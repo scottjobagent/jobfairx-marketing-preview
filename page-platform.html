@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Platform — JobFairX</title>
+<meta name="description" content="The JobFairX employer platform: events dashboard, candidate pipeline, interview scheduling, event day, messaging and analytics — and the interview location you set for each event.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — PLATFORM HUB  (/employer/platform)
+   Parent for the six capability pages that currently link nowhere.
+   Rhythm: dark hero → light capability grid → dark interview-location band →
+   light "all packages include" → dark CTA + footer. Hard cuts, no seams.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- shared section head ---------- */
+.head { max-width: 62ch; }
+.head .t-eyebrow { margin-bottom: var(--s-4); }
+.head .t-lead { margin-top: var(--s-5); }
+
+/* ---------- hero ---------- */
+.phero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.phero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.phero__glow::before, .phero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.phero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.phero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.phero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.phero__inner { position: relative; z-index: 2; }
+.phero h1 { max-width: 17ch; margin-top: var(--s-4); }
+.phero__sub { max-width: 64ch; margin-top: var(--s-6); }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+
+/* platform totals — earned by events already run, stated as totals, nothing more */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-6); margin-top: var(--s-16); }
+.stat { min-width: 0; padding-top: var(--s-5); border-top: 1px solid var(--hairline); }
+.stat__n { font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem); font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+.stat__l { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); letter-spacing: .006em; }
+@media (max-width: 780px) { .stats { grid-template-columns: 1fr 1fr; gap: var(--s-5); margin-top: var(--s-12); } }
+
+/* ---------- capability grid ----------
+   Each card is a real screen, not an icon, and each is a link to its own page. */
+.caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); margin-top: var(--s-12); }
+.cap { padding: 0; overflow: hidden; min-width: 0; display: flex; flex-direction: column; }
+.cap__shot { position: relative; }
+.cap .crop { border-radius: 0; border-bottom: 1px solid var(--hairline); }
+.cap__body { padding: var(--s-5) var(--s-6) var(--s-6); display: flex; flex-direction: column; flex: 1; }
+.cap h3 { font-size: 1rem; font-weight: 550; letter-spacing: -.02em; }
+.cap p { font-size: var(--t-sm); color: var(--ink-2); margin-top: 6px; letter-spacing: .006em; }
+.cap__go {
+  margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--hairline);
+  display: flex; align-items: center; gap: 6px;
+  font-size: var(--t-sm); font-weight: 500; letter-spacing: -.01em; color: var(--accent);
+}
+.cap__go svg { transition: transform var(--t-fast) var(--e-out); }
+.cap:hover .cap__go svg { transform: translateX(3px); }
+.cap__go--soon { color: var(--ink-3); }
+.cap:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* the honest marker: five of these six detail pages are Wave 2 */
+.chip-soon {
+  position: absolute; top: var(--s-3); right: var(--s-3); z-index: 2;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; padding: 4px 8px; border-radius: var(--r-xs);
+  background: var(--surface); border: 1px solid var(--hairline-strong); color: var(--ink-3);
+  box-shadow: var(--sh-sm); white-space: nowrap;
+}
+@media (max-width: 980px) { .caps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .caps { grid-template-columns: 1fr; } }
+
+/* ---------- interview-location band ---------- */
+.crop--6x5 { aspect-ratio: 6/5; }
+.loc-anno { margin-top: var(--s-12); }
+.loc-anno .anno__key { align-content: center; }
+.loc-note {
+  margin-top: var(--s-8); padding: var(--s-5) var(--s-6);
+  border-radius: var(--r-lg); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; max-width: 72ch;
+}
+.loc-note strong { color: var(--ink); font-weight: 550; }
+
+/* Pins land on illegible UI once the stage drops under ~560px, so below that
+   they come off and the crop retightens onto the INTERVIEW LOCATION column —
+   the key alone carries the pairing. Overriding width/transform rather than
+   --zm/--lm/--tm, because the inline custom properties would otherwise win. */
+@media (max-width: 560px) {
+  .loc-anno .anno__pin { display: none; }
+  .loc-anno .anno__stage .crop { aspect-ratio: .78; }
+  .loc-anno .anno__stage .crop > img { width: 420%; transform: translate(-41.8%, -33%); }
+}
+
+/* ---------- all packages include ---------- */
+.incl { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); margin-top: var(--s-12); }
+.incl li {
+  display: flex; gap: var(--s-3); min-width: 0; padding: var(--s-5);
+  border-radius: var(--r-lg); border: 1px solid var(--hairline); background: var(--surface);
+  font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em;
+}
+.incl svg { flex: none; margin-top: 3px; color: var(--accent); }
+@media (max-width: 1040px) { .incl { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px)  { .incl { grid-template-columns: 1fr; } }
+
+/* ---------- final CTA ---------- */
+.close { text-align: center; }
+.close .t-lead { margin-inline: auto; max-width: 52ch; }
+.close .cta-row { justify-content: center; }
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+
+/* Wave-2 capability pages do not exist yet. These cards stay non-clickable
+   rather than shipping five 404s — the "coming soon" chip alone would not
+   stop a click, and the whole card was the hit target. */
+.cap--soon { cursor: default; }
+.cap--soon:hover { transform: none; }
+.cap--soon .cap__go { opacity: .45; }
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="phero grain">
+    <div class="phero__glow" aria-hidden="true"></div>
+    <div class="phero__grid" aria-hidden="true"></div>
+
+    <div class="u-container phero__inner">
+      <p class="t-eyebrow">Platform</p>
+      <h1 class="t-h1 t-balance">One place to run a hiring event, start to finish.</h1>
+
+      <p class="t-lead phero__sub">
+        Register for an event, post your open jobs, accept the interview requests that come
+        back, and meet every candidate in the interview location you chose — without leaving
+        the platform or asking anyone to install anything.
+      </p>
+
+      <div class="cta-row">
+        <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+        <a href="page-events.html" class="btn btn--secondary btn--lg">Browse upcoming events</a>
+      </div>
+
+      <ul class="stats">
+        <li class="stat" data-reveal style="--i:0">
+          <div class="stat__n" data-count>4,000+</div>
+          <div class="stat__l">Employers</div>
+        </li>
+        <li class="stat" data-reveal style="--i:1">
+          <div class="stat__n" data-count>500,000+</div>
+          <div class="stat__l">Interviews conducted</div>
+        </li>
+        <li class="stat" data-reveal style="--i:2">
+          <div class="stat__n" data-count>300+</div>
+          <div class="stat__l">Cities</div>
+        </li>
+        <li class="stat" data-reveal style="--i:3">
+          <div class="stat__n">3M+</div>
+          <div class="stat__l">Registered candidates</div>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="capabilities">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Six surfaces</p>
+        <h2 class="t-h2 t-balance">Everything the event needs, in one place.</h2>
+        <p class="t-lead">
+          Every card below is a real screen you will use, not an icon. Open any one of them
+          for the detail.
+        </p>
+      </div>
+
+      <div class="caps">
+
+        
+        <div class="card cap cap--soon">
+          <div class="cap__shot">
+            <span class="chip-soon">Coming soon</span>
+            <div class="crop crop--4x3">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The employer events dashboard: four upcoming events in rows, each with its own interview location, setup state, job titles and candidate counts."
+                   width="3200" height="2000"
+                   style="--zm:2.6;--lm:-17%;--tm:-16%;--z:1.8;--l:-16%;--t:-12%">
+            </div>
+          </div>
+          <div class="cap__body">
+            <h3>Events dashboard</h3>
+            <p>Every event you have registered for, with its interview location, setup state,
+              job titles and candidate counts on one row.</p>
+            <span class="cap__go cap__go--soon">Detail page coming soon</span>
+          </div>
+        </div>
+
+        
+        <a class="card cap" href="page-platform-candidate-pipeline.html" data-reveal style="--i:1">
+          <div class="cap__shot">
+            <div class="crop crop--4x3">
+              <img src="assets/product/candidates.png"
+                   alt="The candidate pipeline, showing interview requests with Accept, Decline and Reschedule actions on each row."
+                   width="3200" height="2000"
+                   style="--zm:2.4;--lm:-16%;--tm:-18%;--z:1.8;--l:-16%;--t:-18%">
+            </div>
+          </div>
+          <div class="cap__body">
+            <h3>Candidate pipeline</h3>
+            <p>Matched candidates request interviews. You accept, decline or reschedule — and
+              accepting is what schedules the interview.</p>
+            <span class="cap__go">Open
+              <svg width="12" height="10" viewBox="0 0 12 10" fill="none" aria-hidden="true"><path d="M7 1l4 4-4 4M11 5H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+        
+        <div class="card cap cap--soon">
+          <div class="cap__shot">
+            <span class="chip-soon">Coming soon</span>
+            <div class="crop crop--4x3">
+              <img src="assets/product/interviews.png"
+                   alt="The interview schedule, showing upcoming, pending and past interviews with the interview location on each line."
+                   width="3200" height="2000"
+                   style="--zm:2.4;--lm:-16%;--tm:-18%;--z:1.8;--l:-16%;--t:-20%">
+            </div>
+          </div>
+          <div class="cap__body">
+            <h3>Interview scheduling</h3>
+            <p>Upcoming, pending and past interviews in one schedule, each line carrying where
+              that interview happens.</p>
+            <span class="cap__go cap__go--soon">Detail page coming soon</span>
+          </div>
+        </div>
+
+        
+        <div class="card cap cap--soon">
+          <div class="cap__shot">
+            <span class="chip-soon">Coming soon</span>
+            <div class="crop crop--4x3">
+              <img src="assets/product/lobby-live.png"
+                   alt="The event lobby during a live hiring event: candidates waiting and interview rooms in progress."
+                   width="3200" height="2000"
+                   style="--zm:2.4;--lm:-3%;--tm:-16%;--z:1.8;--l:-3%;--t:-14%">
+            </div>
+          </div>
+          <div class="cap__body">
+            <h3>Event day</h3>
+            <p>The lobby while the event is running: who is waiting, who is in a room, and who
+              you are due to see next.</p>
+            <span class="cap__go cap__go--soon">Detail page coming soon</span>
+          </div>
+        </div>
+
+        
+        <div class="card cap cap--soon">
+          <div class="cap__shot">
+            <span class="chip-soon">Coming soon</span>
+            <div class="crop crop--4x3">
+              <img src="assets/product/messages-thread.png"
+                   alt="A message thread with a candidate inside the platform, alongside the list of other candidate conversations."
+                   width="3200" height="2000"
+                   style="--zm:2.2;--lm:-15%;--tm:-10%;--z:1.6;--l:-15%;--t:-8%">
+            </div>
+          </div>
+          <div class="cap__body">
+            <h3>Messaging &amp; automations</h3>
+            <p>Talk to candidates in the platform, or let automations send as candidates move
+              through the process — before, during and after the event.</p>
+            <span class="cap__go cap__go--soon">Detail page coming soon</span>
+          </div>
+        </div>
+
+        
+        <div class="card cap cap--soon">
+          <div class="cap__shot">
+            <span class="chip-soon">Coming soon</span>
+            <div class="crop crop--4x3">
+              <img src="assets/product/analytics.png"
+                   alt="The analytics view for a hiring event: scheduled versus completed interviews, attendance rate and missed interviews."
+                   width="3200" height="2000"
+                   style="--zm:2.4;--lm:-16%;--tm:-16%;--z:1.7;--l:-16%;--t:-14%">
+            </div>
+          </div>
+          <div class="cap__body">
+            <h3>Analytics &amp; reporting</h3>
+            <p>Scheduled versus completed, attendance and missed interviews, per event — and
+              the post-event report you keep afterwards.</p>
+            <span class="cap__go cap__go--soon">Detail page coming soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="interview-locations">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Interview locations</p>
+        <h2 class="t-h2 t-balance">Same event. Your choice of room.</h2>
+        <p class="t-lead">
+          An event is a market moment — the Dallas Healthcare Hiring Event, on its date, at its
+          time. Every employer registered joins that same event. What you set independently is
+          your interview location, and it is a column on your dashboard.
+        </p>
+      </div>
+
+      
+      <figure class="anno anno--side loc-anno" data-reveal>
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--6x5">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The employer events dashboard cropped to the interview location column. Four events for one employer: Dallas Healthcare set to a JobFairX video call, Chicago Technology set to you call each candidate, Atlanta Diversity set to an in-person address on Peachtree Street, and Denver Technology set to Microsoft Teams."
+                   width="3200" height="2000"
+                   style="--z:2.35; --l:-23%; --t:-25%">
+            </div>
+          </div>
+          <button class="anno__pin" style="--x:46.5%;--y:19.2%" data-anno="1" aria-label="Interview location 1: JobFairX video call">1</button>
+          <button class="anno__pin" style="--x:46.5%;--y:39.4%" data-anno="2" aria-label="Interview location 2: phone">2</button>
+          <button class="anno__pin" style="--x:46.5%;--y:63.5%" data-anno="3" aria-label="Interview location 3: in person">3</button>
+          <button class="anno__pin" style="--x:46.5%;--y:87.6%" data-anno="4" aria-label="Interview location 4: your own link">4</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong style="color:var(--ink);font-weight:550">JobFairX video call.</strong>
+            The built-in video room. Nothing to install, for you or the candidate.</span></li>
+          <li data-anno="2"><b>2</b><span><strong style="color:var(--ink);font-weight:550">You call each candidate.</strong>
+            A phone screen at the scheduled time. Candidates are told to expect your call.</span></li>
+          <li data-anno="3"><b>3</b><span><strong style="color:var(--ink);font-weight:550">In person, at your address.</strong>
+            You enter the address. Candidates see it on their confirmation and every reminder.</span></li>
+          <li data-anno="4"><b>4</b><span><strong style="color:var(--ink);font-weight:550">Your own link.</strong>
+            Already on Zoom, Teams or Meet? Paste your link and JobFairX schedules around it.</span></li>
+        </ol>
+      </figure>
+
+      <p class="loc-note" data-reveal>
+        <strong>Two employers at the same event can interview completely differently.</strong>
+        In-person is not an event type and never has been — it is one of four places your own
+        interviews can happen, set per event, changeable while you are still in setup. And
+        because candidates are verified to be within approximately 20 miles of the event city,
+        an in-person interview is a local ask, not a trip.
+        <a href="page-interview-locations.html" class="btn btn--ghost" style="display:inline;color:var(--accent-hover)">How interview locations work →</a>
+      </p>
+
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="included">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">All packages include</p>
+        <h2 class="t-h2 t-balance">The same platform, whichever package you buy.</h2>
+        <p class="t-lead">
+          Packages differ on jobs, recruiter seats and interview volume — Starter $495,
+          Growth $895, Pro $1,495 per event. Nothing in this list is an upsell.
+        </p>
+      </div>
+
+      
+      <ul class="incl">
+        <li data-reveal style="--i:0"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> AI matching and job promotion</li>
+        <li data-reveal style="--i:1"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Resumes and contact info for every matched candidate</li>
+        <li data-reveal style="--i:2"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited interviews before, during and after</li>
+        <li data-reveal style="--i:3"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Auto-accept or review each request</li>
+        <li data-reveal style="--i:4"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Employer dashboard with dispositions, notes, analytics</li>
+        <li data-reveal style="--i:5"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Post-event report with downloadable data</li>
+        <li data-reveal style="--i:6"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Follow-up interviews and messaging after the event</li>
+        <li data-reveal style="--i:7"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Dedicated human support</li>
+      </ul>
+
+      <div class="cta-row" style="margin-top:var(--s-10)" data-reveal>
+        <a href="page-pricing.html" class="btn btn--secondary btn--lg">Compare packages</a>
+        <a href="page-faq.html" class="btn btn--secondary btn--lg">Read the employer FAQ</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section close" id="cta">
+    <div class="u-container u-narrow">
+      <div data-reveal>
+        <p class="t-eyebrow">Get started</p>
+        <h2 class="t-h2 t-balance">Your next hire is already looking for you.</h2>
+        <p class="t-lead">
+          Pick an event in your market, post your roles, and matching starts immediately —
+          the first interview requests arrive within a few hours.
+        </p>
+        <div class="cta-row">
+          <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+          <a href="page-contact.html" class="btn btn--secondary btn--lg">Contact us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><span aria-current="page">Platform overview</span></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

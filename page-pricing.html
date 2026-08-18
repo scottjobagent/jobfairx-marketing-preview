@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing — JobFairX</title>
+<meta name="description" content="Packages are priced in scheduled interviews: 20+, 60+ or 100+ per event. Starter $495, Growth $895, Pro $1,495 — with an 8-step bundle ladder and $100 off when you book 30+ days ahead.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — PRICING
+   Replaces /employer/hiring-event-pricing and folds in /hiring-event-bundles.
+   Chrome (announce, nav, drawer, close, footer, placeholder badge) is copied
+   verbatim from concept-3-hybrid.html so the pages read as one site. Only the
+   page-specific machinery below it is new: selectable tiers, the quantity
+   stepper, and the bundle ladder table.
+   ========================================================================== */
+
+/* ---------- announcement bar ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter anywhere — a translucent bar over a
+   hard theme cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { position: relative; font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+/* active page: ink weight plus a 1px accent rule, so the state survives the
+   nav inverting between the dark and light bands */
+.nav__links a[aria-current="page"] { color: var(--ink); }
+.nav__links a[aria-current="page"]::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -6px;
+  height: 1px; background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ----------
+   Same construction as the homepage hero (ambient blobs + masked grid) but
+   shorter: an interior page earns a screenful, not a viewport. */
+.hero {
+  position: relative; overflow: hidden;
+  padding-block: clamp(56px, 8vh, 96px) var(--s-20);
+}
+.hero__glow { position: absolute; inset: -40% -10% auto; height: 780px; pointer-events: none; z-index: 0; }
+.hero__glow::before, .hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.hero__glow::before {
+  width: 680px; height: 560px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.38), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.hero__glow::after {
+  width: 560px; height: 500px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.22), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 20%, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse 90% 60% at 50% 20%, #000 25%, transparent 75%);
+}
+
+.hero__inner { position: relative; z-index: 2; text-align: center; }
+.hero__badge {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  padding: 6px 14px 6px 8px; border-radius: var(--r-pill);
+  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--surface) 70%, transparent);
+  font-size: var(--t-xs); color: var(--ink-2); margin-bottom: var(--s-6);
+}
+.hero__badge span {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: #b9c8ff; border-radius: var(--r-pill); padding: 2px 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+}
+.hero h1 { max-width: 17ch; margin-inline: auto; }
+.hero__sub { max-width: 58ch; margin: var(--s-6) auto 0; }
+.hero__cta { display: flex; gap: var(--s-3); justify-content: center; flex-wrap: wrap; margin-top: var(--s-8); }
+.hero__trust {
+  margin-top: var(--s-5); font-size: var(--t-xs); color: var(--ink-3);
+  display: flex; gap: var(--s-4); justify-content: center; flex-wrap: wrap;
+}
+.hero__trust li { display: flex; align-items: center; gap: 6px; }
+.hero__trust li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: .8; }
+
+/* ---------- commit band ----------
+   The volume commitment is the product, so it gets the hero's anchor slot
+   instead of a screenshot. Price is deliberately the smallest thing in it. */
+.commit {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6);
+  margin-top: var(--s-16); padding-top: var(--s-10); border-top: 1px solid var(--hairline);
+}
+.commit__n { font-size: clamp(2.25rem, 1.4rem + 3vw, 3.25rem); font-weight: 500; letter-spacing: -.045em; line-height: 1; }
+.commit__l { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); letter-spacing: .006em; }
+.commit__t { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); font-family: var(--font-mono); letter-spacing: .04em; }
+@media (max-width: 700px) {
+  .commit { grid-template-columns: 1fr; gap: 0; margin-top: var(--s-12); }
+  .commit > div { padding-block: var(--s-5); border-top: 1px solid var(--hairline); display: grid; grid-template-columns: auto 1fr; gap: var(--s-5); align-items: baseline; }
+  .commit > div:first-child { border-top: 0; padding-top: var(--s-2); }
+  .commit__l, .commit__t { margin-top: 0; }
+  .commit__t { grid-column: 2; }
+}
+
+/* ---------- generic section head ---------- */
+.head { max-width: 62ch; }
+.head--center { margin-inline: auto; text-align: center; }
+.head .t-eyebrow { margin-bottom: var(--s-4); }
+.head .t-lead { margin-top: var(--s-5); }
+
+/* ---------- tier cards ----------
+   The card itself is the control. A transparent hit button covers it and the
+   content sits above with pointer-events off, so the whole card is clickable
+   and focusable without nesting interactive elements inside a <button>. */
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); margin-top: var(--s-12); align-items: start; }
+.tier {
+  position: relative; padding: var(--s-6) var(--s-6) var(--s-8);
+  background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  box-shadow: var(--elev);
+  transition: transform var(--t-fast) var(--e-out), border-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.tier:hover { transform: translateY(-2px); border-color: var(--hairline-strong); box-shadow: var(--sh-lg); }
+.tier.is-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--sh-lg); transform: none; }
+.tier__hit { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.tier__hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tier__content { position: relative; z-index: 2; pointer-events: none; }
+.tier__content a, .tier__content button { pointer-events: auto; }
+
+.tier__pop {
+  position: absolute; top: calc(var(--s-6) - 2px); right: var(--s-6); z-index: 3;
+  pointer-events: none;   /* never blocks the card's own select target */
+  font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+  background: var(--accent); color: #fff; border-radius: var(--r-pill); padding: 3px 9px;
+}
+.tier__name { font-size: 1rem; font-weight: 600; letter-spacing: -.02em; }
+.tier__price { font-size: 2rem; font-weight: 500; letter-spacing: -.04em; margin: var(--s-4) 0 var(--s-2); }
+.tier__price small { font-size: var(--t-sm); font-weight: 400; color: var(--ink-3); letter-spacing: 0; }
+.tier__promise {
+  margin-top: var(--s-4); padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md); background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em;
+}
+.tier__promise b { display: block; font-size: 1.375rem; font-weight: 600; letter-spacing: -.03em; color: var(--accent); }
+.tier__list { display: grid; gap: var(--s-3); margin: var(--s-6) 0; }
+.tier__list li { display: flex; gap: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.tier__list svg { flex: none; margin-top: 3px; color: var(--accent); }
+.tier__pick { width: 100%; }
+.tier.is-selected .tier__pick { display: none; }
+.tier:not(.is-selected) .buy { display: none; }
+@media (max-width: 940px) { .tiers { grid-template-columns: 1fr; } }
+
+/* ---------- quantity stepper ---------- */
+.buy { border-top: 1px solid var(--hairline); padding-top: var(--s-5); animation: buyIn 320ms var(--e-out); }
+@keyframes buyIn { from { opacity: 0; transform: translateY(6px); } }
+.buy__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
+.buy__head span { font-size: var(--t-sm); font-weight: 550; letter-spacing: -.01em; }
+
+.stepper { display: flex; align-items: center; gap: 2px; border: 1px solid var(--hairline); border-radius: var(--r-md); padding: 2px; background: var(--surface-2); }
+.stepper button {
+  width: 30px; height: 30px; border-radius: var(--r-sm); display: grid; place-items: center;
+  font-size: 15px; line-height: 1; color: var(--ink-2);
+  transition: background var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout);
+}
+.stepper button:hover:not(:disabled) { background: var(--surface); color: var(--ink); }
+.stepper button:disabled { opacity: .32; cursor: not-allowed; }
+.stepper output { min-width: 44px; text-align: center; font-size: var(--t-sm); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+
+.chips { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: var(--s-4); }
+.chip {
+  height: 30px; border-radius: var(--r-sm); border: 1px solid var(--hairline);
+  font-size: 12px; font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums;
+  transition: border-color var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout), background var(--t-micro) var(--e-inout);
+}
+.chip:hover { border-color: var(--hairline-strong); color: var(--ink); }
+.chip.is-on { background: var(--ink); border-color: var(--ink); color: var(--canvas); }
+.chips__note { grid-column: 1 / -1; font-size: 11px; color: var(--ink-3); letter-spacing: .006em; margin-top: 2px; }
+
+.buy__out { margin-top: var(--s-5); }
+.buy__line { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
+.buy__k { font-size: var(--t-sm); color: var(--ink-2); }
+.buy__v { font-size: 1.75rem; font-weight: 500; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+/* the placeholder token is prose, not a number — it gets its own line so the
+   label above it doesn't get squeezed into a column */
+.buy__v[data-placeholder] { display: block; margin-top: var(--s-2); font-size: .9375rem; font-weight: 500; letter-spacing: .006em; color: var(--ink-2); }
+.buy__line.is-ph { display: block; }
+.buy__line--sub { margin-top: var(--s-2); }
+.buy__per { font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .006em; }
+.save {
+  display: inline-flex; align-items: center; white-space: nowrap;
+  font-size: var(--t-xs); font-weight: 600; letter-spacing: .006em;
+  color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  border-radius: var(--r-pill); padding: 3px 10px;
+}
+.buy__note { margin-top: var(--s-4); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+.buy .btn { width: 100%; margin-top: var(--s-5); }
+[hidden] { display: none !important; }
+
+.after-tiers {
+  display: flex; align-items: center; justify-content: center; gap: var(--s-3); flex-wrap: wrap;
+  margin-top: var(--s-8); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em;
+}
+
+/* ---------- interview locations row ---------- */
+.locs { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); margin-top: var(--s-10); }
+.loc {
+  display: flex; gap: var(--s-3); align-items: flex-start;
+  padding: var(--s-5); border-radius: var(--r-lg); border: 1px solid var(--hairline); background: var(--surface);
+}
+.loc__ic { width: 30px; height: 30px; border-radius: var(--r-sm); display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--accent) 9%, transparent); color: var(--accent); }
+.loc b { display: block; font-size: .9375rem; font-weight: 600; letter-spacing: -.015em; }
+.loc span { display: block; font-size: var(--t-xs); color: var(--ink-2); margin-top: 3px; letter-spacing: .006em; }
+.loc em {
+  font-style: normal; font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+  background: var(--accent); color: #fff; border-radius: var(--r-pill); padding: 2px 6px; margin-left: 6px; vertical-align: 2px;
+}
+@media (max-width: 980px) { .locs { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .locs { grid-template-columns: 1fr; } }
+
+/* ---------- bundle ladder ---------- */
+.b-tabs { display: flex; gap: var(--s-2); flex-wrap: wrap; margin-top: var(--s-8); }
+.b-tab {
+  padding: 10px 18px; border-radius: var(--r-pill); border: 1px solid var(--hairline);
+  font-size: var(--t-sm); font-weight: 500; color: var(--ink-2);
+  transition: background var(--t-fast) var(--e-inout), border-color var(--t-fast) var(--e-inout), color var(--t-fast) var(--e-inout);
+}
+.b-tab:hover { border-color: var(--hairline-strong); color: var(--ink); }
+.b-tab.is-active { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+.b-pane { display: none; }
+.b-pane.is-active { display: block; }
+
+.ladder-wrap { overflow-x: auto; margin-top: var(--s-6); }
+.ladder { width: 100%; border-collapse: collapse; min-width: 520px; }
+.ladder th, .ladder td { text-align: right; padding: var(--s-4); border-bottom: 1px solid var(--hairline); font-size: var(--t-sm); letter-spacing: .006em; font-variant-numeric: tabular-nums; }
+.ladder th:first-child, .ladder td:first-child { text-align: left; }
+.ladder thead th { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); border-bottom-color: var(--hairline-strong); }
+.ladder td:first-child { font-weight: 600; color: var(--ink); letter-spacing: -.01em; }
+.ladder tbody tr:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.ladder tr.is-pop { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.ladder .col-save { color: var(--accent); font-weight: 600; }
+.ladder .pop {
+  margin-left: var(--s-3); font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+  background: var(--accent); color: #fff; border-radius: var(--r-pill); padding: 2px 7px; vertical-align: 1px;
+}
+@media (max-width: 640px) {
+  /* Rebuilt as stacked rows, not a squashed table — each row becomes a small
+     record with its own labels. */
+  .ladder-wrap { overflow-x: visible; }
+  .ladder { min-width: 0; }
+  .ladder thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ladder tr { display: block; padding: var(--s-5) 0; border-bottom: 1px solid var(--hairline); }
+  .ladder tr.is-pop { border-radius: var(--r-md); padding-inline: var(--s-4); }
+  .ladder td { display: flex; justify-content: space-between; gap: var(--s-4); border: 0; padding: 3px 0; text-align: right; }
+  .ladder td::before { content: attr(data-l); color: var(--ink-3); font-size: var(--t-xs); text-align: left; }
+  .ladder td:first-child { font-size: 1.125rem; margin-bottom: var(--s-2); }
+  .ladder td:first-child::before { content: none; }
+}
+.chips-trust { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-6); }
+.trust-chip {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em;
+  border: 1px solid var(--hairline); border-radius: var(--r-pill); padding: 6px 14px; background: var(--surface);
+}
+.trust-chip svg { color: var(--accent); flex: none; }
+
+.ph-block {
+  margin-top: var(--s-6); padding: var(--s-8); border-radius: var(--r-lg);
+  border: 1px dashed var(--hairline-strong); background: var(--surface-2);
+  max-width: 62ch;
+}
+.ph-block b { display: block; font-family: var(--font-mono); font-size: var(--t-sm); letter-spacing: .02em; color: var(--ink); }
+.ph-block p { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); letter-spacing: .006em; }
+
+/* ---------- all packages include ---------- */
+.incl { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); margin-top: var(--s-12); }
+.incl li {
+  display: flex; gap: var(--s-3); padding: var(--s-5);
+  border-radius: var(--r-lg); border: 1px solid var(--hairline); background: var(--surface);
+  font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em;
+}
+.incl svg { flex: none; margin-top: 3px; color: var(--accent); }
+@media (max-width: 1040px) { .incl { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px)  { .incl { grid-template-columns: 1fr; } }
+
+/* ---------- early registration ---------- */
+.early { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16); align-items: center; margin-top: var(--s-12); }
+.early__rows { display: grid; gap: var(--s-3); margin-top: var(--s-8); }
+.early__row {
+  display: flex; align-items: baseline; gap: var(--s-4); flex-wrap: wrap;
+  padding: var(--s-4) var(--s-5); border-radius: var(--r-md);
+  border: 1px solid var(--hairline); background: var(--surface);
+}
+.early__row b { font-size: var(--t-sm); font-weight: 600; letter-spacing: -.01em; min-width: 72px; }
+.was { color: var(--ink-3); text-decoration: line-through; font-variant-numeric: tabular-nums; }
+.now { font-size: 1.25rem; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.early__row .save { margin-left: auto; }
+@media (max-width: 900px) { .early { grid-template-columns: 1fr; gap: var(--s-10); } }
+
+/* ---------- what employers experience ---------- */
+.xp { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-8); margin-top: var(--s-12); max-width: 780px; }
+.xp__n { font-size: clamp(2.75rem, 2rem + 3.4vw, 4rem); font-weight: 500; letter-spacing: -.045em; line-height: 1; }
+.xp__l { font-size: var(--t-body); color: var(--ink-2); margin-top: var(--s-4); letter-spacing: .006em; }
+.xp__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+.xp-rates { display: flex; gap: var(--s-6); flex-wrap: wrap; margin-top: var(--s-12); padding-top: var(--s-6); border-top: 1px solid var(--hairline); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.xp-rates b { color: var(--ink); font-weight: 600; }
+@media (max-width: 600px) { .xp { grid-template-columns: 1fr; gap: var(--s-10); } }
+
+/* ---------- faq teaser ---------- */
+.faqs { display: grid; gap: var(--s-4); margin-top: var(--s-12); }
+.faq {
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--s-8);
+  padding: var(--s-6) 0; border-top: 1px solid var(--hairline);
+}
+.faq h3 { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.3; }
+.faq p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) { .faq { grid-template-columns: 1fr; gap: var(--s-3); } }
+
+/* ---------- final CTA ---------- */
+.close { position: relative; overflow: hidden; text-align: center; padding-block: var(--s-40); }
+.close__glow { position: absolute; left: 50%; top: 40%; width: 900px; height: 700px; transform: translate(-50%,-50%); pointer-events: none;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 66%); filter: blur(80px); }
+.close__inner { position: relative; z-index: 2; }
+
+/* ---------- footer ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- utilities ---------- */
+.u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- placeholder affordance ----------
+   Anything not grounded in the captured scope is visibly unfinished. */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html" aria-current="page">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+    
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html" aria-current="page">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+  
+  </div>
+
+  
+  <section class="hero grain">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container hero__inner">
+      <a href="#locations" class="hero__badge">
+        <span>New</span> In-person interviews included in every package
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity:.5"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <h1 class="t-display t-balance">20, 60 or 100+ scheduled interviews.</h1>
+
+      <p class="t-lead hero__sub">
+        That's what a package is. Find a hiring event, register, and post your jobs.
+        Candidate matching starts immediately.
+      </p>
+
+      <div class="hero__cta">
+        <a href="#packages" class="btn btn--primary btn--lg">See packages</a>
+        <a href="#cta" class="btn btn--secondary btn--lg">Book a demo</a>
+      </div>
+
+      <ul class="hero__trust">
+        <li>Credits never expire</li>
+        <li>Use across any event type</li>
+        <li>All four interview locations included</li>
+      </ul>
+    </div>
+
+    <div class="u-container">
+      <div class="commit">
+        <div data-reveal style="--i:0">
+          <div class="commit__n">20+</div>
+          <div class="commit__l">scheduled candidate interviews</div>
+          <div class="commit__t">Starter · $495 / event</div>
+        </div>
+        <div data-reveal style="--i:1">
+          <div class="commit__n">60+</div>
+          <div class="commit__l">scheduled candidate interviews</div>
+          <div class="commit__t">Growth · $895 / event</div>
+        </div>
+        <div data-reveal style="--i:2">
+          <div class="commit__n">100+</div>
+          <div class="commit__l">scheduled candidate interviews</div>
+          <div class="commit__t">Pro · $1,495 / event</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="packages">
+    <div class="u-container">
+      <div class="head head--center" data-reveal>
+        <p class="t-eyebrow">Per event</p>
+        <h2 class="t-h2 t-balance">Pick a package, then pick how many events.</h2>
+        <p class="t-lead">
+          Every package is priced per event and includes all four interview locations.
+          Buying more than one event moves you onto the bundle ladder automatically.
+        </p>
+      </div>
+
+      
+      <div class="tiers" data-tiers>
+
+        <article class="tier is-selected" data-tier="starter" data-reveal style="--i:0">
+          <button type="button" class="tier__hit" data-select="starter" aria-pressed="true">
+            <span class="u-sr">Select the Starter package</span>
+          </button>
+          <div class="tier__content">
+            <div class="tier__name">Starter</div>
+            <div class="tier__price">$495<small> / event</small></div>
+            <div class="tier__promise"><b>20+</b> scheduled candidate interviews</div>
+            <ul class="tier__list">
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote 1 job</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 2 recruiter seats</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four interview locations</li>
+            </ul>
+            <button type="button" class="btn btn--secondary tier__pick" data-select="starter">Choose Starter</button>
+
+            <div class="buy" data-buy="starter">
+              <div class="buy__head">
+                <span>How many events?</span>
+                <div class="stepper">
+                  <button type="button" data-step="-1" aria-label="Fewer events">−</button>
+                  <output data-qty aria-label="Number of events">1</output>
+                  <button type="button" data-step="1" aria-label="More events">+</button>
+                </div>
+              </div>
+              <div class="chips" role="group" aria-label="Event quantity">
+                <button type="button" class="chip is-on" data-qty-set="1" aria-pressed="true">1</button>
+                <button type="button" class="chip" data-qty-set="2" aria-pressed="false">2</button>
+                <button type="button" class="chip" data-qty-set="3" aria-pressed="false">3</button>
+                <button type="button" class="chip" data-qty-set="4" aria-pressed="false">4</button>
+                <button type="button" class="chip" data-qty-set="5" aria-pressed="false">5</button>
+                <button type="button" class="chip" data-qty-set="10" aria-pressed="false">10</button>
+                <button type="button" class="chip" data-qty-set="15" aria-pressed="false">15</button>
+                <button type="button" class="chip" data-qty-set="25" aria-pressed="false">25</button>
+                <button type="button" class="chip" data-qty-set="40" aria-pressed="false">40</button>
+                <button type="button" class="chip" data-qty-set="50" aria-pressed="false">50</button>
+                <button type="button" class="chip" data-qty-set="75" aria-pressed="false">75</button>
+                <button type="button" class="chip" data-qty-set="100" aria-pressed="false">100</button>
+              </div>
+              <div class="buy__out" aria-live="polite">
+                <div class="buy__line">
+                  <span class="buy__k" data-total-label>Total</span>
+                  <span class="buy__v" data-total>$495</span>
+                </div>
+                <div class="buy__line buy__line--sub">
+                  <span class="buy__per" data-per>$495 per event</span>
+                  <span class="save" data-save hidden>You save $0</span>
+                </div>
+                <p class="buy__note" data-note hidden></p>
+              </div>
+              <a href="page-events.html" class="btn btn--primary" data-cta>Reserve My Spot →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="tier" data-tier="growth" data-reveal style="--i:1">
+          <span class="tier__pop">Most popular</span>
+          <button type="button" class="tier__hit" data-select="growth" aria-pressed="false">
+            <span class="u-sr">Select the Growth package</span>
+          </button>
+          <div class="tier__content">
+            <div class="tier__name">Growth</div>
+            <div class="tier__price">$895<small> / event</small></div>
+            <div class="tier__promise"><b>60+</b> scheduled candidate interviews</div>
+            <ul class="tier__list">
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote up to 3 jobs</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Up to 5 recruiter seats</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four interview locations</li>
+            </ul>
+            <button type="button" class="btn btn--primary tier__pick" data-select="growth">Choose Growth</button>
+
+            <div class="buy" data-buy="growth">
+              <div class="buy__head">
+                <span>How many events?</span>
+                <div class="stepper">
+                  <button type="button" data-step="-1" aria-label="Fewer events">−</button>
+                  <output data-qty aria-label="Number of events">1</output>
+                  <button type="button" data-step="1" aria-label="More events">+</button>
+                </div>
+              </div>
+              <div class="chips" role="group" aria-label="Event quantity">
+                <button type="button" class="chip is-on" data-qty-set="1" aria-pressed="true">1</button>
+                <button type="button" class="chip" data-qty-set="2" aria-pressed="false">2</button>
+                <button type="button" class="chip" data-qty-set="3" aria-pressed="false">3</button>
+                <button type="button" class="chip" data-qty-set="4" aria-pressed="false">4</button>
+                <button type="button" class="chip" data-qty-set="5" aria-pressed="false">5</button>
+                <button type="button" class="chip" data-qty-set="10" aria-pressed="false">10</button>
+                <button type="button" class="chip" data-qty-set="15" aria-pressed="false">15</button>
+                <button type="button" class="chip" data-qty-set="25" aria-pressed="false">25</button>
+                <button type="button" class="chip" data-qty-set="40" aria-pressed="false">40</button>
+                <button type="button" class="chip" data-qty-set="50" aria-pressed="false">50</button>
+                <button type="button" class="chip" data-qty-set="75" aria-pressed="false">75</button>
+                <button type="button" class="chip" data-qty-set="100" aria-pressed="false">100</button>
+              </div>
+              <div class="buy__out" aria-live="polite">
+                <div class="buy__line">
+                  <span class="buy__k" data-total-label>Total</span>
+                  <span class="buy__v" data-total>$895</span>
+                </div>
+                <div class="buy__line buy__line--sub">
+                  <span class="buy__per" data-per>$895 per event</span>
+                  <span class="save" data-save hidden>You save $0</span>
+                </div>
+                <p class="buy__note" data-note hidden></p>
+              </div>
+              <a href="page-events.html" class="btn btn--primary" data-cta>Reserve My Spot →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="tier" data-tier="pro" data-reveal style="--i:2">
+          <button type="button" class="tier__hit" data-select="pro" aria-pressed="false">
+            <span class="u-sr">Select the Pro package</span>
+          </button>
+          <div class="tier__content">
+            <div class="tier__name">Pro</div>
+            <div class="tier__price">$1,495<small> / event</small></div>
+            <div class="tier__promise"><b>100+</b> scheduled candidate interviews</div>
+            <ul class="tier__list">
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote up to 6 jobs</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited recruiters</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four interview locations</li>
+            </ul>
+            <button type="button" class="btn btn--secondary tier__pick" data-select="pro">Choose Pro</button>
+
+            <div class="buy" data-buy="pro">
+              <div class="buy__head">
+                <span>How many events?</span>
+                <div class="stepper">
+                  <button type="button" data-step="-1" aria-label="Fewer events">−</button>
+                  <output data-qty aria-label="Number of events">1</output>
+                  <button type="button" data-step="1" aria-label="More events">+</button>
+                </div>
+              </div>
+              <div class="chips" role="group" aria-label="Event quantity">
+                <button type="button" class="chip is-on" data-qty-set="1" aria-pressed="true">1</button>
+                <button type="button" class="chip" data-qty-set="2" aria-pressed="false">2</button>
+                <button type="button" class="chip" data-qty-set="3" aria-pressed="false">3</button>
+                <button type="button" class="chip" data-qty-set="4" aria-pressed="false">4</button>
+                <button type="button" class="chip" data-qty-set="5" aria-pressed="false">5</button>
+                <button type="button" class="chip" data-qty-set="10" aria-pressed="false">10</button>
+                <button type="button" class="chip" data-qty-set="15" aria-pressed="false">15</button>
+                <button type="button" class="chip" data-qty-set="25" aria-pressed="false">25</button>
+                <button type="button" class="chip" data-qty-set="40" aria-pressed="false">40</button>
+                <button type="button" class="chip" data-qty-set="50" aria-pressed="false">50</button>
+                <button type="button" class="chip" data-qty-set="75" aria-pressed="false">75</button>
+                <button type="button" class="chip" data-qty-set="100" aria-pressed="false">100</button>
+              </div>
+              <div class="buy__out" aria-live="polite">
+                <div class="buy__line">
+                  <span class="buy__k" data-total-label>Total</span>
+                  <span class="buy__v" data-total>$1,495</span>
+                </div>
+                <div class="buy__line buy__line--sub">
+                  <span class="buy__per" data-per>$1,495 per event</span>
+                  <span class="save" data-save hidden>You save $0</span>
+                </div>
+                <p class="buy__note" data-note hidden></p>
+              </div>
+              <a href="page-events.html" class="btn btn--primary" data-cta>Reserve My Spot →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p class="after-tiers" data-reveal>
+        Looking for larger bundles or custom volume?
+        <a href="#bundles" class="btn btn--ghost" style="color:var(--accent)">See all bundles →</a>
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="locations" style="background:var(--void)">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Included in every package</p>
+        <h2 class="t-h2 t-balance">Same event. Your choice of room.</h2>
+        <p class="t-lead">
+          You join the event — the Dallas Healthcare Hiring Event, say — and you set the
+          interview location for your own interviews. It doesn't change the price, and two
+          employers at the same event can interview completely differently.
+        </p>
+      </div>
+
+      <div class="locs">
+        <div class="loc" data-reveal style="--i:0">
+          <span class="loc__ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 4.5A1.5 1.5 0 0 1 2.5 3h6A1.5 1.5 0 0 1 10 4.5v7A1.5 1.5 0 0 1 8.5 13h-6A1.5 1.5 0 0 1 1 11.5v-7ZM11 6.6l3.3-2.2a.5.5 0 0 1 .7.4v6.4a.5.5 0 0 1-.7.4L11 9.4V6.6Z"/></svg></span>
+          <div><b>JobFairX video</b><span>Built-in video room. Nothing to install.</span></div>
+        </div>
+        <div class="loc" data-reveal style="--i:1">
+          <span class="loc__ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M3.6 1.6c.5-.5 1.3-.5 1.8 0l1.5 1.6c.4.5.4 1.2 0 1.7L5.7 6.1c.7 1.7 2.1 3.1 3.8 3.8l1.2-1.2c.5-.4 1.2-.4 1.7 0l1.6 1.5c.5.5.5 1.3 0 1.8l-.8.8c-.7.7-1.8.9-2.7.5C7 11.8 4 8.8 2.3 5c-.4-.9-.2-2 .5-2.7l.8-.7Z"/></svg></span>
+          <div><b>Phone</b><span>You call each candidate at the scheduled time.</span></div>
+        </div>
+        <div class="loc" data-reveal style="--i:2">
+          <span class="loc__ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5A4.5 4.5 0 0 0 3.5 6c0 3.2 3.7 7.7 4.1 8.2.2.2.6.2.8 0C8.8 13.7 12.5 9.2 12.5 6A4.5 4.5 0 0 0 8 1.5Zm0 6.2A1.7 1.7 0 1 1 8 4.3a1.7 1.7 0 0 1 0 3.4Z"/></svg></span>
+          <div><b>In person <em>New</em></b><span>Your address. Candidates see it on every reminder.</span></div>
+        </div>
+        <div class="loc" data-reveal style="--i:3">
+          <span class="loc__ic"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6 2h8v8h-2V5.4l-6.3 6.3-1.4-1.4L10.6 4H6V2Zm-4 3h3v2H4v7h7v-1h2v3H2V5Z"/></svg></span>
+          <div><b>Your own link</b><span>Zoom, Teams or Meet — we schedule around it.</span></div>
+        </div>
+      </div>
+
+      <p class="t-sm" style="margin-top:var(--s-6);max-width:70ch" data-reveal>
+        Candidates are verified to be within approximately 20 miles of the event city, so
+        they're already local before you ask anyone to travel.
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="bundles">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Bundles</p>
+        <h2 class="t-h2 t-balance">Buy events in volume, up to 40% off.</h2>
+        <p class="t-lead">
+          The same three packages, bought several events at a time. The per-event price
+          drops at every step of the ladder — the Starter ladder runs from $470 an event at
+          five, down to $297 an event at a hundred.
+        </p>
+      </div>
+
+      <div data-tabs>
+        <div class="b-tabs" role="tablist" aria-label="Bundle pricing by package">
+          <button class="b-tab is-active" data-tab="starter" role="tab" aria-selected="true">Starter</button>
+          <button class="b-tab" data-tab="growth" role="tab" aria-selected="false" tabindex="-1">Growth</button>
+          <button class="b-tab" data-tab="pro" role="tab" aria-selected="false" tabindex="-1">Pro</button>
+        </div>
+
+        <div class="b-pane is-active" data-pane="starter" role="tabpanel" aria-label="Starter bundle ladder">
+          <div class="ladder-wrap">
+            <table class="ladder">
+              <caption class="u-sr">Starter bundle pricing, from 5 to 100 events</caption>
+              <thead>
+                <tr><th scope="col">Events</th><th scope="col">Per event</th><th scope="col">Total</th><th scope="col">You save</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>5</td><td data-l="Per event">$470</td><td data-l="Total">$2,350</td><td data-l="You save" class="col-save">$125</td></tr>
+                <tr><td>10</td><td data-l="Per event">$445</td><td data-l="Total">$4,450</td><td data-l="You save" class="col-save">$500</td></tr>
+                <tr><td>15</td><td data-l="Per event">$420</td><td data-l="Total">$6,300</td><td data-l="You save" class="col-save">$1,125</td></tr>
+                <tr class="is-pop"><td>25 <span class="pop">Most popular</span></td><td data-l="Per event">$395</td><td data-l="Total">$9,875</td><td data-l="You save" class="col-save">$2,500</td></tr>
+                <tr><td>40</td><td data-l="Per event">$365</td><td data-l="Total">$14,600</td><td data-l="You save" class="col-save">$5,200</td></tr>
+                <tr><td>50</td><td data-l="Per event">$345</td><td data-l="Total">$17,250</td><td data-l="You save" class="col-save">$7,500</td></tr>
+                <tr><td>75</td><td data-l="Per event">$320</td><td data-l="Total">$24,000</td><td data-l="You save" class="col-save">$13,125</td></tr>
+                <tr><td>100</td><td data-l="Per event">$297</td><td data-l="Total">$29,700</td><td data-l="You save" class="col-save">$19,800</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        
+        <div class="b-pane" data-pane="growth" role="tabpanel" aria-label="Growth bundle ladder">
+          <div class="ph-block" data-placeholder>
+            <b>{{GROWTH BUNDLE LADDER}}</b>
+            <p>
+              Growth is $895 per event at quantity 1–4. Its 5 / 10 / 15 / 25 / 40 / 50 / 75 / 100
+              bundle prices sit behind the Growth tab on the live bundles page and were not
+              captured. Send the eight rows and this table fills in exactly like Starter's.
+            </p>
+          </div>
+        </div>
+
+        <div class="b-pane" data-pane="pro" role="tabpanel" aria-label="Pro bundle ladder">
+          <div class="ph-block" data-placeholder>
+            <b>{{PRO BUNDLE LADDER}}</b>
+            <p>
+              Pro is $1,495 per event at quantity 1–4. Its eight bundle rows were not captured
+              from the live site and are not estimated here.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chips-trust" data-reveal>
+        <span class="trust-chip">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+          Credits never expire
+        </span>
+        <span class="trust-chip">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+          Use across any event type
+        </span>
+        <span class="trust-chip">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+          Maximum saving is 40% at 100 events
+        </span>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" style="background:var(--void)">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">All packages include</p>
+        <h2 class="t-h2 t-balance">The same platform, whichever package you buy.</h2>
+        <p class="t-lead">
+          Packages differ on jobs, seats and interview volume. Nothing below is an upsell.
+        </p>
+      </div>
+
+      <ul class="incl">
+        <li data-reveal style="--i:0"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> AI matching and job promotion</li>
+        <li data-reveal style="--i:1"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Resumes and contact info for every matched candidate</li>
+        <li data-reveal style="--i:2"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited interviews before, during and after</li>
+        <li data-reveal style="--i:3"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Auto-accept or review each request</li>
+        <li data-reveal style="--i:4"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Employer dashboard with dispositions, notes, analytics</li>
+        <li data-reveal style="--i:5"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Post-event report with downloadable data</li>
+        <li data-reveal style="--i:6"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Follow-up interviews and messaging after the event</li>
+        <li data-reveal style="--i:7"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Dedicated human support</li>
+      </ul>
+
+      <div style="margin-top:var(--s-12)" data-reveal>
+        <div class="panel">
+          <div class="crop crop--16x10">
+            <img src="assets/product/analytics.png"
+                 alt="The analytics view for a hiring event: scheduled versus completed interviews, attendance rate and missed interviews."
+                 width="3200" height="2000" style="--z:1; --l:0%; --t:0%">
+          </div>
+        </div>
+        <p class="t-sm" style="margin-top:var(--s-4)">
+          Real product view — the post-event report every package ships with.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section">
+    <div class="u-container">
+      <div class="early">
+        <div data-reveal>
+          <p class="t-eyebrow">Early registration</p>
+          <h2 class="t-h2 t-balance">Book 30+ days out, save $100 an event.</h2>
+          <p class="t-lead" style="margin-top:var(--s-5)">
+            Every event page shows an early-registration price until 30 days before the event.
+            Register inside that window and $100 comes off the package price, whichever package
+            you're on. The cutoff date printed on each event — "Ends August 22", for instance —
+            is exactly 30 days before that event's date.
+          </p>
+
+          <div class="early__rows">
+            <div class="early__row">
+              <b>Starter</b><span class="was">$495</span><span class="now">$395</span>
+              <span class="save">Save $100</span>
+            </div>
+            <div class="early__row">
+              <b>Growth</b><span class="was">$895</span><span class="now">$795</span>
+              <span class="save">Save $100</span>
+            </div>
+            <div class="early__row">
+              <b>Pro</b><span class="was">$1,495</span><span class="now">$1,395</span>
+              <span class="save">Save $100</span>
+            </div>
+          </div>
+
+          <p class="t-sm" style="margin-top:var(--s-6);position:relative" data-placeholder>
+            {{Does early registration stack with bundle pricing?}} — the live site prices the two
+            separately and never shows them together, so this page doesn't claim either way.
+          </p>
+        </div>
+
+        <div data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--16x10">
+              <img src="assets/product/account-billing.png"
+                   alt="The account and billing screen in the JobFairX employer dashboard."
+                   width="3200" height="2000" style="--zm:2.1;--lm:-15%;--tm:-7%;--z:1.45;--l:-13%;--t:-5%">
+            </div>
+          </div>
+          <p class="t-sm" style="margin-top:var(--s-4)">
+            Real product view — account and billing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">What employers experience</p>
+        <h2 class="t-h2 t-balance">The two numbers that decide whether a package was worth it.</h2>
+      </div>
+
+      <div class="xp">
+        <div data-reveal style="--i:0">
+          <div class="xp__n" data-count>87%</div>
+          <div class="xp__l">of employers come back for another event</div>
+          <div class="xp__src">Based on 2025 platform data</div>
+        </div>
+        <div data-reveal style="--i:1">
+          <div class="xp__n" data-count>91%</div>
+          <div class="xp__l">interview show rate</div>
+          <div class="xp__src">Based on 2025 platform data</div>
+        </div>
+      </div>
+
+      <div class="xp-rates" data-reveal>
+        <span>Show rate by event type:</span>
+        <span><b>Healthcare 91%</b></span>
+        <span><b>Veterans 89%</b></span>
+        <span><b>Entry-Level 86%</b></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Before you buy</p>
+        <h2 class="t-h2 t-balance">The three questions that come up most.</h2>
+      </div>
+
+      <div class="faqs">
+        <div class="faq" data-reveal style="--i:0">
+          <h3>Are the candidates local?</h3>
+          <p>Candidates are verified to be within approximately 20 miles of the event city —
+            which is what makes an in-person interview location practical, not just a video
+            call with a longer address field.</p>
+        </div>
+        <div class="faq" data-reveal style="--i:1">
+          <h3>When does matching start after I register?</h3>
+          <p>Candidate matching activates immediately and you will start receiving interview
+            requests within a few hours.</p>
+        </div>
+        <div class="faq" data-reveal style="--i:2">
+          <h3>How many interviews will I actually get?</h3>
+          <p>It's tied to the package: Starter around 20, Growth around 60, Pro 100 or more —
+            scheduled, not just matched.</p>
+        </div>
+      </div>
+
+      <p style="margin-top:var(--s-10)" data-reveal>
+        <a href="page-faq.html" class="btn btn--secondary">Read all 9 questions</a>
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="close" id="cta">
+    <div class="close__glow" aria-hidden="true"></div>
+    <div class="u-container close__inner">
+      <h2 class="t-h1 t-balance" style="max-width:17ch;margin-inline:auto">Pick your events. The candidates are already there.</h2>
+      <p class="t-lead" style="max-width:52ch;margin:var(--s-6) auto 0">
+        Book a demo and we'll show you the next event in your market, who's already registered
+        for it, and what a package would actually get you.
+      </p>
+      <div class="hero__cta">
+        <a href="page-contact.html" class="btn btn--primary btn--lg">Book a demo</a>
+        <a href="page-events.html" class="btn btn--secondary btn--lg">Browse upcoming events</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><span aria-current="page">Pricing</span></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Pricing calculator.
+   Every figure below is transcribed from LIVE-SITE-SCOPE section 4. Growth and
+   Pro have no captured ladder, so at 5+ events they render a placeholder rather
+   than a derived number — a proportional guess would read as fact.
+   Quantities 1–4 are plain multiplication of the per-event price: the live site
+   has no bundle discount below 5, so nothing is being invented there either.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var COUNTS = [1, 2, 3, 4, 5, 10, 15, 25, 40, 50, 75, 100];
+  var TIERS = {
+    starter: { unit: 495,  ladder: { 5:470, 10:445, 15:420, 25:395, 40:365, 50:345, 75:320, 100:297 } },
+    growth:  { unit: 895,  ladder: null },
+    pro:     { unit: 1495, ladder: null }
+  };
+
+  var tier = 'starter';
+  var qty = 1;
+
+  function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  function render() {
+    Object.keys(TIERS).forEach(function (key) {
+      var card = document.querySelector('[data-tier="' + key + '"]');
+      if (!card) return;
+
+      var on = key === tier;
+      card.classList.toggle('is-selected', on);
+      card.querySelectorAll('[data-select]').forEach(function (b) {
+        if (b.hasAttribute('aria-pressed')) b.setAttribute('aria-pressed', String(on));
+      });
+
+      var buy = card.querySelector('[data-buy]');
+      if (!buy) return;
+
+      var t = TIERS[key];
+      var i = COUNTS.indexOf(qty);
+
+      buy.querySelectorAll('[data-qty-set]').forEach(function (c) {
+        var isOn = parseInt(c.getAttribute('data-qty-set'), 10) === qty;
+        c.classList.toggle('is-on', isOn);
+        c.setAttribute('aria-pressed', String(isOn));
+      });
+
+      var out = buy.querySelector('[data-qty]');
+      if (out) out.textContent = qty;
+
+      var minus = buy.querySelector('[data-step="-1"]');
+      var plus  = buy.querySelector('[data-step="1"]');
+      if (minus) minus.disabled = i <= 0;
+      if (plus)  plus.disabled  = i >= COUNTS.length - 1;
+
+      var totalEl = buy.querySelector('[data-total]');
+      var perEl   = buy.querySelector('[data-per]');
+      var saveEl  = buy.querySelector('[data-save]');
+      var noteEl  = buy.querySelector('[data-note]');
+      var labelEl = buy.querySelector('[data-total-label]');
+      var ctaEl   = buy.querySelector('[data-cta]');
+
+      labelEl.textContent = qty === 1 ? 'Total' : 'Total for ' + qty + ' events';
+      ctaEl.textContent = qty > 1 ? 'Reserve My Spots →' : 'Reserve My Spot →';
+
+      var per, total, save = 0, unknown = false;
+      if (qty < 5) {
+        per = t.unit; total = t.unit * qty;
+      } else if (t.ladder && t.ladder[qty]) {
+        per = t.ladder[qty]; total = per * qty; save = (t.unit * qty) - total;
+      } else {
+        unknown = true;
+      }
+
+      if (unknown) {
+        totalEl.textContent = '{{' + key.toUpperCase() + ' BUNDLE TOTAL}}';
+        totalEl.setAttribute('data-placeholder', '');
+        totalEl.parentNode.classList.add('is-ph');
+        perEl.textContent = '{{per-event bundle price}}';
+        saveEl.hidden = true;
+        noteEl.hidden = false;
+        noteEl.textContent = 'The live bundles page prices each package on its own tab. Only the Starter ladder was captured, so this figure is not estimated.';
+      } else {
+        totalEl.textContent = money(total);
+        totalEl.removeAttribute('data-placeholder');
+        totalEl.parentNode.classList.remove('is-ph');
+        perEl.textContent = money(per) + ' per event';
+        saveEl.hidden = save <= 0;
+        saveEl.textContent = 'You save ' + money(save);
+        noteEl.hidden = qty < 5;
+        if (qty >= 5) noteEl.textContent = 'Credits never expire, and they can be used across any event type.';
+      }
+    });
+  }
+
+  /* Keep the bundle table showing the package you just selected. motion.js owns
+     the tab group, so we drive it by clicking rather than duplicating its logic. */
+  function syncTable() {
+    var t = document.querySelector('[data-tabs] [data-tab="' + tier + '"]');
+    if (t && !t.classList.contains('is-active')) t.click();
+  }
+
+  function init() {
+    document.addEventListener('click', function (e) {
+      var sel = e.target.closest ? e.target.closest('[data-select]') : null;
+      if (sel) { tier = sel.getAttribute('data-select'); syncTable(); render(); return; }
+
+      var chip = e.target.closest ? e.target.closest('[data-qty-set]') : null;
+      if (chip) { qty = parseInt(chip.getAttribute('data-qty-set'), 10); render(); return; }
+
+      var step = e.target.closest ? e.target.closest('[data-step]') : null;
+      if (step) {
+        var d = parseInt(step.getAttribute('data-step'), 10);
+        var i = COUNTS.indexOf(qty) + d;
+        if (i < 0) i = 0;
+        if (i > COUNTS.length - 1) i = COUNTS.length - 1;
+        qty = COUNTS[i];
+        render();
+      }
+    });
+
+    // the bundle tabs select the matching card too, so the two stay in step
+    document.querySelectorAll('[data-tabs] [data-tab]').forEach(function (t) {
+      t.addEventListener('click', function () {
+        var k = t.getAttribute('data-tab');
+        if (TIERS[k] && k !== tier) { tier = k; render(); }
+      });
+    });
+
+    render();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

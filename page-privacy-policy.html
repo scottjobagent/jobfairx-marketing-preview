@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — JobFairX</title>
+<meta name="description" content="The JobFairX Statement of Privacy: what personal information is collected, how it is used and shared, your right to deletion, and how to contact us.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+
+
+
+<style>
+/* ==========================================================================
+   PAGE — PRIVACY POLICY  (the legal-document TEMPLATE)
+   Reused by /employer/terms-and-conditions, /employer/dpa and anything else
+   that is a ported legal document. Swap <main>, keep everything else.
+
+   Three-act rhythm as everywhere: dark masthead, light document, dark close.
+   Hard cuts between themes, no seam elements.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- masthead ----------
+   A legal page gets a masthead, not a hero. No animated glow, no product shot,
+   no CTA — the ambient drift devices used on the pitch pages read as spin on a
+   document someone may be reading because they are annoyed with us. */
+.lhead { position: relative; overflow: hidden; padding-block: clamp(44px, 6vh, 72px) var(--s-16); }
+.lhead__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .45;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 88% 74% at 50% 12%, #000 22%, transparent 76%);
+  mask-image: radial-gradient(ellipse 88% 74% at 50% 12%, #000 22%, transparent 76%);
+}
+.lhead__inner { position: relative; z-index: 2; }
+.lhead h1 { margin-top: var(--s-4); max-width: 14ch; }
+
+/* The lede is the policy's own opening sentence, promoted. It is repeated
+   verbatim at the top of the document below — this is a pull-quote of ported
+   text, not a written summary. */
+.lhead__lede { max-width: 56ch; margin-top: var(--s-6); }
+
+/* status strip — effective date + jurisdiction facts, monospace so it reads as
+   metadata rather than as more prose */
+.meta {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-8);
+  margin-top: var(--s-10); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+}
+.meta div { display: grid; gap: 4px; min-width: 0; }
+.meta dt { font-size: var(--t-eyebrow); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+.meta dd { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--ink); letter-spacing: .01em; overflow-wrap: anywhere; }
+
+/* ---------- document layout: sticky TOC + document ---------- */
+.legal { display: grid; grid-template-columns: 244px minmax(0, 1fr); gap: var(--s-16); align-items: start; }
+
+.toc { position: sticky; top: 96px; min-width: 0; }
+.toc__label { margin-bottom: var(--s-4); }
+.toc ol { display: grid; gap: 2px; counter-reset: toc; }
+.toc a {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  padding: 8px var(--s-4); border-radius: var(--r-md);
+  border-left: 2px solid transparent;
+  font-size: var(--t-sm); line-height: 1.35; color: var(--ink-3); letter-spacing: .006em;
+  transition: color var(--t-micro) var(--e-inout), background var(--t-micro) var(--e-inout), border-color var(--t-micro) var(--e-inout);
+}
+.toc a:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.toc a.is-active { color: var(--ink); border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+/* The index numbers live in the CONTENTS ONLY. The live document does not
+   number its headings, so neither do we — numbering the document itself would
+   be editing it. */
+.toc .n { flex: none; font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.toc__print {
+  margin-top: var(--s-5); padding-top: var(--s-5); border-top: 1px solid var(--hairline);
+  display: flex; align-items: center; gap: var(--s-2);
+  font-size: var(--t-sm); color: var(--ink-3);
+}
+.toc__print button { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+.toc__print button:hover { color: var(--accent); }
+
+/* On a phone the contents box is a plain block at the top of the document.
+   Deliberately NOT the horizontally-scrolling chip strip used on the FAQ: nine
+   long legal headings in a scroller is a worse control, and every scroller is
+   another chance to push the document sideways at 390px. */
+@media (max-width: 940px) {
+  .legal { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .toc {
+    position: static; padding: var(--s-5) var(--s-4);
+    border: 1px solid var(--hairline); border-radius: var(--r-lg);
+    background: var(--surface);
+  }
+  .toc__label { padding-inline: var(--s-4); }
+}
+
+/* ---------- the document ---------- */
+.doc { min-width: 0; }
+
+/* Untitled opening paragraph — it carries no heading on the live page, so it
+   gets none here. */
+.doc__lede { padding-bottom: var(--s-8); border-bottom: 1px solid var(--hairline); }
+.doc__lede p { font-size: var(--t-lead); line-height: 1.55; letter-spacing: -.006em; color: var(--ink); }
+
+.sec { scroll-margin-top: 96px; padding-top: var(--s-12); }
+.sec__h {
+  font-size: 1.375rem; font-weight: 500; line-height: 1.15; letter-spacing: -.028em;
+  padding-bottom: var(--s-3); margin-bottom: var(--s-6);
+  border-bottom: 1px solid var(--hairline);
+}
+@media (min-width: 981px) {
+  .sec {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 258px;
+    grid-template-areas: 'head head' 'body sum';
+    column-gap: var(--s-10);
+  }
+  .sec__h    { grid-area: head; }
+  .sec__body { grid-area: body; min-width: 0; }
+  .sec__sum  { grid-area: sum; min-width: 0; align-self: start; }
+}
+
+/* Legal prose: long measure, generous leading, near-ink rather than muted —
+   this is the reading matter, not supporting text. */
+.sec__body, .doc__lede { max-width: 74ch; }
+.sec__body p, .sec__body li {
+  font-size: .9375rem; line-height: 1.72; letter-spacing: .006em;
+  color: color-mix(in srgb, var(--ink) 84%, var(--canvas));
+}
+.sec__body p + p { margin-top: var(--s-4); }
+.sec__body ul { margin: var(--s-4) 0; display: grid; gap: var(--s-3); }
+.sec__body li { position: relative; padding-left: var(--s-6); }
+.sec__body li::before {
+  content: ''; position: absolute; left: 4px; top: .72em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3);
+}
+.sec__body a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.sec__body a:hover { border-bottom-color: var(--accent); }
+
+/* ---------- defined terms ----------
+   The policy defines Usage Data, Device Information and Personal Data inline.
+   <dfn> marks the defining instance; the dotted rule tells a reader scanning
+   for definitions where they are. The title text is the policy's own
+   parenthetical definition, quoted, never a rewritten one. */
+.term {
+  font-style: normal; font-weight: 550; color: var(--ink);
+  border-bottom: 1px dotted var(--ink-3); cursor: help;
+}
+
+/* the postal address block inside Contact Information */
+.addr {
+  margin-top: var(--s-5); padding: var(--s-5) var(--s-6);
+  border-left: 2px solid var(--hairline-strong);
+  background: var(--surface-2); border-radius: 0 var(--r-md) var(--r-md) 0;
+  font-style: normal;
+  font-size: .9375rem; line-height: 1.72; color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.addr strong { font-weight: 550; }
+.addr a { color: var(--accent); }
+
+.stamp {
+  margin-top: var(--s-12); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono); font-size: var(--t-sm);
+  letter-spacing: .02em; color: var(--ink);
+}
+
+/* ---------- plain-language summary ----------
+   Amber, not accent blue. Blue on this site means "product". Amber is used
+   nowhere except to say "editorial, unratified" — the same signal the FAQ's
+   {{NEW}} tags carry. A reader must never be able to mistake one of these for
+   a clause of the policy. */
+.sum {
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid color-mix(in srgb, #b06d1f 26%, transparent);
+  border-left-width: 2px; border-left-color: #b06d1f;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, #b06d1f 5%, transparent);
+}
+.sum__label {
+  display: block; font-family: var(--font-mono);
+  font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  color: #8a5416; margin-bottom: var(--s-2);
+}
+.sum p { font-size: var(--t-xs); line-height: 1.6; letter-spacing: .006em; color: var(--ink-2); }
+.sum p + p { margin-top: var(--s-3); }
+@media (max-width: 980px) { .sum { margin-top: var(--s-6); } }
+
+/* the one-time explanation of what those amber boxes are */
+.sumnote {
+  margin-top: var(--s-8);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-4);
+  align-items: start;
+  padding: var(--s-5) var(--s-6);
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  background: var(--surface);
+}
+.sumnote__ic {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416; font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+}
+.sumnote p { font-size: var(--t-sm); line-height: 1.6; color: var(--ink-2); letter-spacing: .006em; }
+.sumnote strong { color: var(--ink); font-weight: 550; }
+.sumnote__flag {
+  display: inline-block; margin-top: var(--s-3);
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416;
+}
+@media (max-width: 560px) { .sumnote { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- dark close ---------- */
+.closeband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.closeband p { margin-top: var(--s-5); max-width: 48ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.closeband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.closeband__facts li { display: grid; gap: 4px; min-width: 0; }
+.closeband__facts a, .closeband__facts strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.closeband__facts a:hover { color: var(--accent-hover); }
+@media (max-width: 900px) {
+  .closeband__inner { grid-template-columns: 1fr; gap: var(--s-10); }
+  .closeband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot li a[aria-current="page"] { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+
+/* ==========================================================================
+   PRINT
+   A printed privacy policy is an evidentiary artifact — somebody prints it to
+   put in a file, attach to a DSAR, or hand to a regulator. So the printed page
+   is the ported document and NOTHING ELSE:
+
+   · chrome gone (announce bar, nav, drawer, contents, dark close band, footer)
+   · the plain-language summaries GONE TOO. They are editorial and non-binding;
+     printed next to the clauses they would read as part of the policy, which is
+     precisely the misreading the amber styling exists to prevent on screen.
+   · black on white, both themes forced
+   · link destinations spelled out, because a printed <a> is otherwise a dead end
+   ========================================================================== */
+@media print {
+  .announce, .nav, .drawer, .toc, .closeband, .foot, .lhead__grid, .sum, .sumnote { display: none !important; }
+
+  /* both theme scopes collapse to paper */
+  html, body,
+  [data-theme='dark'], [data-theme='light'] {
+    background: #fff !important; color: #000 !important;
+  }
+  [data-theme='dark'], [data-theme='light'] {
+    --canvas: #fff; --void: #fff; --surface: #fff; --surface-2: #fff;
+    --hairline: #bbb; --hairline-strong: #888;
+    --ink: #000; --ink-2: #000; --ink-3: #333;
+    --accent: #000; --accent-hover: #000;
+    --elev: none; --elev-panel: none;
+    color-scheme: light;
+  }
+
+  body { font-size: 10.5pt; line-height: 1.5; letter-spacing: 0; }
+  .u-section, .lhead { padding-block: 0 !important; }
+  .u-container { max-width: none; padding-inline: 0; }
+  .legal { display: block; }
+  .sec { display: block; padding-top: 16pt; scroll-margin-top: 0; }
+  .sec__body, .doc__lede { max-width: none; }
+  .sec__body p, .sec__body li, .addr { color: #000; font-size: 10.5pt; line-height: 1.5; }
+  .doc__lede p { font-size: 11pt; color: #000; }
+
+  .lhead h1 { font-size: 22pt; max-width: none; }
+  .lhead__lede { font-size: 11pt; color: #000; max-width: none; }
+  .sec__h { font-size: 13pt; break-after: avoid; page-break-after: avoid; }
+  .meta { border-top: 1pt solid #000; }
+  .meta dd { color: #000; }
+  .addr { background: none; border-left: 2pt solid #000; }
+  .stamp { color: #000; }
+  .term { border-bottom: 0; font-weight: 600; }
+
+  /* spell out where a link went */
+  .sec__body a[href]::after,
+  .addr a[href]::after { content: ' <' attr(href) '>'; font-family: var(--font-mono); font-size: 9pt; word-break: break-all; }
+  .sec__body a[href^='#']::after { content: ''; }   /* in-document jumps mean nothing on paper */
+  .sec__body a, .addr a { color: #000; border-bottom: 0; text-decoration: underline; }
+
+  p, li { orphans: 3; widows: 3; }
+  ul { break-inside: avoid; page-break-inside: avoid; }
+
+  /* the provenance line only a printed copy needs */
+  .doc::after {
+    content: 'Printed from jobfairx.com/employer/privacy-policy. The plain-language summaries shown on the web page are editorial and are not printed; they form no part of this policy.';
+    display: block; margin-top: 18pt; padding-top: 8pt;
+    border-top: 1pt solid #000; font-size: 8.5pt; line-height: 1.4; color: #000;
+  }
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="lhead grain">
+    <div class="lhead__grid" aria-hidden="true"></div>
+
+    <div class="u-container lhead__inner">
+      <p class="t-eyebrow">Legal</p>
+      <h1 class="t-h1 t-balance">Privacy Policy</h1>
+
+      
+      <p class="t-lead lhead__lede">
+        “Protecting your private information is our priority.”
+      </p>
+
+      <dl class="meta">
+        <div>
+          <dt>Effective</dt>
+          
+          <dd>July 13, 2026</dd>
+        </div>
+        <div>
+          <dt>Applies to</dt>
+          <dd>jobfairx.com</dd>
+        </div>
+        <div>
+          <dt>Entity</dt>
+          <dd>JobFairX, LLC</dd>
+        </div>
+        <div>
+          <dt>Privacy contact</dt>
+          <dd><a href="mailto:info@jobfairx.com">info@jobfairx.com</a></dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" style="padding-block:var(--s-16) var(--section-y)">
+    <div class="u-container">
+      <div class="legal">
+
+        
+        <nav class="toc" data-toc aria-label="Contents of this policy">
+          <p class="t-eyebrow toc__label">Contents</p>
+          <ol>
+            <li><a href="#s-collection"><span class="n">01</span> Collection of your Personal Information</a></li>
+            <li><a href="#s-cookies"><span class="n">02</span> Cookies and Tracking Technologies</a></li>
+            <li><a href="#s-use"><span class="n">03</span> Use of your Personal Information</a></li>
+            <li><a href="#s-sharing"><span class="n">04</span> Sharing Information with Third Parties</a></li>
+            <li><a href="#s-deletion"><span class="n">05</span> Right to Deletion</a></li>
+            <li><a href="#s-children"><span class="n">06</span> Children Under Thirteen</a></li>
+            <li><a href="#s-email"><span class="n">07</span> E-mail Communications</a></li>
+            <li><a href="#s-changes"><span class="n">08</span> Changes to this Statement</a></li>
+            <li><a href="#s-contact"><span class="n">09</span> Contact Information</a></li>
+          </ol>
+          <p class="toc__print">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 5V1.5h6V5M4 10.5H2.5v-4h9v4H10M4 8.5h6v4H4v-4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <button type="button" data-print>Print or save as PDF</button>
+          </p>
+        </nav>
+
+        
+        <main class="doc">
+
+          
+          <div class="doc__lede">
+            <p>
+              Protecting your private information is our priority. This Statement of Privacy applies
+              to JobFairX virtual application, and JobFairX and governs data collection and usage.
+              For the purposes of this Privacy Policy, unless otherwise noted, all references to
+              JobFairX include jobfairx.com and JobFairX. The JobFairX application is a virtual
+              events application. By using the JobFairX application, you consent to the data
+              practices described in this statement.
+            </p>
+
+            
+            <div class="sumnote">
+              <span class="sumnote__ic" aria-hidden="true">i</span>
+              <div>
+                <p>
+                  <strong>The amber boxes beside each section are a plain-language summary.</strong>
+                  They are a reading aid written by JobFairX, they are not part of this policy, they
+                  are not legal advice, and they create no rights or obligations. Where a summary and
+                  the policy differ, <strong>the policy text governs</strong>. Summaries are omitted
+                  from the printed and PDF version of this page.
+                </p>
+                <span class="sumnote__flag" data-placeholder style="position:relative;display:inline-block">{{SUMMARY COPY — PENDING COUNSEL SIGN-OFF}}</span>
+              </div>
+            </div>
+          </div>
+
+          
+          <section class="sec" id="s-collection" data-reveal>
+            <h2 class="sec__h">Collection of your Personal Information</h2>
+
+            <div class="sec__body">
+              <p>
+                In order to better provide you with products and services offered, JobFairX may
+                collect personally identifiable information, such as your:
+              </p>
+              <ul>
+                <li>First and Last Name</li>
+                <li>E-mail Address</li>
+                <li>Phone Number</li>
+                <li>Job Title</li>
+              </ul>
+              <p>
+                If you purchase JobFairX&#39;s products and services, we collect billing and credit
+                card information. This information is used to complete the purchase transaction.
+              </p>
+              <p>
+                Except for information collected automatically through cookies and similar
+                technologies (described in &#39;<a href="#s-cookies">Cookies and Tracking
+                Technologies</a>&#39; below), we do not collect personal information about you unless
+                you voluntarily provide it to us. However, you may be required to provide certain
+                personal information to us when you elect to use certain products or services. These
+                may include: (a) registering for an account; (b) entering a sweepstakes or contest
+                sponsored by us or one of our partners; (c) signing up for special offers from
+                selected third parties; (d) sending us an email message; (e) submitting your credit
+                card or other payment information when ordering and purchasing products and services.
+                To wit, we will use your information for, but not limited to, communicating with you
+                in relation to services and/or products you have requested from us. We also may
+                gather additional personal or non-personal information in the future.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                The identifying details collected are the four listed above. Billing and card details
+                are collected only when you buy something, to complete that purchase.
+              </p>
+              <p>
+                Apart from what cookies pick up automatically, nothing personal is collected unless
+                you hand it over — by registering, entering a promotion, emailing, or paying.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-cookies" data-reveal>
+            <h2 class="sec__h">Cookies and Tracking Technologies</h2>
+
+            <div class="sec__body">
+              <p>
+                When you visit or log into our website, we use cookies and similar technologies to
+                collect certain information about your visit. This includes (i)
+                <dfn class="term" title="information about how you use our site, such as pages visited, time spent on pages, and links clicked">Usage Data</dfn>
+                (information about how you use our site, such as pages visited, time spent on pages,
+                and links clicked); (ii)
+                <dfn class="term" title="details about the device you use to access our site, including IP address, browser type, and operating system">Device Information</dfn>
+                (details about the device you use to access our site, including IP address, browser
+                type, and operating system); and (iii)
+                <dfn class="term" title="if you provide it, we may collect information such as your email address, phone number, or other contact details">Personal Data</dfn>
+                (if you provide it, we may collect information such as your email address, phone
+                number, or other contact details). We may also combine this information collected
+                automatically with other data we receive from third-party sources, such as data
+                providers and marketing partners, to create a more complete profile of you. We then
+                use this profile to communicate with you, including providing personalized
+                advertising and promotional content based on your interests and browsing behavior.
+                You may opt out of this at any time.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                Cookies record how you use the site, what device you are on, and any contact details
+                you supply. That can be combined with data bought from third parties to build a
+                profile, which is then used for personalised advertising.
+              </p>
+              <p>The policy states you may opt out of this at any time.</p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-use" data-reveal>
+            <h2 class="sec__h">Use of your Personal Information</h2>
+
+            <div class="sec__body">
+              <p>
+                JobFairX collects and uses your personal information to operate and deliver the
+                services you have requested.
+              </p>
+              <p>
+                JobFairX may also use your personally identifiable information to inform you of other
+                products or services available from JobFairX and its affiliates.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                Two stated uses: running the service you asked for, and telling you about other
+                JobFairX and affiliate products or services.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-sharing" data-reveal>
+            <h2 class="sec__h">Sharing Information with Third Parties</h2>
+
+            <div class="sec__body">
+              <p>JobFairX does not sell, rent or lease its customer lists to third parties.</p>
+              <p>
+                JobFairX may share data with trusted partners to help perform statistical analysis,
+                send you email or postal mail, provide customer support, or arrange for deliveries.
+                All such third parties are prohibited from using your personal information except to
+                provide these services to JobFairX, and they are required to maintain the
+                confidentiality of your information.
+              </p>
+              <p>
+                JobFairX may disclose your personal information, without notice, if required to do so
+                by law or in the good faith belief that such action is necessary to: (a) conform to
+                the edicts of the law or comply with legal process served on JobFairX or the site;
+                (b) protect and defend the rights or property of JobFairX; and/or (c) act under
+                exigent circumstances to protect the personal safety of users of JobFairX, or the
+                public.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>Customer lists are not sold, rented or leased.</p>
+              <p>
+                Trusted partners may handle your data to do a job for JobFairX — analytics, mail,
+                support, deliveries — and may not use it for anything else.
+              </p>
+              <p>
+                Disclosure without notice is possible in the three situations listed: legal
+                compulsion, defending JobFairX&#39;s rights or property, and emergencies affecting
+                personal safety.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-deletion" data-reveal>
+            <h2 class="sec__h">Right to Deletion</h2>
+
+            <div class="sec__body">
+              <p>
+                Subject to certain exceptions set out below, on receipt of a verifiable request from
+                you, we will:
+              </p>
+              <ul>
+                <li>Delete your personal information from our records; and</li>
+                <li>Direct any service providers to delete your personal information from their records.</li>
+              </ul>
+              <p>
+                Please note that we may not be able to comply with requests to delete your personal
+                information if it is necessary to:
+              </p>
+              <ul>
+                <li>
+                  Complete the transaction for which the personal information was collected, fulfill
+                  the terms of a written warranty or product recall conducted in accordance with
+                  federal law, provide a good or service requested by you, or reasonably anticipated
+                  within the context of our ongoing business relationship with you, or otherwise
+                  perform a contract between you and us;
+                </li>
+                <li>
+                  Detect security incidents, protect against malicious, deceptive, fraudulent, or
+                  illegal activity; or prosecute those responsible for that activity;
+                </li>
+                <li>Debug to identify and repair errors that impair existing intended functionality;</li>
+                <li>
+                  Exercise free speech, ensure the right of another consumer to exercise his or her
+                  right of free speech, or exercise another right provided for by law;
+                </li>
+                <li>Comply with the California Electronic Communications Privacy Act;</li>
+                <li>
+                  Engage in public or peer-reviewed scientific, historical, or statistical research in
+                  the public interest that adheres to all other applicable ethics and privacy laws,
+                  when our deletion of the information is likely to render impossible or seriously
+                  impair the achievement of such research, provided we have obtained your informed
+                  consent;
+                </li>
+                <li>
+                  Enable solely internal uses that are reasonably aligned with your expectations based
+                  on your relationship with us;
+                </li>
+                <li>Comply with an existing legal obligation; or</li>
+                <li>
+                  Otherwise use your personal information, internally, in a lawful manner that is
+                  compatible with the context in which you provided the information.
+                </li>
+              </ul>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                Send a verifiable deletion request and your personal information is deleted from
+                JobFairX records, and service providers are directed to delete it from theirs.
+              </p>
+              <p>
+                Nine exceptions are listed where deletion may not be possible — among them completing
+                a transaction you started, investigating security incidents and fraud, fixing bugs,
+                and complying with an existing legal obligation.
+              </p>
+              <p>
+                Requests go to the contact address in section 09.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-children" data-reveal>
+            <h2 class="sec__h">Children Under Thirteen</h2>
+
+            <div class="sec__body">
+              <p>
+                JobFairX does not knowingly collect personally identifiable information from children
+                under the age of thirteen. If you are under the age of thirteen, you must ask your
+                parent or guardian for permission to use this application.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                Personal information is not knowingly collected from under-13s, and under-13s need a
+                parent or guardian&#39;s permission to use the application.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-email" data-reveal>
+            <h2 class="sec__h">E-mail Communications</h2>
+
+            <div class="sec__body">
+              <p>
+                From time to time, JobFairX may contact you via email for the purpose of providing
+                announcements, promotional offers, alerts, confirmations, surveys, and/or other
+                general communication. In order to improve our Services, we may receive a
+                notification when you open an email from JobFairX or click on a link therein.
+              </p>
+              <p>
+                If you would like to stop receiving marketing or promotional communications via email
+                from JobFairX, you may opt out of such communications by clicking on the UNSUBSCRIBE
+                button.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                JobFairX emails you announcements, offers, alerts, confirmations and surveys, and may
+                be notified when you open one or click a link in it.
+              </p>
+              <p>
+                The stated way to stop marketing email is the UNSUBSCRIBE button in the email itself.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-changes" data-reveal>
+            <h2 class="sec__h">Changes to this Statement</h2>
+
+            <div class="sec__body">
+              <p>
+                JobFairX reserves the right to change this Privacy Policy from time to time. We will
+                notify you about significant changes in the way we treat personal information by
+                sending a notice to the primary email address specified in your account, by placing a
+                prominent notice on our application, and/or by updating any privacy information. Your
+                continued use of the application and/or Services available after such modifications
+                will constitute your: (a) acknowledgment of the modified Privacy Policy; and (b)
+                agreement to abide and be bound by that Policy.
+              </p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                This policy can change. Significant changes are notified by email to your account
+                address, by a notice on the application, or by updating the privacy information.
+              </p>
+              <p>
+                Continuing to use JobFairX after a change counts as accepting the changed policy.
+              </p>
+            </aside>
+          </section>
+
+          
+          <section class="sec" id="s-contact" data-reveal>
+            <h2 class="sec__h">Contact Information</h2>
+
+            <div class="sec__body">
+              <p>
+                JobFairX welcomes your questions or comments regarding this Statement of Privacy. If
+                you believe that JobFairX has not adhered to this Statement, please contact JobFairX
+                at:
+              </p>
+
+              
+              <address class="addr">
+                <strong>JobFairX, LLC</strong><br>
+                209 S Stephanie St. STE B #144<br>
+                Henderson, Nevada 89012
+                <br><br>
+                Email Address:<br>
+                <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+              </address>
+
+              <p class="stamp">Effective as of July 13, 2026</p>
+            </div>
+
+            <aside class="sum">
+              <span class="sum__label">Plain English — not binding</span>
+              <p>
+                Questions, comments and complaints about this policy — including deletion requests
+                under section 05 — go to the postal address or email address shown.
+              </p>
+            </aside>
+          </section>
+
+        </main>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section closeband">
+    <div class="u-container">
+      <div class="closeband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Questions about this policy?</h2>
+          <p class="t-lead">
+            The text above is the authoritative Statement of Privacy. If something in it is
+            unclear, or you want to make a deletion request, the same team that answers
+            employer questions handles it.
+          </p>
+          <div class="cta-row">
+            <a href="page-contact.html" class="btn btn--primary btn--lg">Contact us</a>
+            <a href="page-security.html" class="btn btn--secondary btn--lg">Security</a>
+          </div>
+        </div>
+
+        <ul class="closeband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Email</span>
+            <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Phone</span>
+            <a href="tel:+17022690808">(702) 269-0808</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Hours</span>
+            <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><span aria-current="page">Privacy</span></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page-specific: contents scroll-spy + print button.
+   Vanilla, no dependencies, and nothing here gates the readability of the
+   document — if this script never runs you still get the full policy, the
+   contents list still works as plain anchors, and Ctrl/Cmd-P still prints.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  /* ---------- print ---------- */
+  var printBtn = document.querySelector('[data-print]');
+  if (printBtn) {
+    printBtn.addEventListener('click', function () { window.print(); });
+  }
+
+  /* ---------- contents scroll-spy ---------- */
+  var toc = document.querySelector('[data-toc]');
+  if (!toc || !('IntersectionObserver' in window)) return;
+
+  var links = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+
+  function mark(a) {
+    links.forEach(function (l) {
+      var on = l === a;
+      l.classList.toggle('is-active', on);
+      /* aria-current on the contents entry, so a screen reader gets the same
+         "you are here" the sighted reader gets from the blue rule */
+      if (on) l.setAttribute('aria-current', 'true');
+      else    l.removeAttribute('aria-current');
+    });
+  }
+
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var a = map[e.target.id];
+      if (a) mark(a);
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  Object.keys(map).forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (sec) spy.observe(sec);
+  });
+})();
+</script>
+</body>
+</html>

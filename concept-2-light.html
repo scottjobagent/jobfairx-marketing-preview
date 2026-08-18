@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JobFairX — Concept 2: Light</title>
+<meta name="description" content="Hiring events that fill themselves. AI-matched candidates request the interview — you accept.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   CONCEPT 2 — LIGHT / TECHNICAL-EDITORIAL
+   The page as a printed document rather than a dashboard. Structure is drawn
+   with hairlines and an inset page frame instead of alternating fills; depth
+   is deliberately absent — no shadows, no glass, no glow, no backdrop-filter.
+   Character comes from the tracking opposition (negative on the sans,
+   positive on the mono) and from bracketed section ordinals.
+   ========================================================================== */
+
+:root {
+  /* warm neutral ramp — R=B with G a step lower, so white never reads default */
+  --paper:   #faf9f7;
+  --paper-2: #f4f2ef;
+  --ink:     #16151a;
+  --ink-2:   #55525c;
+  --ink-3:   #86828e;
+  --rule:    #ddd9d4;
+  --rule-2:  #c9c4bd;
+
+  --accent:       #2244cc;
+  --accent-hover: #1a35a8;
+
+  /* per-pillar ink + ~8% tint surface, one pair per interview format */
+  --p-video-i:#1d4ed8; --p-video-s:#e9f0fc;
+  --p-phone-i:#2f7d84; --p-phone-s:#e6f4f5;
+  --p-place-i:#8a5524; --p-place-s:#f8efe5;
+  --p-link-i: #574e57; --p-link-s: #f0eeef;
+
+  --r-md: 4px; --r-lg: 4px; --r-xl: 6px;   /* flat radii throughout */
+}
+
+body { background: var(--paper); color: var(--ink); }
+
+/* the inset page frame — a document, not a canvas */
+.frame {
+  margin: 16px; border: 1px solid var(--rule); background: var(--paper);
+  position: relative; overflow: clip;
+}
+@media (max-width: 720px) { .frame { margin: 8px; } }
+
+.u-section { background: transparent; color: var(--ink); border-top: 1px solid var(--rule); }
+.rule-t { border-top: 1px solid var(--rule); }
+
+/* ---------- type: tracking opposition ---------- */
+.mono { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .08em; font-size: .6875rem; color: var(--ink-3); }
+.t-display, .t-h1, .t-h2, .t-h3 { font-weight: 500; }
+.t-lead { color: var(--ink-2); }
+
+/* bracketed section ordinal + label */
+.ord { display: flex; align-items: baseline; gap: var(--s-3); margin-bottom: var(--s-6); }
+.ord b { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .08em; color: var(--ink-3); font-weight: 400; }
+.ord span { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+
+/* ---------- nav ---------- */
+.announce { text-align: center; font-size: var(--t-xs); color: var(--ink-2); padding: 9px var(--gutter); border-bottom: 1px solid var(--rule); }
+.announce a { color: var(--ink); border-bottom: 1px solid var(--rule-2); }
+.announce a:hover { color: var(--accent); border-color: var(--accent); }
+
+.nav { position: sticky; top: 0; z-index: 60; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 60px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.nav__links a:hover { color: var(--ink); }
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+/* juicebox-style buttons: flat, 4px, mono label */
+.btn { border-radius: 4px; }
+.btn--primary { background: #241f28; color: #faf9fa; font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .08em; text-transform: uppercase; }
+.btn--primary:hover { background: var(--accent); }
+.btn--secondary { border: 1px solid var(--rule-2); color: var(--ink); font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .08em; text-transform: uppercase; background: transparent; }
+.btn--secondary:hover { border-color: var(--ink); background: transparent; }
+
+.drawer { display: none; }
+@media (max-width: 940px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__inner { justify-content: space-between; }
+  .drawer { display: block; position: fixed; inset: 0; z-index: 70; background: var(--paper); padding: var(--s-16) var(--gutter); transform: translateY(-100%); transition: transform var(--t-base) var(--e-out); overflow-y: auto; }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--rule); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ----------
+   No product screenshot and no gradient. The "visual" is a dot matrix with a
+   clearing burned through the middle by a radial mask, so the headline sits in
+   an optical opening rather than on top of an image. */
+.hero { position: relative; padding-block: var(--s-24) var(--s-20); text-align: center; overflow: hidden; }
+.hero__dots {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(34,68,204,.42) 1.1px, transparent 1.1px);
+  background-size: 15px 15px;
+  -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 46%, transparent 34%, #000 100%);
+  mask-image: radial-gradient(ellipse 62% 58% at 50% 46%, transparent 34%, #000 100%);
+  opacity: .5;
+}
+/* crop-mark corner stamp — reads as a technical drawing */
+.hero__stamp {
+  position: absolute; top: 0; right: 0; width: 86px; height: 190px;
+  background: var(--paper); border-left: 1px solid var(--rule); z-index: 1;
+}
+.hero__stamp::after {
+  content: ''; position: absolute; left: 4px; top: 104px; width: 78px; height: 78px;
+  border: 1px solid var(--rule);
+  background: linear-gradient(to bottom right, transparent calc(50% - .5px), var(--rule) 50%, transparent calc(50% + .5px));
+}
+.hero__inner { position: relative; z-index: 2; }
+
+/* rotating conic-gradient border, used exactly once on the page */
+.pill {
+  position: relative; display: inline-flex; align-items: center; gap: var(--s-2);
+  padding: 7px 15px; border-radius: 999px; overflow: hidden;
+  font-size: var(--t-xs); color: var(--ink-2); margin-bottom: var(--s-8);
+}
+.pill::before {
+  content: ''; position: absolute; inset: -200px; z-index: 0;
+  background: conic-gradient(from 0deg at 50% 50%, #dfe4f7 0deg, var(--accent) 360deg);
+  animation: spin 6s linear infinite; will-change: transform;
+}
+.pill::after { content: ''; position: absolute; inset: 1px; border-radius: 999px; background: var(--paper); z-index: 1; }
+.pill > * { position: relative; z-index: 2; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pill em { font-style: normal; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+
+.hero h1 { max-width: 15ch; margin-inline: auto; letter-spacing: -.04em; }
+.hero__sub { max-width: 56ch; margin: var(--s-6) auto 0; }
+.hero__cta { display: flex; gap: var(--s-3); justify-content: center; flex-wrap: wrap; margin-top: var(--s-8); }
+.caret { display: inline-block; width: .5ch; background: var(--accent); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+
+/* ---------- product panels: hairline only, zero shadow ---------- */
+.shot { border: 1px solid var(--rule); border-radius: 6px; padding: 6px; background: var(--paper-2); }
+.shot .crop { border-radius: 3px; border: 1px solid var(--rule); }
+
+/* ---------- logos ---------- */
+.logos { display: grid; grid-template-columns: repeat(6,1fr); gap: var(--s-8) var(--s-6); align-items: center; margin-top: var(--s-6); }
+.logo-ph { height: 24px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; color: var(--ink-3); border: 1px dashed var(--rule-2); border-radius: 3px; }
+@media (max-width: 900px) { .logos { grid-template-columns: repeat(3,1fr); } }
+
+/* ---------- two-column editorial head ---------- */
+.split { display: grid; grid-template-columns: 300px minmax(0,1fr); gap: var(--s-16); }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: var(--s-6); } }
+
+/* ---------- inversion ---------- */
+.compare li { display: flex; gap: var(--s-3); padding: var(--s-3) 0; border-bottom: 1px solid var(--rule); font-size: var(--t-sm); color: var(--ink-2); }
+.compare li:last-child { border-bottom: 0; }
+.compare__mark { flex: none; font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); width: 16px; margin-top: 3px; }
+.compare--new li { color: var(--ink); }
+.compare--new .compare__mark { color: var(--accent); }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-12); margin-top: var(--s-10); }
+@media (max-width: 880px) { .cols2 { grid-template-columns: 1fr; gap: var(--s-8); } }
+
+/* ---------- formats: per-pillar tint ---------- */
+.fmts { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--s-4); margin-top: var(--s-10); }
+.fmt { border: 1px solid var(--rule); border-radius: 4px; padding: var(--s-5); background: var(--tint); }
+.fmt__ic { width: 34px; height: 34px; border-radius: 4px; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule); color: var(--hue); margin-bottom: var(--s-4); }
+.fmt h3 { font-size: .9375rem; font-weight: 550; letter-spacing: -.02em; color: var(--hue); }
+.fmt p { font-size: var(--t-sm); color: var(--ink-2); margin-top: 6px; }
+.fmt--video { --tint: var(--p-video-s); --hue: var(--p-video-i); }
+.fmt--phone { --tint: var(--p-phone-s); --hue: var(--p-phone-i); }
+.fmt--place { --tint: var(--p-place-s); --hue: var(--p-place-i); }
+.fmt--link  { --tint: var(--p-link-s);  --hue: var(--p-link-i); }
+@media (max-width: 980px) { .fmts { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .fmts { grid-template-columns: 1fr; } }
+
+/* ---------- journey: numbered ledger ---------- */
+.ledger { margin-top: var(--s-10); border-top: 1px solid var(--rule); }
+.lrow { display: grid; grid-template-columns: 56px 1fr 200px; gap: var(--s-6); align-items: start; padding: var(--s-6) 0; border-bottom: 1px solid var(--rule); transition: background var(--t-fast) var(--e-out); }
+.lrow:hover { background: var(--paper-2); }
+.lrow__n { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .06em; color: var(--ink-3); padding-top: 3px; }
+.lrow h3 { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; }
+.lrow p { font-size: var(--t-sm); color: var(--ink-2); margin-top: 4px; max-width: 52ch; }
+.lrow__when { font-family: var(--font-mono); font-size: .625rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); text-align: right; padding-top: 4px; }
+@media (max-width: 780px) { .lrow { grid-template-columns: 40px 1fr; } .lrow__when { grid-column: 2; text-align: left; } }
+
+/* ---------- caps ---------- */
+.caps { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--s-5); margin-top: var(--s-10); }
+.cap { border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; background: var(--paper); }
+.cap .crop { border-radius: 0; border-bottom: 1px solid var(--rule); }
+.cap__body { padding: var(--s-5); }
+.cap h3 { font-size: .9375rem; font-weight: 550; letter-spacing: -.02em; }
+.cap p { font-size: var(--t-sm); color: var(--ink-2); margin-top: 6px; }
+@media (max-width: 980px) { .caps { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 640px) { .caps { grid-template-columns: 1fr; } }
+
+/* ---------- video placeholder, flattened ---------- */
+.video-ph { background: var(--paper-2); border-color: var(--rule); border-radius: 6px; }
+.video-ph__play { background: var(--paper); border-color: var(--rule-2); }
+.video-ph__play svg { fill: var(--accent); }
+.video-ph__meta { background: var(--paper); border-color: var(--rule); color: var(--ink-3); font-family: var(--font-mono); }
+
+/* ---------- stats / results / pricing ---------- */
+.stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-top: var(--s-10); border-top: 1px solid var(--rule); }
+.stat { padding: var(--s-6) var(--s-5); border-right: 1px solid var(--rule); }
+.stat:last-child { border-right: 0; }
+.stat__n { font-size: clamp(1.75rem,1.3rem+2vw,2.5rem); font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+.stat__l { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); }
+.stat__src { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; color: var(--ink-3); margin-top: 6px; }
+@media (max-width: 780px) { .stats { grid-template-columns: 1fr 1fr; } .stat:nth-child(2) { border-right: 0; } .stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule); } }
+
+.results { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--s-5); margin-top: var(--s-10); }
+.quote { border: 1px solid var(--rule); border-radius: 4px; padding: var(--s-6); display: flex; flex-direction: column; gap: var(--s-5); background: var(--paper); }
+.quote p { font-size: 1rem; letter-spacing: -.012em; line-height: 1.55; }
+.quote footer { margin-top: auto; display: flex; align-items: center; gap: var(--s-3); font-size: var(--t-sm); }
+.avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--paper-2); border: 1px solid var(--rule); display: grid; place-items: center; font-size: 11px; color: var(--ink-3); flex: none; }
+.quote__who b { display: block; font-weight: 550; }
+.quote__who span { color: var(--ink-3); font-size: var(--t-xs); }
+@media (max-width: 900px) { .results { grid-template-columns: 1fr; } }
+
+.tiers { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: var(--s-10); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.tier { padding: var(--s-8) var(--s-6); border-right: 1px solid var(--rule); }
+.tier:last-child { border-right: 0; }
+.tier--featured { background: var(--paper-2); }
+.tier__name { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.tier__price { font-size: 1.875rem; font-weight: 500; letter-spacing: -.04em; margin: var(--s-4) 0 var(--s-2); }
+.tier__price small { font-size: var(--t-sm); font-weight: 400; color: var(--ink-3); letter-spacing: 0; }
+.tier ul { display: grid; gap: var(--s-3); margin: var(--s-6) 0; }
+.tier li { display: flex; gap: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); }
+.tier li svg { flex: none; margin-top: 3px; color: var(--accent); }
+.tier .btn { width: 100%; }
+@media (max-width: 900px) { .tiers { grid-template-columns: 1fr; } .tier { border-right: 0; border-bottom: 1px solid var(--rule); } .tier:last-child { border-bottom: 0; } }
+
+/* ---------- close + footer (the one dark region) ---------- */
+.close { text-align: center; padding-block: var(--s-32); border-top: 1px solid var(--rule); }
+.foot { background: #16151a; color: #faf9fa; padding-block: var(--s-20) var(--s-8); }
+.foot__cols { display: grid; grid-template-columns: 1.6fr repeat(4,1fr); gap: var(--s-8); }
+/* inverted hierarchy: headings dimmer than the links beneath them */
+.foot h4 { font-size: var(--t-sm); font-weight: 400; color: rgba(255,255,255,.6); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .08em; text-transform: uppercase; color: #faf9fa; }
+.foot li a:hover { color: var(--accent-hover); }
+.foot .wordmark { color: #faf9fa; }
+.foot__mark {
+  position: relative; margin-top: var(--s-16);
+  font-size: clamp(3.5rem,13vw,11rem); font-weight: 600; letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.34); user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 92%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 92%);
+}
+.foot__mark::after { content: 'JobFairX'; position: absolute; left: 2px; top: 2px; color: transparent; -webkit-text-stroke: 1px rgba(90,130,255,.45); }
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap; margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid rgba(255,255,255,.14); font-size: var(--t-xs); color: rgba(255,255,255,.4); }
+@media (max-width: 900px) { .foot__cols { grid-template-columns: 1fr 1fr; } }
+
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .9; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="announce">
+    Next healthcare hiring event — <strong style="color:var(--ink)">{{DATE}}</strong>, {{CITY}}.
+    <a href="#">See upcoming events →</a>
+  </div>
+
+  <header class="nav" data-nav>
+    <div class="u-container nav__inner">
+      <a href="#" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="#platform">Platform</a><a href="#formats">Interviews</a>
+        <a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#results">Customers</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign in</a>
+        <a href="#cta" class="btn btn--primary">Book a demo</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+    <a href="#platform">Platform</a><a href="#formats">Interviews</a>
+    <a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#results">Customers</a>
+    <a href="#cta" style="color:var(--accent)">Book a demo →</a>
+  </div>
+
+  
+  <section class="hero">
+    <div class="hero__dots" aria-hidden="true"></div>
+    <div class="hero__stamp" aria-hidden="true"></div>
+    <div class="u-container hero__inner">
+      <div class="pill"><em>New</em> <span>Host your own branded hiring event</span></div>
+      <h1 class="t-display t-balance">Hiring events that fill themselves.<span class="caret">&nbsp;</span></h1>
+      <p class="t-lead hero__sub">
+        JobFairX matches qualified candidates to your open roles — and they request the
+        interview. You accept, and it's scheduled. Run it by video, phone, or in person.
+      </p>
+      <div class="hero__cta">
+        <a href="#cta" class="btn btn--primary btn--lg">Book a demo</a>
+        <a href="#how" class="btn btn--secondary btn--lg">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <section style="padding-bottom:var(--s-16)">
+    <div class="u-container">
+      <div class="shot" data-reveal>
+        <div class="crop crop--16x10">
+          <img src="assets/product/lobby-live.png" alt="The JobFairX event lobby during a live hiring event, showing interview rooms in progress and candidates waiting." width="3200" height="2000" style="--zm:2.4;--lm:-3%;--tm:-16%;--z:1;--l:0%;--t:0%">
+        </div>
+      </div>
+      <p class="mono" style="margin-top:var(--s-3)">Fig. 01 — Event lobby, interview day</p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" style="padding-block:var(--s-10)">
+    <div class="u-container">
+      <p class="mono">Hiring teams running events on JobFairX</p>
+      <div class="logos" data-placeholder>
+        <div class="logo-ph">{{LOGO 1}}</div><div class="logo-ph">{{LOGO 2}}</div>
+        <div class="logo-ph">{{LOGO 3}}</div><div class="logo-ph">{{LOGO 4}}</div>
+        <div class="logo-ph">{{LOGO 5}}</div><div class="logo-ph">{{LOGO 6}}</div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section">
+    <div class="u-container split">
+      <div><div class="ord"><b>[01]</b><span>The difference</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>You've been doing the chasing. Stop.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5);max-width:60ch" data-reveal>
+          Every other hiring tool hands you a bigger pile to dig through. JobFairX turns the
+          pipeline around: candidates are matched to your roles first, and the ones who want the
+          job ask you for the interview.
+        </p>
+        <div class="cols2">
+          <div data-reveal>
+            <p class="mono" style="margin-bottom:var(--s-4)">The old way</p>
+            <ul class="compare compare--old">
+              <li><span class="compare__mark">01</span> Post a job and wait</li>
+              <li><span class="compare__mark">02</span> Sift hundreds of unscreened resumes</li>
+              <li><span class="compare__mark">03</span> Chase people who never reply</li>
+              <li><span class="compare__mark">04</span> Book interviews one email at a time</li>
+              <li><span class="compare__mark">05</span> Half of them don't show</li>
+            </ul>
+          </div>
+          <div data-reveal style="--i:1">
+            <p class="mono" style="margin-bottom:var(--s-4);color:var(--accent)">With JobFairX</p>
+            <ul class="compare compare--new">
+              <li><span class="compare__mark">01</span> Register for an event, post your roles</li>
+              <li><span class="compare__mark">02</span> AI matches to the role, not to keywords</li>
+              <li><span class="compare__mark">03</span> Candidates request the interview themselves</li>
+              <li><span class="compare__mark">04</span> One click accepts — and schedules it</li>
+              <li><span class="compare__mark">05</span> Reminders and follow-ups send on their own</li>
+            </ul>
+          </div>
+        </div>
+        <div class="shot" style="margin-top:var(--s-10)" data-reveal>
+          <div class="crop crop--wide">
+            <img src="assets/product/candidates.png" alt="The candidate pipeline, showing interview requests with Accept, Decline and Reschedule actions." width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-18%;--z:1.25;--l:-15%;--t:-15%">
+          </div>
+        </div>
+        <p class="mono" style="margin-top:var(--s-3)">Fig. 02 — Candidate pipeline, interview requests</p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="formats">
+    <div class="u-container split">
+      <div><div class="ord"><b>[02]</b><span>Interview formats</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>Virtual when it's faster. In person when it matters.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5);max-width:58ch" data-reveal>
+          You choose the format per event — and candidates see exactly what to expect before they
+          request a time.
+        </p>
+        <div class="fmts">
+          <article class="fmt fmt--video" data-reveal style="--i:0">
+            <div class="fmt__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 4.5A1.5 1.5 0 0 1 2.5 3h6A1.5 1.5 0 0 1 10 4.5v7A1.5 1.5 0 0 1 8.5 13h-6A1.5 1.5 0 0 1 1 11.5v-7ZM11 6.6l3.3-2.2a.5.5 0 0 1 .7.4v6.4a.5.5 0 0 1-.7.4L11 9.4V6.6Z"/></svg></div>
+            <h3>JobFairX video</h3><p>Built-in room. Nothing to install, for you or the candidate.</p>
+          </article>
+          <article class="fmt fmt--phone" data-reveal style="--i:1">
+            <div class="fmt__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3.6 1.6c.5-.5 1.3-.5 1.8 0l1.5 1.6c.4.5.4 1.2 0 1.7L5.7 6.1c.7 1.7 2.1 3.1 3.8 3.8l1.2-1.2c.5-.4 1.2-.4 1.7 0l1.6 1.5c.5.5.5 1.3 0 1.8l-.8.8c-.7.7-1.8.9-2.7.5C7 11.8 4 8.8 2.3 5c-.4-.9-.2-2 .5-2.7l.8-.7Z"/></svg></div>
+            <h3>Phone</h3><p>You call each candidate at the scheduled time.</p>
+          </article>
+          <article class="fmt fmt--place" data-reveal style="--i:2">
+            <div class="fmt__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5A4.5 4.5 0 0 0 3.5 6c0 3.2 3.7 7.7 4.1 8.2.2.2.6.2.8 0C8.8 13.7 12.5 9.2 12.5 6A4.5 4.5 0 0 0 8 1.5Zm0 6.2A1.7 1.7 0 1 1 8 4.3a1.7 1.7 0 0 1 0 3.4Z"/></svg></div>
+            <h3>In person</h3><p>Share an address. It appears on their confirmation.</p>
+          </article>
+          <article class="fmt fmt--link" data-reveal style="--i:3">
+            <div class="fmt__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M6 2h8v8h-2V5.4l-6.3 6.3-1.4-1.4L10.6 4H6V2Zm-4 3h3v2H4v7h7v-1h2v3H2V5Z"/></svg></div>
+            <h3>Your own link</h3><p>Zoom, Teams or Meet — we schedule around it.</p>
+          </article>
+        </div>
+        <div class="shot" style="margin-top:var(--s-10)" data-reveal>
+          <div class="crop crop--wide">
+            <img src="assets/product/interviews.png" alt="One interview schedule mixing video, phone and in-person interviews." width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-18%;--z:1.3;--l:-16%;--t:-16%">
+          </div>
+        </div>
+        <p class="mono" style="margin-top:var(--s-3)">Fig. 03 — Every format in one schedule</p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="how">
+    <div class="u-container split">
+      <div><div class="ord"><b>[03]</b><span>How it works</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>What happens after you register.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5)" data-reveal>Seven steps, most of which happen without you.</p>
+        <div class="ledger">
+          <div class="lrow" data-reveal><div class="lrow__n">01</div><div><h3>Register for a hiring event</h3><p>Pick an upcoming event in your market — or host your own branded one.</p></div><div class="lrow__when">Day one</div></div>
+          <div class="lrow" data-reveal><div class="lrow__n">02</div><div><h3>Post your open jobs</h3><p>Title, location, format. Reuse a previous post as a template.</p></div><div class="lrow__when">Day one</div></div>
+          <div class="lrow" data-reveal><div class="lrow__n">03</div><div><h3>AI starts matching candidates</h3><p>Matched against what the role actually needs — not a keyword count.</p></div><div class="lrow__when">Immediately</div></div>
+          <div class="lrow" data-reveal><div class="lrow__n">04</div><div><h3>Candidates request interviews</h3><p>They pick a time from your availability and ask. No cold outreach.</p></div><div class="lrow__when">Days before</div></div>
+          <div class="lrow" data-reveal><div class="lrow__n">05</div><div><h3>You accept the ones you want</h3><p>Accept, decline or propose a new time. Accepting schedules it.</p></div><div class="lrow__when">Days before</div></div>
+          <div class="lrow" data-reveal><div class="lrow__n">06</div><div><h3>Interview your way</h3><p>Video, phone, in person, or your own link — set per event.</p></div><div class="lrow__when">Event day</div></div>
+          <div class="lrow" data-reveal><div class="lrow__n">07</div><div><h3>Keep hiring after the event</h3><p>Messaging and automations stay on. Rate, follow up, make the offer.</p></div><div class="lrow__when">After</div></div>
+        </div>
+
+        <div class="cols2" style="margin-top:var(--s-10)">
+          <div data-reveal>
+            <div class="shot"><div class="crop crop--16x10"><img src="assets/product/share-preview.png" alt="The candidate's view: choosing a time and requesting an interview." width="3200" height="2000" style="--zm:2.6;--lm:-42%;--tm:-8%;--z:1.9;--l:-40%;--t:-6%"></div></div>
+            <p class="mono" style="margin-top:var(--s-3)">Fig. 04 — What the candidate sees</p>
+          </div>
+          <div data-reveal style="--i:1">
+            <div class="shot"><div class="crop crop--16x10"><img src="assets/product/candidates.png" alt="Accepting an interview request, which schedules it." width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-18%;--z:2.2;--l:-17%;--t:-17%"></div></div>
+            <p class="mono" style="margin-top:var(--s-3)">Fig. 05 — Accept, and it's scheduled</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section">
+    <div class="u-container split">
+      <div><div class="ord"><b>[04]</b><span>AI candidate matching</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>Matching that understands the role, not just the keywords.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5);max-width:58ch" data-reveal>
+          Every candidate you see has been matched against the requirements you actually wrote —
+          and has chosen to raise their hand for it.
+        </p>
+        <div style="margin-top:var(--s-8)" data-reveal>
+          <div class="video-ph" data-placeholder>
+            <div class="video-ph__meta">2:40</div>
+            <div class="video-ph__play"><svg width="20" height="22" viewBox="0 0 20 22"><path d="M0 0l20 11L0 22z"/></svg></div>
+            <div class="video-ph__label t-sm"><strong style="color:var(--ink)">How matching works</strong> — replace with production video</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="platform">
+    <div class="u-container split">
+      <div><div class="ord"><b>[05]</b><span>Platform</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>Everything the event needs, in one place.</h2>
+        <div class="caps">
+          <article class="cap" data-reveal style="--i:0"><div class="crop crop--4x3"><img src="assets/product/dashboard-events.png" alt="Events dashboard" width="3200" height="2000" style="--zm:2.6;--lm:-17%;--tm:-16%;--z:1.8;--l:-16%;--t:-12%"></div><div class="cap__body"><h3>Events dashboard</h3><p>Every event, its format, setup state, jobs and candidate counts in one row.</p></div></article>
+          <article class="cap" data-reveal style="--i:1"><div class="crop crop--4x3"><img src="assets/product/candidates.png" alt="Candidate pipeline" width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-18%;--z:1.8;--l:-16%;--t:-18%"></div><div class="cap__body"><h3>Candidate pipeline</h3><p>Requested, scheduled, interviewed, no-show, declined — action on the row.</p></div></article>
+          <article class="cap" data-reveal style="--i:2"><div class="crop crop--4x3"><img src="assets/product/interviews.png" alt="Interview schedule" width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-18%;--z:1.8;--l:-16%;--t:-20%"></div><div class="cap__body"><h3>Interview schedule</h3><p>Upcoming, pending and past, with the format of each interview.</p></div></article>
+          <article class="cap" data-reveal style="--i:3"><div class="crop crop--4x3"><img src="assets/product/messages-thread.png" alt="Candidate messaging" width="3200" height="2000" style="--zm:2.2;--lm:-15%;--tm:-10%;--z:1.6;--l:-15%;--t:-8%"></div><div class="cap__body"><h3>Messaging</h3><p>Talk to candidates in the platform. Filter by event and by job.</p></div></article>
+          <article class="cap" data-reveal style="--i:4"><div class="crop crop--4x3"><img src="assets/product/automations.png" alt="Automations" width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-16%;--z:1.7;--l:-16%;--t:-16%"></div><div class="cap__body"><h3>Automations</h3><p>Messages that send as candidates move. Five presets ready to switch on.</p></div></article>
+          <article class="cap" data-reveal style="--i:5"><div class="crop crop--4x3"><img src="assets/product/analytics.png" alt="Analytics" width="3200" height="2000" style="--zm:2.4;--lm:-16%;--tm:-16%;--z:1.7;--l:-16%;--t:-14%"></div><div class="cap__body"><h3>Analytics</h3><p>Scheduled vs. completed, attendance rate, missed interviews, per event.</p></div></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section">
+    <div class="u-container split">
+      <div><div class="ord"><b>[06]</b><span>Watch</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>See JobFairX in action.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5)" data-reveal>Six minutes, start to finish.</p>
+        <div style="margin-top:var(--s-8)" data-reveal>
+          <div class="video-ph" data-placeholder>
+            <div class="video-ph__meta">6:12</div>
+            <div class="video-ph__play"><svg width="20" height="22" viewBox="0 0 20 22"><path d="M0 0l20 11L0 22z"/></svg></div>
+            <div class="video-ph__label t-sm"><strong style="color:var(--ink)">Full platform walkthrough</strong> — replace with production video</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="results">
+    <div class="u-container split">
+      <div><div class="ord"><b>[07]</b><span>Customer results</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>What hiring teams get out of an event.</h2>
+        <div class="stats" data-placeholder>
+          <div class="stat"><div class="stat__n" data-count>{{X}}</div><div class="stat__l">interviews scheduled</div><div class="stat__src">Source needed</div></div>
+          <div class="stat"><div class="stat__n" data-count>{{X}}</div><div class="stat__l">avg. requests per event</div><div class="stat__src">Source needed</div></div>
+          <div class="stat"><div class="stat__n" data-count>{{X}}%</div><div class="stat__l">interview show rate</div><div class="stat__src">Source needed</div></div>
+          <div class="stat"><div class="stat__n" data-count>{{X}}</div><div class="stat__l">days to first hire</div><div class="stat__src">Source needed</div></div>
+        </div>
+        <div class="results">
+          <blockquote class="quote" data-reveal data-placeholder style="--i:0"><p>{{Customer quote — specific about the outcome.}}</p><footer><div class="avatar">{{}}</div><div class="quote__who"><b>{{Full Name}}</b><span>{{Full Title}}, {{Company}}</span></div></footer></blockquote>
+          <blockquote class="quote" data-reveal data-placeholder style="--i:1"><p>{{Customer quote — specific about the outcome.}}</p><footer><div class="avatar">{{}}</div><div class="quote__who"><b>{{Full Name}}</b><span>{{Full Title}}, {{Company}}</span></div></footer></blockquote>
+          <blockquote class="quote" data-reveal data-placeholder style="--i:2"><p>{{Customer quote — specific about the outcome.}}</p><footer><div class="avatar">{{}}</div><div class="quote__who"><b>{{Full Name}}</b><span>{{Full Title}}, {{Company}}</span></div></footer></blockquote>
+        </div>
+        <div style="margin-top:var(--s-8)" data-reveal>
+          <div class="video-ph" data-placeholder style="aspect-ratio:21/9">
+            <div class="video-ph__meta">1:50</div>
+            <div class="video-ph__play"><svg width="20" height="22" viewBox="0 0 20 22"><path d="M0 0l20 11L0 22z"/></svg></div>
+            <div class="video-ph__label t-sm"><strong style="color:var(--ink)">Customer story</strong> — replace with production video</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="pricing">
+    <div class="u-container split">
+      <div><div class="ord"><b>[08]</b><span>Pricing</span></div></div>
+      <div>
+        <h2 class="t-h2 t-balance" data-reveal>Priced per event, not per seat you don't use.</h2>
+        <div class="tiers">
+          <article class="tier" data-placeholder>
+            <div class="tier__name">Starter</div><div class="tier__price">{{$X}}<small> / event</small></div>
+            <p class="t-sm" style="color:var(--ink-2)">A single role and a small panel.</p>
+            <ul><li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 2 interviewer seats</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 1 job per event</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four formats</li></ul>
+            <a href="#cta" class="btn btn--secondary">Talk to sales</a>
+          </article>
+          <article class="tier tier--featured" data-placeholder>
+            <div class="tier__name">Growth</div><div class="tier__price">{{$X}}<small> / event</small></div>
+            <p class="t-sm" style="color:var(--ink-2)">Several roles at once.</p>
+            <ul><li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 5 interviewer seats</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 3 jobs per event</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Automations and analytics</li></ul>
+            <a href="#cta" class="btn btn--primary">Talk to sales</a>
+          </article>
+          <article class="tier" data-placeholder>
+            <div class="tier__name">Pro</div><div class="tier__price">{{Custom}}</div>
+            <p class="t-sm" style="color:var(--ink-2)">Multi-market and branded events.</p>
+            <ul><li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited seats</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Your own branded event</li>
+                <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Dedicated support</li></ul>
+            <a href="#cta" class="btn btn--secondary">Talk to sales</a>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="close" id="cta">
+    <div class="u-container">
+      <h2 class="t-h1 t-balance" style="max-width:16ch;margin-inline:auto">Your next hire is already looking for you.</h2>
+      <p class="t-lead" style="max-width:52ch;margin:var(--s-6) auto 0">
+        Book a demo and we'll show you the next event in your market, and who's already in it.
+      </p>
+      <div class="hero__cta">
+        <a href="#" class="btn btn--primary btn--lg">Book a demo</a>
+        <a href="#" class="btn btn--secondary btn--lg">Browse upcoming events</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="#" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:30ch;color:rgba(255,255,255,.6)">AI-matched hiring events for teams that would rather interview than search.</p>
+        </div>
+        <div><h4>Platform</h4><ul><li><a href="#platform">Events</a></li><li><a href="#platform">Candidates</a></li><li><a href="#platform">Scheduling</a></li><li><a href="#platform">Automations</a></li><li><a href="#platform">Analytics</a></li></ul></div>
+        <div><h4>Solutions</h4><ul><li><a href="#">Healthcare</a></li><li><a href="#">Technology</a></li><li><a href="#">Diversity</a></li><li><a href="#">High-volume</a></li></ul></div>
+        <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li></ul></div>
+        <div><h4>Legal</h4><ul><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Security</a></li><li><a href="#" data-placeholder>{{Compliance}}</a></li></ul></div>
+      </div>
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+      <div class="foot__base">
+        <span>© 2026 JobFairX. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} · {{EEOC}} · {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>About JobFairX</title>
+<meta name="description" content="JobFairX runs hiring events in 300+ cities. Employers post roles, matched local candidates request interviews, and the employer decides where those interviews happen.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — ABOUT
+   Replaces /employer/about-us.
+
+   Editorial note that shapes the whole file: we hold very little publishable
+   company information. There is no sourced founding story, no team list and no
+   investor record. So this page is deliberately three screens long — hero and
+   numbers, three principles, the gaps we refuse to fill — rather than a padded
+   narrative built out of adjectives. Everything unsourced is a visible
+   {{PLACEHOLDER}}.
+
+   Theme rhythm: dark statement → light thinking → dark contact. Hard cuts.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ----------
+   Same ambient device as the FAQ hero. This is a company page, not the pitch,
+   so it stays at that reduced scale rather than the homepage's. */
+.ahero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.ahero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.ahero__glow::before, .ahero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.ahero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.ahero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.ahero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.ahero__inner { position: relative; z-index: 2; }
+.ahero h1 { max-width: 15ch; margin-top: var(--s-4); }
+.ahero__sub { max-width: 60ch; margin-top: var(--s-6); }
+
+/* The one sentence the company exists to land, given a rule rather than a box —
+   a bordered card here would compete with the numbers band directly below it. */
+.ahero__claim {
+  max-width: 44ch; margin-top: var(--s-10);
+  padding-left: var(--s-6); border-left: 2px solid var(--accent);
+  font-size: clamp(1.125rem, 1rem + .6vw, 1.5rem);
+  font-weight: 450; line-height: 1.35; letter-spacing: -.024em; color: var(--ink);
+}
+
+/* ---------- numbers band ---------- */
+.band {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-6);
+  margin-top: var(--s-16); padding-top: var(--s-10); border-top: 1px solid var(--hairline);
+}
+.band__n { font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.5rem); font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+.band__l { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); letter-spacing: .006em; }
+.band__note {
+  position: relative; z-index: 2;
+  margin-top: var(--s-8); max-width: 68ch;
+  font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .006em;
+}
+@media (max-width: 760px) { .band { grid-template-columns: repeat(2, 1fr); gap: var(--s-8) var(--s-6); } }
+
+/* ---------- section heads ---------- */
+.sechead { max-width: 62ch; }
+.sechead h2 { margin-top: var(--s-4); }
+.sechead p { margin-top: var(--s-5); }
+
+/* ---------- the three principles ----------
+   Rules, not cards. Three claims about how hiring works do not need
+   containers — they need to sit on the page like paragraphs in a column. */
+.prin { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-10); margin-top: var(--s-12); }
+.prin__i { min-width: 0; border-top: 1px solid var(--hairline-strong); padding-top: var(--s-5); }
+.prin__n { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .12em; color: var(--accent); }
+.prin__i h3 { margin-top: var(--s-4); font-size: 1.25rem; font-weight: 550; line-height: 1.2; letter-spacing: -.024em; }
+.prin__i p { margin-top: var(--s-4); font-size: .9375rem; line-height: 1.65; color: var(--ink-2); letter-spacing: .006em; }
+.prin__i p + p { margin-top: var(--s-3); }
+.prin-foot {
+  margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--hairline);
+  font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .006em; max-width: 70ch;
+}
+.prin-foot strong { color: var(--ink-2); font-weight: 550; }
+@media (max-width: 900px) { .prin { grid-template-columns: 1fr; gap: var(--s-8); margin-top: var(--s-10); } }
+
+/* ---------- annotated screenshot ----------
+   Principle 03 is the one claim people misread, so it gets the only product
+   evidence on the page: the real INTERVIEW LOCATION column, four rows, four
+   different answers. Crop maths: --z 2.45 shows 40.8% of the image width;
+   --l/--t translate to the table's top-left. Pin --x/--y are then percentages
+   of that visible window, which is why the crop must not change per
+   breakpoint — the pins would drift off the rows. */
+.locshot { margin-top: var(--s-16); }
+.anno__stage { min-width: 0; }
+.anno .crop { aspect-ratio: 7/6; }
+.anno__side { min-width: 0; display: grid; gap: var(--s-4); align-content: center; }
+.anno__cap { color: var(--ink-3); max-width: 44ch; }
+@media (max-width: 980px) { .locshot { margin-top: var(--s-12); } }
+
+/* ---------- the gaps ----------
+   Held to the same standard as every other unsourced fact in this rebuild:
+   visible, tagged, and obviously unfinished. */
+.gaps { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); margin-top: var(--s-10); }
+.gap { min-width: 0; }
+.gap__k {
+  font-family: var(--font-mono); font-size: var(--t-xs); font-weight: 500;
+  letter-spacing: .02em; color: #8a5416;
+  display: inline-block; padding: 4px 8px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 10%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 30%, transparent);
+}
+.gap h3 { margin-top: var(--s-4); font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.25; }
+.gap p { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 900px) { .gaps { grid-template-columns: 1fr; gap: var(--s-5); } }
+
+/* ---------- closing band: contact rail + CTA ---------- */
+.closer__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.closer p { margin-top: var(--s-5); max-width: 46ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.closer__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); }
+.closer__facts li { display: grid; gap: 4px; min-width: 0; }
+.closer__facts a, .closer__facts strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+.closer__facts a { overflow-wrap: anywhere; }
+.closer__facts a:hover { color: var(--accent-hover); }
+.closer__facts address { font-style: normal; font-size: var(--t-sm); color: var(--ink-2); line-height: 1.55; letter-spacing: .006em; }
+@media (max-width: 900px) {
+  .closer__inner { grid-template-columns: 1fr; gap: var(--s-10); }
+  .closer__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="ahero grain">
+    <div class="ahero__glow" aria-hidden="true"></div>
+    <div class="ahero__grid" aria-hidden="true"></div>
+
+    <div class="u-container ahero__inner">
+      <p class="t-eyebrow">About JobFairX</p>
+      <h1 class="t-h1 t-balance">We point the hiring pipeline the other way.</h1>
+
+      <p class="t-lead ahero__sub">
+        JobFairX runs hiring events in 300+ cities. Employers post their open roles; matching
+        puts those roles in front of candidates verified to be within approximately 20 miles
+        of the event city; those candidates request interviews. You accept, and the interview
+        is scheduled. No stack of applications ever forms, because nobody was asked to send one.
+      </p>
+
+      <p class="ahero__claim">
+        Candidates come to you already matched, already interested, and already asking for
+        an interview — you just say yes.
+      </p>
+
+      
+      <div class="band">
+        <div><div class="band__n" data-count>4,000+</div><div class="band__l">employers</div></div>
+        <div><div class="band__n" data-count>500,000+</div><div class="band__l">interviews conducted</div></div>
+        <div><div class="band__n" data-count>300+</div><div class="band__l">cities nationwide</div></div>
+        <div><div class="band__n" data-count>3M+</div><div class="band__l">registered candidates</div></div>
+      </div>
+
+      
+      <p class="band__note">
+        Five event types — Healthcare, Diversity, Veteran, Technology and Entry-Level —
+        with 1,200 events currently on the employer calendar.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  <section class="u-section" id="principles">
+    <div class="u-container">
+
+      <header class="sechead" data-reveal>
+        <p class="t-eyebrow">How we think about hiring</p>
+        <h2 class="t-h2 t-balance">Three ideas the product is built on.</h2>
+        <p class="t-lead">
+          Not a mission statement. These are three decisions you can see in the software,
+          and most of what JobFairX does differently follows from one of them.
+        </p>
+      </header>
+
+      <div class="prin">
+
+        <div class="prin__i" data-reveal>
+          <div class="prin__n">01</div>
+          <h3>Candidates request. They don’t apply.</h3>
+          <p>
+            An application is a message sent into the dark, and it puts the burden of
+            interest entirely on the person who sent it. A request is different: someone who
+            has already seen your role is asking to meet you.
+          </p>
+          <p>
+            So the platform has no apply button for you to triage. Matched candidates request
+            an interview, you accept or decline, and accepting is what schedules it. You can
+            review a résumé first, or turn on automatic scheduling and skip that step.
+          </p>
+        </div>
+
+        <div class="prin__i" data-reveal style="--i:1">
+          <div class="prin__n">02</div>
+          <h3>The interview is the unit, not the application.</h3>
+          <p>
+            We do not count submissions, because a hiring team cannot do anything with a
+            submission. Packages are sold in scheduled interviews — 20+ on Starter, 60+ on
+            Growth, 100+ on Pro — since that is the thing that has to land on a calendar
+            before anyone gets hired.
+          </p>
+          <p>
+            500,000+ interviews have been conducted on the platform. That figure, not a
+            résumé count, is how we judge whether any of this is working.
+          </p>
+        </div>
+
+        <div class="prin__i" data-reveal style="--i:2">
+          <div class="prin__n">03</div>
+          <h3>The employer chooses the room.</h3>
+          <p>
+            An event is a market moment — a city, an audience, a date and a time. Every
+            employer joins the same event. What each employer sets independently is their
+            interview location: JobFairX video, phone, in person at their own address, or
+            their own link.
+          </p>
+          <p>
+            Two employers at the same event can interview completely differently, and neither
+            has to accommodate the other. Since candidates are already local to the event
+            city, an address is a workable answer rather than a travel request.
+          </p>
+        </div>
+
+      </div>
+
+      <p class="prin-foot">
+        <strong>91%</strong> interview show rate and <strong>87%</strong> of employers run
+        another event. Based on 2025 platform data.
+      </p>
+
+      
+      <figure class="anno anno--side locshot" data-reveal>
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The employer events dashboard. One company has four upcoming events, and the Interview Location column shows a different answer on each row: a JobFairX video call, a phone call the employer places, an in-person street address in Atlanta, and the employer's own Microsoft Teams link."
+                   width="3200" height="2000"
+                   style="--z:2.45; --l:-24.5%; --t:-26.5%">
+            </div>
+          </div>
+          <button class="anno__pin" style="--x:58.2%;--y:17.7%" data-anno="1" aria-label="Interview location on the first event: JobFairX video call">1</button>
+          <button class="anno__pin" style="--x:55.1%;--y:39.1%" data-anno="2" aria-label="Interview location on the second event: phone">2</button>
+          <button class="anno__pin" style="--x:56.4%;--y:64.5%" data-anno="3" aria-label="Interview location on the third event: in person">3</button>
+          <button class="anno__pin" style="--x:57.4%;--y:89.8%" data-anno="4" aria-label="Interview location on the fourth event: the employer's own link">4</button>
+        </div>
+
+        <div class="anno__side">
+          <p class="t-eyebrow">One employer, four events</p>
+          <ol class="anno__key">
+            <li data-anno="1"><b>1</b><span><strong>JobFairX video.</strong> The built-in room. Nothing to install, for you or the candidate.</span></li>
+            <li data-anno="2"><b>2</b><span><strong>Phone.</strong> You call each candidate at the scheduled time. Numbers sit in the dashboard.</span></li>
+            <li data-anno="3"><b>3</b><span><strong>In person.</strong> Your address, shown on the candidate’s confirmation and every reminder.</span></li>
+            <li data-anno="4"><b>4</b><span><strong>Your own link.</strong> Teams here; Zoom and Meet work the same way.</span></li>
+          </ol>
+          <figcaption class="t-sm anno__cap">
+            The INTERVIEW LOCATION column, as it ships. The setting belongs to the employer,
+            not to the event.
+          </figcaption>
+        </div>
+      </figure>
+
+    </div>
+  </section>
+
+
+  
+  <section class="u-section" id="gaps" style="padding-top:0">
+    <div class="u-container">
+
+      <header class="sechead" data-reveal>
+        <p class="t-eyebrow">Not yet published</p>
+        <h2 class="t-h2 t-balance">Three things we are not going to invent.</h2>
+        <p class="t-lead">
+          A founding story, a team page and an investor list are the standard furniture of an
+          about page. We have no sourced, approved copy for any of the three — so the space
+          stays visible and empty until someone can sign off on what goes in it.
+        </p>
+      </header>
+
+      <div class="gaps">
+
+        <div class="gap card" data-reveal data-placeholder>
+          <span class="gap__k">{{FOUNDING_STORY}}</span>
+          <h3>When JobFairX started, and why</h3>
+          <p>
+            Founding year, founders, and the problem they set out to fix. Nothing publishable
+            about any of this exists on the current site or in the material we audited.
+          </p>
+        </div>
+
+        <div class="gap card" data-reveal style="--i:1" data-placeholder>
+          <span class="gap__k">{{TEAM}}</span>
+          <h3>Who works here</h3>
+          <p>
+            Names, roles, headcount, and whether photographs are in scope. Awaiting a list
+            that has been confirmed as publishable.
+          </p>
+        </div>
+
+        <div class="gap card" data-reveal style="--i:2" data-placeholder>
+          <span class="gap__k">{{INVESTORS_AND_OWNERSHIP}}</span>
+          <h3>Funding and ownership</h3>
+          <p>
+            Investors, ownership structure, and any board. We found no record we were able to
+            verify, and an unverified one is worse than a gap.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section closer" id="contact">
+    <div class="u-container">
+      <div class="closer__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Ask us anything a page can’t answer.</h2>
+          <p class="t-lead">
+            Whether there is an event in your market, how matching handles your roles, or what
+            setting an in-person interview location actually involves. Every package includes
+            dedicated human support.
+          </p>
+          <div class="cta-row">
+            <a href="page-events.html" class="btn btn--primary btn--lg">Browse upcoming events</a>
+            <a href="page-contact.html" class="btn btn--secondary btn--lg">Contact us</a>
+          </div>
+        </div>
+
+        <ul class="closer__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Email</span>
+            <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Phone</span>
+            <a href="tel:+17022690808">(702) 269-0808</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Hours</span>
+            <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Registered office</span>
+            <address>JobFairX, LLC<br>209 S Stephanie St. STE B #144<br>Henderson, Nevada 89012</address>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><span aria-current="page">About</span></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

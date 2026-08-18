@@ -1,0 +1,1227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms and Conditions — JobFairX</title>
+<meta name="description" content="The JobFairX, LLC terms and conditions, effective November 01, 2021 — including the cancellation and refund policy, liability, intellectual property and governing law.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — TERMS AND CONDITIONS
+   Ports /employer/terms-and-conditions. Legal-doc template, same shell as
+   the privacy page: compact dark hero, light document with a sticky contents
+   rail and a plain-English summary rail, dark close, print stylesheet.
+
+   PORTED, NOT DRAFTED. Every word inside a .sec__body is verbatim from the
+   live page, fetched 17 Aug 2026 and diffed against the raw HTML (the contact
+   email is Cloudflare-obfuscated in source as "[email protected]"; the
+   data-cfemail token decodes to info@jobfairx.com, which is what is rendered
+   here). Section order is the live order. Nothing has been reworded, softened
+   or reordered.
+
+   Everything that is NOT the agreement is visibly marked as such:
+     .sec__gloss  — my plain-English summary, hidden in print
+     .gaps        — the flagged-for-review section, hidden in print
+   The printed artifact is the agreement text alone.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ----------
+   Deliberately shorter than the FAQ hero. A legal page's job is to get you to
+   the clause you came for, so the ambient treatment is dialled back and the
+   document starts high on the page. */
+.lhero { position: relative; overflow: hidden; padding-block: clamp(40px, 6vh, 72px) var(--s-16); }
+.lhero__glow { position: absolute; inset: -40% -10% auto; height: 520px; pointer-events: none; z-index: 0; }
+.lhero__glow::before {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(100px);
+  width: 640px; height: 460px; left: 4%; top: 20%;
+  background: radial-gradient(circle, rgba(47,92,255,.24), transparent 68%);
+  animation: ldrift 26s var(--e-inout) infinite alternate;
+}
+@keyframes ldrift { to { transform: translate3d(70px,44px,0) scale(1.1); } }
+.lhero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .45;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 14%, #000 22%, transparent 76%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 14%, #000 22%, transparent 76%);
+}
+.lhero__inner { position: relative; z-index: 2; }
+.lhero h1 { margin-top: var(--s-4); }
+.lhero__sub { max-width: 60ch; margin-top: var(--s-5); }
+
+/* document metadata — reads as a record header, so it is set in mono */
+.meta {
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3);
+  margin-top: var(--s-8);
+}
+.meta li {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em;
+  color: var(--ink-2); padding: 5px 10px; border-radius: var(--r-pill);
+  border: 1px solid var(--hairline); background: rgba(255,255,255,.04);
+}
+.meta li b { color: var(--ink); font-weight: 500; }
+
+.lhero__acts { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-8); }
+
+/* ---------- the cancellation callout ----------
+   PAGE-INVENTORY gap 6 records that "no refund or cancellation policy exists
+   anywhere". It does — it is section 5 of this document, and it has been live
+   since 2021. It was simply never surfaced. Depth on dark = hairline + rim
+   light. No shadow, no coloured bloom. */
+.alert {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  padding: var(--s-8); border-radius: var(--r-xl);
+  border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+}
+.alert__top { display: grid; grid-template-columns: 1fr auto; gap: var(--s-6); align-items: start; }
+.alert__lede {
+  font-size: clamp(1.375rem, 1.1rem + 1.2vw, 1.875rem); font-weight: 500;
+  line-height: 1.1; letter-spacing: -.03em; color: var(--ink);
+  margin-top: var(--s-3); max-width: 24ch;
+}
+.alert__note { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-4); max-width: 62ch; letter-spacing: .006em; }
+.alert__grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-6); margin-top: var(--s-8);
+  padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+}
+.alert__grid dt { font-size: var(--t-eyebrow); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+.alert__grid dd { margin-top: var(--s-3); font-size: 1rem; font-weight: 450; line-height: 1.35; letter-spacing: -.014em; color: var(--ink); }
+.alert .btn--ghost { margin-top: var(--s-6); font-size: var(--t-sm); color: var(--accent-hover); }
+@media (max-width: 780px) {
+  .alert { padding: var(--s-6); margin-top: var(--s-12); }
+  .alert__top { grid-template-columns: 1fr; }
+  .alert__grid { grid-template-columns: 1fr; gap: var(--s-5); }
+}
+
+/* ---------- document layout: contents rail + sections ---------- */
+.doc-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: var(--s-16); align-items: start; }
+
+.toc { position: sticky; top: 96px; max-height: calc(100vh - 128px); overflow-y: auto; min-width: 0; }
+.toc__label { margin-bottom: var(--s-4); }
+.toc ol { display: grid; gap: 1px; }
+.toc a {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  padding: 7px var(--s-4); border-radius: var(--r-sm);
+  border-left: 2px solid transparent;
+  font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; line-height: 1.35;
+  transition: color var(--t-micro) var(--e-inout), background var(--t-micro) var(--e-inout), border-color var(--t-micro) var(--e-inout);
+}
+.toc a:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.toc a.is-active { color: var(--ink); border-left-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.toc a .k { font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); flex: none; width: 15px; }
+.toc a.is-active .k { color: var(--accent); }
+/* the two entries that carry the commercial weight get a marker, so the rail
+   answers "where's the refund policy" without being read end to end */
+.toc a.is-key { color: var(--ink-2); font-weight: 500; }
+.toc a.is-key::after { content: '●'; font-size: 7px; color: var(--accent); margin-left: auto; align-self: center; }
+.toc a.is-flag::after { content: '●'; font-size: 7px; color: #b06d1f; margin-left: auto; align-self: center; }
+.toc a.is-flag { color: var(--ink-2); font-weight: 500; }
+
+/* Mobile: NOT a horizontal chip scroller. Fifteen legal sections in a strip is
+   unusable, and a scroller inside a grid child is the exact overflow bug that
+   bit us before. A static two-column contents card instead — no scroller, no
+   min-width hazard, and it is what a legal document wants anyway. */
+@media (max-width: 900px) {
+  .doc-layout { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .toc {
+    position: static; max-height: none; overflow: visible;
+    border: 1px solid var(--hairline); border-radius: var(--r-lg);
+    background: var(--surface); padding: var(--s-5);
+  }
+  /* Two columns at 390px. The inner track width is 308px here, so the minimum
+     column plus the gap has to clear that: 132 + 12 + 132 = 276. A 150px
+     minimum needs 316px and silently collapses to one column. */
+  .toc ol { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 1px var(--s-3); }
+  .toc a { padding: 6px var(--s-2); border-left: 0; }
+  .toc a.is-active { border-left: 0; background: none; color: var(--ink); }
+}
+
+/* ---------- a section of the agreement ---------- */
+.sec { display: grid; gap: var(--s-5); scroll-margin-top: 96px; }
+.sec + .sec { margin-top: var(--s-12); padding-top: var(--s-12); border-top: 1px solid var(--hairline); }
+
+.sec__h { display: flex; align-items: baseline; gap: var(--s-4); }
+.sec__h .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-3); flex: none; padding-top: 4px; }
+.sec__h h2 { font-size: 1.3125rem; font-weight: 500; line-height: 1.18; letter-spacing: -.026em; color: var(--ink); }
+
+/* Between 901px and 1180px there is no summary rail to hold the column in, so
+   the body would stretch to the full 828px content width — about 99 characters
+   a line, well past readable. Capped here; above 1181px the grid column is
+   already 568px so this never binds. */
+.sec__body { max-width: 620px; }
+.sec__body p { font-size: .9375rem; line-height: 1.72; color: var(--ink-2); letter-spacing: .006em; }
+.sec__body p + p { margin-top: var(--s-4); }
+.sec__body a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.sec__body a:hover { border-bottom-color: var(--accent); }
+.sec__body strong { color: var(--ink); font-weight: 550; }
+/* All-caps blocks need positive tracking and a longer leading or they turn
+   into a grey brick. Kept at the source's emphasis level — the capitalisation
+   is legally load-bearing (conspicuousness), so it is not being normalised. */
+.sec__body .caps {
+  font-size: .8125rem; line-height: 1.78; letter-spacing: .022em;
+  color: var(--ink-2);
+}
+.sec__addr { font-style: normal; font-size: .9375rem; line-height: 1.72; color: var(--ink-2); letter-spacing: .006em; }
+.sec__eff {
+  margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; color: var(--ink-3);
+}
+
+/* ---------- plain-English summary rail ----------
+   DOM order is heading → summary → agreement text, so the reading order is the
+   same whether the rail is beside the clause or stacked above it. Hidden in
+   print: the printed artifact must be the agreement, not my notes on it. */
+.sec__gloss {
+  border-left: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--surface-2);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: var(--s-4) var(--s-5);
+  max-width: 620px;   /* matches .sec__body when the rail is stacked, not beside */
+}
+.sec__gloss .gl {
+  display: block; font-size: 10px; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-2);
+}
+.sec__gloss p { font-size: var(--t-xs); line-height: 1.6; color: var(--ink-2); letter-spacing: .006em; }
+.sec__gloss p + p { margin-top: var(--s-3); }
+
+@media (min-width: 1181px) {
+  .sec { grid-template-columns: minmax(0, 1fr) 240px; column-gap: var(--s-10); align-items: start; }
+  .sec__h     { grid-column: 1 / -1; }
+  .sec__gloss { grid-column: 2; grid-row: 2; }
+  .sec__body  { grid-column: 1; grid-row: 2; min-width: 0; }
+}
+
+/* the cancellation clause is the one people arrive for — give it a plate */
+.sec--key .sec__body {
+  background: var(--surface); border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-lg); padding: var(--s-6); box-shadow: var(--sh-sm);
+}
+
+/* ---------- flagged-for-review section ----------
+   Not part of the agreement. Amber is used consistently across the rebuild for
+   "unconfirmed / needs a decision", same token as the FAQ's NEW tag. */
+.gaps {
+  margin-top: var(--s-16); padding: var(--s-8);
+  border-radius: var(--r-xl);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  background: color-mix(in srgb, #b06d1f 5%, var(--surface));
+  scroll-margin-top: 96px;
+}
+.gaps__tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 10px;
+  font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 8px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 14%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 38%, transparent);
+  color: #8a5416;
+}
+.gaps h2 { margin-top: var(--s-4); font-size: 1.375rem; font-weight: 500; line-height: 1.15; letter-spacing: -.028em; }
+.gaps__lede { margin-top: var(--s-4); font-size: .9375rem; line-height: 1.7; color: var(--ink-2); letter-spacing: .006em; max-width: 70ch; }
+.gaps__list { margin-top: var(--s-8); display: grid; gap: var(--s-5); }
+.gap {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); padding: var(--s-6);
+}
+.gap h3 { font-size: 1rem; font-weight: 550; line-height: 1.3; letter-spacing: -.018em; color: var(--ink); }
+.gap p { margin-top: var(--s-3); font-size: var(--t-sm); line-height: 1.65; color: var(--ink-2); letter-spacing: .006em; max-width: 68ch; }
+.gap__ev {
+  margin-top: var(--s-4); padding-top: var(--s-4); border-top: 1px dashed var(--hairline-strong);
+  display: grid; gap: var(--s-2);
+}
+.gap__ev li { font-family: var(--font-mono); font-size: 11px; line-height: 1.55; color: var(--ink-3); letter-spacing: .02em; }
+.gap__ev li b { color: var(--ink-2); font-weight: 500; }
+.gap__ask {
+  margin-top: var(--s-4); font-size: var(--t-sm); line-height: 1.55;
+  color: #8a5416; font-weight: 500; letter-spacing: .006em;
+}
+.gaps__shot { margin-top: var(--s-8); }
+.gaps__shot figcaption { margin-top: var(--s-4); }
+@media (max-width: 780px) { .gaps { padding: var(--s-6); } }
+
+/* ---------- closing band ---------- */
+.helpband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.helpband p { margin-top: var(--s-5); max-width: 48ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.helpband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); }
+.helpband__facts li { display: grid; gap: 4px; }
+.helpband__facts a, .helpband__facts strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+.helpband__facts a:hover { color: var(--accent-hover); }
+@media (max-width: 900px) {
+  .helpband__inner { grid-template-columns: 1fr; gap: var(--s-10); }
+  .helpband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot li a[aria-current="page"] { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+
+/* ---------- print ----------
+   The printed page is the AGREEMENT — sections 1 to 14, verbatim, on white.
+   Chrome, the summary rail and the internal review section all come out, so
+   nobody can print this and hand over a document with my annotations in it. */
+.print-only { display: none; }
+@media print {
+  @page { margin: 18mm 16mm; }
+
+  html, body { background: #fff !important; }
+  [data-theme="dark"], [data-theme="light"] {
+    background: #fff !important; color: #000 !important;
+    --canvas:#fff; --surface:#fff; --surface-2:#fff;
+    --ink:#000; --ink-2:#1a1a1a; --ink-3:#555;
+    --hairline:#ccc; --hairline-strong:#999; --elev:none; --elev-panel:none;
+  }
+
+  /* everything that is not the agreement */
+  .announce, .nav, .drawer, .lhero__glow, .lhero__grid, .grain::after,
+  .lhero__acts, .alert, .meta, .toc, .sec__gloss, .gaps,
+  .helpband, .foot, .foot__mark { display: none !important; }
+
+  .print-only { display: block; }
+  .print-head { border-bottom: 1px solid #000; padding-bottom: 8pt; margin-bottom: 16pt; }
+  .print-head h1 { font-size: 18pt; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+  .print-head p { font-size: 8.5pt; color: #333; margin-top: 4pt; line-height: 1.45; }
+
+  .lhero { padding: 0 !important; }
+  .lhero h1, .lhero__sub { display: none; }
+  .u-section { padding-block: 0 !important; }
+  .u-container { max-width: none; padding-inline: 0; }
+  .doc-layout { display: block !important; }
+  .sec { display: block !important; page-break-inside: auto; }
+  .sec + .sec { margin-top: 14pt; padding-top: 12pt; border-top: 1px solid #ddd; }
+  .sec__h { page-break-after: avoid; break-after: avoid; }
+  .sec__h h2 { font-size: 11.5pt; font-weight: 600; }
+  .sec__h .k { font-size: 8pt; }
+  .sec__body { max-width: none !important; }   /* the page box already sets the measure */
+  .sec--key .sec__body { border: 1px solid #000 !important; padding: 8pt !important; box-shadow: none !important; }
+  .sec__body p, .sec__addr { font-size: 9pt !important; line-height: 1.5 !important; color: #000 !important; orphans: 3; widows: 3; }
+  .sec__body .caps { font-size: 8pt !important; line-height: 1.5 !important; }
+  .sec__body a { color: #000 !important; border: 0 !important; text-decoration: underline; }
+  .sec__eff { margin-top: 14pt; font-size: 8.5pt; color: #000; }
+
+  a[href^="http"]::after { content: ' (' attr(href) ')'; font-size: 7.5pt; color: #444; }
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="lhero grain">
+    <div class="lhero__glow" aria-hidden="true"></div>
+    <div class="lhero__grid" aria-hidden="true"></div>
+
+    <div class="u-container lhero__inner">
+      <p class="t-eyebrow">Legal</p>
+      <h1 class="t-h1 t-balance">Terms and Conditions</h1>
+
+      <p class="t-lead lhero__sub">
+        The agreement between you and JobFairX, LLC covering your use of this site —
+        including cancellations and refunds, what we are and are not liable for, and
+        which courts decide a dispute.
+      </p>
+
+      <ul class="meta">
+        <li>Effective <b>November 01, 2021</b></li>
+        <li><b>JobFairX, LLC</b> · Henderson, Nevada</li>
+        <li>Governed by <b>Nevada law</b></li>
+        <li><b>14</b> sections</li>
+      </ul>
+
+      <div class="lhero__acts">
+        <a href="#s-refunds" class="btn btn--primary">Cancellations and refunds</a>
+        <button type="button" class="btn btn--secondary" data-print>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 5V1.5h6V5M4 10.5H2.5v-4h9v4H10M4 8.5h6v4H4v-4Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          Print or save as PDF
+        </button>
+      </div>
+
+      
+      <aside class="alert" aria-labelledby="alert-h">
+        <div class="alert__top">
+          <div>
+            <p class="t-eyebrow" id="alert-h">Section 5 — the one to read first</p>
+            <p class="alert__lede">JobFairX does not offer refunds.</p>
+          </div>
+        </div>
+        <p class="alert__note">
+          You are not left with nothing — an employer who cannot attend gets an account
+          credit toward a future event. But the credit depends entirely on when you
+          cancel, and the deadline is a month out.
+        </p>
+
+        <dl class="alert__grid">
+          <div>
+            <dt>Refunds</dt>
+            <dd>None, at any time</dd>
+          </div>
+          <div>
+            <dt>Cancel 30+ days before</dt>
+            <dd>Account credit toward a future event</dd>
+          </div>
+          <div>
+            <dt>Cancel later, or don’t attend</dt>
+            <dd>Fee forfeited, no roll-over</dd>
+          </div>
+        </dl>
+
+        <a href="#s-refunds" class="btn btn--ghost">Read section 5 in full →</a>
+      </aside>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="document" style="padding-block:var(--s-16) var(--section-y)">
+    <div class="u-container">
+
+      
+      <div class="print-only print-head">
+        <h2>JobFairX — Terms and Conditions</h2>
+        <p>
+          JobFairX, LLC · 209 S Stephanie St. STE B #144, Henderson, Nevada 89012 ·
+          info@jobfairx.com · Effective as of November 01, 2021.<br>
+          This printout contains the agreement text only. Plain-English annotations and
+          internal review notes shown on the web page are omitted.
+        </p>
+      </div>
+
+      <div class="doc-layout">
+
+        
+        <nav class="toc" data-toc aria-label="Contents">
+          <p class="t-eyebrow toc__label">Contents</p>
+          <ol>
+            <li><a href="#s-agreement"><span class="k">01</span>Agreement</a></li>
+            <li><a href="#s-privacy"><span class="k">02</span>Privacy</a></li>
+            <li><a href="#s-electronic"><span class="k">03</span>Electronic communications</a></li>
+            <li><a href="#s-account"><span class="k">04</span>Your account</a></li>
+            <li><a href="#s-refunds" class="is-key"><span class="k">05</span>Cancellation &amp; refunds</a></li>
+            <li><a href="#s-links"><span class="k">06</span>Third-party sites</a></li>
+            <li><a href="#s-ip"><span class="k">07</span>Use &amp; intellectual property</a></li>
+            <li><a href="#s-submissions"><span class="k">08</span>Your submissions</a></li>
+            <li><a href="#s-international"><span class="k">09</span>International users</a></li>
+            <li><a href="#s-indemnification"><span class="k">10</span>Indemnification</a></li>
+            <li><a href="#s-liability"><span class="k">11</span>Liability disclaimer</a></li>
+            <li><a href="#s-termination"><span class="k">12</span>Termination &amp; governing law</a></li>
+            <li><a href="#s-changes"><span class="k">13</span>Changes to Terms</a></li>
+            <li><a href="#s-contact"><span class="k">14</span>Contact us</a></li>
+            <li><a href="#s-gaps" class="is-flag"><span class="k">—</span>Flagged for review</a></li>
+          </ol>
+        </nav>
+
+        <div class="doc-body">
+
+          
+          <section class="sec" id="s-agreement" data-reveal>
+            <div class="sec__h"><span class="k">01</span><h2>Agreement between User and www.jobfairx.com</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>Using the site means you accept these Terms exactly as written. There is no negotiated version.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                Welcome to www.jobfairx.com. The www.jobfairx.com website (the “Site”) is
+                comprised of various web pages operated by JobFairX, LLC (“JobFairX”).
+                www.jobfairx.com is offered to you conditioned on your acceptance without
+                modification of the terms, conditions, and notices contained herein (the
+                “Terms”). Your use of www.jobfairx.com constitutes your agreement to all such
+                Terms. Please read these terms carefully, and keep a copy of them for your
+                reference.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-privacy" data-reveal>
+            <div class="sec__h"><span class="k">02</span><h2>Privacy</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>How your data is handled sits in a separate document, the Privacy Policy, and it governs the Site too.</p>
+            </aside>
+            <div class="sec__body">
+              
+              <p>
+                Your use of www.jobfairx.com is subject to JobFairX’s Privacy Policy. Please
+                review our <a href="page-privacy-policy.html">Privacy Policy</a>, which also governs
+                the Site and informs users of our data collection practices.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-electronic" data-reveal>
+            <div class="sec__h"><span class="k">03</span><h2>Electronic Communications</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>Email counts as writing. Anything we send you electronically is legally delivered, including notices about your registrations.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                Visiting www.jobfairx.com or sending emails to JobFairX constitutes electronic
+                communications. You consent to receive electronic communications and you agree
+                that all agreements, notices, disclosures and other communications that we
+                provide to you electronically, via email and on the Site, satisfy any legal
+                requirement that such communications be in writing.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-account" data-reveal>
+            <div class="sec__h"><span class="k">04</span><h2>Your Account</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>Your login is yours to protect, and everything done under it is treated as done by you. You cannot transfer the account, and JobFairX can refuse or cancel service at its discretion.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                If you use this site, you are responsible for maintaining the confidentiality of
+                your account and password and for restricting access to your computer, and you
+                agree to accept responsibility for all activities that occur under your account
+                or password. You may not assign or otherwise transfer your account to any other
+                person or entity. You acknowledge that JobFairX is not responsible for third
+                party access to your account that results from theft or misappropriation of your
+                account. JobFairX and its associates reserve the right to refuse or cancel
+                service, terminate accounts, or remove or edit content in our sole discretion.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec sec--key" id="s-refunds" data-reveal>
+            <div class="sec__h"><span class="k">05</span><h2>Cancellation/Refund Policy</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>No cash refunds, ever. If you cannot attend, you get a credit on your account for a future event — but only if you cancel at least 30 days before the event date.</p>
+              <p>Cancel later than that, or simply not attend, and it is treated as a no show: the fee is gone and it cannot be rolled over. Cancellations are accepted by phone or email.</p>
+              <p>If JobFairX moves an event and the new date does not work for you, the same rule applies — a credit, not a refund.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                JobFairX does not offer refunds. If an Employer is unable to attend an event
+                which they are registered for, a credit will be issued on their account for a
+                future event. Registration cancellations must be received a minimum of 30 days
+                prior to the event. Cancellations made after this deadline will be subject to
+                the “no show” policy. Cancellations will be accepted via phone, or e-mail, and
+                must be received by the stated cancellation deadline.
+              </p>
+              <p>
+                No Show Policy: Job Fair “no shows” forfeit their entire registration fee and
+                materials, and are not eligible to roll the registration package over to another
+                event. To avoid being considered a no show, please call and cancel before the 30
+                day advanced notice deadline. ‘No shows’ are not entitled to transfers or
+                refunds at any time.
+              </p>
+              <p>
+                Date Change: If an event has a date change and an employer is unable to attend,
+                we do not offer refunds, a credit will be issued on your account for a future
+                event.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-links" data-reveal>
+            <div class="sec__h"><span class="k">06</span><h2>Links to Third Party Sites/Third Party Services</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>We link out to other sites and we are not responsible for them. Some parts of the service are delivered by vendors, and using those means your information may be shared with the vendor delivering them.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                www.jobfairx.com may contain links to other websites (“Linked Sites”). The Linked
+                Sites are not under the control of JobFairX and JobFairX is not responsible for
+                the contents of any Linked Site, including without limitation any link contained
+                in a Linked Site, or any changes or updates to a Linked Site. JobFairX is
+                providing these links to you only as a convenience, and the inclusion of any link
+                does not imply endorsement by JobFairX of the site or any association with its
+                operators.
+              </p>
+              <p>
+                Certain services made available via www.jobfairx.com are delivered by third party
+                sites and organizations. By using any product, service or functionality
+                originating from the www.jobfairx.com domain, you hereby acknowledge and consent
+                that JobFairX may share such information and data with any third party with whom
+                JobFairX has a contractual relationship to provide the requested product, service
+                or functionality on behalf of www.jobfairx.com users and customers.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-ip" data-reveal>
+            <div class="sec__h"><span class="k">07</span><h2>No Unlawful or Prohibited Use/Intellectual Property</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>You get a licence to use the Site that can be revoked. Do not scrape it, overload it, or take content out of it.</p>
+              <p>The content and software are JobFairX’s or its suppliers’. Do not copy, resell, reverse-engineer or build derivative work from it, and do not strip attribution.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                You are granted a non-exclusive, non-transferable, revocable license to access and
+                use www.jobfairx.com strictly in accordance with these terms of use. As a
+                condition of your use of the Site, you warrant to JobFairX that you will not use
+                the Site for any purpose that is unlawful or prohibited by these Terms. You may
+                not use the Site in any manner which could damage, disable, overburden, or impair
+                the Site or interfere with any other party’s use and enjoyment of the Site. You
+                may not obtain or attempt to obtain any materials or information through any
+                means not intentionally made available or provided for through the Site.
+              </p>
+              <p>
+                All content included as part of the Service, such as text, graphics, logos,
+                images, as well as the compilation thereof, and any software used on the Site, is
+                the property of JobFairX or its suppliers and protected by copyright and other
+                laws that protect intellectual property and proprietary rights. You agree to
+                observe and abide by all copyright and other proprietary notices, legends or
+                other restrictions contained in any such content and will not make any changes
+                thereto.
+              </p>
+              <p>
+                You will not modify, publish, transmit, reverse engineer, participate in the
+                transfer or sale, create derivative works, or in any way exploit any of the
+                content, in whole or in part, found on the Site. JobFairX content is not for
+                resale. Your use of the Site does not entitle you to make any unauthorized use of
+                any protected content, and in particular you will not delete or alter any
+                proprietary rights or attribution notices in any content. You will use protected
+                content solely for your personal use, and will make no other use of the content
+                without the express written permission of JobFairX and the copyright owner. You
+                agree that you do not acquire any ownership rights in any protected content. We
+                do not grant you any licenses, express or implied, to the intellectual property
+                of JobFairX or our licensors except as expressly authorized by these Terms.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-submissions" data-reveal>
+            <div class="sec__h"><span class="k">08</span><h2>Materials Provided to www.jobfairx.com or Posted on Any JobFairX Web Page</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>You keep ownership of what you post — job posts, feedback, anything you submit — but you grant JobFairX a broad, unpaid licence to copy, edit, translate and publish it, and to use your name alongside it.</p>
+              <p>Nothing is owed to you for that use, and JobFairX can remove any submission at any time. You are confirming you had the rights to submit it in the first place.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                JobFairX does not claim ownership of the materials you provide to
+                www.jobfairx.com (including feedback and suggestions) or post, upload, input or
+                submit to any JobFairX Site or our associated services (collectively
+                “Submissions”). However, by posting, uploading, inputting, providing or
+                submitting your Submission you are granting JobFairX, our affiliated companies
+                and necessary sublicensees permission to use your Submission in connection with
+                the operation of their Internet businesses including, without limitation, the
+                rights to: copy, distribute, transmit, publicly display, publicly perform,
+                reproduce, edit, translate and reformat your Submission; and to publish your name
+                in connection with your Submission.
+              </p>
+              <p>
+                No compensation will be paid with respect to the use of your Submission, as
+                provided herein. JobFairX is under no obligation to post or use any Submission
+                you may provide and may remove any Submission at any time in JobFairX’s sole
+                discretion.
+              </p>
+              <p>
+                By posting, uploading, inputting, providing or submitting your Submission you
+                warrant and represent that you own or otherwise control all of the rights to your
+                Submission as described in this section including, without limitation, all the
+                rights necessary for you to provide, post, upload, input or submit the
+                Submissions.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-international" data-reveal>
+            <div class="sec__h"><span class="k">09</span><h2>International Users</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>The service is run from the USA. If you use it from elsewhere, complying with your own local law is your responsibility.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                The Service is controlled, operated and administered by JobFairX from our offices
+                within the USA. If you access the Service from a location outside the USA, you
+                are responsible for compliance with all local laws. You agree that you will not
+                use the JobFairX Content accessed through www.jobfairx.com in any country or in
+                any manner prohibited by any applicable laws, restrictions or regulations.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-indemnification" data-reveal>
+            <div class="sec__h"><span class="k">10</span><h2>Indemnification</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>If your use of the Site causes JobFairX a loss or draws a third-party claim, you cover the cost — including reasonable legal fees. JobFairX can take over the defence at its own cost, and you have to cooperate.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                You agree to indemnify, defend and hold harmless JobFairX, its officers,
+                directors, employees, agents and third parties, for any losses, costs,
+                liabilities and expenses (including reasonable attorney’s fees) relating to or
+                arising out of your use of or inability to use the Site or services, any user
+                postings made by you, your violation of any terms of this Agreement or your
+                violation of any rights of a third party, or your violation of any applicable
+                laws, rules or regulations. JobFairX reserves the right, at its own cost, to
+                assume the exclusive defense and control of any matter otherwise subject to
+                indemnification by you, in which event you will fully cooperate with JobFairX in
+                asserting any available defenses.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-liability" data-reveal>
+            <div class="sec__h"><span class="k">11</span><h2>Liability Disclaimer</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>The Site is provided “as is”, with no warranty that it is accurate, available or fit for your purpose.</p>
+              <p>Liability for damages — including lost profits and lost data — is excluded as far as the law allows. Some states do not permit that exclusion, so it may not apply to you. Otherwise, your only remedy is to stop using the Site.</p>
+            </aside>
+            <div class="sec__body">
+              <p class="caps">
+                THE INFORMATION, SOFTWARE, PRODUCTS, AND SERVICES INCLUDED IN OR AVAILABLE
+                THROUGH THE SITE MAY INCLUDE INACCURACIES OR TYPOGRAPHICAL ERRORS. CHANGES ARE
+                PERIODICALLY ADDED TO THE INFORMATION HEREIN. JobFairX, LLC AND/OR ITS SUPPLIERS
+                MAY MAKE IMPROVEMENTS AND/OR CHANGES IN THE SITE AT ANY TIME.
+              </p>
+              <p class="caps">
+                JobFairX, LLC AND/OR ITS SUPPLIERS MAKE NO REPRESENTATIONS ABOUT THE SUITABILITY,
+                RELIABILITY, AVAILABILITY, TIMELINESS, AND ACCURACY OF THE INFORMATION, SOFTWARE,
+                PRODUCTS, SERVICES AND RELATED GRAPHICS CONTAINED ON THE SITE FOR ANY PURPOSE. TO
+                THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, ALL SUCH INFORMATION, SOFTWARE,
+                PRODUCTS, SERVICES AND RELATED GRAPHICS ARE PROVIDED “AS IS” WITHOUT WARRANTY OR
+                CONDITION OF ANY KIND. JobFairX, LLC AND/OR ITS SUPPLIERS HEREBY DISCLAIM ALL
+                WARRANTIES AND CONDITIONS WITH REGARD TO THIS INFORMATION, SOFTWARE, PRODUCTS,
+                SERVICES AND RELATED GRAPHICS, INCLUDING ALL IMPLIED WARRANTIES OR CONDITIONS OF
+                MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT.
+              </p>
+              <p class="caps">
+                TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL JobFairX,
+                LLC AND/OR ITS SUPPLIERS BE LIABLE FOR ANY DIRECT, INDIRECT, PUNITIVE,
+                INCIDENTAL, SPECIAL, CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER INCLUDING,
+                WITHOUT LIMITATION, DAMAGES FOR LOSS OF USE, DATA OR PROFITS, ARISING OUT OF OR
+                IN ANY WAY CONNECTED WITH THE USE OR PERFORMANCE OF THE SITE, WITH THE DELAY OR
+                INABILITY TO USE THE SITE OR RELATED SERVICES, THE PROVISION OF OR FAILURE TO
+                PROVIDE SERVICES, OR FOR ANY INFORMATION, SOFTWARE, PRODUCTS, SERVICES AND
+                RELATED GRAPHICS OBTAINED THROUGH THE SITE, OR OTHERWISE ARISING OUT OF THE USE
+                OF THE SITE, WHETHER BASED ON CONTRACT, TORT, NEGLIGENCE, STRICT LIABILITY OR
+                OTHERWISE, EVEN IF JobFairX, LLC OR ANY OF ITS SUPPLIERS HAS BEEN ADVISED OF THE
+                POSSIBILITY OF DAMAGES. BECAUSE SOME STATES/JURISDICTIONS DO NOT ALLOW THE
+                EXCLUSION OR LIMITATION OF LIABILITY FOR CONSEQUENTIAL OR INCIDENTAL DAMAGES, THE
+                ABOVE LIMITATION MAY NOT APPLY TO YOU. IF YOU ARE DISSATISFIED WITH ANY PORTION
+                OF THE SITE, OR WITH ANY OF THESE TERMS OF USE, YOUR SOLE AND EXCLUSIVE REMEDY IS
+                TO DISCONTINUE USING THE SITE.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-termination" data-reveal>
+            <div class="sec__h"><span class="k">12</span><h2>Termination/Access Restriction</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>Access can be cut off at any time, without notice. Disputes go to Nevada courts under Nevada law.</p>
+              <p>Using the Site does not make you a partner, employee or agent of JobFairX. If one clause is unenforceable it gets replaced rather than voiding the rest, and this document supersedes anything said before it.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                JobFairX reserves the right, in its sole discretion, to terminate your access to
+                the Site and the related services or any portion thereof at any time, without
+                notice. To the maximum extent permitted by law, this agreement is governed by the
+                laws of the State of Nevada and you hereby consent to the exclusive jurisdiction
+                and venue of courts in Nevada in all disputes arising out of or relating to the
+                use of the Site. Use of the Site is unauthorized in any jurisdiction that does
+                not give effect to all provisions of these Terms, including, without limitation,
+                this section.
+              </p>
+              <p>
+                You agree that no joint venture, partnership, employment, or agency relationship
+                exists between you and JobFairX as a result of this agreement or use of the Site.
+                JobFairX’s performance of this agreement is subject to existing laws and legal
+                process, and nothing contained in this agreement is in derogation of JobFairX’s
+                right to comply with governmental, court and law enforcement requests or
+                requirements relating to your use of the Site or information provided to or
+                gathered by JobFairX with respect to such use. If any part of this agreement is
+                determined to be invalid or unenforceable pursuant to applicable law including,
+                but not limited to, the warranty disclaimers and liability limitations set forth
+                above, then the invalid or unenforceable provision will be deemed superseded by a
+                valid, enforceable provision that most closely matches the intent of the original
+                provision and the remainder of the agreement shall continue in effect.
+              </p>
+              <p>
+                Unless otherwise specified herein, this agreement constitutes the entire
+                agreement between the user and JobFairX with respect to the Site and it
+                supersedes all prior or contemporaneous communications and proposals, whether
+                electronic, oral or written, between the user and JobFairX with respect to the
+                Site. A printed version of this agreement and of any notice given in electronic
+                form shall be admissible in judicial or administrative proceedings based upon or
+                relating to this agreement to the same extent and subject to the same conditions
+                as other business documents and records originally generated and maintained in
+                printed form. It is the express wish to the parties that this agreement and all
+                related documents be written in English.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-changes" data-reveal>
+            <div class="sec__h"><span class="k">13</span><h2>Changes to Terms</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>These Terms can change at any time, and the newest version replaces every earlier one. There is no promise to notify you — checking back is on you.</p>
+            </aside>
+            <div class="sec__body">
+              <p>
+                JobFairX reserves the right, in its sole discretion, to change the Terms under
+                which www.jobfairx.com is offered. The most current version of the Terms will
+                supersede all previous versions. JobFairX encourages you to periodically review
+                the Terms to stay informed of our updates.
+              </p>
+            </div>
+          </section>
+
+          
+          <section class="sec" id="s-contact" data-reveal>
+            <div class="sec__h"><span class="k">14</span><h2>Contact Us</h2></div>
+            <aside class="sec__gloss">
+              <span class="gl">Plain English — not part of the agreement</span>
+              <p>Where to send questions about these Terms — and, under section 5, where a cancellation by email has to go.</p>
+            </aside>
+            <div class="sec__body">
+              <p>JobFairX welcomes your questions or comments regarding the Terms:</p>
+              <address class="sec__addr">
+                JobFairX, LLC<br>
+                209 S Stephanie St. STE B #144<br>
+                Henderson, Nevada 89012
+              </address>
+              
+              <p>Email Address: <a href="mailto:info@jobfairx.com">info@jobfairx.com</a></p>
+              <p class="sec__eff">Effective as of November 01, 2021</p>
+            </div>
+          </section>
+
+          
+          <section class="gaps" id="s-gaps" data-reveal data-placeholder>
+            <span class="gaps__tag">Not part of the agreement · needs legal review</span>
+            <h2 class="t-balance">Four things these Terms do not settle</h2>
+            <p class="gaps__lede">
+              The audit recorded that no refund or cancellation policy exists anywhere on the
+              site. It does — section 5 above, unchanged since 2021. The real problem is
+              narrower and worse: the policy predates the product it governs, and four
+              specific questions a paying employer will ask have no answer in this document.
+              Each gap below is stated with the evidence behind it. Nothing here is invented,
+              and nothing here is binding.
+            </p>
+
+            <div class="gaps__list">
+
+              <article class="gap">
+                <h3>1. The cancellation window closes before registration does</h3>
+                <p>
+                  Section 5 requires a cancellation at least 30 days before the event. But
+                  registration stays open until 1–2 days before it, and the countdown banners
+                  actively sell into that window. An employer who registers 20 days out has,
+                  from the moment they pay, no way to cancel: section 5 routes them straight
+                  into the no-show policy, where the fee is forfeited and cannot be rolled over.
+                </p>
+                <ul class="gap__ev">
+                  <li><b>Terms §5:</b> cancellations “must be received a minimum of 30 days prior to the event”</li>
+                  <li><b>Live site:</b> early-registration pricing ends at exactly 31 days out (<code>minDays: 31</code>)</li>
+                  <li><b>Live site:</b> registration closes between 1 and 2 days before the event</li>
+                  <li><b>Live banner, state C:</b> “Candidate matching is live. Reserve your spot…”</li>
+                  <li><b>Live banner, state E:</b> “Employer registration closes tomorrow. Reserve your spot now →”</li>
+                </ul>
+                <p class="gap__ask">
+                  {{PLACEHOLDER — REFUND POLICY: what happens when an employer registers inside
+                  the 30-day window? Is there a cooling-off period, a shorter deadline for late
+                  registrations, or is the fee genuinely non-cancellable from purchase?}}
+                </p>
+              </article>
+
+              <article class="gap">
+                <h3>2. Bundle credits and cancellation credits are not the same thing — or are they?</h3>
+                <p>
+                  Bundles run from 5 to 100 events, $470 down to $297 each, up to $29,700 at 100
+                  events, and are sold under a “Credits never expire” trust chip. Section 5
+                  separately promises “a credit … on their account for a future event” when you
+                  cancel. Whether those are one credit type or two, whether the never-expire
+                  promise covers a cancellation credit, and what becomes of an unused bundle
+                  balance are all unaddressed.
+                </p>
+                <ul class="gap__ev">
+                  <li><b>Bundles page:</b> 5–100 events, $470 → $297 per event, $29,700 at 100</li>
+                  <li><b>Bundles page trust chips:</b> “Credits never expire” · “Use across any event type”</li>
+                  <li><b>Terms §5:</b> “a credit will be issued on their account for a future event”</li>
+                  <li><b>Terms §5:</b> no-shows “are not eligible to roll the registration package over”</li>
+                </ul>
+                <p class="gap__ask">
+                  {{PLACEHOLDER — BUNDLE CREDIT TERMS: do bundle credits and cancellation
+                  credits behave identically? Does “never expire” survive a cancellation, and
+                  what happens to an unused balance if an account closes?}}
+                </p>
+              </article>
+
+              <article class="gap">
+                <h3>3. Nothing covers JobFairX cancelling an event</h3>
+                <p>
+                  Section 5 handles a <em>date change</em> — no refund, a credit instead. It says
+                  nothing about an event JobFairX cancels outright, an event that does not run,
+                  or an event that runs with too few candidates matched to be worth attending.
+                  Every obligation in the clause runs one direction.
+                </p>
+                <ul class="gap__ev">
+                  <li><b>Terms §5, Date Change:</b> covers a moved event only</li>
+                  <li><b>Terms §5:</b> silent on cancellation by JobFairX</li>
+                  <li><b>Live site:</b> per-event candidate counts vary widely by market (e.g. 429, 728, 968 pre-registered)</li>
+                </ul>
+                <p class="gap__ask">
+                  {{PLACEHOLDER — EVENT CANCELLATION BY JOBFAIRX: what does an employer receive
+                  if we cancel an event, fail to run one, or run one materially below the
+                  interview volume their plan states?}}
+                </p>
+              </article>
+
+              <article class="gap">
+                <h3>4. The document predates the product it governs</h3>
+                <p>
+                  These Terms took effect on November 01, 2021 and still speak the language of a
+                  physical trade show: no-shows forfeit their registration fee “and materials”.
+                  There are no materials. There is also nothing about interview locations — the
+                  employer who sets an in-person interview location and then cannot host, the
+                  employer whose own video link fails, or the candidate who does not attend a
+                  confirmed interview.
+                </p>
+                <ul class="gap__ev">
+                  <li><b>Terms:</b> “Effective as of November 01, 2021”</li>
+                  <li><b>Terms §5:</b> “forfeit their entire registration fee and materials”</li>
+                  <li><b>Terms:</b> no reference to interview locations, video, phone or in person</li>
+                  <li><b>Product:</b> interview location is set per event — JobFairX video, phone, in person, or your own link</li>
+                </ul>
+                <p class="gap__ask">
+                  {{PLACEHOLDER — INTERVIEW-LOCATION OBLIGATIONS: what is an employer committing
+                  to when they set an interview location, and what happens on either side if
+                  that location falls through?}}
+                </p>
+              </article>
+
+            </div>
+
+            
+            <figure class="anno gaps__shot">
+              <div class="anno__stage">
+                <div class="crop crop--4x3">
+                  <img src="assets/product/account-billing.png"
+                       alt="The JobFairX Account and Billing screen for a demo employer, Sarah Mitchell at Acme Healthcare. It has two tabs, Account and Billing, with the Account tab open showing only contact fields: first and last name, company name, job title, email and phone."
+                       width="3200" height="2000"
+                       style="--z:2.0; --l:-32%; --t:-7%; --zm:2.6; --lm:-33%; --tm:-8%">
+                </div>
+                <button class="anno__pin" style="--x:25.6%;--y:26.8%" data-anno="1" aria-label="Detail 1">1</button>
+                <button class="anno__pin" style="--x:49%;--y:71%" data-anno="2" aria-label="Detail 2">2</button>
+              </div>
+              <ol class="anno__key">
+                <li data-anno="1"><b>1</b><span>The Billing tab was never captured, so we cannot say from our own assets whether a credit balance, an invoice history or a cancellation control lives behind it. Worth confirming before anyone answers gap 2.</span></li>
+                <li data-anno="2"><b>2</b><span>The Account tab holds contact details only. Section 5 promises “a credit … on their account” — nothing on this screen shows one, and section 5 routes cancellations to phone and email rather than to the product.</span></li>
+              </ol>
+            </figure>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section helpband" id="cancel">
+    <div class="u-container">
+      <div class="helpband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Need to cancel a registration?</h2>
+          <p class="t-lead">
+            Section 5 accepts cancellations by phone or email only, and they have to reach us
+            at least 30 days before the event date. Send it early — the deadline is measured
+            by when we receive it, not when you send it.
+          </p>
+          <div class="cta-row">
+            <a href="mailto:info@jobfairx.com?subject=Registration%20cancellation" class="btn btn--primary btn--lg">Email a cancellation</a>
+            <a href="page-contact.html" class="btn btn--secondary btn--lg">Contact us</a>
+          </div>
+        </div>
+
+        <ul class="helpband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Email</span>
+            <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Phone</span>
+            <a href="tel:+17022690808">(702) 269-0808</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Hours</span>
+            <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><span aria-current="page">Terms</span></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page-specific: contents rail spy + print button.
+   Vanilla, no dependencies. Both features are progressive — with the script
+   blocked the contents list is still a working set of anchor links and the
+   document still prints, just without the button.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  /* ---------- print ----------
+     The button is authored as a <button>, not a link, so it never renders as a
+     dead href="#" if the script fails to load. */
+  var printBtn = document.querySelector('[data-print]');
+  if (printBtn) {
+    printBtn.addEventListener('click', function () { window.print(); });
+  }
+
+  /* ---------- contents rail ---------- */
+  var toc = document.querySelector('[data-toc]');
+  if (!toc || !('IntersectionObserver' in window)) return;
+
+  var links = Array.prototype.slice.call(toc.querySelectorAll('a'));
+  var list  = toc.querySelector('ol');
+  var map   = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+
+  function mark(a) {
+    links.forEach(function (l) { l.classList.toggle('is-active', l === a); });
+    /* The rail scrolls independently on desktop once it outgrows the viewport;
+       keep the active entry visible. On mobile it is a static card, so the
+       height check leaves it alone. */
+    if (toc.scrollHeight > toc.clientHeight + 4) {
+      var top = a.offsetTop - toc.clientHeight / 2;
+      toc.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+  }
+
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var a = map[e.target.id];
+      if (a) mark(a);
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  Object.keys(map).forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (sec) spy.observe(sec);
+  });
+
+  /* Guard against an unused variable warning in strict linting setups and keep
+     a handle on the list element for future column work. */
+  void list;
+})();
+</script>
+</body>
+</html>

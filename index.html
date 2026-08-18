@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JobFairX Employer Homepage — Three Concepts</title>
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}*{margin:0}
+  :root{
+    --paper:#faf9f7; --ink:#16151a; --ink-2:#55525c; --ink-3:#86828e;
+    --rule:#ddd9d4; --accent:#2244cc;
+    --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,monospace;
+  }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Inter var',Inter,-apple-system,sans-serif;
+    font-feature-settings:'cv01' 1,'ss03' 1;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin-inline:auto;padding:64px 24px 96px}
+  .mono{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  h1{font-size:clamp(2rem,1.4rem+2.6vw,3rem);font-weight:500;letter-spacing:-.038em;line-height:1.04;margin:16px 0 0;max-width:20ch}
+  .lead{font-size:1.125rem;color:var(--ink-2);max-width:64ch;margin-top:20px;letter-spacing:-.01em}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#fff;
+        transition:border-color .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.16,1,.3,1)}
+  .card:hover{border-color:var(--ink);transform:translateY(-3px)}
+  .card__swatch{height:132px;position:relative;display:grid;place-items:center;border-bottom:1px solid var(--rule)}
+  .card__swatch b{font-size:1.5rem;font-weight:500;letter-spacing:-.03em}
+  .s1{background:linear-gradient(150deg,#08090c,#141a2e 60%,#0b1130);color:#f4f6fa}
+  .s2{background:#faf9f7;color:#16151a;
+      background-image:radial-gradient(circle,rgba(34,68,204,.35) 1.1px,transparent 1.1px);background-size:14px 14px}
+  .s2 b{background:#faf9f7;padding:4px 14px}
+  .s3{background:linear-gradient(180deg,#0b0d12 0%,#0b0d12 38%,#6f6f72 62%,#fbfaf8 100%);color:#f4f6fa}
+  .s3 b{text-shadow:0 1px 12px rgba(0,0,0,.6)}
+  .card__body{padding:20px}
+  .card h2{font-size:1.0625rem;font-weight:550;letter-spacing:-.02em}
+  .card p{font-size:.875rem;color:var(--ink-2);margin-top:8px}
+  .card ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:6px}
+  .card li{font-size:.8125rem;color:var(--ink-2);display:flex;gap:8px}
+  .card li::before{content:'—';color:var(--ink-3)}
+  .open{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-family:var(--mono);
+        font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  .badge{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+         text-transform:uppercase;background:var(--accent);color:#fff;padding:3px 7px;border-radius:3px}
+
+  .docs{margin-top:64px;border-top:1px solid var(--rule);padding-top:32px;
+        display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:900px){.docs{grid-template-columns:1fr}}
+  .doc{border:1px solid var(--rule);border-radius:6px;padding:16px 18px;background:#fff}
+  .doc b{font-size:.9375rem;font-weight:550;letter-spacing:-.02em;display:block}
+  .doc span{font-size:.8125rem;color:var(--ink-2)}
+
+  .note{margin-top:48px;border:1px solid #e8ddc9;background:#fdf9f0;border-radius:6px;padding:18px 20px}
+  .note b{display:block;font-size:.9375rem;font-weight:600;letter-spacing:-.02em}
+  .note p{font-size:.875rem;color:#6b5a3a;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mono">JobFairX · Employer marketing site</p>
+  <h1>Three homepage concepts.</h1>
+  <p class="lead">
+    Same story, same real product screenshots, same seven-step journey — three different
+    design languages. Open each one and scroll it; the motion is the point, and it doesn't
+    survive a static comparison.
+  </p>
+
+  <div class="grid">
+    <a class="card" href="concept-1-dark.html">
+      <div class="card__swatch s1"><b>Dark</b></div>
+      <div class="card__body">
+        <h2>Concept 1 — Cinematic</h2>
+        <p>One continuous night. Ambient light and glass carry the depth.</p>
+        <ul>
+          <li>Asymmetric hero, product bleeds off the right edge</li>
+          <li>Glass cards, ambient aura, accent bloom</li>
+          <li>Journey as numbered full-bleed bands</li>
+        </ul>
+        <span class="open">Open concept →</span>
+      </div>
+    </a>
+
+    <a class="card" href="concept-2-light.html">
+      <div class="card__swatch s2"><b>Light</b></div>
+      <div class="card__body">
+        <h2>Concept 2 — Technical-editorial</h2>
+        <p>The page as a printed document. No shadow, no glass, no glow.</p>
+        <ul>
+          <li>Inset page frame, hairline section rules</li>
+          <li>Bracketed ordinals, mono/sans tracking opposition</li>
+          <li>Per-format accent + tint pairs</li>
+        </ul>
+        <span class="open">Open concept →</span>
+      </div>
+    </a>
+
+    <a class="card" href="concept-3-hybrid.html">
+      <div class="card__swatch s3"><span class="badge">Recommended</span><b>Hybrid</b></div>
+      <div class="card__body">
+        <h2>Concept 3 — Night into day</h2>
+        <p>Dark hero for the promise, daylight for the proof, dark to close.</p>
+        <ul>
+          <li>Cinematic hero with two floating UI fragments</li>
+          <li>Nav inverts with the section beneath it</li>
+          <li>Sticky-scroll journey, tabbed interview formats</li>
+        </ul>
+        <span class="open">Open concept →</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="docs">
+    <a class="doc" href="RECOMMENDATION.md"><b>Recommendation</b><span>Why Concept 3, and what to change before build.</span></a>
+    <a class="doc" href="DESIGN-SYSTEM.md"><b>Design system</b><span>Tokens, type scale, depth, motion, screenshot rules.</span></a>
+    <a class="doc" href="CONTENT-SPEC.md"><b>Content spec</b><span>Section-by-section copy and the product-visual map.</span></a>
+  </div>
+
+  <div class="note">
+    <b>Everything marked PLACEHOLDER is not real.</b>
+    <p>
+      Customer logos, names, quotes, every statistic, all prices and the compliance badges are
+      invented scaffolding, deliberately styled to look unfinished. They carry a
+      <code>data-placeholder</code> attribute so they can be found and swapped in one pass.
+      Nothing here should go live until real, approved data replaces them.
+    </p>
+  </div>
+</div>
+</body>
+</html>

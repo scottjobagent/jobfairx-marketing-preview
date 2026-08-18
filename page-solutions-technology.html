@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technology Hiring Events — JobFairX</title>
+<meta name="description" content="Software Engineers, DevOps Engineers and UX Designers request the interview; you accept, and it is scheduled. Technology is one of the five JobFairX event types, and your interview location can be the video stack your team already runs.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — SOLUTIONS / TECHNOLOGY
+   Replaces /employer/solutions/technology.
+
+   A CLONE of page-solutions-healthcare.html, which is the reference
+   implementation of the solution-page template. The structure is unchanged.
+   What changed is the CONTENT — and, in two places, the structure had to
+   shrink, because technology has less evidence behind it than healthcare:
+
+     .sol-hero    type promise + trust metrics                    [dark]
+     ─────────    NO LOGO WALL. See the comment where it would be. [—]
+     .roles       the titles that show up on this type            [light]
+     .fig         the technology rows on the candidate list       [light]
+     .anno        the real product visual, cropped to this type   [light]
+     .quote       the customer sentence — placeholder, see below  [dark]
+     .runs        how an event of this type runs, end to end      [dark]
+     .pricestrip  pricing — byte-identical on all five pages      [light]
+     .evband      link out to the calendar filtered to this type  [light]
+     .faq         the type FAQ                                    [light]
+     .ctaband     the single page CTA                             [dark]
+
+   Theme rhythm, unchanged from the reference: dark promise → light evidence
+   → dark proof + mechanics → light commerce → dark close. HARD CUTS, no seam
+   elements, no gradient spanning a boundary.
+
+   WHAT THIS CLONE RE-DERIVED RATHER THAN COPIED:
+   1. Every crop geometry and every pin coordinate. Healthcare crops
+      candidates.png; this page's centrepiece crops dashboard-events.png, so
+      not one number carried over. Working is in the .anno block below.
+   2. The trust metrics. Healthcare has four real numbers. Technology has
+      NONE of its own — so this page ships two PLATFORM-WIDE figures, each
+      labelled as platform-wide, and two {{PLACEHOLDER}} tiles. It does not
+      borrow healthcare's 582 / 91% / 35 / 8, and it does not quietly reuse a
+      platform number as though it were a technology number.
+   3. The customer sentence. Three customers are attributable across the
+      whole site — Target, Tesla and Western Regional Medical Center — and
+      none of the three is attributed to a technology event. The .quote slot
+      therefore ships as a placeholder rather than borrowing one of them.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ----------
+   No item carries aria-current on this page: /employer/solutions/... is not in
+   the four-item nav. The selector is kept so a clone that DOES sit on a nav
+   destination only has to add the attribute. Do NOT invent a Solutions nav
+   item here — PAGE-INVENTORY moves the nav to five items in Wave 1 and that
+   change owns this problem for all five solution pages at once. */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a[aria-current="page"] { color: var(--ink); position: relative; }
+.nav__links a[aria-current="page"]::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a[aria-current="page"] { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ==========================================================================
+   SLOT 1 — .sol-hero
+   Identical ambient device and scale to the healthcare hero, so the five type
+   pages read as one family. One promise, one supporting paragraph, then the
+   numbers — except that on this page two of the four numbers do not exist.
+   ========================================================================== */
+.sol-hero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.sol-hero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.sol-hero__glow::before, .sol-hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.sol-hero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.sol-hero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.sol-hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.sol-hero__inner { position: relative; z-index: 2; }
+.sol-hero__crumb { display: flex; align-items: center; gap: var(--s-2); }
+.sol-hero__crumb a { color: var(--ink-3); transition: color var(--t-micro) var(--e-inout); }
+.sol-hero__crumb a:hover { color: var(--accent-hover); }
+.sol-hero h1 { max-width: 18ch; margin-top: var(--s-4); }
+.sol-hero__sub { max-width: 60ch; margin-top: var(--s-6); }
+
+/* ---------- per-type trust metrics ----------
+   Depth on dark is hairline + a half-pixel rim light. No shadow, no bloom.
+   An empty tile keeps its full height so the strip does not visibly sag where
+   the evidence is missing — the placeholder badge is the signal, not a gap. */
+.metrics {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.metrics > li { padding: var(--s-8); min-width: 0; }
+.metrics > li + li { border-left: 1px solid var(--hairline); }
+.metric__n { font-size: clamp(2rem, 1.4rem + 2vw, 2.75rem); font-weight: 500; line-height: 1.02; letter-spacing: -.038em; color: var(--ink); }
+.metric__n--empty {
+  font-family: var(--font-mono); font-size: var(--t-sm); font-weight: 400;
+  line-height: 1.4; letter-spacing: .04em; color: var(--ink-3);
+  padding: var(--s-3) 0;
+}
+.metric__l { margin-top: var(--s-2); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.metric__s { margin-top: var(--s-2); font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.metrics__note { position: relative; z-index: 2; margin-top: var(--s-5); max-width: 82ch; }
+@media (max-width: 900px) {
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s-12); }
+  .metrics > li { padding: var(--s-6); }
+  .metrics > li + li { border-left: 0; }
+  .metrics > li:nth-child(even) { border-left: 1px solid var(--hairline); }
+  .metrics > li:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- section heads (shared by every light slot) ---------- */
+.head { max-width: 60ch; }
+.head p { margin-top: var(--s-4); }
+
+/* ==========================================================================
+   SLOT 3 — .roles
+   Titles only. Every line of "why this role matters" copy a clone might want
+   here would be invented, so the slot deliberately has nowhere to put one.
+   ========================================================================== */
+.roles { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-8); }
+/* 18px, not 17 — the tracking ramp crosses zero around here, and a role title
+   wants the tight setting. Anything that has to sit below 18px in this file
+   takes positive tracking instead. */
+.role {
+  padding: var(--s-4) var(--s-6);
+  font-size: 1.125rem; font-weight: 500; letter-spacing: -.014em; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+}
+.role--empty {
+  color: var(--ink-3); font-family: var(--font-mono); font-size: var(--t-sm);
+  letter-spacing: .04em; font-weight: 400;
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+  border-style: dashed; border-color: var(--hairline-strong); box-shadow: none;
+}
+.roles__note { margin-top: var(--s-6); max-width: 74ch; }
+
+/* ---------- plain (unpinned) product figure ---------- */
+.fig { margin: 0; }
+.fig figcaption { margin-top: var(--s-5); max-width: 78ch; }
+
+/* ==========================================================================
+   SLOT 4 — .anno (the real product visual)
+   base.css owns the component. Three decisions live here:
+
+   1. FULL-WIDTH STAGE, key underneath. At container width the cropped region
+      lands near 1:1 and the pins point at type you can actually read.
+
+   2. The crop geometry and the pin coordinates are ONE calculation. Re-crop
+      and you MUST re-derive every pin. Working, for dashboard-events.png
+      (3200x2000, quoted as fractions of the image):
+
+        aspect 25/6, --z 1.2, --l -15.5%, --t -26.2%
+        visible x  0.1550 → 0.9883   (width  fraction 1/1.2      = 0.83333)
+        visible y  0.2620 → 0.5820   (height fraction 1.6/(A·z)  = 0.32000)
+        pin x = (fx − 0.155) / 0.83333      pin y = (fy − 0.262) / 0.32
+
+      The y-window is chosen, not eyeballed: it opens on the column-heading
+      band and closes on the separator under the Chicago Technology row, so
+      what is on screen is the headings, the Dallas Healthcare row, and the
+      technology row every pin points at. Nothing below it.
+
+      Pins are positioned against .anno__stage. On LIGHT ground .panel has no
+      padding, so stage box == crop box and the mapping is exact. Putting this
+      figure on a dark section would inset the crop by 10px and skew every
+      pin — that is why this block is light and must stay light.
+
+   3. Below 780px base.css swaps in the --zm/--lm/--tm crop, so the pins line
+      up with nothing. Hide them there and let the key carry the explanation.
+   ========================================================================== */
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .anno__key {
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  align-items: start; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.anno--wide .anno__key li { min-width: 0; }
+/* base.css leaves <strong> inside a caption at the browser default of 700, which
+   at 14px is a different typeface weight to everything around it. 550 is the
+   emphasis weight this system uses at small sizes. */
+.anno__key strong { color: var(--ink); font-weight: 550; }
+.anno__note { margin-top: var(--s-5); max-width: 74ch; }
+
+/* Three crops, three aspect ratios, each with a hand-picked mobile region.
+   crop--evtech  headings + Dallas row + Chicago Technology row  (the anno)
+   crop--cand    the top three rows of the candidate list
+   crop--denver  the Denver Technology row alone                            */
+.crop--evtech { aspect-ratio: 25/6; }
+.crop--cand   { aspect-ratio: 15/4; }
+.crop--denver { aspect-ratio: 28/3; }
+@media (max-width: 780px) {
+  .anno__pin { display: none; }
+  .crop--evtech { aspect-ratio: 2/1; }
+  .crop--cand   { aspect-ratio: 16/5; }
+  .crop--denver { aspect-ratio: 12/5; }
+}
+
+/* ==========================================================================
+   SLOT 5 — .quote
+   One sentence, company + role attribution only, on the dark ground. Never a
+   portrait, never a star rating, never a second sentence we did not receive.
+   On THIS page it holds no sentence at all — see the note beside it.
+   ========================================================================== */
+.quote { max-width: 64ch; }
+.quote blockquote { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem); font-weight: 500; line-height: 1.15; letter-spacing: -.03em; color: var(--ink); }
+.quote blockquote.is-empty {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, .9rem + .5vw, 1.25rem); font-weight: 400;
+  line-height: 1.4; letter-spacing: .02em; color: var(--ink-3);
+}
+.quote figcaption {
+  margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-3);
+}
+.quote cite { font-style: normal; font-size: 1.125rem; font-weight: 500; letter-spacing: -.014em; color: var(--ink); }
+.quote .quote__role { font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink-3); }
+
+.gapnote {
+  margin-top: var(--s-8); max-width: 74ch;
+  padding-left: var(--s-5); border-left: 2px solid color-mix(in srgb, #b06d1f 55%, transparent);
+}
+.gapnote p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.gapnote p + p { margin-top: var(--s-3); }
+.gapnote strong { color: var(--ink); font-weight: 550; }
+
+/* ==========================================================================
+   SLOT 6 — .runs
+   The four beats of an event of this type, then the real dashboard row for
+   one. The steps are type-agnostic; only the event named in the row changes.
+   ========================================================================== */
+.flow {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: var(--s-10);
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.flow > li { padding: var(--s-8); min-width: 0; }
+.flow > li + li { border-left: 1px solid var(--hairline); }
+.flow__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-3); text-transform: uppercase; }
+.flow__t { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; color: var(--ink); }
+.flow__d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 980px) {
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow > li + li { border-left: 0; }
+  .flow > li:nth-child(even) { border-left: 1px solid var(--hairline); }
+  .flow > li:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+  .flow > li { padding: var(--s-6); }
+}
+@media (max-width: 620px) {
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .flow > li:nth-child(even) { border-left: 0; }
+  .flow > li + li { border-top: 1px solid var(--hairline); }
+}
+
+.evrow { margin: var(--s-12) 0 0; }
+.evrow figcaption { margin-top: var(--s-5); max-width: 78ch; }
+.ulist { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.ulist li { position: relative; padding-left: 26px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.ulist li::before {
+  content: ''; position: absolute; left: 4px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.ulist strong { color: var(--ink); font-weight: 550; }
+.ulist a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.ulist a:hover { border-bottom-color: var(--accent); }
+
+/* ==========================================================================
+   SLOT 7 — .pricestrip
+   Byte-identical on all five solution pages. Nothing about pricing varies by
+   event type, and the moment one type page implies it does, sales inherits a
+   conversation it cannot win.
+   ========================================================================== */
+.pricestrip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.tier { display: grid; align-content: start; gap: var(--s-3); position: relative; }
+.tier__name { font-size: 1.125rem; font-weight: 550; letter-spacing: -.016em; color: var(--ink); display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
+.tier__pop {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--accent);
+}
+.tier__price { font-size: 2rem; font-weight: 500; line-height: 1.04; letter-spacing: -.038em; color: var(--ink); }
+.tier__per { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+.tier__facts { display: grid; gap: var(--s-2); margin-top: var(--s-2); }
+.tier__facts li { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.pricestrip__note { display: grid; gap: var(--s-3); margin-top: var(--s-8); max-width: 80ch; }
+.pricestrip__note p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.pricestrip__note strong { color: var(--ink); font-weight: 550; }
+@media (max-width: 900px) { .pricestrip { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 8 — .evband  (out to the calendar, filtered to this type)
+   ========================================================================== */
+.evband {
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--s-12); align-items: center;
+  margin-top: var(--s-10); padding: var(--s-10);
+  border: 1px solid var(--hairline); border-radius: var(--r-xl);
+  background: var(--surface); box-shadow: var(--elev);
+}
+.evband > * { min-width: 0; }
+.evband p { margin-top: var(--s-4); max-width: 52ch; }
+.evband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-8); border-left: 1px solid var(--hairline); }
+.evband__facts li { display: grid; gap: 4px; }
+.evband__facts strong { font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.evband__facts strong.is-empty { font-family: var(--font-mono); font-size: var(--t-sm); font-weight: 400; letter-spacing: .04em; color: var(--ink-3); }
+@media (max-width: 900px) {
+  .evband { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); padding: var(--s-6); }
+  .evband__facts { padding-left: 0; padding-top: var(--s-6); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ==========================================================================
+   SLOT 9 — .faq  (accordion copied from page-faq.html)
+   Real buttons, real aria, grid-template-rows animation so the panel measures
+   itself. The collapse rule is gated on the `faq-js` class the inline script
+   adds — a blocked script leaves every answer open and readable.
+   ========================================================================== */
+.faq-list { display: grid; gap: var(--s-3); margin-top: var(--s-8); }
+.faq-item {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+  scroll-margin-top: 116px;
+  transition: border-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.faq-item:hover { border-color: var(--hairline-strong); }
+.faq-item.is-open { border-color: var(--hairline-strong); box-shadow: var(--sh-md); }
+.faq-item h3 { font-size: inherit; font-weight: inherit; letter-spacing: inherit; }
+
+.faq-btn {
+  display: flex; width: 100%; align-items: flex-start; gap: var(--s-5);
+  text-align: left; padding: var(--s-5) var(--s-6); min-height: 60px;
+  font-size: 1.125rem; font-weight: 550; line-height: 1.35; letter-spacing: -.016em;
+  color: var(--ink); border-radius: var(--r-lg);
+}
+.faq-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.faq-btn__ic {
+  flex: none; margin-left: auto; margin-top: 2px;
+  width: 22px; height: 22px; display: grid; place-items: center; color: var(--ink-3);
+  transition: transform var(--t-base) var(--e-out), color var(--t-base) var(--e-out);
+}
+.faq-item.is-open .faq-btn__ic { transform: rotate(180deg); color: var(--accent); }
+
+.faq-panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--t-base) var(--e-out); }
+.faq-js .faq-item:not(.is-open) .faq-panel { grid-template-rows: 0fr; }
+.faq-panel__inner { overflow: hidden; }
+.faq-a { padding: 0 var(--s-6) var(--s-6); max-width: 68ch; }
+.faq-a p { font-size: .9375rem; line-height: 1.65; color: var(--ink-2); letter-spacing: .006em; }
+.faq-a p + p { margin-top: var(--s-4); }
+.faq-a strong { color: var(--ink); font-weight: 550; }
+.faq-a a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.faq-a a:hover { border-bottom-color: var(--accent); }
+
+/* an answer we do not have yet wears its status in the question line */
+.newtag {
+  display: inline-block; margin-left: var(--s-2); vertical-align: 2px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416; white-space: nowrap;
+}
+
+/* ==========================================================================
+   SLOT 10 — .ctaband  (exactly one per solution page)
+   ========================================================================== */
+.ctaband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.ctaband__inner > * { min-width: 0; }
+.ctaband p { margin-top: var(--s-5); max-width: 46ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.ctaband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.ctaband__facts li { display: grid; gap: 4px; }
+.ctaband__facts strong { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.ctaband__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+@media (max-width: 900px) {
+  .ctaband__inner { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .ctaband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-platform.html) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  
+  <section class="sol-hero grain">
+    <div class="sol-hero__glow" aria-hidden="true"></div>
+    <div class="sol-hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container sol-hero__inner">
+      <p class="t-eyebrow sol-hero__crumb">
+        <a href="page-solutions.html">Solutions</a> <span aria-hidden="true">·</span> Technology
+      </p>
+
+      
+      <h1 class="t-h1 t-balance">Your next engineer has already asked for the interview.</h1>
+
+      <p class="t-lead sol-hero__sub">
+        Technology is one of the five JobFairX event types. Matched candidates — verified
+        within approximately 20 miles of the event city — request time with you, and
+        accepting a request is what schedules the interview. Where it happens is your
+        call: JobFairX video, phone, in person at your office, or your own link. If your
+        team already lives in Teams, that is the one to pick.
+      </p>
+
+      
+      <ul class="metrics" data-reveal>
+        <li style="--i:0">
+          <p class="metric__n metric__n--empty" data-placeholder>{{N technology events in 2025}}</p>
+          <p class="metric__l">Technology hiring events</p>
+          <p class="metric__s">2025 — not published</p>
+        </li>
+        <li style="--i:1">
+          <p class="metric__n metric__n--empty" data-placeholder>{{Technology interview show rate}}</p>
+          <p class="metric__l">Interview show rate</p>
+          <p class="metric__s">No figure published for this type</p>
+        </li>
+        <li style="--i:2">
+          <p class="metric__n" data-count>500,000+</p>
+          <p class="metric__l">Interviews conducted</p>
+          <p class="metric__s">Platform-wide, all event types</p>
+        </li>
+        <li style="--i:3">
+          <p class="metric__n" data-count>87%</p>
+          <p class="metric__l">Employers who return</p>
+          <p class="metric__s">Platform-wide · 2025 platform data</p>
+        </li>
+      </ul>
+
+      <p class="t-sm metrics__note">
+        The two figures above are platform-wide, across all five event types — they are
+        not technology numbers wearing a technology label. JobFairX publishes an interview
+        show rate for three types only: healthcare 91%, veterans 89%, entry-level 86%.
+        There is no technology figure, so this page prints none.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+
+  
+  <section class="u-section" id="roles">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Typical roles</p>
+        <h2 class="t-h2 t-balance">The titles that show up on a technology event.</h2>
+        <p class="t-lead">
+          These are technical titles present in the product today — in the Job titles
+          column of the events dashboard, and on candidate rows as a desired job.
+        </p>
+      </div>
+
+      <ul class="roles">
+        <li class="role" data-reveal style="--i:0">Software Engineer</li>
+        <li class="role" data-reveal style="--i:1">DevOps Engineer</li>
+        <li class="role" data-reveal style="--i:2">UX Designer</li>
+        <li class="role" data-reveal style="--i:3">Web Developer</li>
+        <li class="role" data-reveal style="--i:4">Frontend Developer</li>
+        <li class="role role--empty" data-reveal style="--i:5" data-placeholder>{{Full technology role list}}</li>
+      </ul>
+
+      <p class="t-sm roles__note">
+        Five is what we can evidence, not a limit on what you can post. How many roles you
+        promote is a package line: <strong style="color:var(--ink);font-weight:550">1 job</strong>
+        on Starter, up to <strong style="color:var(--ink);font-weight:550">3</strong> on Growth,
+        up to <strong style="color:var(--ink);font-weight:550">6</strong> on Pro.
+      </p>
+
+      <figure class="fig" data-reveal style="--i:1;margin-top:var(--s-12)">
+        <div class="panel">
+          <div class="crop crop--cand">
+            <img src="assets/product/candidates.png"
+                 alt="The top three rows of the JobFairX candidate list under the headings Name, Desired job, Desired location, Time and Actions. Priya Patel is Requested since yesterday with a Video chip, desired job Frontend Developer, desired location Remote, Apr 22 at 10:00 AM CT, with Accept, Decline and Reschedule buttons. Jordan Lee is a No-show from two days ago wanting Registered Nurse in Dallas, TX. Babar Nawaz is Declined four days ago, desired job Web Developer, desired location Remote, Apr 22 at 10:30 AM CT, with Accept and Reschedule still on the row."
+                 width="3200" height="2000"
+                 style="--z:1.21; --l:-15.5%; --t:-30%; --zm:4.25; --lm:-38%; --tm:-33.5%">
+          </div>
+        </div>
+        <figcaption class="t-sm">
+          Frontend Developer and Web Developer, on the All events view of the candidate
+          list. Both technology rows read <strong style="color:var(--ink);font-weight:550">Remote</strong>
+          under Desired location. Verification is still geographic — candidates are verified
+          within approximately 20 miles of the event city — so Remote is a preference stated
+          by someone already in that market, not a national applicant pool.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="screen" style="padding-top:0">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">The real screen</p>
+        <h2 class="t-h2 t-balance">Three technical titles on one event, and the room you picked.</h2>
+        <p class="t-lead">
+          The events dashboard, unretouched, cropped to the Chicago Technology Event.
+          Hover a pin — or a caption — to see which part of the screen it belongs to.
+        </p>
+      </div>
+
+      <figure class="anno anno--wide" data-reveal style="--i:1">
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--evtech">
+              <img src="assets/product/dashboard-events.png"
+                   alt="Two rows of the JobFairX events dashboard under its column headings Actions, Event details, Interview location, Interview setup, Job titles and Candidates. The first row is Dallas Healthcare Event on Apr 22 2026, interview location Video, JobFairX video call, marked Setup complete. The second row is Chicago Technology Event, May 6 2026, 11:00 AM to 3:00 PM CT, carrying a Complete setup button and a red Setup chip; its interview location is Phone, You call each candidate; interview setup reads Incomplete with 4 of unlimited seats; the job titles are Software Engineer, DevOps Engineer and UX Designer at 3 of 6 jobs; and the candidates column reads 2 pending, 5 upcoming with a Manage applicants link."
+                   width="3200" height="2000"
+                   style="--z:1.2; --l:-15.5%; --t:-26.2%; --zm:4.55; --lm:-76%; --tm:-43.2%">
+            </div>
+          </div>
+
+          
+          <button class="anno__pin" style="--x:32.7%;--y:73.1%" data-anno="1" aria-label="Detail 1: the event, its date and its window">1</button>
+          <button class="anno__pin" style="--x:49.2%;--y:66.1%" data-anno="2" aria-label="Detail 2: the interview location for this event">2</button>
+          <button class="anno__pin" style="--x:64.8%;--y:84.4%" data-anno="3" aria-label="Detail 3: recruiter seats in use">3</button>
+          <button class="anno__pin" style="--x:83.4%;--y:80.6%" data-anno="4" aria-label="Detail 4: the technical job titles posted">4</button>
+          <button class="anno__pin" style="--x:95.4%;--y:65.6%" data-anno="5" aria-label="Detail 5: pending and upcoming candidates">5</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong>The event.</strong> Chicago Technology Event, May&nbsp;6&nbsp;2026, 11:00&nbsp;AM–3:00&nbsp;PM&nbsp;CT. A city, a date and a four-hour window — every employer in Chicago joins this same one.</span></li>
+          <li data-anno="2"><b>2</b><span><strong>Interview location.</strong> Phone&nbsp;· “You call each candidate” on this event. The healthcare row above it reads Video&nbsp;· JobFairX video call. Same dashboard, same employer, different room.</span></li>
+          <li data-anno="3"><b>3</b><span><strong>4 of unlimited seats.</strong> Unlimited recruiter seats is the Pro line, which matches the 6-job cap on the same row. Starter is 2 seats, Growth up to 5.</span></li>
+          <li data-anno="4"><b>4</b><span><strong>Software Engineer · DevOps Engineer · UX Designer.</strong> Three posted titles, 3 of 6 jobs used. This column is what candidates match against, so the posted title has to be the real title.</span></li>
+          <li data-anno="5"><b>5</b><span><strong>2 pending · 5 upcoming.</strong> Pending are interview requests waiting on you. Upcoming are the ones you already accepted — which means they are already scheduled.</span></li>
+        </ol>
+      </figure>
+
+      <p class="t-sm anno__note">
+        Nothing on this screen is an application queue. Pending means somebody asked for
+        time with you in a job you posted, and the request already carries the slot they
+        want.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="proof">
+    <div class="u-container">
+      <figure class="quote" data-reveal>
+        <p class="t-eyebrow" style="margin-bottom:var(--s-6)">Customer</p>
+        <blockquote class="is-empty" data-placeholder>{{Technology customer sentence}}</blockquote>
+        <figcaption>
+          <cite data-placeholder>{{Technology customer company}}</cite>
+          <span class="quote__role" data-placeholder>{{Role title}}</span>
+        </figcaption>
+      </figure>
+
+      <div class="gapnote" data-reveal>
+        <p>
+          <strong>Why this is blank.</strong> Three customers are attributable across the
+          whole site — Target, Tesla and Western Regional Medical Center — and not one of
+          the three is attributed to a technology event. Moving a healthcare or a veterans
+          sentence onto this page would be the cheapest possible lie, so the slot stays
+          empty until a technology customer says something we are allowed to print.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="how" style="padding-top:0">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">End to end</p>
+        <h2 class="t-h2 t-balance">How a technology event runs.</h2>
+        <p class="t-lead">
+          One market moment — a city, a date, a four-hour window. Every employer joins the
+          same event. What each of you sets independently is where your own interviews
+          happen.
+        </p>
+      </div>
+
+      <ol class="flow">
+        <li data-reveal style="--i:0">
+          <p class="flow__n">01 — Register</p>
+          <p class="flow__t">Pick the event</p>
+          <p class="flow__d">
+            Choose the technology event in your city and a package, then post your
+            engineering roles. Registering 31 or more days out takes a flat $100 off any
+            tier.
+          </p>
+        </li>
+        <li data-reveal style="--i:1">
+          <p class="flow__n">02 — Set up</p>
+          <p class="flow__t">Set your interview location</p>
+          <p class="flow__d">
+            JobFairX video, phone, in person at your address, or your own link. It is a
+            column on your events dashboard, and it is yours alone — the employer in the
+            next row of the same event can choose differently.
+          </p>
+        </li>
+        <li data-reveal style="--i:2">
+          <p class="flow__n">03 — Match</p>
+          <p class="flow__t">Requests start arriving</p>
+          <p class="flow__d">
+            Matching activates the moment your jobs are posted and the first interview
+            requests land within a few hours. Auto-accept them, or review each one — both
+            are in every package.
+          </p>
+        </li>
+        <li data-reveal style="--i:3">
+          <p class="flow__n">04 — Interview</p>
+          <p class="flow__t">Accept, and it is booked</p>
+          <p class="flow__d">
+            The request already carries a time, so accepting is the scheduling step.
+            Unlimited interviews before, during and after the event are included at every
+            tier.
+          </p>
+        </li>
+      </ol>
+
+      
+      <figure class="evrow" data-reveal>
+        <div class="panel">
+          <div class="crop crop--denver">
+            <img src="assets/product/dashboard-events.png"
+                 alt="One row of the JobFairX events dashboard reading Denver Technology Event, Jun 3 2026, 10:00 AM to 2:00 PM MT. Its interview location is a Video chip above the words Microsoft Teams, with a Go to lobby link and a green Setup complete marker. Interview setup reads 3 interviewers, 3 of 5 seats. The job titles column reads Software Engineer. The candidates column reads 4 pending, 9 upcoming, with a Manage applicants link."
+                 width="3200" height="2000"
+                 style="--z:1.22; --l:-15.5%; --t:-70%; --zm:8.33; --lm:-44.5%; --tm:-74%">
+          </div>
+        </div>
+        <figcaption class="t-sm">
+          The Denver Technology Event, as the dashboard shows it. The interview location
+          column reads <strong style="color:var(--ink);font-weight:550">Video · Microsoft Teams</strong>
+          — that is the your-own-link option, and it is why a technical team with a video
+          stack it already trusts does not have to abandon it to run an event.
+        </figcaption>
+      </figure>
+
+      <ul class="ulist" data-reveal>
+        <li><strong>Your own link is one of four interview locations.</strong> The others are JobFairX video, phone, and in person at your address. You pick one per event, and the dashboard shows what you picked. <a href="page-interview-locations.html">How interview locations work →</a></li>
+        <li><strong>Teams here, phone there.</strong> The same employer runs Microsoft Teams on the Denver event and “You call each candidate” on the Chicago one. The location travels with the event, not with the account.</li>
+        <li><strong>3 interviewers · 3 of 5 seats.</strong> Recruiter seats are a package line: 2 on Starter, up to 5 on Growth, unlimited on Pro. Every seat is a person who can take an interview.</li>
+        <li><strong>4 pending · 9 upcoming.</strong> Nine interviews are already scheduled, because accepting a request is what schedules it. Four more are waiting on an answer.</li>
+        <li><strong>In person is not an event type.</strong> Denver, Chicago and Dallas are all the same kind of thing — a market and a date. The room is a setting you own.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="pricing">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Pricing</p>
+        <h2 class="t-h2 t-balance">Technology costs what every event costs.</h2>
+        <p class="t-lead">
+          There is no engineering surcharge and no technology tier. Packages differ on
+          jobs, recruiter seats and interview volume — nothing else.
+        </p>
+      </div>
+
+      <div class="pricestrip">
+        <div class="card tier" data-reveal style="--i:0">
+          <p class="tier__name">Starter</p>
+          <p class="tier__price">$495</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Promote 1 job</li>
+            <li>20+ scheduled interviews</li>
+            <li>2 recruiter seats</li>
+          </ul>
+        </div>
+        <div class="card tier" data-reveal style="--i:1">
+          <p class="tier__name">Growth <span class="tier__pop">Most popular</span></p>
+          <p class="tier__price">$895</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Up to 3 jobs</li>
+            <li>60+ scheduled interviews</li>
+            <li>Up to 5 recruiter seats</li>
+          </ul>
+        </div>
+        <div class="card tier" data-reveal style="--i:2">
+          <p class="tier__name">Pro</p>
+          <p class="tier__price">$1,495</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Up to 6 jobs</li>
+            <li>100+ scheduled interviews</li>
+            <li>Unlimited recruiter seats</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pricestrip__note" data-reveal>
+        <p><strong>Register early.</strong> A flat $100 comes off every tier at 31 or more days before the event — $395, $795, $1,395.</p>
+        <p><strong>Hiring across several markets.</strong> Bundles run from 5 to 100 events, taking the per-event price from $470 down to $297. Credits never expire and work across any event type.</p>
+      </div>
+
+      <div class="cta-row">
+        <a href="page-pricing.html" class="btn btn--secondary btn--lg">Compare packages</a>
+        <a href="page-faq.html" class="btn btn--secondary btn--lg">Read the employer FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="events" style="padding-top:0">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Upcoming</p>
+        <h2 class="t-h2 t-balance">Find the technology event in your market.</h2>
+      </div>
+
+      
+      <div class="evband" data-reveal>
+        <div>
+          <p class="t-lead" style="margin-top:0">
+            JobFairX runs hiring events in more than 300 cities, and technology is one of
+            the five types on the calendar. Registration closes between one and two days
+            before an event, so the market you want is usually only a few weeks out.
+          </p>
+          <div class="cta-row">
+            <a href="page-events.html?type=technology" class="btn btn--primary btn--lg">Browse technology events</a>
+            <a href="page-event-detail.html" class="btn btn--secondary btn--lg">See an event page</a>
+          </div>
+        </div>
+        <ul class="evband__facts">
+          <li>
+            <span class="t-eyebrow">Cities with events</span>
+            <strong>300+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Open for registration now</span>
+            <strong class="is-empty" data-placeholder>{{N upcoming technology events}}</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="faq" style="padding-top:0">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Technology FAQ</p>
+        <h2 class="t-h2 t-balance">What engineering recruiters ask first.</h2>
+      </div>
+
+      <div class="faq-list">
+
+        <article class="faq-item is-open" id="q-ourlink" data-faq-item data-reveal style="--i:0">
+          <h3>
+            <button class="faq-btn" id="q-ourlink-btn" data-faq-btn aria-expanded="true" aria-controls="q-ourlink-panel">
+              <span>Can we interview in the video tool we already use?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-ourlink-panel" role="region" aria-labelledby="q-ourlink-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  Yes. <strong>Your own link</strong> is one of the four interview locations,
+                  alongside JobFairX video, phone, and in person at your address. The
+                  dashboard then shows the product name instead of a JobFairX room — the
+                  Denver Technology Event row on this page reads
+                  <strong>Video · Microsoft Teams</strong>.
+                </p>
+                <p>
+                  You set it per event, so the same account can run Teams in one city and
+                  the JobFairX room in another.
+                  <a href="page-interview-locations.html">How interview locations work →</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-roles" data-faq-item data-reveal style="--i:1">
+          <h3>
+            <button class="faq-btn" id="q-roles-btn" data-faq-btn aria-expanded="false" aria-controls="q-roles-panel">
+              <span>Which technical roles do candidates actually ask for?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-roles-panel" role="region" aria-labelledby="q-roles-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  The titles visible in the product today are <strong>Software Engineer</strong>,
+                  <strong>DevOps Engineer</strong> and <strong>UX Designer</strong> in the Job
+                  titles column of the events dashboard, and <strong>Web Developer</strong> and
+                  <strong>Frontend Developer</strong> as desired jobs on candidate rows.
+                </p>
+                <p>
+                  That is the evidence, not the ceiling. What limits you is the package: 1
+                  promoted job on Starter, up to 3 on Growth, up to 6 on Pro. The Chicago
+                  Technology Event above is running three of its six.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-remote" data-faq-item data-reveal style="--i:2">
+          <h3>
+            <button class="faq-btn" id="q-remote-btn" data-faq-btn aria-expanded="false" aria-controls="q-remote-panel">
+              <span>Our engineering roles are remote. Does a city-based event still make sense?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-remote-panel" role="region" aria-labelledby="q-remote-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  The event is a market and a date, not a commute. Candidates are verified to
+                  be within approximately 20 miles of the event city — and on both technology
+                  rows in the candidate list, the desired-location column reads
+                  <strong>Remote</strong>. Those two facts sit together comfortably: the
+                  person is in the market, and remote is what they want.
+                </p>
+                <p>
+                  The interview itself does not need a room either. JobFairX video and your
+                  own link both work from anywhere, and you choose which per event.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-apply" data-faq-item data-reveal style="--i:3">
+          <h3>
+            <button class="faq-btn" id="q-apply-btn" data-faq-btn aria-expanded="false" aria-controls="q-apply-panel">
+              <span>Do candidates apply to our postings first?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-apply-panel" role="region" aria-labelledby="q-apply-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  No. Matched candidates <strong>request</strong> an interview with you, and
+                  accepting the request is what schedules it — the request already carries
+                  the slot they asked for. Matching activates the moment your jobs are
+                  posted and the first requests arrive within a few hours.
+                </p>
+                <p>
+                  You still get résumés and contact information for every matched candidate.
+                  You just get them ahead of the interview rather than instead of one.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-volume" data-faq-item data-reveal style="--i:4">
+          <h3>
+            <button class="faq-btn" id="q-volume-btn" data-faq-btn aria-expanded="false" aria-controls="q-volume-panel">
+              <span>How many interviews will we actually run?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-volume-panel" role="region" aria-labelledby="q-volume-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  Scheduled interview volume follows the package: <strong>20+</strong> on
+                  Starter, <strong>60+</strong> on Growth, <strong>100+</strong> on Pro.
+                  Unlimited interviews before, during and after the event are included at
+                  every tier, so the package number is a floor on what gets scheduled, not a
+                  cap on what you can run.
+                </p>
+                <p>
+                  A per-type average for technology events —
+                  <span data-placeholder>{{Avg. interviews and hires per employer, technology}}</span>
+                  — is not published, so this page does not quote one. The healthcare
+                  averages that are published are healthcare's, and they do not transfer.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-show" data-faq-item data-placeholder data-reveal style="--i:5">
+          <h3>
+            <button class="faq-btn" id="q-show-btn" data-faq-btn aria-expanded="false" aria-controls="q-show-panel">
+              <span>What is the show rate at a technology event? <span class="newtag">UNPUBLISHED</span></span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-show-panel" role="region" aria-labelledby="q-show-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  <span data-placeholder>{{Technology show rate, with source}}</span>
+                </p>
+                <p>
+                  Three per-type show rates are published — healthcare 91%, veterans 89%,
+                  entry-level 86% — and technology is not one of them. Platform-wide,
+                  <strong>87%</strong> of employers register again, based on 2025 platform
+                  data. Rather than round a neighbouring type's number into this answer, the
+                  answer stays blank. It is the second question an engineering recruiter
+                  asks; get it measured before this page ships.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section ctaband" id="cta">
+    <div class="u-container">
+      <div class="ctaband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">The engineer you need is already in the market.</h2>
+          <p class="t-lead">
+            Register for the technology event in your city, post your engineering roles,
+            and matching starts the same day. The first interview requests land within a
+            few hours — in your video tool or ours.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+            <a href="page-events.html?type=technology" class="btn btn--secondary btn--lg">Browse technology events</a>
+          </div>
+        </div>
+
+        <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Interviews conducted</span>
+            <strong data-count>500,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers on the platform</span>
+            <strong data-count>4,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers who return</span>
+            <strong data-count>87%</strong>
+            <span class="ctaband__src">Based on 2025 platform data</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><span aria-current="page">Technology</span></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page-specific: the FAQ accordion. Lifted from page-solutions-healthcare.html,
+   which lifted it from page-faq.html minus the category rail. The collapse rule
+   in CSS is gated on the `faq-js` class this script adds, so a blocked script
+   leaves every answer open and readable rather than sealed shut.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var root  = document.documentElement;
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-faq-item]'));
+  if (!items.length) return;
+  root.classList.add('faq-js');
+
+  var btns = items.map(function (it) { return it.querySelector('[data-faq-btn]'); });
+
+  function setOpen(item, open) {
+    var btn   = item.querySelector('[data-faq-btn]');
+    var panel = item.querySelector('[data-faq-panel]');
+    item.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    /* a collapsed panel must leave the tab order too — two answers hold links */
+    if (open) panel.removeAttribute('inert');
+    else      panel.setAttribute('inert', '');
+  }
+
+  items.forEach(function (item, i) {
+    setOpen(item, item.classList.contains('is-open'));   /* first item ships open */
+
+    btns[i].addEventListener('click', function () {
+      setOpen(item, !item.classList.contains('is-open'));
+    });
+
+    /* Enter and Space come free with <button>; this adds the roving movement
+       the WAI accordion pattern expects. */
+    btns[i].addEventListener('keydown', function (e) {
+      var n = -1;
+      if (e.key === 'ArrowDown')    n = (i + 1) % btns.length;
+      else if (e.key === 'ArrowUp') n = (i - 1 + btns.length) % btns.length;
+      else if (e.key === 'Home')    n = 0;
+      else if (e.key === 'End')     n = btns.length - 1;
+      else return;
+      e.preventDefault();
+      btns[n].focus();
+    });
+  });
+
+  /* deep links — page-solutions-technology.html#q-ourlink opens that answer */
+  function openFromHash() {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (!el || !el.hasAttribute('data-faq-item')) return;
+    setOpen(el, true);
+    el.querySelector('[data-faq-btn]').focus({ preventScroll: true });
+  }
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
+})();
+</script>
+</body>
+</html>

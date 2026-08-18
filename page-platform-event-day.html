@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Day — JobFairX</title>
+<meta name="description" content="Event day is a queue you work down. The live lobby shows who is waiting and for how long, which rooms are free, and a Start interview button on every ready row — whatever interview location you set.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — PLATFORM / EVENT DAY
+   Replaces /employer/platform/event-day.
+
+   Cloned from page-platform-candidate-pipeline.html, which is the reference
+   implementation of the capability-detail template. Slot names are kept
+   verbatim so all six capability pages stay diff-able against each other:
+
+     .cap-hero   hero claim + 3-step flow strip                  [dark]
+     .anno       annotated screenshot — the centrepiece          [light]
+     .states     an n-up grid of states / options / tiers        [light]
+     .proof      one 2-column proof section, alternating sides   [either]
+     .rail       sibling cross-links to the other capabilities   [light]
+     .ctaband    the single page CTA                             [dark]
+
+   Theme rhythm: dark hero → light evidence → dark mechanics →
+   light siblings → dark close. HARD CUTS, no seam elements.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ----------
+   No item carries aria-current on this page: /employer/platform/... is not in
+   the four-item nav. Both the class and the attribute selector are kept so
+   this block stays byte-comparable with the pages where an item IS current. */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current,
+.nav__links a[aria-current="page"] { color: var(--ink); position: relative; }
+.nav__links a.is-current::after,
+.nav__links a[aria-current="page"]::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current, .drawer a[aria-current="page"] { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ==========================================================================
+   SLOT 1 — .cap-hero
+   ========================================================================== */
+.cap-hero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.cap-hero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.cap-hero__glow::before, .cap-hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.cap-hero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.cap-hero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.cap-hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.cap-hero__inner { position: relative; z-index: 2; }
+.cap-hero__crumb { display: flex; align-items: center; gap: var(--s-2); }
+.cap-hero__crumb a { color: var(--ink-3); transition: color var(--t-micro) var(--e-inout); }
+.cap-hero__crumb a:hover { color: var(--accent-hover); }
+.cap-hero h1 { max-width: 17ch; margin-top: var(--s-4); }
+.cap-hero__sub { max-width: 60ch; margin-top: var(--s-6); }
+
+/* ---------- hero flow strip ----------
+   Depth here is hairline + half-pixel rim light only — no shadow, no bloom. */
+.flow {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.flow > li { padding: var(--s-8); min-width: 0; }
+.flow > li + li { border-left: 1px solid var(--hairline); }
+.flow__n {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.flow__t { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; color: var(--ink); }
+.flow__d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) {
+  .flow { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-12); }
+  .flow > li + li { border-left: 0; border-top: 1px solid var(--hairline); }
+  .flow > li { padding: var(--s-6); }
+}
+
+/* ==========================================================================
+   SLOT 2 — .anno (the centrepiece)
+   base.css owns the component. Two page-level decisions live here:
+
+   1. FULL-WIDTH STAGE, key underneath. `.anno--side` gives the stage ~700px,
+      which renders this table's 27px product type at 6px.
+   2. The crop geometry and the pin coordinates are ONE calculation. If you
+      re-crop, you must re-derive every pin. Working, for lobby-live.png
+      (3200x2000, quoted below as fractions of the image):
+
+        visible x  0.012 → 0.988   (--z 1.025, --l -1.2%)
+        visible y  0.028 → 0.965   (--t -2.8%, aspect 5/3)
+        pin x = (fx − 0.012) / 0.97561     pin y = (fy − 0.028) / 0.93659
+
+      Why the crop is so shallow here, when candidate-pipeline crops 15% off
+      the left: this screenshot has no sidebar. Its leftmost column is the
+      candidate name and its rightmost is the Start interview button, and BOTH
+      are pin targets — so the only honest zoom is ~1.0 and the key carries
+      the reading. Zoom is a function of the horizontal trim alone; cropping
+      vertically buys legibility nothing.
+
+      Pins are positioned against .anno__stage, and on LIGHT ground .panel has
+      no padding — so stage box == crop box and the mapping is exact. Putting
+      this figure on a dark section would inset the crop by 10px and skew every
+      pin; that is why this block is light.
+   3. Below 780px base.css swaps in the --zm/--lm/--tm crop, so the pins no
+      longer line up with anything. Hide them there and let the key carry the
+      whole explanation — same breakpoint, not 640px.
+   ========================================================================== */
+.annoband__head { max-width: 60ch; }
+.annoband__head p { margin-top: var(--s-4); }
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .anno__key {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.anno--wide .anno__key li { min-width: 0; }
+.anno__note { margin-top: var(--s-5); max-width: 70ch; }
+@media (max-width: 900px) { .anno--wide .anno__key { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .anno--wide .anno__key { grid-template-columns: minmax(0, 1fr); } }
+
+.crop--anno  { aspect-ratio: 5/3; }
+.crop--band  { aspect-ratio: 3/1; }
+.crop--ended { aspect-ratio: 12/5; }
+@media (max-width: 780px) {
+  .anno__pin { display: none; }
+  .crop--anno  { aspect-ratio: 5/4; }
+  .crop--band  { aspect-ratio: 2/1; }
+  .crop--ended { aspect-ratio: 4/3; }
+}
+
+/* ==========================================================================
+   SLOT 3 — .states
+   Four here — one per tab across the top of the lobby.
+   ========================================================================== */
+.states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.state { display: grid; align-content: start; gap: var(--s-3); }
+.state__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-3); }
+.state__t { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); }
+.state__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.state__acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-1); }
+.state__acts span {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  border: 1px solid var(--hairline); color: var(--ink-3);
+  background: var(--surface-2); white-space: nowrap;
+}
+.states__note { margin-top: var(--s-6); max-width: 68ch; }
+@media (max-width: 1080px) { .states { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px)  { .states { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 4 — .proof  (repeated four times here, alternating sides)
+   ========================================================================== */
+.proof { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16); align-items: center; }
+.proof + .proof { margin-top: var(--s-24); }
+.proof__body, .proof__vis { min-width: 0; }   /* grid children must be allowed to shrink */
+.proof__body h2 { margin-top: var(--s-3); }
+.proof__body > p { margin-top: var(--s-5); max-width: 52ch; }
+.proof--flip .proof__vis { order: -1; }
+.proof figcaption { margin-top: var(--s-4); }
+@media (max-width: 900px) {
+  .proof { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+  .proof + .proof { margin-top: var(--s-16); }
+  .proof--flip .proof__vis { order: 0; }
+}
+
+.ulist { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.ulist li { position: relative; padding-left: 26px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.ulist li::before {
+  content: ''; position: absolute; left: 4px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.ulist strong { color: var(--ink); font-weight: 550; }
+
+/* one-sentence customer line — quiet, never a pull-quote card */
+.credit {
+  margin-top: var(--s-12); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-4);
+}
+.credit p { font-size: 1.0625rem; font-weight: 450; letter-spacing: -.018em; color: var(--ink); }
+.credit cite { font-style: normal; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink-3); }
+
+/* a missing asset is drawn as a missing asset, never faked */
+.shotgap {
+  display: grid; place-items: center; text-align: center; gap: var(--s-3);
+  aspect-ratio: 3/2; padding: var(--s-8);
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+}
+.shotgap__t { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .04em; }
+.shotgap p { font-size: var(--t-xs); color: var(--ink-3); max-width: 40ch; letter-spacing: .006em; }
+
+/* ==========================================================================
+   SLOT 5 — .rail  (sibling capability cross-links)
+   ========================================================================== */
+.rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.rail a { display: grid; align-content: start; gap: var(--s-3); }
+.rail__t { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
+.rail__t span { color: var(--ink-3); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.rail a:hover .rail__t span { color: var(--accent); transform: translateX(3px); }
+.rail__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.rail__up { margin-top: var(--s-5); font-size: var(--t-sm); font-weight: 500; color: var(--ink); }
+@media (max-width: 900px) { .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .rail { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 6 — .ctaband  (exactly one per capability page)
+   ========================================================================== */
+.ctaband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.ctaband p { margin-top: var(--s-5); max-width: 46ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.ctaband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.ctaband__facts li { display: grid; gap: 4px; }
+.ctaband__facts strong { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.ctaband__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+@media (max-width: 900px) {
+  .ctaband__inner { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .ctaband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-platform) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  
+  <section class="cap-hero grain">
+    <div class="cap-hero__glow" aria-hidden="true"></div>
+    <div class="cap-hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container cap-hero__inner">
+      <p class="t-eyebrow cap-hero__crumb">
+        <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Event day
+      </p>
+
+      
+      <h1 class="t-h1 t-balance">Event day is a queue you work down.</h1>
+
+      <p class="t-lead cap-hero__sub">
+        The lobby shows every candidate who has turned up, how long each one has been
+        waiting, and which of your rooms is free. Start interview sits on the row.
+        Nothing about the four hours is left to improvise.
+      </p>
+
+      <ol class="flow" data-reveal>
+        <li style="--i:0">
+          <p class="flow__n">01 — Waiting to interview</p>
+          <p class="flow__t">They turn up</p>
+          <p class="flow__d">
+            A candidate whose interview you accepted arrives at their slot and lands in
+            the lobby. Their wait time starts counting on the row.
+          </p>
+        </li>
+        <li style="--i:1">
+          <p class="flow__n">02 — Interviewing</p>
+          <p class="flow__t">You start the room</p>
+          <p class="flow__d">
+            The row carries the name, the desired job, the desired location and the
+            interview time. Status reads Ready, and Start interview opens the room.
+          </p>
+        </li>
+        <li style="--i:2">
+          <p class="flow__n">03 — Interviewed</p>
+          <p class="flow__t">The count moves</p>
+          <p class="flow__d">
+            When the call ends the candidate lands under Interviewed. That tab count is
+            your running total for the day, visible without leaving the lobby.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="lobby">
+    <div class="u-container">
+
+      <div class="annoband__head" data-reveal>
+        <p class="t-eyebrow">The real screen</p>
+        <h2 class="t-h2 t-balance">The lobby, live, two hours and forty-two minutes from the end.</h2>
+        <p class="t-lead">
+          This is the event-day lobby, unretouched, mid-event. Hover a pin — or a
+          caption — to see which part of the screen it belongs to.
+        </p>
+      </div>
+
+      <figure class="anno anno--wide" data-reveal style="--i:1">
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--anno">
+              <img src="assets/product/lobby-live.png"
+                   alt="The JobFairX event-day lobby for the Dallas Healthcare Hiring Event. A status line reads Event is live, Ends in 2h 42m, Apr 22, 2026, 11:00 AM to 3:00 PM CT, with a Video chip beneath it labelled JobFairX video call and a Your status: Available control on the right. Four tabs read Waiting to interview 6, Interviewing 3, Interviewed 5 and Not yet interviewed 26. An Interview rooms table lists Aisha Rahman, James Cooper and Sofia Martinez with their desired job, desired location, interview time, a wait time of 2 minutes, 1 minute and 0 minutes, a Ready status and a blue Start interview button on each row. A Waiting rooms table below lists Derek Washington, Marcus Johnson and Priya Patel with wait times and the statuses Entering interview room and Awaiting available interviewer."
+                   width="3200" height="2000"
+                   style="--z:1.025; --l:-1.2%; --t:-2.8%; --zm:3.2; --lm:-65.2%; --tm:-38%">
+            </div>
+          </div>
+
+          
+          <button class="anno__pin" style="--x:37.5%;--y:11.6%" data-anno="1" aria-label="Detail 1: the event is live and the clock is running">1</button>
+          <button class="anno__pin" style="--x:17.2%;--y:15.6%" data-anno="2" aria-label="Detail 2: your interview location for this event">2</button>
+          <button class="anno__pin" style="--x:50.0%;--y:24.0%" data-anno="3" aria-label="Detail 3: the four queue tabs">3</button>
+          <button class="anno__pin" style="--x:63.5%;--y:45.3%" data-anno="4" aria-label="Detail 4: the wait time column">4</button>
+          <button class="anno__pin" style="--x:82.2%;--y:52.5%" data-anno="5" aria-label="Detail 5: the Start interview button">5</button>
+          <button class="anno__pin" style="--x:73.1%;--y:82.4%" data-anno="6" aria-label="Detail 6: what a waiting room status tells you">6</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong>Event is live · Ends in 2h 42m.</strong> The window is fixed — Apr&nbsp;22, 11:00&nbsp;AM–3:00&nbsp;PM&nbsp;CT — and the header counts it down for you.</span></li>
+          <li data-anno="2"><b>2</b><span><strong>Video · JobFairX video call.</strong> Your interview location, on the lobby header. Another employer at this same event reads something else here.</span></li>
+          <li data-anno="3"><b>3</b><span><strong>Four tabs, four counts.</strong> Waiting to interview&nbsp;6, Interviewing&nbsp;3, Interviewed&nbsp;5, Not yet interviewed&nbsp;26. That line is the whole day.</span></li>
+          <li data-anno="4"><b>4</b><span><strong>Wait time, per row.</strong> 2 minutes, 1 minute, 0 minutes. You never have to guess who has been standing there longest.</span></li>
+          <li data-anno="5"><b>5</b><span><strong>Start interview.</strong> One button per ready row, in the Action column. Status reads Ready beside it, so the row tells you before you click.</span></li>
+          <li data-anno="6"><b>6</b><span><strong>Entering interview room · Awaiting available interviewer.</strong> The waiting-room statuses. The second one is the queue telling you every interviewer is busy.</span></li>
+        </ol>
+      </figure>
+
+      <p class="t-sm anno__note">
+        The lobby is one screen per event. Candidates are verified to be within
+        approximately 20 miles of the event city, so “desired location” on these rows
+        is a local answer — Dallas, TX or Remote, not a national one.
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="states" style="padding-top:0">
+    <div class="u-container">
+      <div style="max-width:56ch" data-reveal>
+        <p class="t-eyebrow">Proof 01</p>
+        <h2 class="t-h2 t-balance">Four tabs. Every candidate is on exactly one of them.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5)">
+          The counts across the top are the state of your event, and they move on their
+          own as the day runs. You work the first tab; the other three are the score.
+        </p>
+      </div>
+
+      <ol class="states">
+        <li class="card state" data-reveal style="--i:0">
+          <span class="state__n">6 ON THIS SCREEN</span>
+          <span class="state__t">Waiting to interview</span>
+          <span class="state__d">Here now, wait time running. This tab splits into Interview rooms — ready to start — and Waiting rooms.</span>
+          <span class="state__acts"><span>Ready</span><span>Entering interview room</span><span>Awaiting available interviewer</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:1">
+          <span class="state__n">3 ON THIS SCREEN</span>
+          <span class="state__t">Interviewing</span>
+          <span class="state__d">In session right now — three interviews running at the same time, across your recruiter seats.</span>
+        </li>
+        <li class="card state" data-reveal style="--i:2">
+          <span class="state__n">5 ON THIS SCREEN</span>
+          <span class="state__t">Interviewed</span>
+          <span class="state__d">Finished. The count is your running total for the day, and it is the number the post-event report is built from.</span>
+        </li>
+        <li class="card state" data-reveal style="--i:3">
+          <span class="state__n">26 ON THIS SCREEN</span>
+          <span class="state__t">Not yet interviewed</span>
+          <span class="state__d">Everyone else on your list for this event who has not been through a room yet.</span>
+        </li>
+      </ol>
+
+      <p class="t-sm states__note" data-placeholder>
+        {{ROW ACTIONS ON THE INTERVIEWING, INTERVIEWED AND NOT-YET-INTERVIEWED TABS}} —
+        the captured screenshot sits on the Waiting-to-interview tab, so the statuses and
+        row controls shown above are the only ones verified. Capture the other three tabs
+        before this page ships rather than describing them from memory.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="rooms">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 02</p>
+          <h2 class="t-h2 t-balance">Rooms run in parallel. Your seats decide how many.</h2>
+          <p class="t-lead">
+            The waiting tab is two tables, not one. Interview rooms holds the candidates a
+            free interviewer can take right now. Waiting rooms holds the rest — and the
+            status on those rows tells you which kind of waiting it is.
+          </p>
+          <ul class="ulist">
+            <li><strong>Entering interview room</strong> — moving through. Nothing for you to do.</li>
+            <li><strong>Awaiting available interviewer</strong> — every seat is busy. That is the one that costs you a candidate, and the wait time beside it is how much it has cost so far.</li>
+            <li>Seats by tier: <strong>2 recruiter seats</strong> on Starter, <strong>up to 5</strong> on Growth, <strong>unlimited recruiters</strong> on Pro.</li>
+            <li><strong>Your status: Available</strong> sits in the lobby header, so each recruiter says when they are free rather than being assumed to be.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--band">
+              <img src="assets/product/lobby-live.png"
+                   alt="Close crop of the Waiting rooms table: three rows showing interview time, a wait time of 3 minutes, 1 minute and 0 minutes, and grey status chips reading Entering interview room, Awaiting available interviewer and Awaiting available interviewer."
+                   width="3200" height="2000"
+                   style="--z:1.667; --l:-30%; --t:-66%; --zm:3.2; --lm:-65%; --tm:-70%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Two of these three are waiting on a person, not on a process. The wait time is
+            on the same line.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <div class="proof proof--flip">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 03</p>
+          <h2 class="t-h2 t-balance">Notes, résumé and chat sit beside the call.</h2>
+          <p class="t-lead">
+            Inside the room the candidate's name and the job they want are on screen, a
+            timer runs from the moment it opens, and the tools you need during the
+            conversation are on the same bar as mute and End. No second tab, no second app.
+          </p>
+          <ul class="ulist">
+            <li><strong>Notes</strong> — written in the room, and they come back out in the post-event report with your recruiter notes and interview records.</li>
+            <li><strong>Resume</strong> — the same résumé that sits on the candidate's row, one click from the call.</li>
+            <li><strong>Chat</strong> — in the room, with the person you are talking to.</li>
+            <li><strong>Background</strong>, mic and video controls are the rest of the bar. This is the JobFairX video interview room — nothing for the candidate to download or install.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--band">
+              <img src="assets/product/interview-screen.png"
+                   alt="Close crop of the bottom of a JobFairX interview room: the recruiter's own small video tile labelled You, a mute and video control pair, a red End button, and four labelled tools along the right of the bar reading Notes, Resume, Chat and Background."
+                   width="3200" height="2000"
+                   style="--z:1.75; --l:-42.5%; --t:-69%; --zm:3.2; --lm:-68%; --tm:-74%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Notes · Resume · Chat · Background — on the control bar, not behind a menu.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <div class="credit" data-reveal>
+        <p>Target interviewed over 90 candidates in one day.</p>
+        <cite>Target</cite>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="anywhere">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 04</p>
+          <h2 class="t-h2 t-balance">Phone or in person? Same queue. You just meet somewhere else.</h2>
+          <p class="t-lead">
+            The event is a market moment — Dallas Healthcare Hiring Event, Apr 22,
+            11:00 AM – 3:00 PM CT — and every employer joins that same one. What you set
+            is your <strong>interview location</strong>, and the lobby header carries it.
+            On this screen it reads Video · JobFairX video call.
+          </p>
+          <ul class="ulist">
+            <li>Four locations to choose from: <strong>JobFairX video</strong>, <strong>phone</strong> — you call each candidate — <strong>in person</strong> at your address, or <strong>your own link</strong>, which the dashboard names.</li>
+            <li>The four tabs, the two tables, the wait times and the statuses are the same screen whichever one you picked. The queue does not change shape because the room did.</li>
+            <li>Two employers at this same Dallas event can be running completely differently: one on JobFairX video, one with candidates walking into their office.</li>
+            <li>Candidates are verified within approximately 20 miles of the event city, so asking them to come to you is a local ask, not a national one.</li>
+          </ul>
+        </div>
+
+        
+        <div class="proof__vis" data-reveal style="--i:1">
+          <div class="shotgap" data-placeholder>
+            <p class="shotgap__t">{{LOBBY WITH A NON-VIDEO INTERVIEW LOCATION — SCREENSHOT NEEDED}}</p>
+            <p>
+              Every captured lobby and interview shot reads “Video · JobFairX video call”.
+              Nothing shows what the header, the Action column or the room controls do
+              when the location is phone, in person or your own link. Capture one before
+              this page ships; do not substitute a mock.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="proof proof--flip">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 05</p>
+          <h2 class="t-h2 t-balance">At 3:00 the screen changes job.</h2>
+          <p class="t-lead">
+            When the countdown runs out the header reads Ended, the tabs become Summary,
+            Interviewed and Not interviewed, and the page stops being a queue and starts
+            being a handover.
+          </p>
+          <ul class="ulist">
+            <li><strong>Interviewing has ended</strong> — “You can schedule follow-up interviews, review feedback, and update notes in your completed event report.”</li>
+            <li><strong>Follow up with 12 candidates you interviewed</strong>, with a View Interview Summary link straight to the feedback and notes.</li>
+            <li>Unlimited interviews <em>before, during and after</em> the event are in every package, Starter through Pro — so the day ending is not the hiring ending.</li>
+            <li>Résumés and contact info for every matched candidate stay with you, and follow-up interviews and messaging after the event are on the same included list.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--ended">
+              <img src="assets/product/lobby-ended.png"
+                   alt="The same event lobby after the event has finished. The status line reads Ended, the tabs read Summary, Interviewed 12 and Not interviewed 85, a card headed Interviewing has ended explains that follow-up interviews, feedback and notes are available in the completed event report, and a second card reads Follow up with 12 candidates you interviewed above a View Interview Summary link."
+                   width="3200" height="2000"
+                   style="--z:1.0204; --l:-1%; --t:-2%; --zm:2.4; --lm:-2%; --tm:-30%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Interviewed 12, Not interviewed 85 — the same event, four hours later.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="more" style="padding-top:0">
+    <div class="u-container">
+      <div style="max-width:52ch" data-reveal>
+        <p class="t-eyebrow">The rest of the platform</p>
+        <h2 class="t-h2 t-balance">What fills the queue before the day starts.</h2>
+        <p class="t-sm rail__up">
+          <a href="page-platform.html" class="btn btn--ghost">All platform capabilities →</a>
+        </p>
+      </div>
+
+      <div class="rail">
+        <a class="card" href="page-platform-events-dashboard.html" data-reveal style="--i:0">
+          <span class="rail__t">Events dashboard <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Every event you have registered for, with the interview location you set on each one.</span>
+        </a>
+        <a class="card" href="page-platform-candidate-pipeline.html" data-reveal style="--i:1">
+          <span class="rail__t">Candidate pipeline <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Matched candidates request interviews with you. Accepting a request is what schedules it.</span>
+        </a>
+        <a class="card" href="page-platform-interview-scheduling.html" data-reveal style="--i:2">
+          <span class="rail__t">Interview scheduling <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Accepted requests land on one schedule, whichever interview location they belong to.</span>
+        </a>
+        <a class="card" href="page-platform-messaging-automations.html" data-reveal style="--i:3">
+          <span class="rail__t">Messaging &amp; automations <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Message candidates directly, or let the automations send as they move through your process.</span>
+        </a>
+        <a class="card" href="page-platform-analytics.html" data-reveal style="--i:4">
+          <span class="rail__t">Analytics &amp; reporting <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Dispositions, notes and analytics, plus the post-event report with downloadable data.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section ctaband" id="cta">
+    <div class="u-container">
+      <div class="ctaband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Open the lobby. Start at the top.</h2>
+          <p class="t-lead">
+            Register for an event in your city, post your open jobs, and set where your
+            interviews happen. By the time the event goes live, the queue is already there.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+            <a href="page-events.html" class="btn btn--secondary btn--lg">Browse upcoming events</a>
+          </div>
+        </div>
+
+        <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Interviews conducted</span>
+            <strong data-count>500,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Show rate, healthcare events</span>
+            <strong data-count>91%</strong>
+            <span class="ctaband__src">Based on 2025 platform data</span>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers who return</span>
+            <strong data-count>87%</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><span aria-current="page">Event day</span></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

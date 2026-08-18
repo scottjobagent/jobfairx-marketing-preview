@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Book a demo — JobFairX</title>
+<meta name="description" content="Book a walkthrough of the JobFairX platform and see the next hiring event in your city, including who is already registered for it.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — BOOK A DEMO
+   Replaces /employer/demo. This is the page the homepage's "Book a demo" CTA
+   has been pointing at into thin air.
+
+   Three blocks, hard cuts, no seam elements:
+     DARK   short hero — what the demo actually is
+     LIGHT  the working surface: what happens next + the real contact rail,
+            beside the qualifying form
+     DARK   platform totals, then the footer
+
+   Deliberately no product screenshots. A conversion page's job is the form;
+   hero art here would push it below the fold on every laptop.
+
+   THE FORM DEFECT WE ARE FIXING (LIVE-SITE-SCOPE §6):
+   the live contact form carries the `required` attribute ZERO times — required
+   status is signalled only by a bare "*" in the label text, so native
+   validation and every screen reader get nothing. Here every required control
+   carries real `required` + `aria-required`, the correct input type and
+   inputmode, an autocomplete token, an inline error wired with
+   aria-describedby + role="alert", an error summary that takes focus, and a
+   visible outline focus ring that survives forced-colors mode.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ----------
+   Short by design. One quiet glow at roughly half the homepage's scale; the
+   grid overlay carries most of the texture so nothing competes with the form
+   sitting immediately beneath the fold. */
+.dhero { position: relative; overflow: hidden; padding-block: clamp(40px, 6vh, 72px) var(--s-16); }
+.dhero__glow {
+  position: absolute; left: 50%; top: -34%; width: 900px; height: 560px;
+  transform: translateX(-50%); pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse at center, rgba(47,92,255,.26), transparent 66%);
+  filter: blur(90px);
+}
+.dhero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 14%, #000 22%, transparent 76%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 14%, #000 22%, transparent 76%);
+}
+.dhero__inner { position: relative; z-index: 2; }
+.dhero h1 { max-width: 17ch; margin-top: var(--s-4); }
+.dhero__sub { max-width: 60ch; margin-top: var(--s-6); }
+.dhero__jump { margin-top: var(--s-8); display: flex; gap: var(--s-3); flex-wrap: wrap; }
+
+/* what the demo actually contains — hairline rules on dark, never cards.
+   Depth on dark is hairline + rim; three bordered boxes here would fight the
+   form card below for the same attention. */
+.gets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-8); margin-top: var(--s-16); }
+.gets li { min-width: 0; border-top: 1px solid var(--hairline); padding-top: var(--s-5); }
+.gets h2 { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.3; color: var(--ink); }
+.gets p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; margin-top: var(--s-3); }
+@media (max-width: 860px) {
+  .gets { grid-template-columns: minmax(0, 1fr); gap: var(--s-6); margin-top: var(--s-12); }
+}
+
+/* ---------- form zone ---------- */
+.formzone { --err: #b3261e; --err-soft: #fdf2f1; }
+.formwrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: var(--s-16); align-items: start; }
+.formwrap > * { min-width: 0; }
+.form-aside { position: sticky; top: 96px; }
+
+/* what happens next — three numbered steps */
+.steps { display: grid; gap: var(--s-6); margin-top: var(--s-8); }
+.steps li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: var(--s-4); align-items: start; }
+.steps b {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--hairline);
+}
+.steps h3 { font-size: .9375rem; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+.steps p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; margin-top: 4px; }
+
+/* the real contact details, as a rail under the steps */
+.rail { margin-top: var(--s-10); padding-top: var(--s-8); border-top: 1px solid var(--hairline); display: grid; gap: var(--s-5); }
+.rail li { display: grid; gap: 4px; min-width: 0; }
+.rail a, .rail strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.rail a:hover { color: var(--accent); }
+.rail__note { margin-top: var(--s-2); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+
+/* the .card primitive lifts on hover; a 700px-tall form must not */
+.form-card { padding: var(--s-8); }
+.form-card:hover { transform: none; border-color: var(--hairline); box-shadow: var(--elev); }
+.form-card h2 { font-size: 1.375rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; }
+.form-legend { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; margin: var(--s-3) 0 var(--s-6); }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+.field { display: grid; gap: 6px; position: relative; min-width: 0; }
+.field--full { grid-column: 1 / -1; }
+.field label { font-size: var(--t-sm); font-weight: 550; color: var(--ink); letter-spacing: .006em; }
+.field label .opt { font-weight: 400; color: var(--ink-3); }
+.field__hint { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+.req { color: var(--accent); }
+
+.field input, .field select, .field textarea {
+  width: 100%; border-radius: var(--r-md);
+  border: 1px solid var(--hairline-strong);
+  background-color: var(--surface); color: var(--ink);
+  font-size: var(--t-body); letter-spacing: .004em;
+  transition: border-color var(--t-micro) var(--e-inout);
+}
+.field input, .field select { height: 46px; padding-inline: var(--s-4); }
+.field textarea { min-height: 116px; padding: var(--s-3) var(--s-4); line-height: 1.55; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-3); }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--ink-3); }
+
+/* Native select chrome varies wildly between platforms and ignores the type
+   ramp, so it is replaced by a chevron drawn into the background. */
+.field select {
+  appearance: none; -webkit-appearance: none; padding-right: 42px; cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5 6 6.5l5-5' stroke='%23565b66' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat; background-position: right var(--s-4) center;
+}
+/* An unchosen select should read as placeholder text, not as an answer. Driven
+   by a data attribute rather than :invalid, so a select showing a validation
+   error doesn't also grey out its own text. */
+.field select[data-empty="true"] { color: var(--ink-3); }
+
+/* One visible focus ring for everything interactive on the page. A real
+   `outline` rather than a box-shadow, so it survives forced-colors mode. */
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible,
+.btn:focus-visible, a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm);
+}
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  border-color: var(--accent); border-radius: var(--r-md);
+}
+/* the accent is a touch dark against #0b0d12 for a comfortable 3:1 */
+[data-theme="dark"] a:focus-visible, [data-theme="dark"] button:focus-visible { outline-color: #7f9dff; }
+
+.field.has-error input, .field.has-error select, .field.has-error textarea {
+  border-color: var(--err); background-color: var(--err-soft);
+}
+.field__err { display: flex; gap: 6px; font-size: var(--t-xs); color: var(--err); letter-spacing: .006em; }
+.field__err svg { flex: none; margin-top: 3px; }
+
+/* error summary — takes focus on a failed submit, links straight to each field */
+.form-alert {
+  margin-bottom: var(--s-6); padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--err); border-left-width: 3px; border-radius: var(--r-md);
+  background: var(--err-soft);
+}
+.form-alert__t { font-size: var(--t-sm); font-weight: 600; color: var(--err); letter-spacing: .006em; }
+.form-alert ul { margin-top: var(--s-2); display: grid; gap: 2px; }
+.form-alert li a { font-size: var(--t-sm); color: var(--err); text-decoration: underline; text-underline-offset: 2px; }
+
+.form-foot { display: flex; align-items: center; gap: var(--s-5); flex-wrap: wrap; margin-top: var(--s-8); }
+.form-foot .btn { min-width: 210px; }
+.form-note { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; max-width: 34ch; }
+
+/* the unverified dropdown lists wear their status inside the form */
+.ph-note {
+  grid-column: 1 / -1;
+  padding: var(--s-4); border-radius: var(--r-md);
+  border: 1px dashed color-mix(in srgb, #b06d1f 45%, transparent);
+  background: color-mix(in srgb, #b06d1f 7%, transparent);
+  font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em;
+}
+.ph-note strong { font-family: var(--font-mono); font-size: 11px; color: #8a5416; }
+
+/* success state — the form is replaced, not covered */
+.success { padding: var(--s-10) var(--s-8); text-align: center; }
+.success:hover { transform: none; box-shadow: var(--elev); border-color: var(--hairline); }
+.success__ic {
+  width: 52px; height: 52px; border-radius: 50%; margin: 0 auto var(--s-6);
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--accent);
+}
+.success p { color: var(--ink-2); max-width: 46ch; margin: var(--s-4) auto 0; }
+.success__proto {
+  margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3);
+}
+
+@media (max-width: 1000px) {
+  .formwrap { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .form-aside { position: static; }
+}
+@media (max-width: 560px) {
+  /* At 390px two columns of 46px inputs guarantees a zoom-on-focus. One column,
+     a full-bleed submit, and the card sheds half its padding so the inputs keep
+     their width instead of the chrome keeping it. */
+  .form-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .form-card { padding: var(--s-5); }
+  .form-foot { gap: var(--s-4); }
+  .form-foot .btn { width: 100%; min-width: 0; }
+  .form-note { max-width: none; }
+  .success { padding: var(--s-8) var(--s-5); }
+}
+
+/* ---------- proof strip ---------- */
+.proof { padding-block: var(--s-20); }
+.proof__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-8); margin-top: var(--s-10); }
+.proof__grid li { min-width: 0; border-top: 1px solid var(--hairline); padding-top: var(--s-5); }
+.proof__n {
+  display: block; font-size: clamp(2rem, 1.3rem + 2.4vw, 3rem); font-weight: 500;
+  line-height: .95; letter-spacing: -.04em; color: var(--ink);
+}
+.proof__l { display: block; margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.proof__src { margin-top: var(--s-10); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+@media (max-width: 780px) { .proof__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-6); } }
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="dhero grain">
+    <div class="dhero__glow" aria-hidden="true"></div>
+    <div class="dhero__grid" aria-hidden="true"></div>
+
+    <div class="u-container dhero__inner">
+      <p class="t-eyebrow">Book a demo</p>
+      <h1 class="t-h1 t-balance">See it running in your own market.</h1>
+
+      <p class="t-lead dhero__sub">
+        A screen share, not a slide deck. We walk the platform end to end, then open the
+        next hiring event in the city you're hiring in — and show you who is already
+        registered for it.
+      </p>
+
+      <div class="dhero__jump">
+        <a href="#demo-form" class="btn btn--primary btn--lg">Request a demo</a>
+        <a href="page-events.html" class="btn btn--secondary btn--lg">Browse events instead</a>
+      </div>
+
+      <ul class="gets">
+        <li data-reveal>
+          <h2>The platform, end to end</h2>
+          <p>
+            Posting your open jobs, matched candidates requesting interviews, accepting a
+            request so it schedules itself, and setting where that interview happens —
+            JobFairX video, phone, in person at your address, or your own link.
+          </p>
+        </li>
+        <li data-reveal style="--i:1">
+          <h2>The next event in your city</h2>
+          <p>
+            We open the real event page for the market you name: the date, the audience
+            it targets, and how many candidates and employers have already registered
+            for it.
+          </p>
+        </li>
+        <li data-reveal style="--i:2">
+          <h2>Which package fits</h2>
+          <p>
+            Starter, Growth or Pro against the roles you're actually filling — 1, 3 or 6
+            jobs, and 20+, 60+ or 100+ scheduled interviews. Registering 31 or more days
+            out takes $100 off either way.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section formzone" id="demo-form">
+    <div class="u-container">
+      <div class="formwrap">
+
+        
+        <div class="form-aside" data-reveal>
+          <p class="t-eyebrow">What happens next</p>
+
+          <ol class="steps">
+            <li>
+              <b>1</b>
+              <div>
+                <h3>We get back to you</h3>
+                <p>
+                  Your request reaches the same team that answers info@jobfairx.com. Expect
+                  a reply within <span data-placeholder>{{RESPONSE_TIME}}</span>, inside
+                  support hours — Mon–Fri, 5:00&nbsp;AM – 5:00&nbsp;PM PST.
+                </p>
+              </div>
+            </li>
+            <li>
+              <b>2</b>
+              <div>
+                <h3>We walk the platform</h3>
+                <p>
+                  <span data-placeholder>{{DEMO_LENGTH}}</span> on a screen share. A job
+                  posted, interview requests arriving against it, one accepted so you can
+                  see it schedule, and the interview location set for that event.
+                </p>
+              </div>
+            </li>
+            <li>
+              <b>3</b>
+              <div>
+                <h3>You get your market, before you decide anything</h3>
+                <p>
+                  The next hiring event in the city you named, who is registered for it so
+                  far, and the package that covers the roles you listed. A demo isn't a
+                  registration — you aren't reserving a seat at anything.
+                </p>
+              </div>
+            </li>
+          </ol>
+
+          <ul class="rail">
+            <li>
+              <span class="t-eyebrow">Email</span>
+              <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+            </li>
+            <li>
+              <span class="t-eyebrow">Phone</span>
+              <a href="tel:+17022690808">(702) 269-0808</a>
+            </li>
+            <li>
+              <span class="t-eyebrow">Support hours</span>
+              <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+              <p class="rail__note">
+                In a hurry, skip the form and call. Outside the window, email reaches the
+                same team.
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        
+        <div data-reveal style="--i:1">
+          <form class="card form-card" id="demo-form-el" novalidate aria-labelledby="demo-form-h">
+
+            <div class="form-alert" id="form-error-summary" role="alert" tabindex="-1" hidden>
+              <p class="form-alert__t" id="form-error-count">There's a problem with this form.</p>
+              <ul id="form-error-list"></ul>
+            </div>
+
+            <h2 id="demo-form-h">Request a demo</h2>
+            <p class="form-legend">
+              Fields marked <span class="req" aria-hidden="true">*</span> are required.
+              Nine fields, most of them one word.
+            </p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="first-name">First name <span class="req" aria-hidden="true">*</span></label>
+                <input id="first-name" name="firstName" type="text" autocomplete="given-name"
+                       required aria-required="true" aria-describedby="err-first-name"
+                       data-validate data-label="First name" data-msg="Enter your first name.">
+                <p class="field__err" id="err-first-name" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="last-name">Last name <span class="req" aria-hidden="true">*</span></label>
+                <input id="last-name" name="lastName" type="text" autocomplete="family-name"
+                       required aria-required="true" aria-describedby="err-last-name"
+                       data-validate data-label="Last name" data-msg="Enter your last name.">
+                <p class="field__err" id="err-last-name" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="email">Business email <span class="req" aria-hidden="true">*</span></label>
+                <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                       required aria-required="true" aria-describedby="err-email"
+                       data-validate data-type="email" data-label="Business email"
+                       data-msg="Enter your business email."
+                       data-msg-format="Enter an email address in the format name@company.com.">
+                <p class="field__err" id="err-email" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="phone">Phone <span class="req" aria-hidden="true">*</span></label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                       required aria-required="true" aria-describedby="err-phone"
+                       data-validate data-type="tel" data-label="Phone"
+                       data-msg="Enter a phone number we can reach you on."
+                       data-msg-format="Enter a phone number including the area code.">
+                <p class="field__err" id="err-phone" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="company">Company <span class="req" aria-hidden="true">*</span></label>
+                <input id="company" name="company" type="text" autocomplete="organization"
+                       required aria-required="true" aria-describedby="err-company"
+                       data-validate data-label="Company" data-msg="Enter your company name.">
+                <p class="field__err" id="err-company" role="alert" hidden></p>
+              </div>
+
+              <div class="field" data-placeholder>
+                <label for="company-size">Company size <span class="req" aria-hidden="true">*</span></label>
+                <select id="company-size" name="companySize" required aria-required="true"
+                        aria-describedby="err-company-size"
+                        data-validate data-label="Company size" data-msg="Choose a company size.">
+                  <option value="">Select…</option>
+                  <option>1–10 employees</option>
+                  <option>11–50 employees</option>
+                  <option>51–200 employees</option>
+                  <option>201–500 employees</option>
+                  <option>501–1,000 employees</option>
+                  <option>1,001–5,000 employees</option>
+                  <option>5,000+ employees</option>
+                </select>
+                <p class="field__err" id="err-company-size" role="alert" hidden></p>
+              </div>
+
+              <div class="field field--full" data-placeholder>
+                <label for="job-title">Job title <span class="req" aria-hidden="true">*</span></label>
+                <select id="job-title" name="jobTitle" autocomplete="organization-title"
+                        required aria-required="true" aria-describedby="err-job-title"
+                        data-validate data-label="Job title" data-msg="Choose the closest job title.">
+                  <option value="">Select…</option>
+                  <option>Recruiter / Talent acquisition</option>
+                  <option>Hiring manager</option>
+                  <option>HR manager or director</option>
+                  <option>VP / Head of people</option>
+                  <option>Founder or owner</option>
+                  <option>Operations</option>
+                  <option>Other</option>
+                </select>
+                <p class="field__err" id="err-job-title" role="alert" hidden></p>
+              </div>
+
+              
+              <p class="ph-note" data-placeholder>
+                <strong>{{OPTION_LISTS}}</strong> — the Company Size and Job Title values
+                above are stand-ins. LIVE-SITE-SCOPE.md records only that the live form
+                uses dropdowns for both; the production values were not captured. Replace
+                both lists before publishing, and keep them identical to the ones on
+                page-contact.html.
+              </p>
+
+              
+              <div class="field field--full">
+                <label for="city">Which city are you hiring in? <span class="req" aria-hidden="true">*</span></label>
+                <input id="city" name="city" type="text" autocomplete="address-level2"
+                       placeholder="Dallas, TX"
+                       required aria-required="true" aria-describedby="city-hint err-city"
+                       data-validate data-label="City" data-msg="Tell us the city you're hiring in.">
+                <p class="field__hint" id="city-hint">
+                  Events run in 300+ cities, and candidates are verified within about
+                  20 miles of the event city — so the city decides which event we open.
+                </p>
+                <p class="field__err" id="err-city" role="alert" hidden></p>
+              </div>
+
+              <div class="field field--full">
+                <label for="roles">What roles? <span class="opt">(optional)</span></label>
+                <textarea id="roles" name="roles" rows="4" aria-describedby="roles-hint"
+                          placeholder="RNs, LPNs and medical assistants — roughly how many of each."></textarea>
+                <p class="field__hint" id="roles-hint">
+                  Job titles and rough headcount. It's what tells us whether one job,
+                  three or six covers you.
+                </p>
+              </div>
+            </div>
+
+            <div class="form-foot">
+              <button type="submit" class="btn btn--primary btn--lg">Request a demo</button>
+              <p class="form-note">Prototype — this form validates but posts nowhere. Nothing is sent or stored.</p>
+            </div>
+          </form>
+
+          
+          <div class="card success" id="form-success" role="status" tabindex="-1" hidden>
+            <div class="success__ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+            </div>
+            <h2 class="t-h3">Thanks<span id="success-name"></span> — we've got your request.</h2>
+            <p>
+              A reply goes to <b id="success-email">the address you entered</b> during
+              support hours, Mon–Fri, 5:00 AM – 5:00 PM PST, and we'll have the next
+              <span id="success-city">event in your city</span> open when we talk. In a
+              hurry, call <a href="tel:+17022690808" style="color:var(--accent)">(702) 269-0808</a>.
+            </p>
+            <div style="margin-top:var(--s-8);display:flex;gap:var(--s-3);justify-content:center;flex-wrap:wrap">
+              <a href="page-events.html" class="btn btn--primary">Browse events</a>
+              <button type="button" class="btn btn--secondary" id="book-another">Send another request</button>
+            </div>
+            <p class="success__proto">
+              Prototype — nothing was actually submitted. This state exists to show the
+              confirmation, not to confirm anything.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section proof">
+    <div class="u-container">
+      <p class="t-eyebrow">The platform to date</p>
+      <ul class="proof__grid">
+        <li data-reveal>
+          <span class="proof__n" data-count>4,000+</span>
+          <span class="proof__l">Employers</span>
+        </li>
+        <li data-reveal style="--i:1">
+          <span class="proof__n" data-count>500,000+</span>
+          <span class="proof__l">Interviews conducted</span>
+        </li>
+        <li data-reveal style="--i:2">
+          <span class="proof__n" data-count>300+</span>
+          <span class="proof__l">Cities</span>
+        </li>
+        <li data-reveal style="--i:3">
+          <span class="proof__n" data-count>3M+</span>
+          <span class="proof__l">Registered candidates</span>
+        </li>
+      </ul>
+      
+      <p class="proof__src">Platform totals across all hiring events to date.</p>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><span aria-current="page">Book a demo</span></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Demo request form — validation.
+   Vanilla, no dependencies. Same four rules as page-contact.html, kept
+   deliberately identical so the two forms behave the same way:
+
+   1. Submit always preventDefault()s. This is a prototype; it posts nowhere.
+   2. A field validates on blur only AFTER it has been touched, then live on
+      input once it is already showing a message. Validating on the first
+      keystroke tells people they are wrong before they've finished being right.
+   3. On a failed submit the ERROR SUMMARY is the single announcement and it
+      takes focus. The inline messages keep role="alert" in the markup — that is
+      what makes a lone blur-triggered error speak — but the role is lifted for
+      the instant the bulk messages are written, because one submit firing nine
+      live regions at once buries the summary in noise.
+   4. Nothing is announced twice: the inline message and its summary row carry
+      exactly the same string.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var form    = document.getElementById('demo-form-el');
+  var success = document.getElementById('form-success');
+  if (!form || !success) return;
+
+  var summary  = document.getElementById('form-error-summary');
+  var sumCount = document.getElementById('form-error-count');
+  var sumList  = document.getElementById('form-error-list');
+  var fields   = Array.prototype.slice.call(form.querySelectorAll('[data-validate]'));
+
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var WARN  = '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">' +
+              '<path d="M8 1.3 15.2 14H.8L8 1.3Zm-.8 4.4v4h1.6v-4H7.2Zm0 5.2v1.6h1.6v-1.6H7.2Z"/></svg>';
+
+  function wrap(el)   { return el.closest('.field'); }
+  function errBox(el) { return document.getElementById('err-' + el.id); }
+
+  /* returns an error string, or '' when the field is fine */
+  function problem(el) {
+    var v = (el.value || '').trim();
+    if (!v) return el.getAttribute('data-msg');
+    if (el.getAttribute('data-type') === 'email' && !EMAIL.test(v)) {
+      return el.getAttribute('data-msg-format');
+    }
+    if (el.getAttribute('data-type') === 'tel') {
+      // 10 digits covers a US number with its area code; 15 is the E.164
+      // ceiling, so an international number with a country code still passes.
+      var digits = v.replace(/\D/g, '').length;
+      if (digits < 10 || digits > 15) return el.getAttribute('data-msg-format');
+    }
+    return '';
+  }
+
+  function showError(el, msg, quiet) {
+    var box = errBox(el);
+    wrap(el).classList.add('has-error');
+    el.setAttribute('aria-invalid', 'true');
+
+    if (quiet) box.removeAttribute('role');        // see rule 3 above
+    box.innerHTML = WARN;                          // authored icon markup only
+    var span = document.createElement('span');
+    span.textContent = msg;                        // message via textContent
+    box.appendChild(span);
+    box.hidden = false;
+    if (quiet) {
+      // restored once the summary's announcement window has passed, so the next
+      // single-field error still speaks on its own
+      setTimeout(function () { box.setAttribute('role', 'alert'); }, 600);
+    }
+  }
+
+  function clearError(el) {
+    var box = errBox(el);
+    wrap(el).classList.remove('has-error');
+    el.removeAttribute('aria-invalid');
+    box.hidden = true;
+    box.textContent = '';
+  }
+
+  function check(el, quiet) {
+    var msg = problem(el);
+    if (msg) { showError(el, msg, quiet); return false; }
+    clearError(el);
+    return true;
+  }
+
+  /* an unchosen select paints as placeholder text rather than as an answer */
+  function paintSelect(el) {
+    if (el.tagName === 'SELECT') el.setAttribute('data-empty', String(el.value === ''));
+  }
+
+  fields.forEach(function (el) {
+    paintSelect(el);
+    var touched = false;
+    el.addEventListener('blur', function () { touched = true; check(el); });
+    el.addEventListener('change', function () {
+      paintSelect(el);
+      if (touched || el.tagName === 'SELECT') check(el);
+    });
+    el.addEventListener('input', function () {
+      // only re-validate live once a message is already on screen
+      if (wrap(el).classList.contains('has-error')) check(el);
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();                       // prototype: posts nowhere, ever
+
+    var bad = fields.filter(function (el) { return !check(el, true); });
+
+    if (bad.length) {
+      sumCount.textContent = bad.length === 1
+        ? 'There is 1 field that needs your attention.'
+        : 'There are ' + bad.length + ' fields that need your attention.';
+      sumList.textContent = '';
+      bad.forEach(function (el) {
+        var li = document.createElement('li');
+        var a  = document.createElement('a');
+        a.href = '#' + el.id;
+        a.textContent = el.getAttribute('data-label') + ' — ' + problem(el);
+        a.addEventListener('click', function (ev) { ev.preventDefault(); el.focus(); });
+        li.appendChild(a);
+        sumList.appendChild(li);
+      });
+      summary.hidden = false;
+      summary.focus();
+      return;
+    }
+
+    summary.hidden = true;
+
+    var first = document.getElementById('first-name').value.trim();
+    var city  = document.getElementById('city').value.trim();
+    document.getElementById('success-name').textContent  = first ? ', ' + first : '';
+    document.getElementById('success-email').textContent = document.getElementById('email').value.trim();
+    /* echo the city back rather than naming an event — we hold no event data
+       on this page and will not invent one */
+    document.getElementById('success-city').textContent  = city ? 'event in ' + city : 'event in your city';
+
+    form.hidden = true;
+    success.hidden = false;
+    success.focus();
+  });
+
+  document.getElementById('book-another').addEventListener('click', function () {
+    form.reset();
+    fields.forEach(function (el) { clearError(el); paintSelect(el); });
+    summary.hidden = true;
+    success.hidden = true;
+    form.hidden = false;
+    document.getElementById('first-name').focus();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JobFairX — 2026 Hiring Events</title>
+<meta name="description" content="Find a hiring event, register, and post your jobs. Candidate matching starts immediately.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — UPCOMING HIRING EVENTS  (replaces /employer/hiring-event-calendar)
+   Same chrome, rhythm and CSS conventions as concept-3-hybrid.html.
+   Dark hero → hard cut → light listing → light bands → hard cut → dark close.
+
+   ⚠️ INTERVIEW-LOCATION MODEL. Events do NOT carry a format. An event is a
+   market moment (city + date + audience); every employer joins the same one.
+   What each employer sets independently is the INTERVIEW LOCATION for their
+   own interviews. So: no virtual/in-person filter, no format column, no
+   format badge on any row. See LIVE-SITE-SCOPE.md §6b.
+   ========================================================================== */
+
+/* ---------- announcement bar (verbatim from the homepage) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (verbatim from the homepage) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it, and frosted chrome now reads dated. */
+.nav.is-stuck {
+  background: var(--canvas);
+  border-bottom-color: var(--hairline);
+}
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { position: relative; font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+/* active state for this page */
+.nav__links a[aria-current="page"] { color: var(--ink); }
+.nav__links a[aria-current="page"]::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -7px;
+  height: 1px; background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a[aria-current="page"] { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero (calendar variant: shorter than the homepage hero) ------- */
+.hero-cal {
+  position: relative; overflow: hidden;
+  padding-block: clamp(56px, 8vh, 88px) clamp(56px, 8vh, 88px);
+}
+.hero-cal__glow { position: absolute; inset: -40% -10% auto; height: 720px; pointer-events: none; z-index: 0; }
+.hero-cal__glow::before, .hero-cal__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.hero-cal__glow::before {
+  width: 660px; height: 540px; left: 4%; top: 18%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.hero-cal__glow::after {
+  width: 560px; height: 480px; right: 4%; top: 6%;
+  background: radial-gradient(circle, rgba(120,80,255,.20), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.hero-cal__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 30% 30%, #000 20%, transparent 76%);
+  mask-image: radial-gradient(ellipse 90% 70% at 30% 30%, #000 20%, transparent 76%);
+}
+.hero-cal__inner { position: relative; z-index: 2; }
+.hero-cal h1 { max-width: 14ch; }
+.hero-cal__sub { max-width: 54ch; margin-top: var(--s-6); }
+
+/* the interview-location note. NOT a format note — an event has no format. */
+.locnote {
+  margin-top: var(--s-8); max-width: 72ch;
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  padding: var(--s-5) var(--s-6);
+}
+.locnote__tag {
+  display: inline-flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-3);
+  padding: 4px 12px 4px 5px; border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  font-size: var(--t-xs); color: #b9c8ff; font-weight: 500;
+}
+.locnote__tag b {
+  background: var(--accent); color: #fff; border-radius: var(--r-pill);
+  padding: 2px 8px; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+}
+.locnote p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.locnote strong { color: var(--ink); font-weight: 550; }
+
+.hero-cal__trust {
+  margin-top: var(--s-6); font-size: var(--t-xs); color: var(--ink-3);
+  display: flex; gap: var(--s-4); flex-wrap: wrap;
+}
+/* flex-start + an em offset keeps the marker on the FIRST line when an item
+   wraps, instead of floating to the middle of a two-line entry */
+.hero-cal__trust li { display: flex; align-items: flex-start; gap: 7px; }
+.hero-cal__trust li::before {
+  content: ''; flex: none; width: 4px; height: 4px; margin-top: .58em;
+  border-radius: 50%; background: var(--accent); opacity: .8;
+}
+
+/* ---------- filter bar ----------
+   Sticky under the nav, solid (no backdrop-filter, same rule as the nav). */
+/* The nav's sticky containing block is the dark hero wrapper, exactly as on
+   the homepage — so the nav rides up and out as the light block arrives. The
+   filter bar pins at top:0 and takes over the moment the nav clears, which
+   makes it a handoff rather than an overlap. `.calendar` is the sticky scope,
+   so the bar releases at the end of the list instead of hovering over the
+   bands below it. Solid background, no backdrop-filter — same rule as the nav. */
+.calendar { position: relative; }
+.filters {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+  padding-block: var(--s-4);
+}
+.filters__row { display: grid; grid-template-columns: minmax(0,1fr) 264px; gap: var(--s-3); }
+.filters__note {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-5);
+  margin-top: var(--s-3); font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em;
+}
+.filters__note b { color: var(--ink); font-weight: 550; }
+.filters__count { color: var(--ink-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* screen-reader-only label text */
+.u-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+/* search */
+.search { position: relative; }
+.search input {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 48px; padding: 0 44px 0 42px;
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  background: var(--surface); font-size: var(--t-sm); letter-spacing: .006em;
+  transition: border-color var(--t-fast) var(--e-inout), box-shadow var(--t-fast) var(--e-inout);
+}
+/* our own clear button is the affordance; kill the native one so there aren't two */
+.search input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.search input::placeholder { color: var(--ink-3); }
+.search input:hover { border-color: var(--hairline-strong); }
+.search input:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+.search__ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
+.search__clear {
+  position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  color: var(--ink-3);
+  transition: background var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout);
+}
+.search__clear:hover { background: var(--surface-2); color: var(--ink); }
+.search__clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* custom select — real listbox, keyboard driven */
+.sel { position: relative; }
+.sel__btn {
+  display: flex; align-items: center; gap: 10px; width: 100%; height: 48px;
+  padding: 0 12px 0 14px; text-align: left;
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  background: var(--surface); font-size: var(--t-sm); letter-spacing: .006em; color: var(--ink);
+  transition: border-color var(--t-fast) var(--e-inout), box-shadow var(--t-fast) var(--e-inout);
+}
+.sel__btn:hover { border-color: var(--hairline-strong); }
+.sel__btn:focus-visible,
+.sel.is-open .sel__btn {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+.sel__chev { margin-left: auto; color: var(--ink-3); transition: transform var(--t-fast) var(--e-out); }
+.sel.is-open .sel__chev { transform: rotate(180deg); }
+.sel__list {
+  position: absolute; z-index: 5; top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-md); box-shadow: var(--sh-lg);
+  padding: 6px; max-height: 320px; overflow: auto; outline: none;
+  animation: popin 160ms var(--e-out);
+}
+@keyframes popin { from { opacity: 0; transform: translateY(-4px); } }
+.sel__opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--r-sm);
+  font-size: var(--t-sm); letter-spacing: .006em; cursor: pointer;
+}
+.sel__opt.is-active { background: var(--surface-2); }
+.sel__opt[aria-selected="true"]::after {
+  content: ''; margin-left: auto; width: 13px; height: 13px; flex: none;
+  background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z'/></svg>") center/contain no-repeat;
+}
+
+/* ---------- type colour dots ----------
+   The five real event types (Healthcare · Diversity · Veterans · Technology ·
+   Entry Level). This is the audience axis — it is NOT a format. */
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, currentColor); flex: none; }
+.ty-all        { --c: #8b909b; }
+.ty-diversity  { --c: #8b5cf6; }
+.ty-veterans   { --c: #b06d1f; }
+.ty-healthcare { --c: #0e9488; }
+.ty-entry      { --c: #db2777; }
+.ty-technology { --c: #2f5cff; }
+
+/* ---------- the event list ----------
+   A list, not a card grid. Four columns on desktop; a stacked, tappable row
+   with a chevron on mobile. */
+.ev-head {
+  display: grid;
+  grid-template-columns: 148px minmax(0,1fr) 168px 190px 16px;
+  column-gap: var(--s-5);
+  padding: 0 var(--s-3) var(--s-3);
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.ev-head span { font-size: var(--t-eyebrow); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+
+.ev {
+  position: relative;
+  display: grid;
+  grid-template-columns: 148px minmax(0,1fr) 168px 190px 16px;
+  grid-template-areas: "date name type status chev";
+  align-items: center;
+  column-gap: var(--s-5);
+  padding: var(--s-5) var(--s-3);
+  border-bottom: 1px solid var(--hairline);
+  transition: background var(--t-fast) var(--e-out);
+}
+/* "hover raises the row border": an ink hairline grows in from the left. */
+.ev::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--ink); transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t-base) var(--e-out);
+}
+.ev:hover { background: var(--surface); }
+.ev:hover::after, .ev:focus-visible::after { transform: scaleX(1); }
+.ev:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--r-sm); }
+.ev[hidden] { display: none; }
+
+.ev__date { grid-area: date; display: flex; flex-direction: column-reverse; }
+.ev__date b { font-size: .9375rem; font-weight: 550; letter-spacing: -.018em; color: var(--ink); }
+.ev__date i { font-style: normal; font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+
+.ev__name { grid-area: name; min-width: 0; }
+.ev__name b { display: block; font-size: 1rem; font-weight: 550; line-height: 1.3; letter-spacing: -.02em; color: var(--ink); }
+.ev__chip {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 7px;
+  padding: 3px 10px; border-radius: var(--r-pill);
+  background: #fdf3e3; border: 1px solid #f0dfc0; color: #8a5c14;
+  font-size: 11px; font-weight: 550; letter-spacing: .01em; font-style: normal;
+}
+
+.ev__type { grid-area: type; display: flex; align-items: center; gap: var(--s-2); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+
+.ev__status { grid-area: status; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px; border-radius: var(--r-pill);
+  font-size: var(--t-xs); font-weight: 550; letter-spacing: .006em; white-space: nowrap;
+}
+.pill--early { background: #fdf3e3; color: #8a5c14; }
+.pill--early .dot { --c: #b06d1f; }
+.pill--soon  { background: color-mix(in srgb, var(--accent) 10%, transparent); color: #1f45d6; }
+.pill--soon  .dot { --c: #2f5cff; }
+.pill--live  { background: #e7f5ec; color: #146c43; }
+.pill--live  .dot { --c: #146c43; animation: livepulse 2.4s var(--e-inout) infinite; }
+@keyframes livepulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(20,108,67,.45); }
+  70%      { box-shadow: 0 0 0 5px rgba(20,108,67,0); }
+}
+
+.ev__chev { grid-area: chev; color: var(--ink-3); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.ev:hover .ev__chev { transform: translateX(3px); color: var(--ink); }
+
+/* Mid widths: the four columns still work, but the fixed ones have to give
+   ground or the event name — the only column that matters — wraps to two lines
+   while three narrow columns sit half empty. */
+@media (min-width: 821px) and (max-width: 1080px) {
+  .ev, .ev-head {
+    grid-template-columns: 118px minmax(0,1fr) 136px 168px 16px;
+    column-gap: var(--s-4);
+  }
+}
+
+/* mobile: rethought, not shrunk */
+@media (max-width: 820px) {
+  .ev-head { display: none; }
+  .ev {
+    grid-template-columns: minmax(0,1fr) auto 18px;
+    grid-template-areas:
+      "type   type   chev"
+      "name   name   chev"
+      "date   status chev";
+    row-gap: 7px; column-gap: var(--s-3);
+    padding: var(--s-5) var(--s-1);
+  }
+  .ev__date { flex-direction: row; align-items: baseline; gap: 5px; }
+  .ev__date i::after { content: ','; }
+  .ev__status { justify-self: end; }
+  .ev__type { font-size: var(--t-xs); }
+  .ev__name b { font-size: 1.0625rem; }
+  .ev__chev { align-self: center; }
+}
+
+/* empty state + load more */
+.ev-empty { padding: var(--s-20) var(--s-4); text-align: center; }
+.ev-empty h3 { font-size: 1.25rem; font-weight: 550; letter-spacing: -.025em; }
+.ev-empty p { margin-top: var(--s-3); color: var(--ink-2); font-size: var(--t-sm); letter-spacing: .006em; }
+.ev-more { margin-top: var(--s-10); text-align: center; }
+
+.feed-note {
+  display: block; margin: var(--s-2) 0 var(--s-6);
+  font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em;
+  max-width: 78ch;
+}
+.feed-note [data-placeholder] { font-family: var(--font-mono); color: var(--ink-2); }
+
+/* ---------- interview-location band ---------- */
+.head { max-width: 62ch; }
+.head .t-eyebrow { margin-bottom: var(--s-4); }
+.head .t-lead { margin-top: var(--s-5); }
+
+.loc { display: grid; grid-template-columns: 1fr 1.15fr; gap: var(--s-16); align-items: center; margin-top: var(--s-12); }
+.loc__list { display: grid; gap: var(--s-2); }
+.loc__row {
+  display: grid; grid-template-columns: 34px 1fr; gap: var(--s-4); align-items: start;
+  padding: var(--s-4); border-radius: var(--r-lg); border: 1px solid transparent;
+  transition: border-color var(--t-fast) var(--e-out), background var(--t-fast) var(--e-out);
+}
+.loc__row:hover { background: var(--surface); border-color: var(--hairline); }
+.loc__ic {
+  width: 34px; height: 34px; border-radius: var(--r-md); display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 9%, transparent); color: var(--accent);
+}
+.loc__row b { display: block; font-size: .9375rem; font-weight: 550; letter-spacing: -.02em; color: var(--ink); }
+.loc__d { display: block; margin-top: 3px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.loc__new {
+  display: inline-block; margin-left: var(--s-2); vertical-align: 2px;
+  background: var(--accent); color: #fff; border-radius: var(--r-pill);
+  padding: 2px 7px; font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+}
+@media (max-width: 900px) { .loc { grid-template-columns: 1fr; gap: var(--s-8); } }
+
+/* ---------- bundle cross-sell ---------- */
+.bundle {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--s-12); align-items: center;
+  padding: var(--s-12); border-radius: var(--r-2xl);
+  background: var(--surface); border: 1px solid var(--hairline);
+  box-shadow: var(--sh-lg);
+}
+.bundle__chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-6); }
+.bundle__chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 13px; border-radius: var(--r-pill);
+  border: 1px solid var(--hairline); background: var(--surface-2);
+  font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em;
+}
+.bundle__chip svg { color: var(--accent); flex: none; }
+.bundle__save {
+  text-align: center; padding: var(--s-8) var(--s-6);
+  border-radius: var(--r-xl); background: var(--surface-2); border: 1px solid var(--hairline);
+}
+.bundle__n { font-size: clamp(3rem, 2rem + 4vw, 4.25rem); font-weight: 500; letter-spacing: -.05em; line-height: 1; color: var(--accent); }
+.bundle__l { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); letter-spacing: .006em; }
+.bundle__save .btn { margin-top: var(--s-6); width: 100%; }
+@media (max-width: 860px) {
+  .bundle { grid-template-columns: 1fr; gap: var(--s-8); padding: var(--s-8) var(--s-6); }
+}
+
+/* ---------- final CTA ---------- */
+.close { position: relative; overflow: hidden; text-align: center; padding-block: var(--s-40); }
+.close__glow {
+  position: absolute; left: 50%; top: 40%; width: 900px; height: 700px; transform: translate(-50%,-50%);
+  pointer-events: none; background: radial-gradient(circle, rgba(47,92,255,.34), transparent 66%); filter: blur(80px);
+}
+.close__inner { position: relative; z-index: 2; }
+.close__cta { display: flex; gap: var(--s-3); justify-content: center; flex-wrap: wrap; margin-top: var(--s-8); }
+
+/* ---------- footer (verbatim from the homepage) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base {
+  display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3);
+}
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- responsive: filter bar ---------- */
+@media (max-width: 820px) {
+  /* Sticky costs too much vertical room once the controls stack, so it
+     releases on small screens rather than eating a third of the viewport. */
+  .filters { position: static; padding-block: var(--s-5); }
+  .filters__row { grid-template-columns: 1fr; }
+  .filters__note { flex-direction: column; gap: var(--s-2); }
+  .filters__count { align-self: flex-start; }
+}
+
+/* ---------- placeholder affordance ----------
+   Anything not grounded in the source material is visibly unfinished. */
+[hidden] { display: none !important; }
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="#location">See how it works →</a>
+  </div>
+
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html" aria-current="page">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+    
+    <a href="page-events.html" aria-current="page">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+  
+  </div>
+
+  
+  <section class="hero-cal grain">
+    <div class="hero-cal__glow" aria-hidden="true"></div>
+    <div class="hero-cal__grid" aria-hidden="true"></div>
+
+    <div class="u-container hero-cal__inner">
+      <p class="t-eyebrow">Upcoming hiring events</p>
+      <h1 class="t-h1 t-balance" style="margin-top:var(--s-4)">2026 hiring events</h1>
+      <p class="t-lead hero-cal__sub">
+        Find a hiring event, register, and post your jobs. Candidate matching starts
+        immediately.
+      </p>
+
+      
+      <div class="locnote">
+        <span class="locnote__tag"><b>New</b> Interview location</span>
+        <p>
+          Every event below is one event — one city, one date, one audience — and every
+          employer joins the same one. What's new is that <strong>you choose where your own
+          interviews happen</strong>: JobFairX video, phone, in person at your address, or
+          your own Zoom, Teams or Meet link. Two employers at the same event can interview
+          completely differently.
+        </p>
+      </div>
+
+      <ul class="hero-cal__trust">
+        <li>300+ cities nationwide</li>
+        <li>Five event types</li>
+        <li>Candidates verified within ~20 miles of the event city</li>
+        <li>Interview requests within a few hours of registering</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <div class="calendar">
+  <div class="filters">
+    <div class="u-container">
+      <div class="filters__row">
+        <div class="search">
+          <span class="search__ic" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <label for="city" class="u-sr">Search events by city</label>
+          <input id="city" type="search" autocomplete="off" placeholder="Search by city or state — try “Dallas”" data-city-input>
+          <button class="search__clear" type="button" data-city-clear hidden aria-label="Clear city search">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        
+        <div class="sel" data-select>
+          <span id="type-label" class="u-sr">Filter by event type</span>
+          <button class="sel__btn" type="button" data-select-btn
+                  aria-haspopup="listbox" aria-expanded="false"
+                  aria-labelledby="type-label type-value" id="type-btn">
+            <span class="dot ty-all" data-select-dot aria-hidden="true"></span>
+            <span data-select-value id="type-value">All Types</span>
+            <svg class="sel__chev" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="sel__list" role="listbox" tabindex="-1" aria-labelledby="type-label" id="type-list" hidden>
+            <li class="sel__opt" role="option" id="type-o0" data-value="all"        aria-selected="true"><span class="dot ty-all" aria-hidden="true"></span>All Types</li>
+            <li class="sel__opt" role="option" id="type-o1" data-value="diversity"  aria-selected="false"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</li>
+            <li class="sel__opt" role="option" id="type-o2" data-value="veterans"   aria-selected="false"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</li>
+            <li class="sel__opt" role="option" id="type-o3" data-value="healthcare" aria-selected="false"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</li>
+            <li class="sel__opt" role="option" id="type-o4" data-value="entry"      aria-selected="false"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</li>
+            <li class="sel__opt" role="option" id="type-o5" data-value="technology" aria-selected="false"><span class="dot ty-technology" aria-hidden="true"></span>Technology</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="filters__note">
+        <p>
+          <b>You pick your interview location when you register</b> — JobFairX video, phone,
+          in person at your address, or your own link. It's your setting, not the event's.
+        </p>
+        <span class="filters__count" data-count-out role="status" aria-live="polite"></span>
+      </div>
+    </div>
+  </div>
+
+  
+  <section class="u-section" style="padding-block:var(--s-10) var(--s-24)">
+    <div class="u-container" data-reveal>
+
+      
+      <p class="feed-note">
+        <span data-placeholder>{{LIVE_EVENT_FEED}}</span> — sample rows built from the real
+        market list and the five real event types. Dallas · Aug 25 and Pearland · Sep 22 are
+        verified against the live site; every other date is feed-rendered in production, not
+        a sourced fact.
+      </p>
+
+      <div class="ev-head" aria-hidden="true">
+        <span>Date</span><span>Event</span><span>Type</span><span>Status</span><span></span>
+      </div>
+
+      
+      <div data-ev-list>
+
+        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="dallas tx texas">
+          <span class="ev__date"><i>Tuesday</i><b>Aug 25</b></span>
+          <span class="ev__name"><b>Dallas, TX Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="entry" data-search="nashville tn tennessee">
+          <span class="ev__date"><i>Thursday</i><b>Aug 27</b></span>
+          <span class="ev__name"><b>Nashville, TN Entry Level Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="veterans" data-search="norfolk va virginia">
+          <span class="ev__date"><i>Friday</i><b>Aug 28</b></span>
+          <span class="ev__name"><b>Norfolk, VA Veterans Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="diversity" data-search="chicago il illinois">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 1</b></span>
+          <span class="ev__name"><b>Chicago, IL Diversity Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="miami fl florida">
+          <span class="ev__date"><i>Thursday</i><b>Sep 3</b></span>
+          <span class="ev__name"><b>Miami, FL Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="technology" data-search="seattle wa washington">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 8</b></span>
+          <span class="ev__name"><b>Seattle, WA Technology Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="entry" data-search="denver co colorado">
+          <span class="ev__date"><i>Thursday</i><b>Sep 10</b></span>
+          <span class="ev__name"><b>Denver, CO Entry Level Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="boston ma massachusetts">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 15</b></span>
+          <span class="ev__name"><b>Boston, MA Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="technology" data-search="austin tx texas">
+          <span class="ev__date"><i>Thursday</i><b>Sep 17</b></span>
+          <span class="ev__name">
+            <b>Austin, TX Technology Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="diversity" data-search="cincinnati oh ohio">
+          <span class="ev__date"><i>Friday</i><b>Sep 18</b></span>
+          <span class="ev__name">
+            <b>Cincinnati, OH Diversity Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        
+        <a class="ev" href="page-event-detail.html" data-type="veterans" data-search="pearland tx texas houston">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 22</b></span>
+          <span class="ev__name">
+            <b>Pearland, TX Veterans Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="entry" data-search="new york ny nyc">
+          <span class="ev__date"><i>Thursday</i><b>Sep 24</b></span>
+          <span class="ev__name">
+            <b>New York, NY Entry Level Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="portland or oregon">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 29</b></span>
+          <span class="ev__name">
+            <b>Portland, OR Healthcare Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="technology" data-search="manchester nh new hampshire">
+          <span class="ev__date"><i>Wednesday</i><b>Sep 30</b></span>
+          <span class="ev__name">
+            <b>Manchester, NH Technology Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="ev-empty" data-ev-empty hidden>
+        <h3>No events found</h3>
+        <p>Try adjusting your search or filter criteria.</p>
+        <button class="btn btn--secondary" type="button" data-ev-reset style="margin-top:var(--s-6)">Clear filters</button>
+      </div>
+
+      <div class="ev-more">
+        <button class="btn btn--secondary btn--lg" type="button" data-ev-more>Load More Events</button>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  
+  <section class="u-section" id="location" style="background:var(--void)">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Interview location</p>
+        <h2 class="t-h2 t-balance">Same event. Your choice of room.</h2>
+        <p class="t-lead">
+          Registering for any event above puts you in front of the same matched, local
+          candidates. Where you actually meet them is a setting you own — and you can set
+          it differently at every event you join.
+        </p>
+      </div>
+
+      <div class="loc">
+        <div class="loc__list" data-reveal>
+          <div class="loc__row">
+            <span class="loc__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 4.5A1.5 1.5 0 0 1 2.5 3h6A1.5 1.5 0 0 1 10 4.5v7A1.5 1.5 0 0 1 8.5 13h-6A1.5 1.5 0 0 1 1 11.5v-7ZM11 6.6l3.3-2.2a.5.5 0 0 1 .7.4v6.4a.5.5 0 0 1-.7.4L11 9.4V6.6Z"/></svg></span>
+            <span><b>JobFairX video</b><span class="loc__d">Built-in video room. Nothing to install, for you or the candidate.</span></span>
+          </div>
+          <div class="loc__row">
+            <span class="loc__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3.6 1.6c.5-.5 1.3-.5 1.8 0l1.5 1.6c.4.5.4 1.2 0 1.7L5.7 6.1c.7 1.7 2.1 3.1 3.8 3.8l1.2-1.2c.5-.4 1.2-.4 1.7 0l1.6 1.5c.5.5.5 1.3 0 1.8l-.8.8c-.7.7-1.8.9-2.7.5C7 11.8 4 8.8 2.3 5c-.4-.9-.2-2 .5-2.7l.8-.7Z"/></svg></span>
+            <span><b>Phone</b><span class="loc__d">You call each candidate at the scheduled time. Numbers are in the dashboard.</span></span>
+          </div>
+          <div class="loc__row">
+            <span class="loc__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5A4.5 4.5 0 0 0 3.5 6c0 3.2 3.7 7.7 4.1 8.2.2.2.6.2.8 0C8.8 13.7 12.5 9.2 12.5 6A4.5 4.5 0 0 0 8 1.5Zm0 6.2A1.7 1.7 0 1 1 8 4.3a1.7 1.7 0 0 1 0 3.4Z"/></svg></span>
+            <span><b>In person<em class="loc__new">New</em></b><span class="loc__d">Set a street address and suite. Candidates see it on their confirmation and every reminder.</span></span>
+          </div>
+          <div class="loc__row">
+            <span class="loc__ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M6 2h8v8h-2V5.4l-6.3 6.3-1.4-1.4L10.6 4H6V2Zm-4 3h3v2H4v7h7v-1h2v3H2V5Z"/></svg></span>
+            <span><b>Your own link</b><span class="loc__d">Zoom, Teams or Meet — paste your link and JobFairX schedules around it.</span></span>
+          </div>
+        </div>
+
+        <div data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--16x10">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The events dashboard interview location column, where one event is set to a JobFairX video call, one to a phone call, and one to a street address."
+                   width="3200" height="2000"
+                   style="--zm:2.6;--lm:-17%;--tm:-16%;--z:1.9;--l:-14%;--t:-37%">
+            </div>
+          </div>
+          <p class="t-sm" style="margin-top:var(--s-4)">
+            Real product view — the INTERVIEW LOCATION column. One employer, four events,
+            a different interview location set on each.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section">
+    <div class="u-container">
+      <div class="bundle" data-reveal>
+        <div>
+          <p class="t-eyebrow">Multi-event packages</p>
+          <h2 class="t-h2 t-balance" style="margin-top:var(--s-4)">Hiring across multiple events?</h2>
+          <p class="t-lead" style="margin-top:var(--s-5)">
+            Save up to 40% with multi-event packages. Buy event credits in a bundle, then
+            spend them on whichever markets and dates you need.
+          </p>
+          <div class="bundle__chips">
+            <span class="bundle__chip"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Credits never expire</span>
+            <span class="bundle__chip"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Use across any event type</span>
+          </div>
+        </div>
+
+        
+        <div class="bundle__save">
+          <div class="t-eyebrow">Save up to</div>
+          <div class="bundle__n">40%</div>
+          <div class="bundle__l">at 100 events, from $495 to $297 each</div>
+          <a href="page-pricing.html" class="btn btn--primary">See bundle pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="close" id="cta">
+    <div class="close__glow" aria-hidden="true"></div>
+    <div class="u-container close__inner">
+      <h2 class="t-h1 t-balance" style="max-width:17ch;margin-inline:auto">Pick a city. Matching starts the same day.</h2>
+      <p class="t-lead" style="max-width:54ch;margin:var(--s-6) auto 0">
+        Register for an event, post your jobs, and you'll start receiving interview requests
+        within a few hours — from candidates already verified within about 20 miles of the
+        event city.
+      </p>
+      <div class="close__cta">
+        <a href="page-contact.html" class="btn btn--primary btn--lg">Book a demo</a>
+        <a href="page-pricing.html" class="btn btn--secondary btn--lg">See pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><span aria-current="page">Upcoming hiring events</span></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Calendar behaviour — vanilla, no dependencies.
+   1. A real, keyboard-accessible listbox (not a styled <select>).
+   2. City search + type filter, both actually filtering the list.
+   3. Progressive disclosure via Load More.
+   Everything degrades: with JS off, all 14 rows render with their status.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var PAGE = 8;   // rows visible before the first "Load More Events"
+
+  /* ---------- 1. custom listbox -----------------------------------------
+     WAI-ARIA listbox pattern: focus moves to the list when it opens and the
+     active option is tracked with aria-activedescendant, so a screen reader
+     announces each option as the arrow keys move through them. */
+  function initSelect(root, onChange) {
+    var btn   = root.querySelector('[data-select-btn]');
+    var list  = root.querySelector('[role="listbox"]');
+    var opts  = Array.prototype.slice.call(list.querySelectorAll('[role="option"]'));
+    var valEl = root.querySelector('[data-select-value]');
+    var dotEl = root.querySelector('[data-select-dot]');
+    var selected = 0, active = 0, open = false, typed = '', typedAt = 0;
+
+    opts.forEach(function (o, i) { if (o.getAttribute('aria-selected') === 'true') selected = i; });
+
+    function setActive(i) {
+      active = (i + opts.length) % opts.length;
+      opts.forEach(function (o, k) { o.classList.toggle('is-active', k === active); });
+      list.setAttribute('aria-activedescendant', opts[active].id);
+      if (opts[active].scrollIntoView) opts[active].scrollIntoView({ block: 'nearest' });
+    }
+
+    function openList() {
+      if (open) return;
+      open = true;
+      root.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      list.hidden = false;
+      setActive(selected);
+      list.focus();
+    }
+
+    function closeList(returnFocus) {
+      if (!open) return;
+      open = false;
+      root.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      list.hidden = true;
+      if (returnFocus) btn.focus();
+    }
+
+    function choose(i) {
+      selected = i;
+      opts.forEach(function (o, k) { o.setAttribute('aria-selected', String(k === i)); });
+      var o = opts[i];
+      valEl.textContent = o.textContent.trim();
+      // mirror the option's colour dot onto the closed button
+      dotEl.className = 'dot ' + (o.querySelector('.dot').className.replace('dot', '').trim());
+      closeList(true);
+      onChange(o.getAttribute('data-value'));
+    }
+
+    btn.addEventListener('click', function () { open ? closeList(true) : openList(); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault(); openList();
+      }
+    });
+
+    list.addEventListener('keydown', function (e) {
+      switch (e.key) {
+        case 'ArrowDown': e.preventDefault(); setActive(active + 1); break;
+        case 'ArrowUp':   e.preventDefault(); setActive(active - 1); break;
+        case 'Home':      e.preventDefault(); setActive(0); break;
+        case 'End':       e.preventDefault(); setActive(opts.length - 1); break;
+        case 'Enter': case ' ': case 'Spacebar': e.preventDefault(); choose(active); break;
+        case 'Escape': e.preventDefault(); closeList(true); break;
+        case 'Tab': closeList(false); break;
+        default:
+          if (e.key.length !== 1) return;
+          // typeahead: consecutive keystrokes inside 700ms build one string
+          var now = Date.now();
+          typed = (now - typedAt < 700 ? typed : '') + e.key.toLowerCase();
+          typedAt = now;
+          for (var i = 0; i < opts.length; i++) {
+            if (opts[i].textContent.trim().toLowerCase().indexOf(typed) === 0) { setActive(i); break; }
+          }
+      }
+    });
+
+    opts.forEach(function (o, i) {
+      o.addEventListener('click', function () { choose(i); });
+      o.addEventListener('mousemove', function () { if (active !== i) setActive(i); });
+    });
+
+    document.addEventListener('pointerdown', function (e) {
+      if (open && !root.contains(e.target)) closeList(false);
+    });
+
+    return {
+      reset: function () { choose(0); },
+      // Programmatic selection for deep links. Goes through choose() so the
+      // button label, the colour dot, aria-selected and the filter all update
+      // together — a synthetic click on the option does not reach this.
+      selectByValue: function (v) {
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i].getAttribute('data-value') === v) { choose(i); return true; }
+        }
+        return false;
+      }
+    };
+  }
+
+  /* ---------- 2. the list ------------------------------------------------- */
+  var listRoot = document.querySelector('[data-ev-list]');
+  if (!listRoot) return;
+
+  var rows    = Array.prototype.slice.call(listRoot.querySelectorAll('.ev'));
+  var headRow = document.querySelector('.ev-head');
+  var empty   = document.querySelector('[data-ev-empty]');
+  var moreWrap= document.querySelector('.ev-more');
+  var moreBtn = document.querySelector('[data-ev-more]');
+  var resetBtn= document.querySelector('[data-ev-reset]');
+  var input   = document.querySelector('[data-city-input]');
+  var clear   = document.querySelector('[data-city-clear]');
+  var countEl = document.querySelector('[data-count-out]');
+
+  var type = 'all', shown = PAGE;
+
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var matches = rows.filter(function (r) {
+      var okType = type === 'all' || r.getAttribute('data-type') === type;
+      var okCity = !q || r.getAttribute('data-search').indexOf(q) > -1;
+      return okType && okCity;
+    });
+
+    rows.forEach(function (r) { r.hidden = true; });
+    var visible = matches.slice(0, shown);
+    visible.forEach(function (r) { r.hidden = false; });
+
+    var none = matches.length === 0;
+    empty.hidden = !none;
+    if (headRow) headRow.hidden = none;
+    moreWrap.hidden = none || matches.length <= shown;
+    clear.hidden = !q;
+
+    countEl.textContent = none
+      ? 'No events'
+      : 'Showing ' + visible.length + ' of ' + matches.length + (matches.length === 1 ? ' event' : ' events');
+
+    return visible;
+  }
+
+  function refilter() { shown = PAGE; apply(); }
+
+  var typeSelect = initSelect(document.querySelector('[data-select]'), function (v) {
+    type = v; refilter();
+  });
+
+  input.addEventListener('input', refilter);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && input.value) { input.value = ''; refilter(); }
+  });
+  clear.addEventListener('click', function () { input.value = ''; refilter(); input.focus(); });
+
+  moreBtn.addEventListener('click', function () {
+    var before = shown;
+    shown += 6;
+    var visible = apply();
+    // Send focus to the first newly revealed row, otherwise a keyboard user is
+    // left on a button that may have just disappeared.
+    if (visible[before]) visible[before].focus();
+  });
+
+  resetBtn.addEventListener('click', function () {
+    input.value = '';
+    typeSelect.reset();          // reset() calls onChange → refilter()
+    input.focus();
+  });
+
+  apply();
+
+  /* ---------- deep link: page-events.html?type=healthcare -----------------
+     The solution pages link here pre-filtered. Vocabulary differs between the
+     two surfaces (solutions say "entry-level" and "veteran", the filter uses
+     "entry" and "veterans"), so normalise rather than assuming they match. */
+  (function deepLink() {
+    var q = new URLSearchParams(window.location.search).get('type');
+    if (!q || !typeSelect || !typeSelect.selectByValue) return;
+    var MAP = { 'entry-level': 'entry', 'entrylevel': 'entry',
+                'veteran': 'veterans', 'vets': 'veterans' };
+    var want = MAP[q.toLowerCase()] || q.toLowerCase();
+    typeSelect.selectByValue(want);
+  })();
+})();
+
+</script>
+</body>
+</html>

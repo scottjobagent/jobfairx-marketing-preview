@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Messaging &amp; Automations — JobFairX</title>
+<meta name="description" content="One inbox for every candidate conversation, filtered by event and by job, and five automation presets that send as candidates move through your hiring process. Turn one on, point it at a job or an event, and stop typing it.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — PLATFORM / MESSAGING & AUTOMATIONS
+   Replaces /employer/platform/messaging-automations.
+
+   Cloned from page-platform-candidate-pipeline.html — THE reference
+   implementation of the capability-detail template. Same six slots, same
+   theme rhythm, same CSS conventions. Nothing here is reinvented; the only
+   page-level decisions are the crop geometries, and each one is shown.
+
+     .cap-hero   hero claim + 3-step flow strip                  [dark]
+     .anno       annotated screenshot — the centrepiece          [light]
+     .states     n-up grid — the five automation presets         [light]
+     .proof      2-column proof sections, alternating sides      [either]
+     .rail       sibling cross-links to the other capabilities   [light]
+     .ctaband    the single page CTA                             [dark]
+
+   Theme rhythm: dark hero → light evidence → dark mechanics →
+   light siblings → dark close. HARD CUTS, no seam elements.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ----------
+   No item carries aria-current on this page: /employer/platform/... is not in
+   the four-item nav. Do NOT invent a nav item for it — PAGE-INVENTORY moves
+   the nav to five items in Wave 1 and that change owns this problem. */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ==========================================================================
+   SLOT 1 — .cap-hero
+   Verbatim from the reference. One claim, one supporting paragraph, no pitch.
+   ========================================================================== */
+.cap-hero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.cap-hero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.cap-hero__glow::before, .cap-hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.cap-hero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.cap-hero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.cap-hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.cap-hero__inner { position: relative; z-index: 2; }
+.cap-hero__crumb { display: flex; align-items: center; gap: var(--s-2); }
+.cap-hero__crumb a { color: var(--ink-3); transition: color var(--t-micro) var(--e-inout); }
+.cap-hero__crumb a:hover { color: var(--accent-hover); }
+.cap-hero h1 { max-width: 17ch; margin-top: var(--s-4); }
+.cap-hero__sub { max-width: 60ch; margin-top: var(--s-6); }
+
+/* ---------- hero flow strip ----------
+   Three beats of the mechanic, on the dark ground. Depth here is hairline +
+   half-pixel rim light only — no shadow, no coloured bloom. */
+.flow {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.flow > li { padding: var(--s-8); min-width: 0; }
+.flow > li + li { border-left: 1px solid var(--hairline); }
+.flow__n {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.flow__t { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; color: var(--ink); }
+.flow__d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) {
+  .flow { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-12); }
+  .flow > li + li { border-left: 0; border-top: 1px solid var(--hairline); }
+  .flow > li { padding: var(--s-6); }
+}
+
+/* ==========================================================================
+   SLOT 2 — .anno (the centrepiece)
+   base.css owns the component. Two page-level decisions live here:
+
+   1. SIDE LAYOUT, not the reference's full-width stage — and this is a
+      deliberate departure that follows the reference's OWN reasoning rather
+      than its output. Candidate-pipeline rejected `.anno--side` because its
+      crop was the whole 3200px-wide dashboard at --z 1.2: a ~676px stage
+      would have rendered 12px product type at ~6px.
+
+      This page's crop is the INBOX COLUMN only — the left 39.7% of the frame,
+      at --z 2.52. The stage shows 1270 image px, which is 635 logical px
+      (the shot is a 2x capture of a 1600px viewport). In a 676px stage that
+      lands at ~1.06:1 — slightly ABOVE life size. Forcing the same portrait
+      crop to container width would instead produce a ~1590px-tall figure and
+      a 1.9x blow-up. Side layout is the crop-legibility argument applied, not
+      abandoned.
+
+      Why the crop stops at 39.7%: the message body to the right of it is
+      prototype demo copy, not shippable product copy. Do not widen it.
+
+   2. The crop geometry and the pin coordinates are ONE calculation. If you
+      re-crop, you must re-derive every pin. Working, for messages-thread.png
+      (3200x2000, quoted below as fractions of the image):
+
+        --z 2.52, --l 0%      →  visible x  0 → 0.39683
+        --t 0%, aspect 1/1    →  visible y  0 → 0.63492   [1.6 / (AR * z)]
+
+      Both spans are 793.65px in the 2000x1250 reference render, so the
+      mapping is the same on both axes:
+
+        pin x = fx / 0.39683        pin y = fy / 0.63492
+        (equivalently: coord in the 2000x1250 render ÷ 793.65)
+
+      Pins are positioned against .anno__stage, and on LIGHT ground .panel has
+      no padding — so stage box == crop box and the mapping is exact. Putting
+      this figure on a dark section would inset the crop by 10px and skew
+      every pin; that is why this block is light.
+
+   3. Below 780px base.css swaps in the --zm/--lm/--tm crop, so the pins no
+      longer line up with anything. Hide them there and let the key carry the
+      whole explanation — same breakpoint, not 640px.
+   ========================================================================== */
+.annoband__head { max-width: 60ch; }
+.annoband__head p { margin-top: var(--s-4); }
+.anno--side { margin-top: var(--s-12); }
+.anno--side > * { min-width: 0; }          /* grid children must be allowed to shrink */
+/* The key column is ~436px wide at container width. A long unbreakable run —
+   an nbsp-joined list, a URL — would push the whole grid past the viewport,
+   so the caption text is told it may break rather than overflow. */
+.anno--side .anno__key li { min-width: 0; }
+.anno__key li span { min-width: 0; overflow-wrap: anywhere; }
+.anno__note { margin-top: var(--s-8); max-width: 70ch; }
+
+/* Crop aspect ratios. Each one is half of a pair with the inline --z/--l/--t
+   on its <img>; changing either half without the other moves the region. */
+.crop--anno  { aspect-ratio: 1/1; }    /* messages-thread — the inbox column   */
+.crop--table { aspect-ratio: 2.72; }   /* automations — the five-row table     */
+.crop--cols  { aspect-ratio: 4/3; }    /* automations — the scoping columns    */
+.crop--rail  { aspect-ratio: 3/4; }    /* messages-thread — column, again      */
+@media (max-width: 780px) {
+  .anno__pin   { display: none; }
+  .crop--anno  { aspect-ratio: 4/5; }
+  .crop--table { aspect-ratio: .95; }
+  .crop--cols  { aspect-ratio: .86; }
+}
+
+/* ==========================================================================
+   SLOT 3 — .states
+   An n-up grid of peer items. Five here: the five automation presets.
+   ========================================================================== */
+.states { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.state { display: grid; align-content: start; gap: var(--s-3); min-width: 0; }
+.state__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-3); }
+.state__t { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); }
+.state__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.state__acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-1); }
+.state__acts span {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  border: 1px solid var(--hairline); color: var(--ink-3);
+  background: var(--surface-2); white-space: nowrap;
+}
+@media (max-width: 1080px) { .states { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px)  { .states { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 4 — .proof  (repeated, alternating sides)
+   ========================================================================== */
+.proof { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16); align-items: center; }
+.proof + .proof { margin-top: var(--s-24); }
+.proof__body, .proof__vis { min-width: 0; }   /* grid children must be allowed to shrink */
+.proof__body h2 { margin-top: var(--s-3); }
+.proof__body > p { margin-top: var(--s-5); max-width: 52ch; }
+.proof--flip .proof__vis { order: -1; }
+.proof figcaption { margin-top: var(--s-4); }
+@media (max-width: 900px) {
+  .proof { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+  .proof + .proof { margin-top: var(--s-16); }
+  .proof--flip .proof__vis { order: 0; }
+}
+
+.ulist { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.ulist li { position: relative; padding-left: 26px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.ulist li::before {
+  content: ''; position: absolute; left: 4px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.ulist strong { color: var(--ink); font-weight: 550; }
+
+/* one-sentence customer line — quiet, never a pull-quote card */
+.credit {
+  margin-top: var(--s-12); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-4);
+}
+.credit p { font-size: 1.0625rem; font-weight: 450; letter-spacing: -.018em; color: var(--ink); }
+.credit cite { font-style: normal; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink-3); }
+
+/* a missing fact is drawn as a missing fact, never filled in */
+.gapnote {
+  margin-top: var(--s-8); padding: var(--s-5) var(--s-6);
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+  max-width: 78ch;
+}
+.gapnote__t { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .04em; }
+.gapnote p { margin-top: var(--s-2); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+
+/* ==========================================================================
+   SLOT 5 — .rail  (sibling capability cross-links)
+   ========================================================================== */
+.rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.rail a { display: grid; align-content: start; gap: var(--s-3); min-width: 0; }
+.rail__t { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
+.rail__t span { color: var(--ink-3); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.rail a:hover .rail__t span { color: var(--accent); transform: translateX(3px); }
+.rail__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 900px) { .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .rail { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 6 — .ctaband  (exactly one per capability page)
+   ========================================================================== */
+.ctaband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.ctaband p { margin-top: var(--s-5); max-width: 46ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.ctaband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.ctaband__facts li { display: grid; gap: 4px; }
+.ctaband__facts strong { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.ctaband__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+@media (max-width: 900px) {
+  .ctaband__inner { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .ctaband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-platform.html) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  
+  <section class="cap-hero grain">
+    <div class="cap-hero__glow" aria-hidden="true"></div>
+    <div class="cap-hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container cap-hero__inner">
+      <p class="t-eyebrow cap-hero__crumb">
+        <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Messaging &amp; automations
+      </p>
+
+      <h1 class="t-h1 t-balance">The follow-up nobody has time for, already sent.</h1>
+
+      <p class="t-lead cap-hero__sub">
+        Every conversation with a candidate sits in one inbox, filtered by event and by
+        job. Beside it are five automation presets — in the product's own words,
+        <em>messages that send as candidates move through your hiring process</em>. You
+        decide which ones are on, and what each one covers.
+      </p>
+
+      
+      <ol class="flow" data-reveal>
+        <li style="--i:0">
+          <p class="flow__n">01 — Presets</p>
+          <p class="flow__t">Turn one on</p>
+          <p class="flow__d">
+            Five presets sit on the Automations screen. Status on each row is a single
+            On or Off, and it is set per automation — not for the account.
+          </p>
+        </li>
+        <li style="--i:1">
+          <p class="flow__n">02 — Scope</p>
+          <p class="flow__t">Point it somewhere</p>
+          <p class="flow__d">
+            Jobs included takes one job or all of them. Hiring event takes one event or
+            all of them. The two columns sit on every row.
+          </p>
+        </li>
+        <li style="--i:2">
+          <p class="flow__n">03 — Send</p>
+          <p class="flow__t">It sends as they move</p>
+          <p class="flow__d">
+            Nothing to trigger by hand. The messages go as candidates move through the
+            pipeline, and they land in the same inbox you type into.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="inbox">
+    <div class="u-container">
+
+      <div class="annoband__head" data-reveal>
+        <p class="t-eyebrow">The real screen</p>
+        <h2 class="t-h2 t-balance">One inbox, scoped by event and by job.</h2>
+        <p class="t-lead">
+          This is the Messages screen, unretouched, cropped to the conversation column.
+          Hover a pin — or a caption — to see which part of the screen it belongs to.
+        </p>
+      </div>
+
+      <figure class="anno anno--side" data-reveal style="--i:1">
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--anno">
+              
+              <img src="assets/product/messages-thread.png"
+                   alt="The JobFairX Messages screen, cropped to the left of the window. A dark navigation rail lists Events, Candidates, Interviews, Messages, Automations and Analytics, with Messages highlighted. Beside it a conversation column headed Messages carries an Inbox tab with a count of 18 and an Archived tab, an All Events dropdown and an All Jobs dropdown, then a list of conversations. Each conversation row shows a candidate name, a Today timestamp, the job the conversation belongs to as a blue link, and the first line of the most recent message. One row is highlighted as the open conversation."
+                   width="3200" height="2000"
+                   style="--z:2.52; --l:0%; --t:0%; --zm:3.861; --lm:-13.75%; --tm:-5%">
+            </div>
+          </div>
+
+          
+          <button class="anno__pin" style="--x:28.3%;--y:44.1%" data-anno="1" aria-label="Detail 1: Automations in the navigation rail">1</button>
+          <button class="anno__pin" style="--x:63.6%;--y:21.5%" data-anno="2" aria-label="Detail 2: the Inbox and Archived tabs">2</button>
+          <button class="anno__pin" style="--x:86.9%;--y:30.4%" data-anno="3" aria-label="Detail 3: the event and job filters">3</button>
+          <button class="anno__pin" style="--x:71.8%;--y:55.8%" data-anno="4" aria-label="Detail 4: one row is one conversation">4</button>
+          <button class="anno__pin" style="--x:63.0%;--y:79.0%" data-anno="5" aria-label="Detail 5: the last line of each thread">5</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong>Automations, one item down.</strong> The rail reads Events, Candidates, Interviews, Messages, Automations, Analytics. What you type and what sends itself are neighbours, not separate products.</span></li>
+          <li data-anno="2"><b>2</b><span><strong>Inbox, with a count. Archived beside it.</strong> One list for live conversations and one for the threads you are finished with — not one inbox per event.</span></li>
+          <li data-anno="3"><b>3</b><span><strong>All Events · All Jobs.</strong> Two dropdowns narrow the list to one hiring event, or one job, or both. They are the same two axes an automation is scoped by.</span></li>
+          <li data-anno="4"><b>4</b><span><strong>One row is one conversation.</strong> The candidate, the job it belongs to as a link, and when it last moved. Selecting the row opens the thread beside it.</span></li>
+          <li data-anno="5"><b>5</b><span><strong>The last line, without opening anything.</strong> Every row shows the most recent message, so who is waiting on a reply reads straight down the column.</span></li>
+        </ol>
+      </figure>
+
+      <p class="t-sm anno__note">
+        The two dropdowns above the list are the same two controls the Automations table
+        uses — it filters by job, and every row names the jobs it includes and the hiring
+        event it belongs to. Scope in one place, scope in the other.
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="presets" style="padding-top:0">
+    <div class="u-container">
+      <div style="max-width:56ch" data-reveal>
+        <p class="t-eyebrow">Proof 01</p>
+        <h2 class="t-h2 t-balance">Five presets are ready to turn on.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5)">
+          They are not a workflow you have to build. They are five rows in a table, each
+          with a Status you flip, a set of jobs it covers and a hiring event it belongs
+          to. Three are On and two are Off in the screen below — nothing here is
+          all-or-nothing.
+        </p>
+      </div>
+
+      <ol class="states">
+        <li class="card state" data-reveal style="--i:0">
+          <span class="state__n">01</span>
+          <span class="state__t">Message new candidates</span>
+          <span class="state__d">The opening message on a new conversation, sent without you writing it.</span>
+          <span class="state__acts"><span>On</span><span>1 job</span><span>Dallas Healthcare</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:1">
+          <span class="state__n">02</span>
+          <span class="state__t">Message scheduled candidates</span>
+          <span class="state__d">For candidates whose interview is booked. Scheduled is a pipeline state.</span>
+          <span class="state__acts"><span>On</span><span>3 jobs</span><span>Chicago Technology</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:2">
+          <span class="state__n">03</span>
+          <span class="state__t">Missed interview follow-up</span>
+          <span class="state__d">For the interview nobody joined. No-show is a pipeline state, and this is not a dead end.</span>
+          <span class="state__acts"><span>On</span><span>All jobs</span><span>All events</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:3">
+          <span class="state__n">04</span>
+          <span class="state__t">Email declined candidates</span>
+          <span class="state__d">For the candidates you passed on. Declined is a pipeline state too.</span>
+          <span class="state__acts"><span>Off</span><span>2 jobs</span><span>Atlanta Diversity</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:4">
+          <span class="state__n">05</span>
+          <span class="state__t">Post-interview follow-up</span>
+          <span class="state__d">After the interview is done. Interviewed is a pipeline state; this is the message that comes next.</span>
+          <span class="state__acts"><span>Off</span><span>1 job</span><span>Dallas Healthcare</span></span>
+        </li>
+      </ol>
+
+      <p class="t-sm" style="margin-top:var(--s-6);max-width:70ch">
+        The Status, job count and event on each card above are the values on the real
+        screen — one account's five rows, not a fixed configuration. Every preset can be
+        On or Off, scoped to one job or all of them, at one event or all of them.
+      </p>
+
+      <div class="gapnote" data-reveal>
+        <p class="gapnote__t" data-placeholder>{{PRESET TRIGGERS &amp; DEFAULT COPY}}</p>
+        <p>
+          The captured product screenshots show the five preset names, their Status, their
+          scope and when each was last modified — nothing more. Exactly what fires each
+          preset, how editable the default message body is, and whether a preset sends as
+          a message or as an email (row 04 says “Email”) are not visible anywhere in the
+          14 shots. Confirm all three before this page ships; do not describe them from
+          the names alone.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="automations">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 02</p>
+          <h2 class="t-h2 t-balance">The screen states its own job in one line.</h2>
+          <p class="t-lead">
+            “Messages that send as candidates move through your hiring process.” That is
+            the product's description, not ours, and it is printed at the top of the
+            Automations screen. Below it are five rows and one decision per row.
+          </p>
+          <ul class="ulist">
+            <li><strong>Status</strong> is On or Off, per automation. Not a global switch, and not a plan you have to be on.</li>
+            <li><strong>Automation name · Jobs included · Hiring event · Date modified</strong> — four columns, so the last change is on the row you are reading.</li>
+            <li>Presets cover the moments a recruiter running an event never gets back to: new, scheduled, missed, declined, and after the interview.</li>
+            <li>One layer up, the same principle applies to the requests themselves — <strong>auto-accept or review each request</strong> is on the All Packages Include list, at every tier.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--table">
+              <img src="assets/product/automations.png"
+                   alt="The My automations table on the JobFairX Automations screen. Column headings read Status, Automation name, Jobs included, Hiring event and Date modified. Five rows: Message new candidates, On, 1 job, Dallas Healthcare Event, Aug 2, 2026; Message scheduled candidates, On, 3 jobs, Chicago Technology Event, Aug 6, 2026; Missed interview follow-up, On, All jobs, All events, Aug 4, 2026; Email declined candidates, Off, 2 jobs, Atlanta Diversity Event, Jul 21, 2026; Post-interview follow-up, Off, 1 job, Dallas Healthcare Event, Jul 28, 2026. A pencil edit icon sits at the end of every row."
+                   width="3200" height="2000"
+                   style="--z:1.262; --l:-17.25%; --t:-33%; --zm:3.604; --lm:-17.25%; --tm:-33%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Five rows, five On/Off decisions, and an edit icon on each. The whole feature
+            fits in one table.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <div class="proof proof--flip">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 03</p>
+          <h2 class="t-h2 t-balance">Point one at a single job. Point the next at everything.</h2>
+          <p class="t-lead">
+            Two columns carry the targeting, and they are independent. An automation can
+            cover one job at one hiring event; the one below it can cover all jobs at all
+            events. You are not choosing a single policy for the account.
+          </p>
+          <ul class="ulist">
+            <li><strong>Jobs included</strong> reads 1 job, 3 jobs or 2 jobs on the specific rows — or <strong>All jobs</strong>.</li>
+            <li><strong>Hiring event</strong> names one event — Dallas Healthcare, Chicago Technology, Atlanta Diversity — or reads <strong>All events</strong>.</li>
+            <li>Your job count is the tier you registered on: <strong>1 job</strong> on Starter, <strong>up to 3</strong> on Growth, <strong>up to 6</strong> on Pro.</li>
+            <li>Seats scale the same way — <strong>2 recruiter seats</strong> on Starter, <strong>up to 5</strong> on Growth, <strong>unlimited</strong> on Pro.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--cols">
+              <img src="assets/product/automations.png"
+                   alt="Close crop of the right-hand columns of the automations table: Jobs included, Hiring event and Date modified. The five values under Jobs included read 1 job, 3 jobs, All jobs, 2 jobs and 1 job; under Hiring event they read Dallas Healthcare Event, Chicago Technology Event, All events, Atlanta Diversity Event and Dallas Healthcare Event."
+                   width="3200" height="2000"
+                   style="--z:2.564; --l:-57.5%; --t:-33%; --zm:4; --lm:-58%; --tm:-33%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Jobs included and Hiring event, on the same five rows. “All jobs · All events”
+            is a setting you choose, not what is left when you choose nothing.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <div class="credit" data-reveal>
+        <p>Western Regional Medical Center hired two LPNs, three RNs, and two MAs.</p>
+        <cite>Western Regional Medical Center</cite>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="after">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 04</p>
+          <h2 class="t-h2 t-balance">The event ends. The messaging does not.</h2>
+          <p class="t-lead">
+            Follow-up interviews and messaging after the event are on the “All Packages
+            Include” list — Starter, Growth and Pro alike. The inbox is not scoped to a
+            live event, and a thread leaves it when you archive it, not when the clock
+            runs out.
+          </p>
+          <ul class="ulist">
+            <li>Schedule follow-up interviews and message candidates <strong>after the event</strong>.</li>
+            <li><strong>Unlimited interviews</strong> before, during and after the event, in every package.</li>
+            <li>Résumés and contact info for <strong>every matched candidate</strong> stay with you — not only the ones you interviewed.</li>
+            <li>A <strong>post-event report</strong> arrives with recruiter notes, interview records and résumés, as downloadable data.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--rail">
+              <img src="assets/product/messages-thread.png"
+                   alt="Close crop of the conversation column on the Messages screen: the heading Messages with a Manage link, an Inbox tab carrying a count of 18 next to an Archived tab, an All Events dropdown and an All Jobs dropdown, and four conversation rows below them. Each row carries a candidate name, a Today timestamp, the job the conversation belongs to and the opening words of the most recent message."
+                   width="3200" height="2000"
+                   style="--z:3.861; --l:-13.75%; --t:-6%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Inbox and Archived, the event and job filters, and the threads themselves —
+            the same column whether the event is next week or last month.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="more" style="padding-top:0">
+    <div class="u-container">
+      <div style="max-width:52ch" data-reveal>
+        <p class="t-eyebrow">The rest of the platform</p>
+        <h2 class="t-h2 t-balance">What the messages are about.</h2>
+      </div>
+
+      <div class="rail">
+        <a class="card" href="page-platform-events-dashboard.html" data-reveal style="--i:0">
+          <span class="rail__t">Events dashboard <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Every event you have registered for, with the interview location you set on each one.</span>
+        </a>
+        <a class="card" href="page-platform-candidate-pipeline.html" data-reveal style="--i:1">
+          <span class="rail__t">Candidate pipeline <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Five states — Requested, Scheduled, Interviewed, No-show, Declined. The presets follow them.</span>
+        </a>
+        <a class="card" href="page-platform-interview-scheduling.html" data-reveal style="--i:2">
+          <span class="rail__t">Interview scheduling <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Accepted requests land on one schedule, whichever interview location they belong to.</span>
+        </a>
+        <a class="card" href="page-platform-event-day.html" data-reveal style="--i:3">
+          <span class="rail__t">Event day <span aria-hidden="true">→</span></span>
+          <span class="rail__d">The lobby, the interview itself, and what the screen shows once a session has ended.</span>
+        </a>
+        <a class="card" href="page-platform-analytics.html" data-reveal style="--i:4">
+          <span class="rail__t">Analytics &amp; reporting <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Dispositions, notes and analytics, plus the post-event report with downloadable data.</span>
+        </a>
+        <a class="card" href="page-platform.html" data-reveal style="--i:5">
+          <span class="rail__t">The platform, end to end <span aria-hidden="true">→</span></span>
+          <span class="rail__d">All six capabilities on one page, in the order a hiring event actually runs.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section ctaband" id="cta">
+    <div class="u-container">
+      <div class="ctaband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">The follow-up is already written. Turn it on.</h2>
+          <p class="t-lead">
+            Register for an event in your city and post your open jobs. Matching activates
+            immediately and the first interview requests arrive within a few hours — the
+            presets are waiting on the Automations screen before they do.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+            <a href="page-events.html" class="btn btn--secondary btn--lg">Browse upcoming events</a>
+          </div>
+        </div>
+
+        <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Employers on the platform</span>
+            <strong data-count>4,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Interviews conducted</span>
+            <strong data-count>500,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers who return</span>
+            <strong data-count>87%</strong>
+            <span class="ctaband__src">Based on 2025 platform data</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><span aria-current="page">Messaging &amp; automations</span></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

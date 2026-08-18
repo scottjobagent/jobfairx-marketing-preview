@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>In-Person Interviews — JobFairX</title>
+<meta name="description" content="Interview candidates at your own address at any JobFairX hiring event. Candidates are verified within approximately 20 miles of the event city, so they are already local.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — IN-PERSON INTERVIEWS  (/employer/in-person-interviews)
+   The launch page. Five themed blocks, hard cuts, no seam elements:
+     1 DARK   announce · nav · hero · the Atlanta row
+     2 LIGHT  the 20-mile argument
+     3 DARK   the model + annotated Interview Location column
+     4 LIGHT  how it works · who it is for · what doesn't change · pricing · proof
+     5 DARK   CTA · footer
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 84px) var(--s-20); }
+.hero__glow { position: absolute; inset: -30% -10% auto; height: 660px; pointer-events: none; z-index: 0; }
+.hero__glow::before, .hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(94px); will-change: transform;
+}
+.hero__glow::before {
+  width: 660px; height: 540px; left: 4%; top: 14%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.hero__glow::after {
+  width: 540px; height: 470px; right: 2%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 16%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 16%, #000 25%, transparent 78%);
+}
+.hero__inner { position: relative; z-index: 2; }
+
+/* the launch chip — the "New" framing, restated at the top of the page itself */
+.newchip {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  padding: 5px 12px 5px 6px; border-radius: var(--r-pill);
+  border: 1px solid var(--hairline-strong);
+  background: rgba(255,255,255,.045);
+  font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .004em;
+}
+.newchip b {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: var(--r-pill);
+  background: var(--accent); color: var(--accent-ink);
+}
+.hero h1 { max-width: 13ch; margin-top: var(--s-6); }
+.hero__sub { max-width: 60ch; margin-top: var(--s-6); }
+.hero__cta { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.hero__fine { margin-top: var(--s-5); color: var(--ink-3); }
+
+/* hero product view — the Atlanta Diversity Event row.
+   Depth on dark is hairline + rim light (the .panel rule in base.css). No shadow. */
+.hero__shot { position: relative; z-index: 2; margin-top: var(--s-16); }
+.hero__shot .crop { aspect-ratio: 5/2; }
+.hero__shot figcaption { margin-top: var(--s-5); max-width: 68ch; }
+@media (max-width: 780px) {
+  .hero__shot { margin-top: var(--s-12); }
+  .hero__shot .crop { aspect-ratio: 16/9; }
+}
+
+/* ---------- 2. the 20-mile argument ----------
+   Buried nine answers down in the live FAQ. It is the whole reason in-person
+   interviews are a reasonable ask, so it gets the largest type on the page. */
+.local__head { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: var(--s-16); align-items: end; }
+.local__fig { display: flex; align-items: baseline; gap: var(--s-4); }
+.local__n {
+  font-size: clamp(4.5rem, 2rem + 9vw, 9rem); font-weight: 500;
+  line-height: .84; letter-spacing: -.055em; color: var(--ink);
+}
+.local__u { font-size: var(--t-h3); font-weight: 500; letter-spacing: -.02em; color: var(--ink-3); }
+.local__quote {
+  font-size: clamp(1.25rem, 1rem + 1.1vw, 1.75rem); font-weight: 450;
+  line-height: 1.35; letter-spacing: -.024em; color: var(--ink);
+  padding-left: var(--s-6); border-left: 2px solid var(--accent);
+}
+.local__cite { display: block; margin-top: var(--s-4); font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .006em; font-style: normal; }
+.local__body { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-10); margin-top: var(--s-12); }
+.local__body p { color: var(--ink-2); letter-spacing: .004em; }
+
+.statrow {
+  display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: var(--s-8);
+  margin-top: var(--s-12); padding-top: var(--s-8); border-top: 1px solid var(--hairline);
+}
+.statrow dt { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; color: var(--ink); }
+.statrow dd { margin-top: var(--s-2); font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .006em; }
+.footnote { margin-top: var(--s-8); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .008em; max-width: 76ch; }
+
+@media (max-width: 900px) {
+  .local__head { grid-template-columns: minmax(0,1fr); gap: var(--s-8); align-items: start; }
+  .local__body { grid-template-columns: minmax(0,1fr); gap: var(--s-6); margin-top: var(--s-8); }
+  .statrow { grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-6); }
+}
+
+/* ---------- 3. the model (dark) ---------- */
+.model__defs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-6); margin-top: var(--s-12); }
+.def {
+  min-width: 0; padding: var(--s-8);
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+}
+.def h3 { margin-top: var(--s-3); }
+.def p { margin-top: var(--s-4); color: var(--ink-2); font-size: .9375rem; line-height: 1.65; letter-spacing: .006em; }
+@media (max-width: 900px) { .model__defs { grid-template-columns: minmax(0,1fr); } }
+
+/* annotated screenshot — pins sit in the gutter to the LEFT of the location
+   cell so they never cover the string they are pointing at */
+.anno--loc { margin-top: var(--s-16); }
+.anno--loc .crop { aspect-ratio: 7/5; }
+.anno--loc .anno__key { grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-3) var(--s-6); }
+.anno--loc figcaption { margin-top: var(--s-2); }
+@media (max-width: 780px) {
+  /* On a phone the pins would land on top of illegible UI. Art-direct to a
+     tighter crop of the column itself and let the key carry the meaning —
+     the pin coordinates are tied to the desktop crop and would drift. */
+  .anno--loc .anno__pin { display: none; }
+  .anno--loc .crop { aspect-ratio: .55; }
+  .anno--loc .anno__key { grid-template-columns: minmax(0,1fr); }
+}
+
+/* ---------- 4. how it works ---------- */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--s-6); margin-top: var(--s-12); counter-reset: step; }
+.step { min-width: 0; }
+.step__n {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+  color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+.step h3 { margin-top: var(--s-5); font-size: 1.125rem; font-weight: 550; letter-spacing: -.022em; line-height: 1.25; }
+.step p { margin-top: var(--s-3); font-size: .9375rem; line-height: 1.65; color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) { .steps { grid-template-columns: minmax(0,1fr); gap: var(--s-8); } }
+
+.note {
+  margin-top: var(--s-12); padding: var(--s-6);
+  border-radius: var(--r-lg); border: 1px solid var(--hairline); background: var(--surface);
+  box-shadow: var(--sh-sm);
+  font-size: .9375rem; line-height: 1.65; color: var(--ink-2); letter-spacing: .006em;
+  max-width: 78ch;
+}
+.note b { color: var(--ink); font-weight: 550; }
+
+/* the interviews list, contained rather than full-bleed so the 3200px source
+   still renders above 1:1 and the tags stay readable */
+.shot { margin-top: var(--s-16); max-width: 880px; margin-inline: auto; }
+.shot .crop { aspect-ratio: 3/2; }
+.shot figcaption { margin-top: var(--s-5); text-align: center; }
+@media (max-width: 780px) { .shot .crop { aspect-ratio: .79; } }
+
+/* base.css swaps to the tight --zm/--lm/--tm crops at 780px. Those regions are
+   art-directed for a ~350px column; in a 730px tablet column the same crop
+   renders the 3200px source ABOVE 1:1 and the figure grows past 1200px tall.
+   Cap the frame instead of re-cropping — one rule, both phone and tablet. */
+@media (max-width: 780px) {
+  .hero__shot .panel,
+  .anno--loc .anno__stage,
+  /* width:100% is load-bearing on .anno__stage — it is a grid item, and auto
+     inline margins alone switch it from stretch to shrink-to-fit, which
+     collapses it to nothing around a percentage-width child. */
+  .shot .panel { width: 100%; max-width: 440px; margin-inline: auto; }
+}
+
+/* ---------- placeholder image slots ----------
+   Two assets do not exist and must not be faked:
+   (a) a photograph of an in-person interview,
+   (b) the candidate confirmation showing the address. */
+.ph-slot {
+  position: relative; display: grid; place-items: center; align-content: center;
+  gap: var(--s-3); padding: var(--s-8); text-align: center;
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-xl);
+  background: var(--surface-2);
+}
+.ph-slot svg { color: var(--ink-3); }
+.ph-slot code {
+  font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: .02em;
+  color: #8a5416; max-width: 34ch; line-height: 1.5;
+}
+.ph-slot small { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .008em; max-width: 40ch; }
+
+.ph-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-8); margin-top: var(--s-16); align-items: start; }
+.ph-pair .ph-slot { aspect-ratio: 4/3; }
+.ph-pair figcaption { margin-top: var(--s-4); }
+@media (max-width: 900px) { .ph-pair { grid-template-columns: minmax(0,1fr); gap: var(--s-10); } }
+
+/* ---------- who it is for ---------- */
+.who { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--s-16); align-items: start; }
+.who__col { min-width: 0; }
+.who__cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.who__cards h3 { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; }
+.who__cards p { margin-top: var(--s-3); font-size: .9375rem; line-height: 1.6; color: var(--ink-2); letter-spacing: .006em; }
+.who .ph-slot { aspect-ratio: 4/5; }
+.who figcaption { margin-top: var(--s-4); }
+@media (max-width: 900px) {
+  .who { grid-template-columns: minmax(0,1fr); gap: var(--s-10); }
+  .who .ph-slot { aspect-ratio: 3/2; }
+}
+@media (max-width: 560px) { .who__cards { grid-template-columns: minmax(0,1fr); } }
+
+/* ---------- what doesn't change + pricing ---------- */
+.same { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-6) var(--s-10); margin-top: var(--s-10); }
+.same li { min-width: 0; padding-top: var(--s-5); border-top: 1px solid var(--hairline); }
+.same h3 { font-size: 1rem; font-weight: 550; letter-spacing: -.018em; }
+.same p { margin-top: var(--s-2); font-size: .9375rem; line-height: 1.6; color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) { .same { grid-template-columns: minmax(0,1fr); } }
+
+.price { margin-top: var(--s-16); padding-top: var(--s-10); border-top: 1px solid var(--hairline); }
+.price__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16); align-items: start; margin-top: var(--s-6); }
+.price p { color: var(--ink-2); letter-spacing: .004em; }
+.price p + p { margin-top: var(--s-4); }
+.price__flag {
+  min-width: 0; padding: var(--s-6); border-radius: var(--r-lg);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  background: color-mix(in srgb, #b06d1f 7%, transparent);
+}
+.price__flag p { font-size: .9375rem; line-height: 1.6; color: var(--ink-2); }
+.price__flag code { font-family: var(--font-mono); font-size: var(--t-xs); color: #8a5416; letter-spacing: .02em; }
+@media (max-width: 900px) { .price__grid { grid-template-columns: minmax(0,1fr); gap: var(--s-8); } }
+
+/* ---------- proof ---------- */
+.proof { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--s-6); margin-top: var(--s-10); }
+.proof li { min-width: 0; }
+.proof p { font-size: 1.0625rem; font-weight: 450; line-height: 1.45; letter-spacing: -.014em; color: var(--ink); }
+.proof span { display: block; margin-top: var(--s-4); font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+@media (max-width: 780px) { .proof { grid-template-columns: minmax(0,1fr); gap: var(--s-8); } }
+
+/* ---------- closing CTA ---------- */
+.close__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.close p { margin-top: var(--s-5); max-width: 48ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.close__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.close__facts li { display: grid; gap: 4px; min-width: 0; }
+.close__facts a, .close__facts strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.close__facts a:hover { color: var(--accent-hover); }
+@media (max-width: 900px) {
+  .close__inner { grid-template-columns: minmax(0,1fr); gap: var(--s-10); }
+  .close__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="#how">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="hero grain">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container hero__inner">
+      <p class="newchip"><b>New</b> In-person interviews are live</p>
+
+      
+      <h1 class="t-display t-balance">Same event. Your choice of room.</h1>
+
+      <p class="t-lead hero__sub">
+        The event doesn’t change: one city, one date, one window, and every employer
+        registered against the same audience. What’s new is that you decide where your
+        own interviews happen — on JobFairX video, by phone, in person at your address,
+        or on a link of your own.
+      </p>
+
+      <div class="hero__cta">
+        <a href="#" class="btn btn--primary btn--lg">Register for an event</a>
+        <a href="#how" class="btn btn--secondary btn--lg">See how it works</a>
+      </div>
+
+      <p class="t-sm hero__fine">Set per event, on any event you join.</p>
+
+      
+      <figure class="hero__shot" data-reveal>
+        <div class="panel">
+          <div class="crop">
+            <img src="assets/product/dashboard-events.png"
+                 alt="The Interview Location column of the employer events dashboard. The Atlanta Diversity Event on April 5, 2026 reads “In person — 1201 Peachtree St NE, Suite 300, Atlanta, GA”. The Denver Technology Event below it reads “Video — Microsoft Teams”."
+                 width="3200" height="2000"
+                 style="--z:2.15; --l:-24%; --t:-55%; --zm:4.8; --lm:-43%; --tm:-55%">
+          </div>
+        </div>
+        <figcaption class="t-sm">
+          Real product view. Two events on one employer’s dashboard — one meeting
+          candidates at 1201 Peachtree St NE in Atlanta, one on their own Teams link.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="local">
+    <div class="u-container">
+
+      <p class="t-eyebrow" data-reveal>Why this works at all</p>
+
+      <div class="local__head" data-reveal style="--i:1">
+        <div>
+          <h2 class="t-h1 t-balance" style="margin-top:var(--s-5)">Nobody has to travel. They already live here.</h2>
+          <div class="local__fig" style="margin-top:var(--s-10)">
+            <span class="local__n">~20</span>
+            <span class="local__u">miles</span>
+          </div>
+        </div>
+
+        
+        <blockquote class="local__quote">
+          “Candidates are verified to be within approximately 20 miles of the event
+          city, so you’re connecting with local, relevant talent.”
+          <cite class="local__cite">JobFairX employer FAQ — the answer most people scroll past</cite>
+        </blockquote>
+      </div>
+
+      <div class="local__body" data-reveal style="--i:2">
+        <p>
+          That check has run on every JobFairX event since long before in-person
+          interviews existed, and it is the reason this is worth having at all. Asking a
+          stranger to drive across a state for a first interview is how you lose them.
+          Asking someone who already lives twenty minutes away to come by is a normal
+          Tuesday.
+        </p>
+        <p>
+          The people requesting time with you at the Atlanta Diversity Event are in
+          Atlanta. It is verified before they ever reach your list — so by the time you
+          are deciding whether to accept a request, the hard part of an in-person
+          interview is already behind you.
+        </p>
+      </div>
+
+      <dl class="statrow" data-reveal style="--i:3">
+        <div><dt data-count>300+</dt><dd>Cities with hiring events</dd></div>
+        <div><dt data-count>3M+</dt><dd>Registered candidates</dd></div>
+        <div><dt data-count>4,000+</dt><dd>Employers</dd></div>
+        <div><dt data-count>500,000+</dt><dd>Interviews conducted</dd></div>
+      </dl>
+
+      <p class="footnote" data-reveal style="--i:4">
+        Interview show rate across JobFairX events: 91% healthcare, 89% veterans, 86%
+        entry-level. Based on 2025 platform data — event-wide figures, recorded before
+        in-person interviews existed.
+        <span data-placeholder>{{IN-PERSON SHOW RATE — not yet measured}}</span>
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="model">
+    <div class="u-container">
+
+      <p class="t-eyebrow" data-reveal>The part that gets misread</p>
+      <h2 class="t-h2 t-balance" data-reveal style="--i:1; max-width:20ch; margin-top:var(--s-5)">
+        In person isn’t a kind of event. It’s where your interviews happen.
+      </h2>
+
+      <div class="model__defs">
+        
+        <div class="def" data-reveal style="--i:1">
+          <p class="t-eyebrow">An event</p>
+          <h3 class="t-h3">A market moment.</h3>
+          <p>
+            The Dallas Healthcare Hiring Event: one city, one date, one window. Every
+            employer who registers joins that same event. There is no in-person version
+            of it and no virtual version of it, because the event doesn’t carry a
+            setting for your interviews — you do.
+          </p>
+        </div>
+
+        <div class="def" data-reveal style="--i:2">
+          <p class="t-eyebrow">An interview location</p>
+          <h3 class="t-h3">Yours, and yours alone.</h3>
+          <p>
+            You set it during setup, for your own interviews, at each event you join:
+            JobFairX video, phone, in person at your address, or your own link. Two
+            employers at the same Dallas Healthcare event can interview completely
+            differently — one on video, one with candidates walking into their office.
+          </p>
+        </div>
+      </div>
+
+      
+      <figure class="anno anno--loc" data-reveal>
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The employer events dashboard, showing the Interview Location column for four upcoming events: Dallas Healthcare — JobFairX video call; Chicago Technology — you call each candidate; Atlanta Diversity — in person at 1201 Peachtree St NE, Suite 300, Atlanta, GA; Denver Technology — Microsoft Teams."
+                   width="3200" height="2000"
+                   style="--z:2; --l:-15%; --t:-26%; --zm:5.26; --lm:-44%; --tm:-26%">
+            </div>
+          </div>
+          <button class="anno__pin" style="--x:57%; --y:16.1%" data-anno="1" aria-label="Interview location 1: JobFairX video">1</button>
+          <button class="anno__pin" style="--x:57%; --y:37.1%" data-anno="2" aria-label="Interview location 2: phone">2</button>
+          <button class="anno__pin" style="--x:57%; --y:61.9%" data-anno="3" aria-label="Interview location 3: in person">3</button>
+          <button class="anno__pin" style="--x:57%; --y:86.8%" data-anno="4" aria-label="Interview location 4: your own link">4</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong style="color:var(--ink);font-weight:550">JobFairX video</strong> — “JobFairX video call”. The interview runs inside the platform.</span></li>
+          <li data-anno="2"><b>2</b><span><strong style="color:var(--ink);font-weight:550">Phone</strong> — “You call each candidate”, at the time you accepted.</span></li>
+          <li data-anno="3"><b>3</b><span><strong style="color:var(--ink);font-weight:550">In person</strong> — your street address, shown on the dashboard and on every candidate’s confirmation.</span></li>
+          <li data-anno="4"><b>4</b><span><strong style="color:var(--ink);font-weight:550">Your own link</strong> — here, Microsoft Teams. Use whatever your team already runs on.</span></li>
+        </ol>
+
+        <figcaption class="t-sm">
+          One employer, four events, four different answers in the same column.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="how">
+    <div class="u-container">
+      <p class="t-eyebrow" data-reveal>How it works</p>
+      <h2 class="t-h2 t-balance" data-reveal style="--i:1; max-width:18ch; margin-top:var(--s-5)">
+        Three steps, all of them during setup.
+      </h2>
+
+      <div class="steps">
+        <div class="step" data-reveal style="--i:1">
+          <span class="step__n">1</span>
+          <h3>Choose in person.</h3>
+          <p>
+            Interview location is part of setting up the event, alongside your jobs and
+            your interviewer seats. Pick <em>In person</em> and the row on your events
+            dashboard changes with it.
+          </p>
+        </div>
+
+        <div class="step" data-reveal style="--i:2">
+          <span class="step__n">2</span>
+          <h3>Enter your address.</h3>
+          <p>
+            The street address where you want to meet people — your office, a branch, a
+            space you’ve booked. That address becomes the interview location for that
+            event.
+          </p>
+        </div>
+
+        <div class="step" data-reveal style="--i:3">
+          <span class="step__n">3</span>
+          <h3>Candidates get it, then get reminded.</h3>
+          <p>
+            It lands on their confirmation and on every reminder after it. Candidates
+            already receive automated email and SMS in the run-up to a scheduled
+            interview; your address rides along on all of them.
+          </p>
+        </div>
+      </div>
+
+      <p class="note" data-reveal>
+        Nothing else moves. Candidates still <b>request</b> interviews, you still review
+        résumés before deciding, and <b>accepting a request is what schedules the
+        interview</b> — exactly as it works for a video or phone event. The only thing
+        that changed is the answer to “where”.
+      </p>
+
+      
+      <figure class="shot" data-reveal>
+        <div class="panel">
+          <div class="crop">
+            <img src="assets/product/interviews.png"
+                 alt="The employer interviews list, showing eight upcoming interviews with their scheduled times and an interview location tag on each: four marked Video, two marked In person, two marked Phone."
+                 width="3200" height="2000"
+                 style="--z:2.38; --l:-51%; --t:-36%; --zm:4.5; --lm:-54.5%; --tm:-36%">
+          </div>
+        </div>
+        <figcaption class="t-sm">
+          Every scheduled interview carries its own location tag. Two of these people
+          are coming to the office.
+        </figcaption>
+      </figure>
+
+      
+      <div class="ph-pair">
+        <figure data-reveal>
+          <div class="ph-slot" data-placeholder>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 6 9-6"/></svg>
+            <code>{{SCREENSHOT — candidate confirmation for an in-person interview, showing the employer address}}</code>
+            <small>Not captured yet. No mock-up, no illustration — this slot stays empty until the real screen is shot and the candidate name is redacted.</small>
+          </div>
+          <figcaption class="t-sm">
+            What the candidate receives once you accept.
+          </figcaption>
+        </figure>
+
+        <div data-reveal style="--i:1">
+          <h3 class="t-h3" style="margin-top:var(--s-2)">What candidates are told</h3>
+          <p style="margin-top:var(--s-4);color:var(--ink-2);letter-spacing:.004em">
+            Candidates receive pre-event preparation materials, interview tips and
+            guidance on presenting themselves professionally, plus automated emails and
+            SMS leading up to their scheduled interview. Where the interview happens is
+            part of that from the moment you accept.
+          </p>
+          <p style="margin-top:var(--s-4);color:var(--ink-2);letter-spacing:.004em">
+            They are being asked to travel a short, verified distance to an address in
+            the city they already live in — not to work out a video link ten minutes
+            before it starts.
+          </p>
+          <p style="margin-top:var(--s-6)">
+            <a href="page-faq.html#q-venue" class="btn btn--ghost" style="color:var(--accent)">Read the FAQ on in-person interviews →</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="who" style="padding-top:0">
+    <div class="u-container">
+      <div class="who">
+        <div class="who__col" data-reveal>
+          <p class="t-eyebrow">When to use it</p>
+          <h2 class="t-h2 t-balance" style="margin-top:var(--s-5); max-width:16ch">When the room is the point.</h2>
+          <p class="t-lead" style="margin-top:var(--s-6); max-width:44ch">
+            Most interviews don’t need one. Some can’t do without — and those are the
+            roles that have been hardest to hire through a screen.
+          </p>
+
+          <div class="who__cards">
+            <div class="card">
+              <h3>A walkthrough</h3>
+              <p>
+                The floor, the ward, the line, the loading bay. Some roles are far easier
+                to accept once someone has stood in the place they’d be standing daily.
+              </p>
+            </div>
+            <div class="card">
+              <h3>A skills test</h3>
+              <p>
+                Anything you need to watch someone actually do, with your own eyes and
+                your own tools rather than a description of it.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Equipment</h3>
+              <p>
+                Machinery, vehicles, instruments, a kitchen. Things that don’t fit down a
+                video call and don’t travel to one either.
+              </p>
+            </div>
+            <div class="card">
+              <h3>A handshake</h3>
+              <p>
+                Roles where the first meeting decides it, and both sides would rather it
+                happened in a room.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        
+        <figure class="who__col" data-reveal style="--i:1">
+          <div class="ph-slot" data-placeholder>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><circle cx="8.5" cy="10" r="1.8"/><path d="m3.5 17 5-4.5 4 3.5 3-2.5 4.5 4"/></svg>
+            <code>{{PHOTOGRAPH — an employer interviewing a candidate at their own site}}</code>
+            <small>
+              We have no photograph of an in-person JobFairX interview. Stock imagery
+              would be a claim we can’t support on the page that launches the feature,
+              so this slot stays visible and empty until a real one is shot with consent.
+            </small>
+          </div>
+          <figcaption class="t-sm">
+            Asset required before this page ships.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="rest" style="padding-top:0">
+    <div class="u-container">
+      <p class="t-eyebrow" data-reveal>Everything else</p>
+      <h2 class="t-h2 t-balance" data-reveal style="--i:1; max-width:20ch; margin-top:var(--s-5)">
+        The rest of the event is unchanged.
+      </h2>
+
+      <ul class="same">
+        <li data-reveal style="--i:1">
+          <h3>Same matching</h3>
+          <p>
+            Candidate matching activates immediately once your jobs are posted, and
+            interview requests start arriving within a few hours.
+          </p>
+        </li>
+        <li data-reveal style="--i:2">
+          <h3>Same review, same decision</h3>
+          <p>
+            Résumés and contact details for every matched candidate. You accept or
+            decline each request, or switch on automatic scheduling to accept them for
+            you.
+          </p>
+        </li>
+        <li data-reveal style="--i:3">
+          <h3>Same dashboard</h3>
+          <p>
+            Messaging, automations, interviewer seats, dispositions, notes and analytics
+            behave exactly as they do on a video event.
+          </p>
+        </li>
+        <li data-reveal style="--i:4">
+          <h3>Same post-event report</h3>
+          <p>
+            Recruiter notes, interview records and résumés afterwards — and access that
+            doesn’t expire, so follow-ups keep running through the platform.
+          </p>
+        </li>
+      </ul>
+
+      
+      <div class="price" data-reveal>
+        <h3 class="t-h3">What it costs</h3>
+        <div class="price__grid">
+          <div>
+            <p>
+              Event packages are priced per event: <strong>Starter $495</strong> for 1 job
+              and 20+ scheduled interviews, <strong>Growth $895</strong> for up to 3 jobs
+              and 60+, <strong>Pro $1,495</strong> for up to 6 jobs and 100+. Seats run 2,
+              up to 5, then unlimited.
+            </p>
+            <p>
+              Registering 31 or more days ahead takes a flat $100 off any tier, and
+              bundles run from $470 an event at 5 events down to $297 an event at 100.
+              <a href="page-pricing.html" style="color:var(--accent);border-bottom:1px solid color-mix(in srgb, var(--accent) 35%, transparent)">See pricing</a>
+            </p>
+          </div>
+
+          <div class="price__flag" data-placeholder>
+            <p style="margin-bottom:var(--s-3)"><strong style="color:var(--ink)">In-person pricing is not confirmed.</strong></p>
+            <p>
+              <code>{{IN-PERSON PRICING — unconfirmed}}</code> Open questions 2 and 3 in
+              the scope doc: whether an in-person interview location changes the package
+              price, and whether the bundle ladder applies to it. Do not state parity with
+              video on this page until product signs it off.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="proof" style="padding-top:0">
+    <div class="u-container">
+      <p class="t-eyebrow" data-reveal>Already running</p>
+      <h2 class="t-h2 t-balance" data-reveal style="--i:1; max-width:22ch; margin-top:var(--s-5)">
+        What employers have done at JobFairX events.
+      </h2>
+
+      <ul class="proof">
+        <li data-reveal style="--i:1">
+          <p>Interviewed over 90 candidates in one day.</p>
+          <span>Target</span>
+        </li>
+        <li data-reveal style="--i:2">
+          <p>Has run three veterans events.</p>
+          <span>Tesla</span>
+        </li>
+        <li data-reveal style="--i:3">
+          <p>Hired two LPNs, three RNs, and two MAs.</p>
+          <span>Western Regional Medical Center</span>
+        </li>
+      </ul>
+
+      <p class="footnote" data-reveal style="--i:4">
+        All three ran before in-person interviews existed — the volume is the point, not
+        the room. 87% of employers return.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section close" id="cta">
+    <div class="u-container">
+      <div class="close__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Pick an event. Then pick your room.</h2>
+          <p class="t-lead">
+            Registration takes a few minutes. Candidate matching starts as soon as your
+            jobs are posted, and you set your interview location in the same sitting.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an event</a>
+            <a href="page-contact.html" class="btn btn--secondary btn--lg">Talk to us</a>
+          </div>
+        </div>
+
+        <ul class="close__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Email</span>
+            <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Phone</span>
+            <a href="tel:+17022690808">(702) 269-0808</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Hours</span>
+            <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><span aria-current="page">In-person interviews</span></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

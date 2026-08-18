@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Employer resources — JobFairX</title>
+<meta name="description" content="The JobFairX employer library: articles on hiring-event cost, high-volume hiring, platform comparisons and interview locations, grouped by what you are trying to decide.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — EMPLOYER RESOURCES (content hub index)
+   Replaces /employer/resources. Also the destination for the dead footer
+   "Blog" link — PAGE-INVENTORY: "Do not build a blog. 12 articles already
+   live at /employer/resources. Point the dead footer Blog link there."
+
+   Rhythm: dark index → light rails → dark pricing rail + CTA. Hard cuts.
+   The page is a router, not an essay: everything below the hero is a link.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ---------- */
+.rhero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.rhero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.rhero__glow::before, .rhero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.rhero__glow::before {
+  width: 620px; height: 520px; left: 4%; top: 14%;
+  background: radial-gradient(circle, rgba(47,92,255,.30), transparent 68%);
+  animation: drift1 26s var(--e-inout) infinite alternate;
+}
+.rhero__glow::after {
+  width: 520px; height: 460px; right: 6%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.18), transparent 70%);
+  animation: drift2 32s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.rhero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.rhero__inner { position: relative; z-index: 2; }
+.rhero h1 { max-width: 15ch; margin-top: var(--s-4); }
+.rhero__sub { max-width: 60ch; margin-top: var(--s-6); }
+.rhero__where {
+  margin-top: var(--s-5); font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .006em;
+  max-width: 60ch;
+}
+.rhero__where code {
+  font-family: var(--font-mono); font-size: .8125rem; color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+/* counts strip */
+.hubmeta {
+  display: flex; flex-wrap: wrap; gap: var(--s-6) var(--s-12);
+  margin-top: var(--s-10); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+}
+.hubmeta div { display: grid; gap: 4px; }
+.hubmeta b { font-size: 1.75rem; font-weight: 500; line-height: 1; letter-spacing: -.035em; color: var(--ink); }
+
+/* ---------- start here ----------
+   Depth on dark = hairline + rim light. No shadow, no coloured bloom. */
+.start {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-10);
+  align-items: center; padding: var(--s-8);
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+}
+.start h2 { margin-top: var(--s-3); font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2rem); font-weight: 500; line-height: 1.08; letter-spacing: -.032em; }
+.start__slug {
+  display: inline-block; margin-top: var(--s-4);
+  font-family: var(--font-mono); font-size: .8125rem; color: var(--ink-3);
+  letter-spacing: .02em; overflow-wrap: anywhere;
+}
+.start__sum { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--ink-2); max-width: 46ch; letter-spacing: .006em; }
+.start .btn { margin-top: var(--s-6); }
+.start__shot .crop { aspect-ratio: 5/4; border: 1px solid var(--hairline); }
+.start__cap { margin-top: var(--s-3); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+@media (max-width: 900px) {
+  .start { grid-template-columns: 1fr; gap: var(--s-8); padding: var(--s-6); margin-top: var(--s-12); }
+  .start__shot { order: -1; }
+}
+
+/* ---------- cluster index ----------
+   Chips WRAP rather than scroll. A horizontal scroller inside a grid child is
+   the exact pattern that pushed the FAQ page 231px wide on mobile; wrapping
+   removes the failure mode instead of patching it. */
+.clusternav { display: flex; flex-wrap: wrap; gap: var(--s-2); min-width: 0; }
+.clusternav a {
+  display: inline-flex; align-items: baseline; gap: var(--s-2);
+  font-size: var(--t-sm); letter-spacing: .006em; color: var(--ink-2);
+  padding: 8px 14px; border-radius: var(--r-pill); border: 1px solid var(--hairline);
+  background: var(--surface);
+  transition: color var(--t-micro) var(--e-inout), border-color var(--t-micro) var(--e-inout);
+}
+.clusternav a:hover { color: var(--ink); border-color: var(--ink-3); }
+.clusternav .n { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+
+/* ---------- rails ---------- */
+.rail { display: grid; grid-template-columns: 264px minmax(0, 1fr); gap: var(--s-12); align-items: start; scroll-margin-top: 96px; }
+.rail + .rail { margin-top: var(--s-16); padding-top: var(--s-16); border-top: 1px solid var(--hairline); }
+.rail__head h2 { font-size: 1.375rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; margin-top: var(--s-3); }
+.rail__line { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; max-width: 34ch; }
+@media (min-width: 901px) { .rail__head { position: sticky; top: 96px; } }
+@media (max-width: 900px) {
+  .rail { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); scroll-margin-top: 84px; }
+  .rail + .rail { margin-top: var(--s-12); padding-top: var(--s-12); }
+}
+
+.rail__list { display: grid; min-width: 0; }
+.rail__list > li { min-width: 0; border-top: 1px solid var(--hairline); }
+.rail__list > li:last-child { border-bottom: 1px solid var(--hairline); }
+
+.art {
+  display: grid; grid-template-columns: minmax(0, 1fr) 24px; gap: var(--s-4);
+  align-items: center; padding: var(--s-5) var(--s-4);
+  border-radius: var(--r-md);
+  transition: background var(--t-micro) var(--e-inout);
+}
+.art:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.art:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.art__t {
+  display: block; font-size: 1.0625rem; font-weight: 500;
+  letter-spacing: -.018em; line-height: 1.3; color: var(--ink);
+}
+.art__s {
+  display: block; margin-top: 5px;
+  font-family: var(--font-mono); font-size: .75rem; color: var(--ink-3);
+  letter-spacing: .02em; overflow-wrap: anywhere;
+}
+.art__go {
+  justify-self: end; color: var(--ink-3); font-size: 1rem; line-height: 1;
+  transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out);
+}
+.art:hover .art__go { color: var(--accent); transform: translate(2px, -2px); }
+
+/* internal link rows — different species from the live articles, so they get a
+   different marker and no external glyph */
+.art--in .art__t { color: var(--ink); }
+.art--in .art__s { color: var(--accent); font-family: var(--font-sans); font-size: var(--t-xs); letter-spacing: .006em; }
+.art--in:hover .art__go { transform: translateX(3px); }
+.rail__list > li.is-in { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+
+.flag {
+  display: inline-block; margin-left: var(--s-2); vertical-align: 2px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416; white-space: nowrap;
+}
+
+/* ---------- the rest of the library ---------- */
+.libstrip { margin-top: var(--s-16); padding-top: var(--s-10); border-top: 1px solid var(--hairline); }
+.libstrip__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-6); }
+.libstrip__list li { min-width: 0; }
+/* the strip cards keep .art's grid — they only add the card frame */
+.libcard {
+  height: 100%; align-items: start;
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  background: var(--surface); box-shadow: var(--sh-sm);
+}
+.libcard .art__s { margin-top: var(--s-3); }
+@media (max-width: 900px) { .libstrip__list { grid-template-columns: minmax(0, 1fr); } }
+
+.note { margin-top: var(--s-8); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; max-width: 76ch; display: inline-block; }
+
+/* ---------- pricing / bundles rail ---------- */
+.prices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-10); }
+.pcard {
+  min-width: 0; padding: var(--s-6);
+  border-radius: var(--r-lg); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.22);
+  display: flex; flex-direction: column;
+  transition: border-color var(--t-fast) var(--e-out);
+}
+.pcard:hover { border-color: var(--hairline-strong); }
+.pcard h3 { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 500; letter-spacing: -.026em; line-height: 1.15; }
+.pcard ul { margin-top: var(--s-5); display: grid; gap: var(--s-3); }
+.pcard li { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: var(--s-3); }
+.pcard li i { font-style: normal; color: var(--ink-3); }
+.pcard li b { color: var(--ink); font-weight: 500; }
+.pcard .btn--ghost { margin-top: auto; padding-top: var(--s-6); font-size: var(--t-sm); color: var(--accent-hover); align-self: start; }
+.pcard .btn--ghost::after { bottom: -2px; }
+@media (max-width: 900px) { .prices { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- proof + CTA ---------- */
+.proofwrap { margin-top: var(--s-10); padding-top: var(--s-8); border-top: 1px solid var(--hairline); }
+.proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-8); margin-top: var(--s-6); }
+.proof li { min-width: 0; }
+.proof b { display: block; font-size: var(--t-sm); font-weight: 550; letter-spacing: -.01em; color: var(--ink); }
+.proof span { display: block; margin-top: var(--s-2); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) { .proof { grid-template-columns: minmax(0, 1fr); gap: var(--s-6); } }
+
+.ctaband__inner { max-width: 62ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot li a[aria-current="page"] { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="rhero grain">
+    <div class="rhero__glow" aria-hidden="true"></div>
+    <div class="rhero__grid" aria-hidden="true"></div>
+
+    <div class="u-container rhero__inner">
+      <p class="t-eyebrow">Employer resources</p>
+      <h1 class="t-h1 t-balance">The employer library</h1>
+
+      <p class="t-lead rhero__sub">
+        Articles on running hiring events — what a hire costs, how to handle volume,
+        how platforms compare, and where your interviews actually happen. Grouped by
+        the question you arrived with, not by the date it was published.
+      </p>
+
+      
+      <p class="rhero__where">
+        Every article lives at <code>jobfairx.com/employer/resources/</code> — this page is
+        the index. There is no separate blog; this is it.
+      </p>
+
+      <ul class="hubmeta">
+        <li><div><b>12</b><span class="t-sm">Live articles</span></div></li>
+        <li><div><b>5</b><span class="t-sm">Clusters</span></div></li>
+        <li><div><b>3</b><span class="t-sm">Flagged for rewrite</span></div></li>
+      </ul>
+
+      
+      <div class="start" data-reveal>
+        <div>
+          <p class="t-eyebrow">Start here</p>
+          <h2>How to host a virtual hiring event</h2>
+          <span class="start__slug">/employer/resources/how-to-host-a-virtual-hiring-event</span>
+          
+          <p class="start__sum" data-placeholder>
+            {{One-line summary — pull the live article's meta description}}
+          </p>
+          <a class="btn btn--primary" href="https://jobfairx.com/employer/resources/how-to-host-a-virtual-hiring-event" rel="noopener">Read it</a>
+        </div>
+
+        <figure class="start__shot" style="margin:0">
+          <div class="crop">
+            <img src="assets/product/setup-flow.png"
+                 alt="The JobFairX job post setup screen: a Growth package with 2 of 3 jobs added, a job title field, a job location type set to In person, and a field for the street address or ZIP code."
+                 width="3200" height="2000"
+                 style="--z:1.9; --l:-34%; --t:-11%; --zm:2.6; --lm:-34%; --tm:-13%">
+          </div>
+          <figcaption class="start__cap">
+            Real product view — posting a job inside an event. This is the job's own
+            location, set separately from where you interview.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="library" style="padding-block:var(--s-16) var(--section-y)">
+    <div class="u-container">
+
+      <nav class="clusternav" aria-label="Article clusters">
+        <a href="#r-start">Getting started <span class="n">3</span></a>
+        <a href="#r-cost">Cost &amp; ROI <span class="n">3</span></a>
+        <a href="#r-volume">High-volume hiring <span class="n">1</span></a>
+        <a href="#r-compare">Comparing platforms <span class="n">1</span></a>
+        <a href="#r-formats">Interview locations <span class="n">1</span></a>
+        <a href="#pricing">Pricing &amp; bundles</a>
+      </nav>
+
+      <div style="margin-top:var(--s-12)">
+
+        
+        <section class="rail" id="r-start" data-reveal>
+          <div class="rail__head">
+            <p class="t-eyebrow">01</p>
+            <h2>Getting started</h2>
+            <p class="rail__line">
+              For the first event. What one is, how a day runs, and what has to be in
+              place before candidates start requesting interviews.
+            </p>
+          </div>
+
+          <ol class="rail__list">
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/how-to-host-a-virtual-hiring-event" rel="noopener">
+                <span>
+                  <span class="art__t">How to host a virtual hiring event</span>
+                  <span class="art__s">how-to-host-a-virtual-hiring-event</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+
+            
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/how-does-a-virtual-job-fair-work" rel="noopener">
+                <span>
+                  <span class="art__t">How does a virtual job fair work<span class="flag">Needs update</span></span>
+                  <span class="art__s">how-does-a-virtual-job-fair-work</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+
+            
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/virtual-hiring-events" rel="noopener">
+                <span>
+                  <span class="art__t">Virtual hiring events<span class="flag">Needs update</span></span>
+                  <span class="art__s">virtual-hiring-events</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+
+            <li class="is-in">
+              <a class="art art--in" href="page-faq.html#c-how">
+                <span>
+                  <span class="art__t">How it works, answered in four questions</span>
+                  <span class="art__s">On this site · Employer FAQ</span>
+                </span>
+                <span class="art__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ol>
+        </section>
+
+        
+        <section class="rail" id="r-cost" data-reveal>
+          <div class="rail__head">
+            <p class="t-eyebrow">02</p>
+            <h2>Cost &amp; ROI</h2>
+            <p class="rail__line">
+              For the person building the business case — the numbers a finance
+              partner will ask for before signing anything off.
+            </p>
+          </div>
+
+          <ol class="rail__list">
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/recruiting-roi" rel="noopener">
+                <span>
+                  <span class="art__t">Recruiting ROI</span>
+                  <span class="art__s">recruiting-roi</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/cost-per-hire" rel="noopener">
+                <span>
+                  <span class="art__t">Cost per hire</span>
+                  <span class="art__s">cost-per-hire</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/time-to-fill" rel="noopener">
+                <span>
+                  <span class="art__t">Time to fill</span>
+                  <span class="art__s">time-to-fill</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+
+            
+            <li class="is-in">
+              <a class="art art--in" href="page-pricing.html#packages">
+                <span>
+                  <span class="art__t">What an event actually costs — $495, $895, $1,495</span>
+                  <span class="art__s">On this site · Pricing</span>
+                </span>
+                <span class="art__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ol>
+        </section>
+
+        
+        <section class="rail" id="r-volume" data-reveal>
+          <div class="rail__head">
+            <p class="t-eyebrow">03</p>
+            <h2>High-volume hiring</h2>
+            <p class="rail__line">
+              For req counts that will not fit down a one-at-a-time pipeline, and for
+              hiring the same roles in more than one market.
+            </p>
+          </div>
+
+          <ol class="rail__list">
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/high-volume-hiring" rel="noopener">
+                <span>
+                  <span class="art__t">High-volume hiring</span>
+                  <span class="art__s">high-volume-hiring</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+
+            
+            <li class="is-in">
+              <a class="art art--in" href="page-pricing.html#bundles">
+                <span>
+                  <span class="art__t">Event bundles — 5 to 100 events, $470 down to $297 each</span>
+                  <span class="art__s">On this site · Pricing · credits never expire</span>
+                </span>
+                <span class="art__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ol>
+        </section>
+
+        
+        <section class="rail" id="r-compare" data-reveal>
+          <div class="rail__head">
+            <p class="t-eyebrow">04</p>
+            <h2>Comparing platforms</h2>
+            <p class="rail__line">
+              For the shortlist stage, when JobFairX is one of several names on the
+              page and someone has to justify the choice.
+            </p>
+          </div>
+
+          <ol class="rail__list">
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/best-virtual-hiring-event-platforms" rel="noopener">
+                <span>
+                  <span class="art__t">Best virtual hiring event platforms</span>
+                  <span class="art__s">best-virtual-hiring-event-platforms</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li class="is-in">
+              <a class="art art--in" href="page-events.html">
+                <span>
+                  <span class="art__t">Skip the comparison and look at a real event</span>
+                  <span class="art__s">On this site · Upcoming hiring events</span>
+                </span>
+                <span class="art__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ol>
+        </section>
+
+        
+        <section class="rail" id="r-formats" data-reveal>
+          <div class="rail__head">
+            <p class="t-eyebrow">05</p>
+            <h2>Interview locations</h2>
+            <p class="rail__line">
+              Every employer joins the same event. Each one sets their own interview
+              location: JobFairX video, phone, in person at your address, or your own
+              link. This is the cluster the launch changed most.
+            </p>
+          </div>
+
+          <ol class="rail__list">
+            
+            <li>
+              <a class="art" href="https://jobfairx.com/employer/resources/virtual-vs-in-person-hiring-event" rel="noopener">
+                <span>
+                  <span class="art__t">Virtual vs in-person hiring event<span class="flag">Needs update</span></span>
+                  <span class="art__s">virtual-vs-in-person-hiring-event</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li class="is-in">
+              <a class="art art--in" href="page-faq.html#c-locations">
+                <span>
+                  <span class="art__t">Where do the interviews happen? Four answers</span>
+                  <span class="art__s">On this site · FAQ · events and interview locations</span>
+                </span>
+                <span class="art__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ol>
+        </section>
+
+        
+        <div class="libstrip" data-reveal>
+          <p class="t-eyebrow">Also on the hub</p>
+          <ul class="libstrip__list">
+            <li>
+              <a class="art libcard" href="https://jobfairx.com/employer/resources/" rel="noopener">
+                <span>
+                  <span class="art__t">Resources index</span>
+                  <span class="art__s">/employer/resources/</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            
+            <li>
+              <a class="art libcard" href="https://jobfairx.com/employer/resources/" rel="noopener">
+                <span>
+                  <span class="art__t">Author page</span>
+                  <span class="art__s" data-placeholder>/employer/resources/{{author-slug}}</span>
+                </span>
+                <span class="art__go" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            
+            <li>
+              <span class="art libcard" data-placeholder style="cursor:default">
+                <span>
+                  <span class="art__t">{{Remaining articles}}</span>
+                  <span class="art__s">12 counted live · 9 slugs captured · list the rest here</span>
+                </span>
+                <span class="art__go" aria-hidden="true">·</span>
+              </span>
+            </li>
+          </ul>
+
+          <p class="note" data-placeholder>
+            {{Link labels are rendered from each article's live slug — the published
+            titles were never captured. Swap in the real &lt;title&gt; strings in one pass.}}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="pricing">
+    <div class="u-container">
+      <div style="max-width:60ch" data-reveal>
+        <p class="t-eyebrow">The number the articles leave out</p>
+        <h2 class="t-h2 t-balance" style="margin-top:var(--s-4)">
+          Every article here ends at the calendar. Not one of them links to a price.
+        </h2>
+        <p class="t-lead" style="margin-top:var(--s-5)">
+          So here they are. Read the ROI piece, then check the figure it is being
+          measured against.
+        </p>
+      </div>
+
+      <div class="prices">
+        <div class="pcard" data-reveal>
+          <p class="t-eyebrow">Per event</p>
+          <h3>Starter · Growth · Pro</h3>
+          <ul>
+            <li><i>·</i><span><b>$495 · $895 · $1,495</b> per event</span></li>
+            <li><i>·</i><span>1 job · up to 3 jobs · up to 6 jobs</span></li>
+            <li><i>·</i><span>20+ · 60+ · 100+ scheduled interviews</span></li>
+            <li><i>·</i><span>2 seats · up to 5 · unlimited recruiters</span></li>
+          </ul>
+          <a class="btn btn--ghost" href="page-pricing.html#packages">See what each package includes →</a>
+        </div>
+
+        <div class="pcard" data-reveal style="--i:1">
+          <p class="t-eyebrow">Bundles</p>
+          <h3>5 to 100 events</h3>
+          <ul>
+            <li><i>·</i><span>From <b>$470</b> per event down to <b>$297</b> at 100</span></li>
+            <li><i>·</i><span>Credits never expire</span></li>
+            <li><i>·</i><span>Use across any event type</span></li>
+            <li><i>·</i><span>Most popular: <b>25 events at $395 each</b></span></li>
+          </ul>
+          <a class="btn btn--ghost" href="page-pricing.html#bundles">See the bundle ladder →</a>
+        </div>
+
+        <div class="pcard" data-reveal style="--i:2">
+          <p class="t-eyebrow">Timing</p>
+          <h3>$100 off, 31+ days out</h3>
+          <ul>
+            <li><i>·</i><span>A flat <b>$100</b> off every tier, not a percentage</span></li>
+            <li><i>·</i><span>The deadline is exactly 31 days before the event</span></li>
+            <li><i>·</i><span>Candidates are verified within ~20 miles of the event city</span></li>
+          </ul>
+          <a class="btn btn--ghost" href="page-events.html">Find an event 31+ days out →</a>
+        </div>
+      </div>
+
+      
+      <div class="proofwrap" data-reveal>
+        <p class="t-eyebrow">Employers on JobFairX</p>
+        <ul class="proof">
+          <li><b>Target</b><span>Interviewed over 90 candidates in one day.</span></li>
+          <li><b>Tesla</b><span>Three veterans events.</span></li>
+          <li><b>Western Regional Medical Center</b><span>Hired two LPNs, three RNs, and two MAs.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section ctaband" id="cta" style="padding-top:0">
+    <div class="u-container">
+      <div class="ctaband__inner" data-reveal>
+        <h2 class="t-h2 t-balance">Reading is the easy part.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5)">
+          Pick a city, register, post your roles. Matching activates immediately and
+          the first interview requests arrive within a few hours — you decide where
+          each interview happens.
+        </p>
+        <div class="cta-row">
+          <a href="page-events.html" class="btn btn--primary btn--lg">Browse upcoming events</a>
+          <a href="page-pricing.html" class="btn btn--secondary btn--lg">See pricing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><span aria-current="page">Resources</span></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

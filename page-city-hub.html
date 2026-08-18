@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<title>Hiring Events in Dallas, TX — JobFairX for Employers</title>
+
+
+<meta name="description" content="Upcoming hiring events in Dallas, TX. Candidates verified within about 20 miles of Dallas. Choose your interview location.">
+
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — CITY HUB TEMPLATE
+   Replaces the 301 at /employer/job-fairs/{state}/{city}.
+
+   ⚑ THIS FILE IS A TEMPLATE, WRITTEN AS A WORKED EXAMPLE FOR DALLAS, TEXAS.
+     352 instances are generated from it. Today
+     /employer/job-fairs/texas/dallas 301s to a filtered calendar, which means
+     1,760 city×type pages (352 cities × 5 event types) point UP at nothing.
+     This page is their parent, and the block at SLOT 2 carries the link that
+     adopts them.
+
+   ⚑ HOW THE DYNAMIC FIELDS ARE MARKED.
+     Every string a generator substitutes is preceded by an HTML comment naming
+     its variable, e.g.  Dallas
+     A field we genuinely do not know the value of is ALSO rendered as a
+     visible {{PLACEHOLDER}} with data-placeholder, so it cannot ship by
+     accident. The two are different things:
+       Dallas      → known, substituted per instance
+       <span data-placeholder>{{UPCOMING_EVENT_COUNT}}</span>
+                                    → not known here, comes from the feed
+
+   ⚑ THE VARIABLE SET
+     {{CITY}}            Dallas            {{CITY_SLUG}}     dallas
+     {{STATE}}           Texas             {{STATE_SLUG}}    texas
+     {{STATE_ABBR}}      TX                {{TZ_ABBR}}       CT
+     {{UPCOMING_EVENT_COUNT}}              count of upcoming events in this city
+     {{TYPES_IN_CITY[]}} the subset of the five event types that actually have
+                         an upcoming event here — the generator emits ONE
+                         .tycard per member, never a card for a type with no
+                         upcoming event, or the city×type child is an orphan
+                         pointing at an empty page.
+     {{EVENTS[]}}        one .ev row each: DATE, WEEKDAY, TYPE, TYPE_SLUG,
+                         EVENT_ID, COUNTDOWN_STATE
+     {{CITY_PRE_REGISTERED}} / {{CITY_AVG_INTERVIEWS}}
+                         per-market figures off the same server payload the
+                         event pages read (LIVE-SITE-SCOPE §3, §7b). They carry
+                         an "Updated daily" chip and must stay live-queried.
+
+   ⚑ WHAT IS NEVER SUBSTITUTED
+     The customer sentence in SLOT 4 is global, not local. Do not localise it,
+     do not swap the company, do not add a city. Three customers exist and each
+     has exactly one sentence.
+
+   Slots, cloned from page-platform-candidate-pipeline.html:
+     .chero      dark hero — city claim, event count, three-fact strip   [dark]
+     .tygrid     the five event types AS THEY OCCUR HERE                 [light]
+     .ev list    upcoming events in this city, countdown chips           [light]
+     .proof      local proof — the ~20 mile radius                       [dark]
+     .anno       interview location, on the real dashboard               [light]
+     .pricestrip pricing, identical on all 352 instances                 [light]
+     .ctaband    the single page CTA                                     [dark]
+
+   Theme rhythm: dark hero → light listings → dark local proof →
+   light mechanics → dark close. HARD CUTS, no seam elements.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-event-detail) ----------
+   /employer/job-fairs/{state}/{city} is a child of the events calendar —
+   exactly like the event detail page — so "Upcoming Hiring Events" carries
+   aria-current on every one of the 352 instances. Nothing else about the nav
+   varies by city. */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter anywhere on this site. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { position: relative; font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a[aria-current="page"] { color: var(--ink); }
+.nav__links a[aria-current="page"]::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -7px;
+  height: 1px; background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a[aria-current="page"] { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ==========================================================================
+   EVENT-TYPE COLOURS
+   From LIVE-SITE-SCOPE §9 — "use these so marketing and product agree":
+   Diversity orange · Technology blue · Healthcare teal · Veterans red ·
+   Entry-Level sky. One value per ground, because a hue that reads correctly
+   on #fbfaf8 goes muddy on #0b0d12. Values match page-solutions.html.
+   ========================================================================== */
+:root {
+  --ty-healthcare: #0e9488;   /* teal   */
+  --ty-diversity:  #c96a10;   /* orange */
+  --ty-veterans:   #c0392f;   /* red    */
+  --ty-technology: #2f5cff;   /* blue   */
+  --ty-entry:      #0284c7;   /* sky    */
+}
+[data-theme="dark"] {
+  --ty-healthcare: #2dd4bf;
+  --ty-diversity:  #f0912f;
+  --ty-veterans:   #f2635a;
+  --ty-technology: #6d8cff;
+  --ty-entry:      #38bdf8;
+}
+.ty-healthcare { --c: var(--ty-healthcare); }
+.ty-diversity  { --c: var(--ty-diversity); }
+.ty-veterans   { --c: var(--ty-veterans); }
+.ty-technology { --c: var(--ty-technology); }
+.ty-entry      { --c: var(--ty-entry); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, currentColor); flex: none; }
+
+/* ==========================================================================
+   SLOT 1 — .chero
+   Same ambient device, at the same scale, as every other hub hero. One claim,
+   the count, and three facts. No pitch: a city hub is a wayfinding page.
+   ========================================================================== */
+.chero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.chero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.chero__glow::before, .chero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.chero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.chero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.chero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.chero__inner { position: relative; z-index: 2; }
+.chero__crumb { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s-2); }
+.chero__crumb a { color: var(--ink-3); transition: color var(--t-micro) var(--e-inout); }
+.chero__crumb a:hover { color: var(--accent-hover); }
+.chero__crumb b { color: var(--ink-2); font-weight: 600; }
+.chero h1 { max-width: 17ch; margin-top: var(--s-4); }
+.chero__sub { max-width: 60ch; margin-top: var(--s-6); }
+.chero__cta { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+
+/* Three-fact strip. Depth on dark is hairline + half-pixel rim light only —
+   no shadow, no coloured bloom. Same construction as .flow on the reference. */
+.herofacts {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.herofacts > li { padding: var(--s-8); min-width: 0; }
+.herofacts > li + li { border-left: 1px solid var(--hairline); }
+.herofacts__k {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.herofacts__v { margin-top: var(--s-3); font-size: 2rem; font-weight: 500; letter-spacing: -.038em; line-height: 1.04; color: var(--ink); }
+.herofacts__d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) {
+  .herofacts { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-12); }
+  .herofacts > li + li { border-left: 0; border-top: 1px solid var(--hairline); }
+  .herofacts > li { padding: var(--s-6); }
+}
+
+/* ---------- shared section head ---------- */
+.head { max-width: 62ch; }
+.head .t-eyebrow { margin-bottom: var(--s-4); }
+.head .t-lead { margin-top: var(--s-5); }
+
+/* ==========================================================================
+   SLOT 2 — .tygrid  ⚑ THE ORPHAN-ADOPTION BLOCK
+   One card per event type that actually runs in this city. Each card carries
+   TWO outbound links and they do different jobs:
+
+     a) the city×type SEO child   /job-fairs/{state}/{city}/next-{type}
+        — 1,760 of these exist and none of them currently has a parent. This
+          is the link that gives them one. It is the reason this page exists.
+     b) the type page             /employer/solutions/{type}
+        — the audience story, identical for every city.
+
+   The full child path is printed as visible mono text, not just hidden in the
+   href, because a developer reading the generated HTML needs to be able to see
+   the slug it built without opening devtools.
+
+   ⚠ There is no next-inperson child and there must never be one. In person is
+     an interview LOCATION, not an event type; that URL family 500s today and
+     PAGE-INVENTORY says keep it that way.
+   ========================================================================== */
+.tygrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.tycard { display: grid; align-content: start; gap: var(--s-3); min-width: 0; }
+.tycard__type { display: flex; align-items: center; gap: var(--s-2); font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); }
+.tycard__next { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+.tycard__next span[data-placeholder] { font-family: var(--font-mono); color: var(--ink-2); }
+.tycard__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.tycard__stat {
+  font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em;
+  padding-top: var(--s-3); border-top: 1px solid var(--hairline);
+}
+.tycard__stat b { color: var(--ink); font-weight: 550; }
+.tycard__go {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-2);
+  /* 14px text link, so tracking is POSITIVE. The ramp crosses zero: negative
+     on display, +.006em at 14–16px. This is a link, not a .btn. */
+  font-size: var(--t-sm); font-weight: 550; letter-spacing: .006em; color: var(--ink);
+  margin-top: var(--s-1);
+}
+.tycard__go span { color: var(--ink-3); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.tycard__go:hover { color: var(--accent); }
+.tycard__go:hover span { color: var(--accent); transform: translateX(3px); }
+.tycard__url {
+  display: block; font-family: var(--font-mono); font-size: 10px; line-height: 1.45;
+  letter-spacing: .01em; color: var(--ink-3);
+  overflow-wrap: anywhere;                 /* long slugs must wrap, never scroll */
+}
+.tycard__alt { font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em; }
+.tycard__alt:hover { color: var(--accent); }
+@media (max-width: 1140px) { .tygrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px)  { .tygrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px)  { .tygrid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 3 — the upcoming events list
+   Row pattern lifted BYTE-FOR-BYTE from page-events.html so the two pages
+   cannot drift — the same event has to look the same on the calendar and on
+   its city hub. A list, not a card grid. Four columns on desktop; a stacked,
+   tappable row with a chevron on mobile.
+
+   ⚑ RECONCILE, DO NOT FIX HERE: the inherited rule carries negative tracking
+     below 18px — .ev__date b (15px / −.018em) and .ev__name b (16px / −.02em)
+     — which the type ramp says should be about +.006em. Correcting it in this
+     file alone would make one event row disagree with the identical row on the
+     calendar. Change it in page-events.html, page-event-detail.html and this
+     file in ONE pass.
+   ========================================================================== */
+.ev-head {
+  display: grid;
+  grid-template-columns: 148px minmax(0,1fr) 168px 190px 16px;
+  column-gap: var(--s-5);
+  padding: 0 var(--s-3) var(--s-3);
+  border-bottom: 1px solid var(--hairline-strong);
+}
+.ev-head span { font-size: var(--t-eyebrow); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+
+.ev {
+  position: relative;
+  display: grid;
+  grid-template-columns: 148px minmax(0,1fr) 168px 190px 16px;
+  grid-template-areas: "date name type status chev";
+  align-items: center;
+  column-gap: var(--s-5);
+  padding: var(--s-5) var(--s-3);
+  border-bottom: 1px solid var(--hairline);
+  transition: background var(--t-fast) var(--e-out);
+}
+.ev::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--ink); transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t-base) var(--e-out);
+}
+.ev:hover { background: var(--surface); }
+.ev:hover::after, .ev:focus-visible::after { transform: scaleX(1); }
+.ev:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--r-sm); }
+
+.ev__date { grid-area: date; display: flex; flex-direction: column-reverse; }
+.ev__date b { font-size: .9375rem; font-weight: 550; letter-spacing: -.018em; color: var(--ink); }
+.ev__date i { font-style: normal; font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+
+.ev__name { grid-area: name; min-width: 0; }
+.ev__name b { display: block; font-size: 1rem; font-weight: 550; line-height: 1.3; letter-spacing: -.02em; color: var(--ink); }
+.ev__chip {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 7px;
+  padding: 3px 10px; border-radius: var(--r-pill);
+  background: #fdf3e3; border: 1px solid #f0dfc0; color: #8a5c14;
+  font-size: 11px; font-weight: 550; letter-spacing: .01em; font-style: normal;
+}
+
+.ev__type { grid-area: type; display: flex; align-items: center; gap: var(--s-2); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+
+.ev__status { grid-area: status; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px; border-radius: var(--r-pill);
+  font-size: var(--t-xs); font-weight: 550; letter-spacing: .006em; white-space: nowrap;
+}
+.pill--early { background: #fdf3e3; color: #8a5c14; }
+.pill--early .dot { --c: #b06d1f; }
+.pill--soon  { background: color-mix(in srgb, var(--accent) 10%, transparent); color: #1f45d6; }
+.pill--soon  .dot { --c: #2f5cff; }
+.pill--live  { background: #e7f5ec; color: #146c43; }
+.pill--live  .dot { --c: #146c43; animation: livepulse 2.4s var(--e-inout) infinite; }
+@keyframes livepulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(20,108,67,.45); }
+  70%      { box-shadow: 0 0 0 5px rgba(20,108,67,0); }
+}
+
+.ev__chev { grid-area: chev; color: var(--ink-3); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.ev:hover .ev__chev { transform: translateX(3px); color: var(--ink); }
+
+@media (min-width: 821px) and (max-width: 1080px) {
+  .ev, .ev-head {
+    grid-template-columns: 118px minmax(0,1fr) 136px 168px 16px;
+    column-gap: var(--s-4);
+  }
+}
+@media (max-width: 820px) {
+  .ev-head { display: none; }
+  .ev {
+    grid-template-columns: minmax(0,1fr) auto 18px;
+    grid-template-areas:
+      "type   type   chev"
+      "name   name   chev"
+      "date   status chev";
+    row-gap: 7px; column-gap: var(--s-3);
+    padding: var(--s-5) var(--s-1);
+  }
+  .ev__date { flex-direction: row; align-items: baseline; gap: 5px; }
+  .ev__date i::after { content: ','; }
+  .ev__status { justify-self: end; }
+  .ev__type { font-size: var(--t-xs); }
+  .ev__name b { font-size: 1.0625rem; }
+  .ev__chev { align-self: center; }
+}
+
+.feed-note {
+  display: block; margin: var(--s-2) 0 var(--s-6);
+  font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em;
+  max-width: 82ch;
+}
+.feed-note [data-placeholder] { font-family: var(--font-mono); color: var(--ink-2); }
+.ev-after { margin-top: var(--s-8); display: flex; flex-wrap: wrap; gap: var(--s-3); }
+
+/* ==========================================================================
+   SLOT 4 — .proof  (local proof, on dark)
+   ========================================================================== */
+.proof { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16); align-items: center; }
+.proof__body, .proof__vis { min-width: 0; }   /* grid children must be allowed to shrink */
+.proof__body h2 { margin-top: var(--s-3); }
+.proof__body > p { margin-top: var(--s-5); max-width: 52ch; }
+.proof figcaption { margin-top: var(--s-4); }
+@media (max-width: 900px) {
+  .proof { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+}
+
+.ulist { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.ulist li { position: relative; padding-left: 26px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.ulist li::before {
+  content: ''; position: absolute; left: 4px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.ulist strong { color: var(--ink); font-weight: 550; }
+
+/* the three local figures — one real, two live-queried per market */
+.localstats {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-8);
+  margin-top: var(--s-16); padding-top: var(--s-8);
+  border-top: 1px solid var(--hairline);
+}
+.localstats li { display: grid; gap: 6px; min-width: 0; }
+.localstats strong { font-size: 1.75rem; font-weight: 500; letter-spacing: -.035em; line-height: 1.04; color: var(--ink); }
+.localstats span { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.localstats em { font-style: normal; font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+@media (max-width: 780px) { .localstats { grid-template-columns: minmax(0, 1fr); gap: var(--s-6); } }
+
+/* one-sentence customer line — quiet, never a pull-quote card */
+.credit {
+  margin-top: var(--s-12); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-4);
+}
+.credit p { font-size: 1.0625rem; font-weight: 450; letter-spacing: -.018em; color: var(--ink); }
+.credit cite { font-style: normal; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink-3); }
+
+/* ==========================================================================
+   SLOT 5 — .anno (interview location, on the real dashboard)
+   base.css owns the component. Two decisions live here:
+
+   1. FULL-WIDTH STAGE, key underneath. At container width the INTERVIEW
+      LOCATION column lands near 1:1 and the pins point at something legible.
+   2. The crop geometry and the pin coordinates are ONE calculation. If you
+      re-crop, re-derive every pin. Working, for dashboard-events.png
+      (3200x2000, quoted as fractions of the image):
+
+        visible x  0.160 → 0.660   (--z 2, --l -16%)
+        visible y  0.265 → 0.830   (--t -26.5%, aspect 17/12)
+        pin x = (fx − 0.160) / 0.5        pin y = (fy − 0.265) / 0.5647
+
+      Every pin sits at fx 0.435 — the empty gutter between the end of the
+      date/time line and the start of the location chip — so no marker ever
+      covers the string it points at. Pins are positioned against
+      .anno__stage, and on LIGHT ground .panel has no padding, so stage box ==
+      crop box and the mapping is exact. Putting this figure on a dark section
+      would inset the crop by 10px and skew every pin; that is why this block
+      is light.
+   3. Below 780px base.css swaps in the --zm/--lm/--tm crop, so the pins no
+      longer line up with anything. Hide them there and let the key carry the
+      whole explanation — same breakpoint, not 640px.
+   ========================================================================== */
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .anno__key {
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  align-items: start; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.anno--wide .anno__key li { min-width: 0; }
+.anno__note { margin-top: var(--s-5); max-width: 74ch; }
+.crop--loc { aspect-ratio: 17/12; }
+.crop--proof { aspect-ratio: 4/3; }
+@media (max-width: 780px) {
+  .anno__pin { display: none; }
+  .crop--loc { aspect-ratio: 5/4; }
+  .crop--proof { aspect-ratio: 5/4; }
+}
+
+/* ==========================================================================
+   SLOT 6 — .pricestrip
+   ⚑ BYTE-IDENTICAL ON ALL 352 INSTANCES. Nothing about pricing varies by city,
+     and the moment one city page implies it does, sales inherits a
+     conversation it cannot win. The generator must not template this block.
+   ========================================================================== */
+.pricestrip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.tier { display: grid; align-content: start; gap: var(--s-3); position: relative; }
+.tier__name { font-size: 1.125rem; font-weight: 550; letter-spacing: -.016em; color: var(--ink); display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
+.tier__pop {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--accent);
+}
+.tier__price { font-size: 2rem; font-weight: 500; line-height: 1.04; letter-spacing: -.038em; color: var(--ink); }
+.tier__per { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+.tier__facts { display: grid; gap: var(--s-2); margin-top: var(--s-2); }
+.tier__facts li { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.pricestrip__note { display: grid; gap: var(--s-3); margin-top: var(--s-8); max-width: 80ch; }
+.pricestrip__note p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.pricestrip__note strong { color: var(--ink); font-weight: 550; }
+@media (max-width: 900px) { .pricestrip { grid-template-columns: minmax(0, 1fr); } }
+
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+
+/* ==========================================================================
+   SLOT 7 — .ctaband  (exactly one per city page)
+   ========================================================================== */
+.ctaband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.ctaband p { margin-top: var(--s-5); max-width: 46ch; }
+.ctaband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.ctaband__facts li { display: grid; gap: 4px; }
+.ctaband__facts strong { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.ctaband__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+@media (max-width: 900px) {
+  .ctaband__inner { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .ctaband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-platform) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder] { position: relative; }
+/* A {{TOKEN}} is never display type. Dropped into a big-number slot it renders
+   as mono at body size and is allowed to wrap — otherwise a long variable name
+   like {{CITY_PRE_REGISTERED}} sets a 450px unbreakable line and blows the
+   layout out sideways at 390px. */
+.herofacts__v [data-placeholder],
+.localstats strong[data-placeholder],
+.t-h1 [data-placeholder], .t-h2 [data-placeholder], .t-h3 [data-placeholder] {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: var(--t-body); font-weight: 500;
+  letter-spacing: .01em; line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html" aria-current="page">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html" aria-current="page">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  
+  <section class="chero grain">
+    <div class="chero__glow" aria-hidden="true"></div>
+    <div class="chero__grid" aria-hidden="true"></div>
+
+    <div class="u-container chero__inner">
+
+      
+      <p class="t-eyebrow chero__crumb">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <span aria-hidden="true">·</span>
+        <b>Texas</b>
+        <span aria-hidden="true">·</span>
+        Dallas
+      </p>
+
+      
+      <h1 class="t-h1 t-balance">Hiring events in Dallas, TX</h1>
+
+      <p class="t-lead chero__sub">
+        <span data-placeholder>{{UPCOMING_EVENT_COUNT}}</span> upcoming events in
+        Dallas. Register for one, post your jobs, and matched candidates
+        start requesting interviews within a few hours. You accept — that schedules it —
+        and you decide where the interview happens.
+      </p>
+
+      <div class="chero__cta">
+        <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+        <a href="#events" class="btn btn--secondary btn--lg">See Dallas events</a>
+      </div>
+
+      
+      <ul class="herofacts" data-reveal>
+        <li style="--i:0">
+          <p class="herofacts__k">Upcoming here</p>
+          <p class="herofacts__v"><span data-placeholder>{{UPCOMING_EVENT_COUNT}}</span></p>
+          <p class="herofacts__d">
+            Events on the Dallas calendar right now, across
+            <span data-placeholder>{{TYPES_IN_CITY_COUNT}}</span> of the five event types.
+          </p>
+        </li>
+        <li style="--i:1">
+          <p class="herofacts__k">Candidate radius</p>
+          <p class="herofacts__v">~20 miles</p>
+          <p class="herofacts__d">
+            Candidates are verified to be within approximately 20 miles of the event city.
+            Not templated — this is the same everywhere.
+          </p>
+        </li>
+        <li style="--i:2">
+          <p class="herofacts__k">Interview location</p>
+          <p class="herofacts__v">4 choices</p>
+          <p class="herofacts__d">
+            JobFairX video, phone, in person at your Dallas address, or
+            your own link. Your setting, not the event's.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="types">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Event types in Dallas</p>
+        
+        <h2 class="t-h2 t-balance">Five audience types. Here is what runs in Dallas.</h2>
+        <p class="t-lead">
+          Healthcare, Diversity, Veterans, Technology and Entry-Level are audience types,
+          not formats — Dallas has upcoming events in
+          <span data-placeholder>{{TYPES_IN_CITY_COUNT}}</span> of the five. Whichever one
+          you register for, you set your own interview location on it.
+        </p>
+      </div>
+
+      
+      <ul class="tygrid">
+
+        <li class="card tycard ty-healthcare" data-reveal style="--i:0">
+          <p class="tycard__type"><span class="dot" aria-hidden="true"></span>Healthcare</p>
+          <p class="tycard__next">Next in Dallas · <span data-placeholder>{{NEXT_HEALTHCARE_DATE}}</span></p>
+          <p class="tycard__d">Employers scaling their healthcare teams.</p>
+          <p class="tycard__stat"><b>91%</b> interview show rate at healthcare events</p>
+          
+          <a class="tycard__go" href="/employer/job-fairs/texas/dallas/next-healthcare">
+            Dallas healthcare events <span aria-hidden="true">→</span>
+          </a>
+          <code class="tycard__url">/employer/job-fairs/texas/dallas/next-healthcare</code>
+          
+          <a class="tycard__alt" href="page-solutions-healthcare.html">Healthcare hiring on JobFairX →</a>
+        </li>
+
+        <li class="card tycard ty-diversity" data-reveal style="--i:1">
+          <p class="tycard__type"><span class="dot" aria-hidden="true"></span>Diversity</p>
+          <p class="tycard__next">Next in Dallas · <span data-placeholder>{{NEXT_DIVERSITY_DATE}}</span></p>
+          <p class="tycard__d">Employers building diverse teams.</p>
+          
+          <a class="tycard__go" href="/employer/job-fairs/texas/dallas/next-diversity">
+            Dallas diversity events <span aria-hidden="true">→</span>
+          </a>
+          <code class="tycard__url">/employer/job-fairs/texas/dallas/next-diversity</code>
+          <a class="tycard__alt" href="page-solutions-diversity.html">Diversity hiring on JobFairX →</a>
+        </li>
+
+        <li class="card tycard ty-veterans" data-reveal style="--i:2">
+          <p class="tycard__type"><span class="dot" aria-hidden="true"></span>Veterans</p>
+          <p class="tycard__next">Next in Dallas · <span data-placeholder>{{NEXT_VETERANS_DATE}}</span></p>
+          <p class="tycard__d">Mission-ready veterans.</p>
+          <p class="tycard__stat"><b>89%</b> interview show rate at veterans events</p>
+          <a class="tycard__go" href="/employer/job-fairs/texas/dallas/next-veterans">
+            Dallas veterans events <span aria-hidden="true">→</span>
+          </a>
+          <code class="tycard__url">/employer/job-fairs/texas/dallas/next-veterans</code>
+          <a class="tycard__alt" href="page-solutions-veteran.html">Veterans hiring on JobFairX →</a>
+        </li>
+
+        <li class="card tycard ty-technology" data-reveal style="--i:3">
+          <p class="tycard__type"><span class="dot" aria-hidden="true"></span>Technology</p>
+          <p class="tycard__next">Next in Dallas · <span data-placeholder>{{NEXT_TECHNOLOGY_DATE}}</span></p>
+          <p class="tycard__d">Employers scaling their engineering teams.</p>
+          <a class="tycard__go" href="/employer/job-fairs/texas/dallas/next-technology">
+            Dallas technology events <span aria-hidden="true">→</span>
+          </a>
+          <code class="tycard__url">/employer/job-fairs/texas/dallas/next-technology</code>
+          <a class="tycard__alt" href="page-solutions-technology.html">Technology hiring on JobFairX →</a>
+        </li>
+
+        <li class="card tycard ty-entry" data-reveal style="--i:4">
+          <p class="tycard__type"><span class="dot" aria-hidden="true"></span>Entry-Level</p>
+          <p class="tycard__next">Next in Dallas · <span data-placeholder>{{NEXT_ENTRY_LEVEL_DATE}}</span></p>
+          <p class="tycard__d">Emerging new talent.</p>
+          <p class="tycard__stat"><b>86%</b> interview show rate at entry-level events</p>
+          <a class="tycard__go" href="/employer/job-fairs/texas/dallas/next-entry-level">
+            Dallas entry-level events <span aria-hidden="true">→</span>
+          </a>
+          <code class="tycard__url">/employer/job-fairs/texas/dallas/next-entry-level</code>
+          <a class="tycard__alt" href="page-solutions-entry-level.html">Entry-level hiring on JobFairX →</a>
+        </li>
+      </ul>
+
+      
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="events" style="padding-top:0">
+    <div class="u-container" data-reveal>
+
+      <div class="head" style="margin-bottom:var(--s-8)">
+        <p class="t-eyebrow">The calendar</p>
+        <h2 class="t-h2 t-balance">Upcoming events in Dallas, TX</h2>
+        <p class="t-lead">
+          Every row is the same market moment for every employer who joins it. What
+          differs between two employers at one event is where each of them interviews.
+        </p>
+      </div>
+
+      
+      <p class="feed-note">
+        <span data-placeholder>{{LIVE_EVENT_FEED}}</span> — in production every row below is
+        rendered from the events feed filtered to this city. Only Dallas ·
+        Aug 25 is verified against the live site; the other four rows exist to show the row
+        shape and the three countdown states, and their dates are not sourced facts.
+      </p>
+
+      <div class="ev-head" aria-hidden="true">
+        <span>Date</span><span>Event</span><span>Type</span><span>Status</span><span></span>
+      </div>
+
+      
+      <div>
+
+        
+        <a class="ev" href="page-event-detail.html" data-type="healthcare">
+          <span class="ev__date"><i>Tuesday</i><b>Aug 25</b></span>
+          <span class="ev__name"><b>Dallas, TX Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="technology">
+          <span class="ev__date"><i>Thursday</i><b>Sep 3</b></span>
+          <span class="ev__name"><b>Dallas, TX Technology Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="entry">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 15</b></span>
+          <span class="ev__name"><b>Dallas, TX Entry Level Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="veterans">
+          <span class="ev__date"><i>Thursday</i><b>Sep 24</b></span>
+          <span class="ev__name">
+            <b>Dallas, TX Veterans Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev" href="page-event-detail.html" data-type="diversity">
+          <span class="ev__date"><i>Tuesday</i><b>Oct 6</b></span>
+          <span class="ev__name">
+            <b>Dallas, TX Diversity Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <p class="t-sm" style="margin-top:var(--s-6);max-width:74ch">
+        <strong style="color:var(--ink);font-weight:550">Early registration</strong> takes a
+        flat $100 off any tier when you register 31 or more days before the event. Matching
+        activates the moment your jobs are posted, and the first interview requests arrive
+        within a few hours.
+      </p>
+
+      <div class="ev-after">
+        
+        <a href="page-events.html" class="btn btn--secondary">Browse every upcoming event</a>
+        <a href="page-pricing.html" class="btn btn--secondary">See packages and bundles</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="local">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Local proof</p>
+          <h2 class="t-h2 t-balance">Every candidate is already within about 20 miles of Dallas.</h2>
+          <p class="t-lead">
+            Not "open to relocating". Not a national board with a location filter on top.
+            Candidates matched to a Dallas event are verified to be within
+            approximately 20 miles of the event city before they can request an interview
+            with you.
+          </p>
+          <ul class="ulist">
+            <li>The <strong>desired location</strong> column on your candidate list is a local answer — it reads Dallas, TX.</li>
+            <li>That is what makes an <strong>in-person interview</strong> a reasonable ask here: you are inviting someone across town, not across the country.</li>
+            <li>Candidates <strong>request</strong> the interview and name the slot. You accept, and that single click schedules it.</li>
+            <li>Résumés and contact details come with <strong>every matched candidate</strong>, not just the ones you interview.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--proof">
+              
+              <img src="assets/product/candidates.png"
+                   alt="The JobFairX candidate list. A Desired location column reads Dallas, TX on three of the five rows and Remote on the other two, beside desired jobs including Registered Nurse and Physical Therapist and interview times of Apr 22 at 10:00 AM CT and later."
+                   width="3200" height="2000"
+                   style="--z:1.95; --l:-19%; --t:-29%; --zm:3.1; --lm:-33%; --tm:-29%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Real product view — the Desired location column on a Dallas
+            event. Verification happens before a candidate can request time with you.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <ul class="localstats" data-reveal>
+        <li>
+          <strong>~20 miles</strong>
+          <span>Verified candidate radius from Dallas</span>
+          <em>Platform constant — not templated per city.</em>
+        </li>
+        <li>
+          <strong data-placeholder>{{CITY_PRE_REGISTERED}}</strong>
+          <span>Pre-registered candidates in Dallas</span>
+          <em>Per-market, live-queried · Updated daily</em>
+        </li>
+        <li>
+          <strong data-placeholder>{{CITY_AVG_INTERVIEWS}}</strong>
+          <span>Average interviews per employer at a Dallas event</span>
+          <em>Per-market, live-queried · Updated daily</em>
+        </li>
+      </ul>
+
+      
+      <div class="credit" data-reveal>
+        <p>Target interviewed over 90 candidates in one day.</p>
+        <cite>Target</cite>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="location">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Interview location</p>
+        <h2 class="t-h2 t-balance">You choose where your Dallas interviews happen.</h2>
+        <p class="t-lead">
+          Two employers at the same Dallas event can interview completely
+          differently. One runs the built-in video room; another has candidates come to
+          their office. It is a setting on your registration, and you can set it
+          differently at every event you join.
+        </p>
+      </div>
+
+      <figure class="anno anno--wide" data-reveal style="--i:1">
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--loc">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The employer events dashboard, showing the Interview Location column for four upcoming events: Dallas Healthcare Event on April 22 set to a JobFairX video call; Chicago Technology Event set to phone, you call each candidate; Atlanta Diversity Event set to in person at 1201 Peachtree St NE, Suite 300, Atlanta, GA; and Denver Technology Event set to Microsoft Teams."
+                   width="3200" height="2000"
+                   style="--z:2; --l:-16%; --t:-26.5%; --zm:2.4; --lm:-25%; --tm:-26.5%">
+            </div>
+          </div>
+
+          
+          <button class="anno__pin" style="--x:55%;--y:17.5%" data-anno="1" aria-label="Interview location 1: JobFairX video">1</button>
+          <button class="anno__pin" style="--x:55%;--y:38.8%" data-anno="2" aria-label="Interview location 2: phone">2</button>
+          <button class="anno__pin" style="--x:55%;--y:63.9%" data-anno="3" aria-label="Interview location 3: in person">3</button>
+          <button class="anno__pin" style="--x:55%;--y:89.1%" data-anno="4" aria-label="Interview location 4: your own link">4</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong>JobFairX video.</strong> The built-in room. Nothing to install, for you or the candidate. The dashboard reads “JobFairX video call”.</span></li>
+          <li data-anno="2"><b>2</b><span><strong>Phone.</strong> You call each candidate at the scheduled time. The dashboard reads “You call each candidate”.</span></li>
+          <li data-anno="3"><b>3</b><span><strong>In person.</strong> Set a street address and suite in Dallas. Candidates see it on their confirmation and every reminder.</span></li>
+          <li data-anno="4"><b>4</b><span><strong>Your own link.</strong> Zoom, Teams or Meet — paste the link and JobFairX schedules around it.</span></li>
+        </ol>
+      </figure>
+
+      <p class="t-sm anno__note">
+        Real product view — the INTERVIEW LOCATION column. One employer, four events, a
+        different interview location set on each. The event never carries a format; only
+        your registration does.
+      </p>
+
+      <div class="cta-row">
+        <a href="page-in-person-interviews.html" class="btn btn--secondary btn--lg">Interviewing in person in Dallas</a>
+        <a href="page-interview-locations.html" class="btn btn--secondary btn--lg">All four interview locations</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="pricing" style="padding-top:0">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Pricing</p>
+        
+        <h2 class="t-h2 t-balance">Dallas costs what every event costs.</h2>
+        <p class="t-lead">
+          Packages differ on jobs, recruiter seats and interview volume — nothing else. The
+          market you pick does not change the price.
+        </p>
+      </div>
+
+      <div class="pricestrip">
+        <div class="card tier" data-reveal style="--i:0">
+          <p class="tier__name">Starter</p>
+          <p class="tier__price">$495</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Promote 1 job</li>
+            <li>20+ scheduled interviews</li>
+            <li>2 recruiter seats</li>
+          </ul>
+        </div>
+        <div class="card tier" data-reveal style="--i:1">
+          <p class="tier__name">Growth <span class="tier__pop">Most popular</span></p>
+          <p class="tier__price">$895</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Up to 3 jobs</li>
+            <li>60+ scheduled interviews</li>
+            <li>Up to 5 recruiter seats</li>
+          </ul>
+        </div>
+        <div class="card tier" data-reveal style="--i:2">
+          <p class="tier__name">Pro</p>
+          <p class="tier__price">$1,495</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Up to 6 jobs</li>
+            <li>100+ scheduled interviews</li>
+            <li>Unlimited recruiter seats</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pricestrip__note" data-reveal>
+        <p><strong>Register early.</strong> A flat $100 comes off every tier at 31 or more days before the event — $395, $795, $1,395.</p>
+        <p><strong>Hiring across several markets.</strong> Bundles run from 5 to 100 events, taking the per-event price from $470 down to $297. Credits never expire and work across any event type.</p>
+      </div>
+
+      <div class="cta-row">
+        <a href="page-pricing.html" class="btn btn--secondary btn--lg">Compare packages</a>
+        <a href="page-faq.html" class="btn btn--secondary btn--lg">Read the employer FAQ</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section ctaband" id="cta">
+    <div class="u-container">
+      <div class="ctaband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Your next Dallas hire is already about 20 miles away.</h2>
+          <p class="t-lead">
+            Register for a Dallas event, post your open jobs, and matching
+            starts the same day. The first interview requests land within a few hours.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+            <a href="#events" class="btn btn--secondary btn--lg">See Dallas events</a>
+          </div>
+        </div>
+
+        
+        <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Cities with hiring events</span>
+            <strong data-count>300+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers who return</span>
+            <strong data-count>87%</strong>
+            <span class="ctaband__src">Based on 2025 platform data</span>
+          </li>
+          <li>
+            <span class="t-eyebrow">Interviews conducted</span>
+            <strong data-count>500,000+</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

@@ -1,0 +1,1406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entry-Level Hiring Events — JobFairX</title>
+<meta name="description" content="Hire emerging new talent at an 86% interview show rate, from candidates verified within approximately 20 miles of the event city. They request the interview; you accept, and it is scheduled. 100+ scheduled interviews on Pro, and bundles from $470 down to $297 an event.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — SOLUTIONS / ENTRY-LEVEL
+   Replaces /employer/solutions/entry-level.
+
+   Cloned from page-solutions-healthcare.html, the reference implementation of
+   the solution-page template. Same slot order, same theme rhythm, same
+   components. What changed is CONTENT, and — critically — how much of it we
+   are allowed to assert.
+
+     .sol-hero    type promise + the per-type trust metrics       [dark]
+     .logos       the logo wall — placeholder slots until signed  [light]
+     .roles       the titles that show up on this type            [light]
+     .anno        the real product visual, cropped to the story   [light]
+     .evband      the local-radius argument (extra use of slot 8) [light]
+     .quote       the ONE attributable customer sentence          [dark]
+     .runs        how an event of this type runs, end to end      [dark]
+     .pricestrip  pricing — identical tiers on all five pages     [light]
+     .evband      link out to the calendar filtered to this type  [light]
+     .faq         the type FAQ                                    [light]
+     .ctaband     the single page CTA                             [dark]
+
+   Theme rhythm: dark promise → light evidence → dark proof + mechanics →
+   light commerce → dark close. HARD CUTS, no seam elements.
+
+   ⚑ WHAT THIS PAGE IS ALLOWED TO SAY, AND WHAT IT IS NOT.
+   Healthcare has a complete data set. Entry-level has exactly ONE published
+   figure: an 86% interview show rate. So:
+     · three of the four hero metric tiles ship as {{PLACEHOLDER}}s;
+     · the roles rack ships EMPTY — none of the 14 captured product
+       screenshots contains an entry-level job title, so there is nothing to
+       print. Frontend Developer, Web Developer, Registered Nurse, Physical
+       Therapist, Software Engineer, DevOps Engineer and UX Designer are what
+       the captures actually contain, and not one of them is entry-level;
+     · the customer sentence ships as a {{PLACEHOLDER}}. There are exactly
+       three attributable customers on the whole site — Target, Tesla, Western
+       Regional Medical Center — and none of their sentences is attributed to
+       an entry-level event;
+     · the logo wall ships as empty slots, same as healthcare.
+
+   ⚑ WHAT IS SUBSTANTIATED, AND IS THEREFORE THE ANGLE.
+   Entry-level is the volume audience. Volume is a pricing shape, not a
+   claim: Pro's 100+ scheduled interviews, and the bundle ladder from 5 to
+   100 events at $470 down to $297. Both are real, both are on page-pricing.
+   And the ~20-mile local verification matters more here than anywhere else,
+   because these candidates travel least — hence the in-person-interviews
+   cross-link. Nothing on this page needs a number we do not have.
+
+   ⚑ WHAT A FURTHER CLONE MUST RE-DERIVE, NOT COPY:
+   the .anno crop geometry AND every pin coordinate — they are one
+   calculation; the working is in the .anno block below.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ----------
+   No item carries aria-current on this page: /employer/solutions/... is not
+   one of the four nav destinations. The selector is kept so a clone that DOES
+   sit on a nav destination only has to add the attribute. Do NOT invent a
+   Solutions nav item here — PAGE-INVENTORY moves the nav to five items in
+   Wave 1 and that change owns this problem for all five solution pages at
+   once. */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a[aria-current="page"] { color: var(--ink); position: relative; }
+.nav__links a[aria-current="page"]::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a[aria-current="page"] { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ==========================================================================
+   SLOT 1 — .sol-hero
+   Identical ambient device and scale to healthcare, so the five type pages
+   and the six capability pages read as one site.
+   ========================================================================== */
+.sol-hero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.sol-hero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.sol-hero__glow::before, .sol-hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.sol-hero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.sol-hero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.sol-hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.sol-hero__inner { position: relative; z-index: 2; }
+.sol-hero__crumb { display: flex; align-items: center; gap: var(--s-2); }
+.sol-hero__crumb a { color: var(--ink-3); transition: color var(--t-micro) var(--e-inout); }
+.sol-hero__crumb a:hover { color: var(--accent-hover); }
+.sol-hero h1 { max-width: 18ch; margin-top: var(--s-4); }
+.sol-hero__sub { max-width: 60ch; margin-top: var(--s-6); }
+
+/* ---------- per-type trust metrics ----------
+   Depth on dark is hairline + a half-pixel rim light. No shadow, no bloom.
+   Three of these four tiles are empty on purpose — see the header note. An
+   empty tile is drawn as an empty tile, at a size that cannot be mistaken
+   for a figure. */
+.metrics {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.metrics > li { padding: var(--s-8); min-width: 0; }
+.metrics > li + li { border-left: 1px solid var(--hairline); }
+.metric__n { font-size: clamp(2rem, 1.4rem + 2vw, 2.75rem); font-weight: 500; line-height: 1.02; letter-spacing: -.038em; color: var(--ink); }
+.metric__n--ph {
+  font-family: var(--font-mono); font-size: var(--t-xs); font-weight: 400;
+  line-height: 1.45; letter-spacing: .04em; color: var(--ink-3);
+  padding: var(--s-3) var(--s-3) var(--s-3) 0;
+}
+.metric__l { margin-top: var(--s-2); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.metric__s { margin-top: var(--s-2); font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.metrics__note { position: relative; z-index: 2; margin-top: var(--s-5); max-width: 78ch; }
+@media (max-width: 900px) {
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--s-12); }
+  .metrics > li { padding: var(--s-6); }
+  .metrics > li + li { border-left: 0; }
+  .metrics > li:nth-child(even) { border-left: 1px solid var(--hairline); }
+  .metrics > li:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+}
+
+/* ==========================================================================
+   SLOT 2 — .logos
+   PAGE-INVENTORY gap 5: two of the five live type pages carry fabricated
+   logo walls. So this one ships as obviously-empty slots. A logo wall that
+   names the wrong company is a legal problem, not a design gap.
+   ========================================================================== */
+.head { max-width: 60ch; }
+.head p { margin-top: var(--s-4); }
+
+.logos { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s-3); margin-top: var(--s-8); }
+.logos li { min-width: 0; }
+.logoslot {
+  display: grid; place-items: center; height: 84px; padding: var(--s-3);
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--ink-3); text-align: center;
+}
+@media (max-width: 900px) { .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .logos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.gapnote {
+  margin-top: var(--s-6); max-width: 74ch;
+  padding-left: var(--s-5); border-left: 2px solid color-mix(in srgb, #b06d1f 55%, transparent);
+}
+.gapnote p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.gapnote p + p { margin-top: var(--s-3); }
+.gapnote strong { color: var(--ink); font-weight: 550; }
+
+/* ==========================================================================
+   SLOT 3 — .roles
+   Titles only, and on this page there are none to print. The rack still
+   ships, empty, because the absence is the honest answer and a reader who
+   came for "what roles" needs to see that we did not guess.
+   ========================================================================== */
+.roles { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-8); }
+.role {
+  padding: var(--s-4) var(--s-6);
+  font-size: 1.0625rem; font-weight: 500; letter-spacing: -.018em; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+}
+.role--empty {
+  color: var(--ink-3); font-family: var(--font-mono); font-size: var(--t-sm);
+  letter-spacing: .04em; font-weight: 400;
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+  border-style: dashed; border-color: var(--hairline-strong); box-shadow: none;
+}
+.roles__note { margin-top: var(--s-6); max-width: 72ch; }
+
+/* ==========================================================================
+   SLOT 4 — .anno (the real product visual)
+   base.css owns the component. Three decisions live here:
+
+   1. WHAT THE CROP IS OF. Healthcare cropped to its clinical candidate rows.
+      There are no entry-level rows in any capture, so cropping to rows would
+      either mislead or show a nurse on an entry-level page. Instead this
+      crops to the part of the screen that IS the entry-level argument: the
+      triage band — six state tabs with live counts, sort, two filters and
+      search — plus the first row so the Accept button is on screen. That is
+      what a 100-interview event is actually managed with.
+
+   2. FULL-WIDTH STAGE, key underneath. At container width the cropped region
+      lands near 1:1 in logical pixels (the captures are 2x), so the pins
+      point at type you can read.
+
+   3. The crop geometry and the pin coordinates are ONE calculation. Re-crop
+      and you MUST re-derive every pin. Working, for candidates.png
+      (3200x2000, quoted as fractions of the image):
+
+        aspect 17/5, --z 1.2, --l -15.5%, --t -15.2%
+        visible x  0.1550 → 0.9883   (width  fraction 1/1.2      = 0.833333)
+        visible y  0.1520 → 0.5442   (height fraction 1.6/(3.4·1.2) = 0.392157)
+        pin x = (fx − 0.155) / 0.833333     pin y = (fy − 0.152) / 0.392157
+
+      The y-window is chosen, not eyeballed: it opens just above the tab strip
+      and closes on the separator under the second row, so the band reads as a
+      list you are working through rather than a cropped fragment.
+
+      Pins are positioned against .anno__stage. On LIGHT ground .panel has no
+      padding, so stage box == crop box and the mapping is exact. Putting this
+      figure on a dark section would inset the crop by 10px and skew every
+      pin — that is why this block is light and must stay light.
+
+   4. Below 780px base.css swaps in the --zm/--lm/--tm crop, so the pins line
+      up with nothing. Hide them there and let the key carry the explanation.
+   ========================================================================== */
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .anno__key {
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  align-items: start; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.anno--wide .anno__key li { min-width: 0; }
+.anno__note { margin-top: var(--s-5); max-width: 72ch; }
+
+.crop--triage  { aspect-ratio: 17/5; }
+.crop--evtable { aspect-ratio: 7/3; }
+@media (max-width: 780px) {
+  .anno__pin { display: none; }
+  .crop--triage  { aspect-ratio: 5/4; }
+  .crop--evtable { aspect-ratio: 1/1; }
+}
+
+/* ==========================================================================
+   SLOT 5 — .quote
+   One sentence, company + role attribution only, on the dark ground. Never a
+   portrait, never a star rating, never a second sentence we did not receive
+   — and on this page, never a sentence at all until one exists.
+   ========================================================================== */
+.quote { max-width: 64ch; }
+.quote blockquote { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem); font-weight: 500; line-height: 1.15; letter-spacing: -.03em; color: var(--ink); }
+.quoteslot {
+  display: grid; place-items: center; text-align: center;
+  min-height: 132px; padding: var(--s-8);
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-xl);
+  background: rgba(255,255,255,.03);
+  font-family: var(--font-mono); font-size: var(--t-sm); letter-spacing: .04em;
+  color: var(--ink-3);
+}
+.quote figcaption {
+  margin-top: var(--s-6); padding-top: var(--s-5); border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-3);
+}
+.quote cite { font-style: normal; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.018em; color: var(--ink); }
+.quote .quote__role { font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink-3); }
+
+/* ==========================================================================
+   SLOT 6 — .runs
+   The four beats of an event of this type, then the real events dashboard.
+   The steps are type-agnostic; only the audience named in step 01 changes.
+   ========================================================================== */
+.flow {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: var(--s-10);
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.flow > li { padding: var(--s-8); min-width: 0; }
+.flow > li + li { border-left: 1px solid var(--hairline); }
+.flow__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-3); text-transform: uppercase; }
+.flow__t { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; color: var(--ink); }
+.flow__d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 980px) {
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow > li + li { border-left: 0; }
+  .flow > li:nth-child(even) { border-left: 1px solid var(--hairline); }
+  .flow > li:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+  .flow > li { padding: var(--s-6); }
+}
+@media (max-width: 620px) {
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .flow > li:nth-child(even) { border-left: 0; }
+  .flow > li + li { border-top: 1px solid var(--hairline); }
+}
+
+.evrow { margin-top: var(--s-12); }
+.evrow figcaption { margin-top: var(--s-5); max-width: 76ch; }
+.ulist { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.ulist li { position: relative; padding-left: 26px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.ulist li::before {
+  content: ''; position: absolute; left: 4px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.ulist strong { color: var(--ink); font-weight: 550; }
+
+/* ==========================================================================
+   SLOT 7 — .pricestrip
+   The three tier cards are identical on all five solution pages. Nothing
+   about pricing varies by event type, and the moment one type page implies
+   it does, sales inherits a conversation it cannot win. What this page adds
+   underneath is emphasis, not a different price: entry-level is the volume
+   audience, so Pro and the bundle ladder are where the reader is going.
+   ========================================================================== */
+.pricestrip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.tier { display: grid; align-content: start; gap: var(--s-3); position: relative; }
+.tier__name { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; color: var(--ink); display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
+.tier__pop {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--accent);
+}
+.tier__price { font-size: 2rem; font-weight: 500; line-height: 1.04; letter-spacing: -.038em; color: var(--ink); }
+.tier__per { font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+.tier__facts { display: grid; gap: var(--s-2); margin-top: var(--s-2); }
+.tier__facts li { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.pricestrip__note { display: grid; gap: var(--s-3); margin-top: var(--s-8); max-width: 80ch; }
+.pricestrip__note p { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.pricestrip__note strong { color: var(--ink); font-weight: 550; }
+@media (max-width: 900px) { .pricestrip { grid-template-columns: minmax(0, 1fr); } }
+
+/* the bundle ladder, as a scrollable table — its own overflow container, so
+   the page body never scrolls sideways at 390px */
+.ladder { margin-top: var(--s-10); border: 1px solid var(--hairline); border-radius: var(--r-xl); background: var(--surface); box-shadow: var(--elev); overflow: hidden; }
+.ladder__scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ladder table { border-collapse: collapse; width: 100%; min-width: 520px; }
+.ladder th, .ladder td { text-align: left; padding: var(--s-4) var(--s-5); font-size: var(--t-sm); letter-spacing: .006em; white-space: nowrap; }
+.ladder th { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--hairline); }
+.ladder td { color: var(--ink-2); border-bottom: 1px solid var(--hairline); }
+.ladder tr:last-child td { border-bottom: 0; }
+.ladder td:first-child { color: var(--ink); font-weight: 550; }
+.ladder tr.is-pop td { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.ladder__cap { padding: var(--s-4) var(--s-5); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; border-top: 1px solid var(--hairline); }
+
+/* ==========================================================================
+   SLOT 8 — .evband  (used twice: the local-radius argument, and the calendar)
+   ========================================================================== */
+.evband {
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--s-12); align-items: center;
+  margin-top: var(--s-10); padding: var(--s-10);
+  border: 1px solid var(--hairline); border-radius: var(--r-xl);
+  background: var(--surface); box-shadow: var(--elev);
+}
+.evband > * { min-width: 0; }
+.evband p { margin-top: var(--s-4); max-width: 52ch; }
+.evband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-8); border-left: 1px solid var(--hairline); }
+.evband__facts li { display: grid; gap: 4px; }
+.evband__facts strong { font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+@media (max-width: 900px) {
+  .evband { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); padding: var(--s-6); }
+  .evband__facts { padding-left: 0; padding-top: var(--s-6); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ==========================================================================
+   SLOT 9 — .faq  (accordion copied from page-faq.html via healthcare)
+   Real buttons, real aria, grid-template-rows animation so the panel measures
+   itself. The collapse rule is gated on the `faq-js` class the inline script
+   adds — a blocked script leaves every answer open and readable.
+   ========================================================================== */
+.faq-list { display: grid; gap: var(--s-3); margin-top: var(--s-8); }
+.faq-item {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+  scroll-margin-top: 116px;
+  transition: border-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.faq-item:hover { border-color: var(--hairline-strong); }
+.faq-item.is-open { border-color: var(--hairline-strong); box-shadow: var(--sh-md); }
+.faq-item h3 { font-size: inherit; font-weight: inherit; letter-spacing: inherit; }
+
+.faq-btn {
+  display: flex; width: 100%; align-items: flex-start; gap: var(--s-5);
+  text-align: left; padding: var(--s-5) var(--s-6); min-height: 60px;
+  font-size: 1.0625rem; font-weight: 550; line-height: 1.35; letter-spacing: -.018em;
+  color: var(--ink); border-radius: var(--r-lg);
+}
+.faq-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.faq-btn__ic {
+  flex: none; margin-left: auto; margin-top: 2px;
+  width: 22px; height: 22px; display: grid; place-items: center; color: var(--ink-3);
+  transition: transform var(--t-base) var(--e-out), color var(--t-base) var(--e-out);
+}
+.faq-item.is-open .faq-btn__ic { transform: rotate(180deg); color: var(--accent); }
+
+.faq-panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--t-base) var(--e-out); }
+.faq-js .faq-item:not(.is-open) .faq-panel { grid-template-rows: 0fr; }
+.faq-panel__inner { overflow: hidden; }
+.faq-a { padding: 0 var(--s-6) var(--s-6); max-width: 68ch; }
+.faq-a p { font-size: .9375rem; line-height: 1.65; color: var(--ink-2); letter-spacing: .006em; }
+.faq-a p + p { margin-top: var(--s-4); }
+.faq-a strong { color: var(--ink); font-weight: 550; }
+.faq-a a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.faq-a a:hover { border-bottom-color: var(--accent); }
+
+/* an answer we do not have yet wears its status in the question line */
+.newtag {
+  display: inline-block; margin-left: var(--s-2); vertical-align: 2px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416; white-space: nowrap;
+}
+
+/* ==========================================================================
+   SLOT 10 — .ctaband  (exactly one per solution page)
+   ========================================================================== */
+.ctaband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.ctaband__inner > * { min-width: 0; }
+.ctaband p { margin-top: var(--s-5); max-width: 46ch; }
+.ctaband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.ctaband__facts li { display: grid; gap: 4px; }
+.ctaband__facts strong { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.ctaband__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+@media (max-width: 900px) {
+  .ctaband__inner { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .ctaband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-platform.html) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+/* a long {{TOKEN}} must break rather than push the page sideways at 390px */
+[data-placeholder] { overflow-wrap: anywhere; }
+
+/* A bare inline {{TOKEN}} inside a paragraph gets its own PLACEHOLDER badge
+   dropped straight on top of the next word, which hides the very thing the
+   badge is flagging. Anywhere a token sits in running text, give it this
+   chip: the badge then lands on the chip's own corner, clear of the copy. */
+.phtag {
+  display: inline-block; margin-top: var(--s-2);
+  padding: 6px var(--s-3);
+  font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: .04em;
+  color: var(--ink-3); line-height: 1.4;
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-sm);
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  
+  <section class="sol-hero grain">
+    <div class="sol-hero__glow" aria-hidden="true"></div>
+    <div class="sol-hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container sol-hero__inner">
+      <p class="t-eyebrow sol-hero__crumb">
+        <a href="page-solutions.html">Solutions</a> <span aria-hidden="true">·</span> Entry-Level
+      </p>
+
+      
+      <h1 class="t-h1 t-balance">Hire emerging new talent, one full schedule at a time.</h1>
+
+      <p class="t-lead sol-hero__sub">
+        Entry-level is one of the five JobFairX event types, and it is the one teams hire
+        in volume from. Matched candidates — verified within approximately 20 miles of the
+        event city — request time with you. You accept, and that click is what schedules
+        the interview. Where it happens is your call: JobFairX video, phone, in person at
+        your address, or your own link.
+      </p>
+
+      
+      <ul class="metrics" data-reveal>
+        <li style="--i:0">
+          <p class="metric__n" data-count>86%</p>
+          <p class="metric__l">Interview show rate</p>
+          <p class="metric__s">2025 platform data</p>
+        </li>
+        <li style="--i:1">
+          <p class="metric__n metric__n--ph" data-placeholder>{{ENTRY-LEVEL EVENTS RUN}}</p>
+          <p class="metric__l">Entry-level hiring events</p>
+          <p class="metric__s">Not published</p>
+        </li>
+        <li style="--i:2">
+          <p class="metric__n metric__n--ph" data-placeholder>{{AVG INTERVIEWS PER EMPLOYER — ENTRY-LEVEL}}</p>
+          <p class="metric__l">Avg. interviews per employer</p>
+          <p class="metric__s">Not published</p>
+        </li>
+        <li style="--i:3">
+          <p class="metric__n metric__n--ph" data-placeholder>{{AVG HIRES PER EVENT — ENTRY-LEVEL}}</p>
+          <p class="metric__l">Avg. hires per event</p>
+          <p class="metric__s">Not published</p>
+        </li>
+      </ul>
+
+      <p class="t-sm metrics__note">
+        86% is the entry-level figure specifically — healthcare events run 91% and veterans
+        events 89%. The other three tiles are per-type numbers we have not published, so
+        they stay empty rather than borrow another type's. Every event page carries its own
+        per-market interviews and hires averages, updated daily; those are that market's
+        numbers, not this page's.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="employers">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Entry-level employers</p>
+        <h2 class="t-h2 t-balance">Six slots, deliberately empty.</h2>
+        <p class="t-lead">
+          A logo wall is an attendance claim about somebody else's brand. Ours is not
+          signed off yet, so nothing goes in these slots until it is.
+        </p>
+      </div>
+
+      <ul class="logos" aria-label="Entry-level employer logo slots, currently unfilled">
+        <li data-reveal style="--i:0"><span class="logoslot" data-placeholder>{{LOGO 01}}</span></li>
+        <li data-reveal style="--i:1"><span class="logoslot" data-placeholder>{{LOGO 02}}</span></li>
+        <li data-reveal style="--i:2"><span class="logoslot" data-placeholder>{{LOGO 03}}</span></li>
+        <li data-reveal style="--i:3"><span class="logoslot" data-placeholder>{{LOGO 04}}</span></li>
+        <li data-reveal style="--i:4"><span class="logoslot" data-placeholder>{{LOGO 05}}</span></li>
+        <li data-reveal style="--i:5"><span class="logoslot" data-placeholder>{{LOGO 06}}</span></li>
+      </ul>
+
+      <div class="gapnote" data-reveal>
+        <p>
+          <strong>Why this is empty.</strong> The page audit records the logo walls on two
+          of the five live type pages as <strong>fabricated</strong>, and the "has attended"
+          claims on the other three as unverified. An unverified attendance claim naming a
+          real company is a legal exposure, not a design gap, so this wall ships blank.
+        </p>
+        <p>
+          Fill a slot only when written confirmation from that company exists — one company
+          at a time.
+        </p>
+        <p><span class="phtag" data-placeholder>{{Written confirmation per company}}</span></p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="roles" style="padding-top:0">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Typical roles</p>
+        <h2 class="t-h2 t-balance">We have not captured an entry-level title yet.</h2>
+        <p class="t-lead">
+          Healthcare can name five job titles because they are visible in the product
+          today. Entry-level cannot, so this rack stays empty rather than filling itself
+          with plausible-sounding roles.
+        </p>
+      </div>
+
+      <ul class="roles" aria-label="Entry-level job titles, not yet captured">
+        <li class="role role--empty" data-reveal style="--i:0" data-placeholder>{{ENTRY-LEVEL ROLE LIST}}</li>
+      </ul>
+
+      <div class="gapnote" data-reveal>
+        <p>
+          <strong>What the captures actually contain.</strong> Across the fourteen product
+          screenshots, the job titles on candidate rows and in the events dashboard's Job
+          titles column are Frontend Developer, Web Developer, Registered Nurse, Physical
+          Therapist, Software Engineer, DevOps Engineer and UX Designer. Not one of them is
+          an entry-level role, so not one of them is printed above.
+        </p>
+      </div>
+
+      <p class="t-sm roles__note">
+        How many roles you promote is a package line, and it is the same line on every
+        type: <strong style="color:var(--ink);font-weight:550">1 job</strong> on Starter, up
+        to <strong style="color:var(--ink);font-weight:550">3</strong> on Growth, up to
+        <strong style="color:var(--ink);font-weight:550">6</strong> on Pro. Six titles on
+        one event is the shape most volume hiring takes.
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="screen" style="padding-top:0">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">The real screen</p>
+        <h2 class="t-h2 t-balance">A hundred interviews needs a list you can work through.</h2>
+        <p class="t-lead">
+          The top of the Candidates tab, unretouched: six state tabs with live counts, a
+          sort, two filters and a search box. Hover a pin — or a caption — to see which
+          part of the screen it belongs to.
+        </p>
+      </div>
+
+      <figure class="anno anno--wide" data-reveal style="--i:1">
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--triage">
+              <img src="assets/product/candidates.png"
+                   alt="The top of the JobFairX Candidates tab. Six tabs read All 7, Requested 2, Scheduled 1, Interviewed 2, No-show 1 and Declined 1. Below them a row of controls: Sort by interview time, earliest first; a Job filter; a Feedback filter; and a Search candidates box. Under the column headings Name, Desired job, Desired location, Time and Actions, the first candidate row shows a name, the state Requested from yesterday with a Video chip, View resume and Message links, a desired job, a desired location, an interview time of Apr 22 at 10:00 AM CT, and an Accept, Decline and Reschedule button group."
+                   width="3200" height="2000"
+                   style="--z:1.2; --l:-15.5%; --t:-15.2%; --zm:2.6; --lm:-16%; --tm:-16%">
+            </div>
+          </div>
+
+          
+          <button class="anno__pin" style="--x:61.2%;--y:9.6%" data-anno="1" aria-label="Detail 1: six state tabs with live counts">1</button>
+          <button class="anno__pin" style="--x:14.6%;--y:34.3%" data-anno="2" aria-label="Detail 2: sort by interview time">2</button>
+          <button class="anno__pin" style="--x:35.0%;--y:34.3%" data-anno="3" aria-label="Detail 3: filter by job and by feedback">3</button>
+          <button class="anno__pin" style="--x:70.8%;--y:34.3%" data-anno="4" aria-label="Detail 4: search candidates">4</button>
+          <button class="anno__pin" style="--x:82.2%;--y:65.7%" data-anno="5" aria-label="Detail 5: accept, decline and reschedule">5</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong>Six tabs, with counts.</strong> All&nbsp;·&nbsp;7, Requested&nbsp;·&nbsp;2, Scheduled&nbsp;·&nbsp;1, Interviewed&nbsp;·&nbsp;2, No-show&nbsp;·&nbsp;1, Declined&nbsp;·&nbsp;1. At seven the counts are a courtesy; at a hundred they are the event.</span></li>
+          <li data-anno="2"><b>2</b><span><strong>Sort by interview time.</strong> Earliest first, so the list is the order of your day rather than the order the requests arrived.</span></li>
+          <li data-anno="3"><b>3</b><span><strong>Filter by job, filter by feedback.</strong> Six promoted titles on one Pro event become six workable lists, and feedback filters the ones still waiting on a rating.</span></li>
+          <li data-anno="4"><b>4</b><span><strong>Search candidates.</strong> One name, out of however many. The control exists because volume is the normal case, not the exception.</span></li>
+          <li data-anno="5"><b>5</b><span><strong>Accept · Decline · Reschedule.</strong> On the row, not behind a detail page. Accepting is the scheduling step — the request already carries the time.</span></li>
+        </ol>
+      </figure>
+
+      <p class="t-sm anno__note">
+        This capture is from a seven-candidate demo account, and none of its rows is an
+        entry-level role — see the gap noted above. What it shows accurately is the
+        machinery: the same six tabs, the same sort, the same filters and the same
+        row-level actions carry a Pro event's <strong style="color:var(--ink);font-weight:550">100+
+        scheduled interviews</strong>.
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="local" style="padding-top:0">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Local</p>
+        <h2 class="t-h2 t-balance">Twenty miles is the whole argument.</h2>
+        <p class="t-lead">
+          Entry-level candidates are the least able to travel for an interview, and the
+          least likely to relocate for the job. Every candidate at the event is verified to
+          be within approximately 20 miles of the event city — which is what makes asking
+          them to come to your site a reasonable ask rather than a trip.
+        </p>
+      </div>
+
+      <div class="evband" data-reveal>
+        <div>
+          <p class="t-lead" style="margin-top:0">
+            In person is not a kind of event. Every employer joins the same city-and-date
+            event; each of you sets your own interview location — JobFairX video, phone, in
+            person at your address, or your own link. Enter an address and candidates see it
+            on their confirmation and on every reminder.
+          </p>
+          <div class="cta-row">
+            <a href="page-in-person-interviews.html" class="btn btn--primary btn--lg">In-person interviews</a>
+            <a href="page-interview-locations.html" class="btn btn--secondary btn--lg">All four interview locations</a>
+          </div>
+        </div>
+        <ul class="evband__facts">
+          <li>
+            <span class="t-eyebrow">Candidate verification radius</span>
+            <strong>≈20 miles</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Cities with events</span>
+            <strong>300+</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="proof">
+    <div class="u-container">
+      <figure class="quote" data-reveal>
+        <p class="t-eyebrow" style="margin-bottom:var(--s-6)">Customer</p>
+        <div class="quoteslot" data-placeholder>{{ENTRY-LEVEL CUSTOMER SENTENCE}}</div>
+        <figcaption>
+          <cite><span class="phtag" data-placeholder>{{Company}} · {{Role}}</span></cite>
+          <span class="quote__role">Company and role attribution only</span>
+        </figcaption>
+      </figure>
+
+      <div class="gapnote" data-reveal style="margin-top:var(--s-10)">
+        <p>
+          <strong>Why this is empty.</strong> Three customers are attributable across the
+          whole site — Target, Tesla and Western Regional Medical Center — and not one of
+          their sentences is attributed to an entry-level event. Healthcare gets Western
+          Regional's sentence because it is a healthcare sentence; borrowing one here would
+          make the attribution false.
+        </p>
+        <p>
+          The closest thing we have to volume evidence is Target's line about interviewing
+          over 90 candidates in one day. It appears on the platform pages, where it is not
+          claimed for any event type, and it stays there.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="how" style="padding-top:0">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">End to end</p>
+        <h2 class="t-h2 t-balance">How an entry-level event runs.</h2>
+        <p class="t-lead">
+          One market moment — a city, a date, a four-hour window. Every employer joins the
+          same event. What each of you sets independently is where your own interviews
+          happen.
+        </p>
+      </div>
+
+      <ol class="flow">
+        <li data-reveal style="--i:0">
+          <p class="flow__n">01 — Register</p>
+          <p class="flow__t">Pick the event</p>
+          <p class="flow__d">
+            Choose the entry-level event in your city and a package, then post your open
+            roles. Registering 31 or more days out takes a flat $100 off any tier.
+          </p>
+        </li>
+        <li data-reveal style="--i:1">
+          <p class="flow__n">02 — Set up</p>
+          <p class="flow__t">Set your interview location</p>
+          <p class="flow__d">
+            JobFairX video, phone, in person at your address, or your own link. It is a
+            column on your events dashboard, and it is yours alone — the employer in the
+            next row of the same event can choose differently.
+          </p>
+        </li>
+        <li data-reveal style="--i:2">
+          <p class="flow__n">03 — Match</p>
+          <p class="flow__t">Requests start arriving</p>
+          <p class="flow__d">
+            Matching activates the moment your jobs are posted and the first interview
+            requests land within a few hours. Auto-accept them, or review each one — both
+            are in every package.
+          </p>
+        </li>
+        <li data-reveal style="--i:3">
+          <p class="flow__n">04 — Interview</p>
+          <p class="flow__t">Accept, and it is booked</p>
+          <p class="flow__d">
+            The request already carries a time, so accepting is the scheduling step.
+            Unlimited interviews before, during and after the event are included at every
+            tier.
+          </p>
+        </li>
+      </ol>
+
+      <figure class="evrow" data-reveal>
+        <div class="panel">
+          <div class="crop crop--evtable">
+            <img src="assets/product/dashboard-events.png"
+                 alt="The JobFairX events dashboard, four upcoming events under the column headings Actions, Event details, Interview location, Interview setup, Job titles and Candidates. Dallas Healthcare Event on Apr 22 2026, 11:00 AM to 3:00 PM CT, interview location Video, JobFairX video call, setup complete, 2 interviewers of 5 seats, Registered Nurse, 1 of 3 jobs, 3 pending and 16 upcoming candidates. Chicago Technology Event on May 6 2026, interview location Phone, You call each candidate, setup incomplete, 4 of unlimited seats, Software Engineer, DevOps Engineer and UX Designer, 3 of 6 jobs, 2 pending and 5 upcoming. Atlanta Diversity Event on Apr 5 2026, interview location In person, 1201 Peachtree St NE, Suite 300, Atlanta, GA, 1 of 1 seat, no jobs added, no candidates. Denver Technology Event on Jun 3 2026, interview location Video, Microsoft Teams, 3 of 5 seats, Software Engineer, 1 of 2 jobs, 4 pending and 9 upcoming."
+                 width="3200" height="2000"
+                 style="--z:1.2; --l:-15.5%; --t:-26.9%; --zm:2.4; --lm:-16%; --tm:-27%">
+          </div>
+        </div>
+        <figcaption class="t-sm">
+          Four events on one dashboard, and four different answers in the Interview location
+          column — a JobFairX video call, a phone call the employer places, a street address
+          in Atlanta, and a Microsoft Teams link. Same product, four rooms. None of the
+          fourteen product screenshots contains an entry-level event, so these rows show the
+          columns accurately and this type not at all.
+        </figcaption>
+        <p><span class="phtag" data-placeholder>{{ENTRY-LEVEL EVENT CAPTURE}}</span></p>
+      </figure>
+
+      <ul class="ulist" data-reveal>
+        <li><strong>Interview location is per employer, per event.</strong> The column reads a product name, a phone instruction or a street address depending on what that employer chose. It is not an attribute of the event.</li>
+        <li><strong>Seats and jobs are the package on screen.</strong> "1 of 3 jobs, 1 of 5 seats" is Growth. Starter is 1 job and 2 recruiter seats; Pro is up to 6 jobs and unlimited recruiters — which is the tier volume hiring lands on.</li>
+        <li><strong>Job titles are what candidates match against.</strong> Whatever you post is what the matching works from, so the posted title needs to be the title you would actually hire.</li>
+        <li><strong>Pending versus upcoming.</strong> Pending are requests waiting on you. Upcoming are the ones you already accepted, which means they are already scheduled.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="pricing">
+    <div class="u-container">
+
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Pricing</p>
+        <h2 class="t-h2 t-balance">Entry-level costs what every event costs.</h2>
+        <p class="t-lead">
+          There is no volume surcharge and no entry-level tier. Packages differ on jobs,
+          recruiter seats and scheduled interview volume — nothing else. Hiring in volume
+          means the top tier and the bundle ladder, not a different price list.
+        </p>
+      </div>
+
+      <div class="pricestrip">
+        <div class="card tier" data-reveal style="--i:0">
+          <p class="tier__name">Starter</p>
+          <p class="tier__price">$495</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Promote 1 job</li>
+            <li>20+ scheduled interviews</li>
+            <li>2 recruiter seats</li>
+          </ul>
+        </div>
+        <div class="card tier" data-reveal style="--i:1">
+          <p class="tier__name">Growth <span class="tier__pop">Most popular</span></p>
+          <p class="tier__price">$895</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Up to 3 jobs</li>
+            <li>60+ scheduled interviews</li>
+            <li>Up to 5 recruiter seats</li>
+          </ul>
+        </div>
+        <div class="card tier" data-reveal style="--i:2">
+          <p class="tier__name">Pro</p>
+          <p class="tier__price">$1,495</p>
+          <p class="tier__per">per event</p>
+          <ul class="tier__facts">
+            <li>Up to 6 jobs</li>
+            <li>100+ scheduled interviews</li>
+            <li>Unlimited recruiter seats</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pricestrip__note" data-reveal>
+        <p><strong>Volume lives on Pro.</strong> 100+ scheduled interviews, up to 6 promoted job titles and unlimited recruiter seats — so every interviewer on the day has their own login rather than sharing one.</p>
+        <p><strong>Register early.</strong> A flat $100 comes off every tier at 31 or more days before the event — $395, $795, $1,395.</p>
+      </div>
+
+      
+      <div class="ladder" data-reveal>
+        <div class="ladder__scroll">
+          <table>
+            <caption class="t-eyebrow" style="text-align:left;padding:var(--s-5) var(--s-5) 0">Bundle ladder — Starter tier</caption>
+            <thead>
+              <tr><th scope="col">Events</th><th scope="col">Per event</th><th scope="col">Total</th><th scope="col">You save</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>5</td><td>$470</td><td>$2,350</td><td>$125</td></tr>
+              <tr><td>10</td><td>$445</td><td>$4,450</td><td>$500</td></tr>
+              <tr><td>15</td><td>$420</td><td>$6,300</td><td>$1,125</td></tr>
+              <tr class="is-pop"><td>25</td><td>$395</td><td>$9,875</td><td>$2,500 — most popular</td></tr>
+              <tr><td>40</td><td>$365</td><td>$14,600</td><td>$5,200</td></tr>
+              <tr><td>50</td><td>$345</td><td>$17,250</td><td>$7,500</td></tr>
+              <tr><td>75</td><td>$320</td><td>$24,000</td><td>$13,125</td></tr>
+              <tr><td>100</td><td>$297</td><td>$29,700</td><td>$19,800</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="ladder__cap">
+          Credits never expire and work across any event type, so a bundle bought for
+          entry-level hiring can be spent on a healthcare or technology event later. Growth
+          and Pro have their own ladders on the pricing page.
+        </p>
+      </div>
+
+      <div class="cta-row">
+        <a href="page-pricing.html" class="btn btn--primary btn--lg">See bundles and full pricing</a>
+        <a href="page-faq.html" class="btn btn--secondary btn--lg">Read the employer FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="events" style="padding-top:0">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Upcoming</p>
+        <h2 class="t-h2 t-balance">Find the entry-level event in your market.</h2>
+      </div>
+
+      
+      <div class="evband" data-reveal>
+        <div>
+          <p class="t-lead" style="margin-top:0">
+            Events run across 300+ cities, and registration closes between one and two days
+            before an event — so the market you want is usually only a few weeks out. If you
+            are hiring the same roles in several of them, buy the bundle before the first
+            event rather than after it.
+          </p>
+          <div class="cta-row">
+            <a href="page-events.html?type=entry-level" class="btn btn--primary btn--lg">Browse entry-level events</a>
+            <a href="page-event-detail.html" class="btn btn--secondary btn--lg">See an event page</a>
+          </div>
+        </div>
+        <ul class="evband__facts">
+          <li>
+            <span class="t-eyebrow">Open for registration now</span>
+            <strong data-placeholder>{{N upcoming entry-level events}}</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Cities with events</span>
+            <strong>300+</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="faq" style="padding-top:0">
+    <div class="u-container">
+      <div class="head" data-reveal>
+        <p class="t-eyebrow">Entry-level FAQ</p>
+        <h2 class="t-h2 t-balance">What high-volume recruiters ask first.</h2>
+      </div>
+
+      <div class="faq-list">
+
+        <article class="faq-item is-open" id="q-volume" data-faq-item data-reveal style="--i:0">
+          <h3>
+            <button class="faq-btn" id="q-volume-btn" data-faq-btn aria-expanded="true" aria-controls="q-volume-panel">
+              <span>We are hiring dozens of people. How much can one event carry?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-volume-panel" role="region" aria-labelledby="q-volume-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  Scheduled interview volume follows the package: <strong>20+</strong> on
+                  Starter, <strong>60+</strong> on Growth, <strong>100+</strong> on Pro. Pro
+                  also carries up to 6 promoted job titles and unlimited recruiter seats, so
+                  a hiring day can be run by a team rather than one login.
+                </p>
+                <p>
+                  Unlimited interviews before, during and after the event are included at
+                  every tier, so the package number is a floor on what gets scheduled, not a
+                  cap on what you can run.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-local" data-faq-item data-reveal style="--i:1">
+          <h3>
+            <button class="faq-btn" id="q-local-btn" data-faq-btn aria-expanded="false" aria-controls="q-local-panel">
+              <span>Are these candidates actually local?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-local-panel" role="region" aria-labelledby="q-local-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  Yes. Candidates are verified to be within approximately 20 miles of the
+                  event city. That matters more on entry-level hiring than on any other
+                  type, because these candidates are the least able to travel for an
+                  interview and the least likely to relocate for the job.
+                </p>
+                <p>
+                  It is also what makes an in-person interview location a reasonable ask
+                  rather than a trip.
+                  <a href="page-in-person-interviews.html">How in-person interviews work →</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-where" data-faq-item data-reveal style="--i:2">
+          <h3>
+            <button class="faq-btn" id="q-where-btn" data-faq-btn aria-expanded="false" aria-controls="q-where-panel">
+              <span>Where do the interviews happen — can candidates come to our site?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-where-panel" role="region" aria-labelledby="q-where-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  You choose. Each event you join has an interview location that you set:
+                  JobFairX video, phone, in person at your own address, or your own link.
+                  Enter an address and candidates see it on their confirmation and every
+                  reminder.
+                </p>
+                <p>
+                  In person is not a kind of event. Every employer joins the same
+                  city-and-date event; two of you at that one event can interview completely
+                  differently.
+                  <a href="page-interview-locations.html">How interview locations work →</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-show" data-faq-item data-reveal style="--i:3">
+          <h3>
+            <button class="faq-btn" id="q-show-btn" data-faq-btn aria-expanded="false" aria-controls="q-show-panel">
+              <span>What is the show rate at an entry-level event?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-show-panel" role="region" aria-labelledby="q-show-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  86%, based on 2025 platform data. It is the lowest of the three rates we
+                  publish — healthcare events run 91% and veterans events 89% — and it is
+                  still the figure most volume hiring is built on. Across the platform, 87%
+                  of employers register again.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-apply" data-faq-item data-reveal style="--i:4">
+          <h3>
+            <button class="faq-btn" id="q-apply-btn" data-faq-btn aria-expanded="false" aria-controls="q-apply-panel">
+              <span>Do candidates apply to our postings first?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-apply-panel" role="region" aria-labelledby="q-apply-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  No. Matched candidates <strong>request</strong> an interview with you, and
+                  accepting the request is what schedules it — the request already carries
+                  the slot they asked for. Matching activates the moment your jobs are
+                  posted and the first requests arrive within a few hours.
+                </p>
+                <p>
+                  At volume that inversion is the whole point: an entry-level event is a
+                  schedule you accept into, not a résumé pile you work down. You still get
+                  résumés and contact information for every matched candidate — ahead of the
+                  interview rather than instead of one.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-markets" data-faq-item data-reveal style="--i:5">
+          <h3>
+            <button class="faq-btn" id="q-markets-btn" data-faq-btn aria-expanded="false" aria-controls="q-markets-panel">
+              <span>We hire entry-level in a dozen cities. What does that cost?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-markets-panel" role="region" aria-labelledby="q-markets-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  Bundles run from 5 to 100 events and take the per-event price from
+                  <strong>$470</strong> down to <strong>$297</strong>. Credits never expire
+                  and work across any event type, so you are not committing to which cities
+                  or which audiences when you buy.
+                  <a href="page-pricing.html">See the full ladder →</a>
+                </p>
+                <p>
+                  Buying one event at a time still works, and registering 31 or more days
+                  ahead takes a flat $100 off any tier.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-definition" data-faq-item data-placeholder data-reveal style="--i:6">
+          <h3>
+            <button class="faq-btn" id="q-definition-btn" data-faq-btn aria-expanded="false" aria-controls="q-definition-panel">
+              <span>What counts as an entry-level candidate? <span class="newtag">UNCONFIRMED</span></span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-definition-panel" role="region" aria-labelledby="q-definition-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  <span class="phtag" data-placeholder>{{ENTRY-LEVEL AUDIENCE DEFINITION — experience, education or self-selection?}}</span>
+                </p>
+                <p>
+                  What is documented is <em>location</em> verification — approximately 20
+                  miles of the event city — and that entry-level is one of the five event
+                  types a candidate registers under. Whether the type is a filter on
+                  experience, on education, or simply which event the candidate chose is not
+                  recorded anywhere we can cite, so this answer stays blank rather than
+                  guessing. It is the first question a volume recruiter asks; get it
+                  answered before this page ships.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section ctaband" id="cta">
+    <div class="u-container">
+      <div class="ctaband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Fill the schedule, not the résumé pile.</h2>
+          <p class="t-lead">
+            Register for the entry-level event in your city, post your open roles, and
+            matching starts the same day. The first interview requests land within a few
+            hours.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+            <a href="page-events.html?type=entry-level" class="btn btn--secondary btn--lg">Browse entry-level events</a>
+          </div>
+        </div>
+
+        <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Interviews conducted</span>
+            <strong data-count>500,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers on the platform</span>
+            <strong data-count>4,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers who return</span>
+            <strong data-count>87%</strong>
+            <span class="ctaband__src">Based on 2025 platform data</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><span aria-current="page">Entry-level</span></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page-specific: the FAQ accordion. Lifted from page-solutions-healthcare.html,
+   which lifted it from page-faq.html minus the category rail. The collapse
+   rule in CSS is gated on the `faq-js` class this script adds, so a blocked
+   script leaves every answer open and readable rather than sealed shut.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var root  = document.documentElement;
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-faq-item]'));
+  if (!items.length) return;
+  root.classList.add('faq-js');
+
+  var btns = items.map(function (it) { return it.querySelector('[data-faq-btn]'); });
+
+  function setOpen(item, open) {
+    var btn   = item.querySelector('[data-faq-btn]');
+    var panel = item.querySelector('[data-faq-panel]');
+    item.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    /* a collapsed panel must leave the tab order too — four answers hold links */
+    if (open) panel.removeAttribute('inert');
+    else      panel.setAttribute('inert', '');
+  }
+
+  items.forEach(function (item, i) {
+    setOpen(item, item.classList.contains('is-open'));   /* first item ships open */
+
+    btns[i].addEventListener('click', function () {
+      setOpen(item, !item.classList.contains('is-open'));
+    });
+
+    /* Enter and Space come free with <button>; this adds the roving movement
+       the WAI accordion pattern expects. */
+    btns[i].addEventListener('keydown', function (e) {
+      var n = -1;
+      if (e.key === 'ArrowDown')    n = (i + 1) % btns.length;
+      else if (e.key === 'ArrowUp') n = (i - 1 + btns.length) % btns.length;
+      else if (e.key === 'Home')    n = 0;
+      else if (e.key === 'End')     n = btns.length - 1;
+      else return;
+      e.preventDefault();
+      btns[n].focus();
+    });
+  });
+
+  /* deep links — page-solutions-entry-level.html#q-markets opens that answer */
+  function openFromHash() {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (!el || !el.hasAttribute('data-faq-item')) return;
+    setOpen(el, true);
+    el.querySelector('[data-faq-btn]').focus({ preventScroll: true });
+  }
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
+})();
+</script>
+</body>
+</html>

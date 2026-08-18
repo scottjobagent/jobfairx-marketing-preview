@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analytics &amp; reporting — JobFairX</title>
+<meta name="description" content="Requests, scheduled interviews, attendance, misses and dispositions are counted as they happen, scoped to a date range you set — and the post-event report is ready the moment the event ends, with downloadable data.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — PLATFORM / ANALYTICS & REPORTING
+   Replaces /employer/platform/analytics.
+
+   Cloned from page-platform-candidate-pipeline.html, which is the reference
+   implementation of the capability-detail template. Same six slots, same
+   theme rhythm, same conventions. Only the crop geometry and the pin
+   coordinates are re-derived, because they are page-specific by definition.
+
+     .cap-hero   hero claim + 3-step flow strip                  [dark]
+     .anno       annotated screenshot — the centrepiece          [light]
+     .states     an n-up grid of the four KPI cards              [light]
+     .proof      2-column proof sections, alternating sides      [either]
+     .rail       sibling cross-links to the other capabilities   [light]
+     .ctaband    the single page CTA                             [dark]
+
+   Theme rhythm: dark hero → light evidence → dark mechanics →
+   light close-out + siblings → dark CTA. HARD CUTS, no seam elements.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ----------
+   No item carries aria-current on this page: /employer/platform/... is not one
+   of the four nav destinations, so none of them is the current page. Do NOT
+   invent a nav item for it. */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ==========================================================================
+   SLOT 1 — .cap-hero
+   ========================================================================== */
+.cap-hero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.cap-hero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.cap-hero__glow::before, .cap-hero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.cap-hero__glow::before {
+  width: 620px; height: 520px; left: 6%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.34), transparent 68%);
+  animation: drift1 24s var(--e-inout) infinite alternate;
+}
+.cap-hero__glow::after {
+  width: 520px; height: 460px; right: 4%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.2), transparent 70%);
+  animation: drift2 30s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.cap-hero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.cap-hero__inner { position: relative; z-index: 2; }
+.cap-hero__crumb { display: flex; align-items: center; gap: var(--s-2); }
+.cap-hero__crumb a { color: var(--ink-3); transition: color var(--t-micro) var(--e-inout); }
+.cap-hero__crumb a:hover { color: var(--accent-hover); }
+.cap-hero h1 { max-width: 17ch; margin-top: var(--s-4); }
+.cap-hero__sub { max-width: 60ch; margin-top: var(--s-6); }
+
+/* ---------- hero flow strip ----------
+   Depth on the dark ground is hairline + half-pixel rim light only. */
+.flow {
+  position: relative; z-index: 2; margin-top: var(--s-16);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: var(--r-xl); border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+  overflow: hidden;
+}
+.flow > li { padding: var(--s-8); min-width: 0; }
+.flow > li + li { border-left: 1px solid var(--hairline); }
+.flow__n {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.flow__t { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; color: var(--ink); }
+.flow__d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) {
+  .flow { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-12); }
+  .flow > li + li { border-left: 0; border-top: 1px solid var(--hairline); }
+  .flow > li { padding: var(--s-6); }
+}
+
+/* ==========================================================================
+   SLOT 2 — .anno (the centrepiece)
+   base.css owns the component. Two page-level decisions live here:
+
+   1. FULL-WIDTH STAGE, key underneath. At container width the crop lands near
+      1:1 and the pins point at something you can actually read.
+   2. The crop geometry and the pin coordinates are ONE calculation. If you
+      re-crop, you must re-derive every pin. Working, for analytics.png
+      (3200x2000, quoted below as fractions of the image):
+
+        visible x  0.153 → 0.986   (--z 1.2, --l -15.3%)
+        visible y  0.076 → 0.999   (--t -7.6%, aspect 26/18)
+        pin x = (fx − 0.153) / 0.8333      pin y = (fy − 0.076) / 0.9231
+
+      The left edge is set at 0.153 because the dark nav rail ends at 0.1375
+      and the header card's left edge sits at 0.156 — 0.153 clears the rail and
+      still keeps the card's own border. Pins are positioned against
+      .anno__stage, and on LIGHT ground .panel has no padding, so stage box ==
+      crop box and the mapping is exact. Putting this figure on a dark section
+      would inset the crop by 10px and skew every pin; that is why this block
+      is light.
+   3. Below 780px base.css swaps in the --zm/--lm/--tm crop, so the pins no
+      longer line up with anything. Hide them there and let the key carry the
+      whole explanation — same breakpoint, not 640px.
+   ========================================================================== */
+.annoband__head { max-width: 60ch; }
+.annoband__head p { margin-top: var(--s-4); }
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .anno__key {
+  /* Six captions, so the track is wider than the reference's five-caption grid:
+     300px yields 3 × 2 at container width instead of an orphaned 5 + 1. The
+     min() is load-bearing — a bare minmax(300px,…) forces a 300px track inside
+     a 280px container and pushes the page sideways on a small phone. */
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  align-items: start; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.anno--wide .anno__key li { min-width: 0; }
+
+/* The honesty note under the screenshot. It is a note, not a disclaimer box —
+   no tint, no icon, no border. Just a rule and quieter type. */
+.anno__note {
+  margin-top: var(--s-8); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  max-width: 78ch;
+}
+.anno__note strong { color: var(--ink); font-weight: 550; }
+
+/* Crop geometry. Each aspect is chosen so the region it frames arrives at the
+   width it is shown at, rather than being squashed into a generic box.
+     --anno   26/18  the whole content column, header card → table header row
+     --chart  5/2    the two series, Apr 22 → May 19, four whole week labels
+     --strip  6/1    the Events card header and its column names
+
+   The chart crop's left edge (0.4828) is not a round number by accident: it is
+   the first column of pixels after the "Apr 15 – Apr 21" label ends, and the
+   right edge lands just before "May 20 – May 20" begins. Any wider and the
+   figure carries a half-word at one end. */
+.crop--anno  { aspect-ratio: 26/18; }
+.crop--chart { aspect-ratio: 5/2; }
+.crop--strip { aspect-ratio: 6/1; }
+@media (max-width: 780px) {
+  .anno__pin { display: none; }
+  .crop--anno  { aspect-ratio: 5/4; }
+  .crop--chart { aspect-ratio: 2/1; }
+}
+
+/* ==========================================================================
+   SLOT 3 — .states
+   An n-up grid of peer items. Four here — one per KPI card on the screen.
+   ========================================================================== */
+.states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.state { display: grid; align-content: start; gap: var(--s-3); }
+.state__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--ink-3); }
+.state__t { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); }
+.state__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.state__acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-1); }
+.state__acts span {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  border: 1px solid var(--hairline); color: var(--ink-3);
+  background: var(--surface-2); white-space: nowrap;
+}
+@media (max-width: 1080px) { .states { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px)  { .states { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 4 — .proof  (repeated, alternating sides)
+   ========================================================================== */
+.proof { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-16); align-items: center; }
+.proof + .proof { margin-top: var(--s-24); }
+.proof__body, .proof__vis { min-width: 0; }   /* grid children must be allowed to shrink */
+.proof__body h2 { margin-top: var(--s-3); }
+.proof__body > p { margin-top: var(--s-5); max-width: 52ch; }
+.proof--flip .proof__vis { order: -1; }
+.proof figcaption { margin-top: var(--s-4); }
+@media (max-width: 900px) {
+  .proof { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+  .proof + .proof { margin-top: var(--s-16); }
+  .proof--flip .proof__vis { order: 0; }
+}
+
+.ulist { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.ulist li { position: relative; padding-left: 26px; font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.ulist li::before {
+  content: ''; position: absolute; left: 4px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.ulist strong { color: var(--ink); font-weight: 550; }
+
+/* column names read as data, so they are set as data */
+.cols { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--ink); }
+
+/* one-sentence customer line — quiet, never a pull-quote card */
+.credit {
+  margin-top: var(--s-12); padding-top: var(--s-6);
+  border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-4);
+}
+.credit p { font-size: 1.0625rem; font-weight: 450; letter-spacing: -.018em; color: var(--ink); }
+.credit cite { font-style: normal; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink-3); }
+
+/* a missing asset is drawn as a missing asset, never faked */
+.shotgap {
+  display: grid; place-items: center; text-align: center; gap: var(--s-3);
+  aspect-ratio: 3/2; padding: var(--s-8);
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+}
+.shotgap__t { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .04em; }
+.shotgap p { font-size: var(--t-xs); color: var(--ink-3); max-width: 40ch; letter-spacing: .006em; }
+
+/* ==========================================================================
+   SLOT 5 — .rail  (sibling capability cross-links)
+   ========================================================================== */
+.rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4); margin-top: var(--s-10); }
+.rail a { display: grid; align-content: start; gap: var(--s-3); }
+.rail__t { font-size: 1.0625rem; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; color: var(--ink); display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
+.rail__t span { color: var(--ink-3); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.rail a:hover .rail__t span { color: var(--accent); transform: translateX(3px); }
+.rail__d { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.rail__up { margin-top: var(--s-5); display: inline-block; font-size: var(--t-sm); letter-spacing: .006em; color: var(--accent); }
+@media (max-width: 900px) { .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .rail { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   SLOT 6 — .ctaband  (exactly one per capability page)
+   ========================================================================== */
+.ctaband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: center; }
+.ctaband p { margin-top: var(--s-5); max-width: 46ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.ctaband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.ctaband__facts li { display: grid; gap: 4px; }
+.ctaband__facts strong { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+.ctaband__src { font-size: var(--t-xs); color: var(--ink-3); margin-top: var(--s-2); }
+@media (max-width: 900px) {
+  .ctaband__inner { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+  .ctaband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-platform) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholder affordance (same rule as every other page) ---------- */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  
+  <section class="cap-hero grain">
+    <div class="cap-hero__glow" aria-hidden="true"></div>
+    <div class="cap-hero__grid" aria-hidden="true"></div>
+
+    <div class="u-container cap-hero__inner">
+      <p class="t-eyebrow cap-hero__crumb">
+        <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Analytics &amp; reporting
+      </p>
+
+      <h1 class="t-h1 t-balance">When the event ends, the report is already written.</h1>
+
+      <p class="t-lead cap-hero__sub">
+        Nothing is compiled afterwards. Every request, every accepted interview, every
+        reschedule and every no-show is counted as your recruiters work, so the post-event
+        report — interview stats, candidate dispositions, downloadable data — is ready the
+        moment the event is over.
+      </p>
+
+      <ol class="flow" data-reveal>
+        <li style="--i:0">
+          <p class="flow__n">01 — During</p>
+          <p class="flow__t">It counts as it happens</p>
+          <p class="flow__d">
+            A candidate requests, you accept, the interview runs or it does not, and your
+            recruiter records what they thought. Each of those is already a number.
+          </p>
+        </li>
+        <li style="--i:1">
+          <p class="flow__n">02 — The moment it ends</p>
+          <p class="flow__t">The report is ready</p>
+          <p class="flow__d">
+            Interview stats, candidate dispositions and downloadable data. You do not
+            request it, wait for it, or ask an account manager to pull it.
+          </p>
+        </li>
+        <li style="--i:2">
+          <p class="flow__n">03 — After</p>
+          <p class="flow__t">It keeps counting</p>
+          <p class="flow__d">
+            Follow-up interviews and messaging continue after the event, and the dashboard
+            keeps dispositions, notes and analytics against each candidate.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+
+  
+  <section class="u-section" id="report">
+    <div class="u-container">
+
+      <div class="annoband__head" data-reveal>
+        <p class="t-eyebrow">The real screen</p>
+        <h2 class="t-h2 t-balance">Four numbers, one chart, and a row for every event.</h2>
+        <p class="t-lead">
+          This is the Analytics view for interviews, unretouched — one account, one date
+          range. Hover a pin, or a caption, to see which part of the screen it belongs to.
+        </p>
+      </div>
+
+      <figure class="anno anno--wide" data-reveal style="--i:1">
+        <div class="anno__stage">
+          <div class="panel">
+            <div class="crop crop--anno">
+              <img src="assets/product/analytics.png"
+                   alt="The JobFairX Analytics view for interviews. A header card titled Interviews carries a date range control reading 04/01/2026 to 05/20/2026. Below it four cards read Interviews scheduled 90, Attendance rate 66 percent, Missed interviews 31 and Marked yes 19. Under those, a chart titled Interviews over time plots Interviews scheduled against Interviews completed week by week from Apr 1 to May 20, with a granularity control set to Week. At the foot of the screen an Events table begins, its columns headed Event, Date, Requests, Scheduled, Rescheduled, Completed, Missed and Marked yes."
+                   width="3200" height="2000"
+                   style="--z:1.2; --l:-15.3%; --t:-7.6%; --zm:2.6; --lm:-15.3%; --tm:-7.2%">
+            </div>
+          </div>
+
+          
+          <button class="anno__pin" style="--x:71.6%;--y:6.4%"  data-anno="1" aria-label="Detail 1: the date range control">1</button>
+          <button class="anno__pin" style="--x:17.3%;--y:25.1%" data-anno="2" aria-label="Detail 2: interviews scheduled">2</button>
+          <button class="anno__pin" style="--x:41.6%;--y:25.1%" data-anno="3" aria-label="Detail 3: attendance rate">3</button>
+          <button class="anno__pin" style="--x:66.0%;--y:25.1%" data-anno="4" aria-label="Detail 4: missed interviews and marked yes">4</button>
+          <button class="anno__pin" style="--x:47.3%;--y:44.7%" data-anno="5" aria-label="Detail 5: scheduled against completed">5</button>
+          <button class="anno__pin" style="--x:36.0%;--y:93.3%" data-anno="6" aria-label="Detail 6: the events table">6</button>
+        </div>
+
+        <ol class="anno__key">
+          <li data-anno="1"><b>1</b><span><strong>Date range · 04/01/2026 – 05/20/2026.</strong> Every figure on this screen is scoped to the range you pick. Nothing here is a lifetime total you cannot narrow.</span></li>
+          <li data-anno="2"><b>2</b><span><strong>Interviews scheduled · 90.</strong> Accepted requests, counted. A candidate asks for time, you accept, and accepting is the step that puts a number here.</span></li>
+          <li data-anno="3"><b>3</b><span><strong>Attendance rate · 66%.</strong> This account, this range. Read the note under the screenshot before you compare it to anything.</span></li>
+          <li data-anno="4"><b>4</b><span><strong>Missed · 31, and Marked yes · 19.</strong> The figures reconcile: 90 scheduled less 31 missed leaves 59, and 59 of 90 is the 66%. Marked yes is your recruiters' own disposition.</span></li>
+          <li data-anno="5"><b>5</b><span><strong>Interviews scheduled vs. Interviews completed.</strong> Two series on one chart, by week. The gap between the lines is what you booked against what actually happened.</span></li>
+          <li data-anno="6"><b>6</b><span><strong>Events · All events.</strong> The same period broken out one row per event, or filtered to a single event from the dropdown.</span></li>
+        </ol>
+      </figure>
+
+      
+      <p class="t-sm anno__note">
+        <strong>About that 66%.</strong> The attendance rate on this screen belongs to one
+        account over one date range — 04/01/2026 to 05/20/2026 — and it is a sample, not a
+        platform figure. Show rates published elsewhere on this site are platform-wide
+        numbers based on 2025 data, and they will not match what any single dashboard says,
+        including yours. That is rather the point of the report: it tells you what happened
+        at your events, not what happens on average.
+      </p>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="metrics" style="padding-top:0">
+    <div class="u-container">
+      <div style="max-width:56ch" data-reveal>
+        <p class="t-eyebrow">Proof 01</p>
+        <h2 class="t-h2 t-balance">What the report contains, before you open anything.</h2>
+        <p class="t-lead" style="margin-top:var(--s-5)">
+          Four counts sit across the top of the screen, and all four move with the date
+          range. Three of them are what the platform observed. The fourth is what your
+          recruiters decided.
+        </p>
+      </div>
+
+      <ol class="states">
+        <li class="card state" data-reveal style="--i:0">
+          <span class="state__n">01</span>
+          <span class="state__t">Interviews scheduled</span>
+          <span class="state__d">Every request you accepted. Accepting is the scheduling step, so this is a count of decisions you made.</span>
+          <span class="state__acts"><span>90 in this range</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:1">
+          <span class="state__n">02</span>
+          <span class="state__t">Attendance rate</span>
+          <span class="state__d">How much of what you booked actually took place, across the range you chose. Your rate, not an average.</span>
+          <span class="state__acts"><span>66% in this range</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:2">
+          <span class="state__n">03</span>
+          <span class="state__t">Missed interviews</span>
+          <span class="state__d">The ones that did not happen — on the same row of cards as the good news, at the same size.</span>
+          <span class="state__acts"><span>31 in this range</span></span>
+        </li>
+        <li class="card state" data-reveal style="--i:3">
+          <span class="state__n">04</span>
+          <span class="state__t">Marked yes</span>
+          <span class="state__d">The dispositions your recruiters recorded after the interview. The one number on this screen that is your judgement.</span>
+          <span class="state__acts"><span>19 in this range</span></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="funnel">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 02</p>
+          <h2 class="t-h2 t-balance">Requested, scheduled, completed — as one picture.</h2>
+          <p class="t-lead">
+            Requests are not applications and scheduled is not the same as completed. The
+            chart draws Interviews scheduled against Interviews completed on the same axis,
+            so the distance between the two lines is the only figure you have to interpret.
+          </p>
+          <ul class="ulist">
+            <li>Granularity is a control, not a fixed view: <strong>Event day</strong>, <strong>Day</strong>, <strong>Week</strong> or <strong>Month</strong>.</li>
+            <li>The chart's own footnote: <em>“Includes rescheduled interviews shown on their actual interview date.”</em> A moved interview counts on the day it happened, not the day it was first booked.</li>
+            <li>Requests and scheduled are genuinely different columns, because a candidate requesting time and you accepting are two different events.</li>
+            <li>Where the interview happened does not change the count. JobFairX video, phone, your own link or your own address all land in the same series.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--chart">
+              <img src="assets/product/analytics.png"
+                   alt="Close crop of the Interviews over time chart: a blue Interviews scheduled line running above an amber Interviews completed line across the weeks labelled Apr 22 to Apr 28, Apr 29 to May 5, May 6 to May 12 and May 13 to May 19, with both lines falling to zero in the week of Apr 29."
+                   width="3200" height="2000"
+                   style="--z:2.667; --l:-48.28%; --t:-55%; --zm:3.3; --lm:-47.5%; --tm:-55%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            Blue is what you booked, amber is what happened. A week with both lines flat at
+            zero is a week with nothing booked — the chart does not smooth that away.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <div class="proof proof--flip">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 03</p>
+          <h2 class="t-h2 t-balance">One row per event. Eight columns, no blending.</h2>
+          <p class="t-lead">
+            A single blended attendance rate hides which event earned it. The Events table
+            at the foot of the same screen breaks the identical period out event by event,
+            so two events in two cities are never averaged into each other.
+          </p>
+          <ul class="ulist">
+            <li class="cols">EVENT · DATE · REQUESTS · SCHEDULED · RESCHEDULED · COMPLETED · MISSED · MARKED YES</li>
+            <li>The dropdown filters the table to a single event, or leaves it on <strong>All events</strong>.</li>
+            <li><strong>Rescheduled</strong> gets a column of its own, so a moved interview is not quietly counted as a miss.</li>
+            <li>Interview volume by package: <strong>20+</strong> scheduled interviews on Starter, <strong>60+</strong> on Growth, <strong>100+</strong> on Pro. The SCHEDULED column is where you find out.</li>
+          </ul>
+        </div>
+
+        <figure class="proof__vis" data-reveal style="--i:1">
+          <div class="panel">
+            <div class="crop crop--strip">
+              <img src="assets/product/analytics.png"
+                   alt="Close crop of the Events section at the foot of the analytics screen: the heading Events beside an All events dropdown, and the start of the table header row reading EVENT, DATE and REQUESTS."
+                   width="3200" height="2000"
+                   style="--z:2.6; --l:-16.25%; --t:-89.75%; --zm:4; --lm:-17.5%; --tm:-93.35%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            The Events table header, on the same screen as the four counts and the chart.
+          </figcaption>
+        </figure>
+      </div>
+
+      
+      <div class="credit" data-reveal>
+        <p>Western Regional Medical Center hired two LPNs, three RNs, and two MAs.</p>
+        <cite>Western Regional Medical Center</cite>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section" id="export">
+    <div class="u-container">
+
+      
+      <div class="proof">
+        <div class="proof__body" data-reveal>
+          <p class="t-eyebrow">Proof 04</p>
+          <h2 class="t-h2 t-balance">Downloadable data, and a dashboard that stays open.</h2>
+          <p class="t-lead">
+            The post-event report is not a summary you read once. It arrives with interview
+            stats, candidate dispositions and downloadable data — and the screen it came
+            from does not close when the event does.
+          </p>
+          <ul class="ulist">
+            <li><strong>Post-event report with interview stats, candidate dispositions, and downloadable data</strong> — on the All Packages Include list, so Starter, Growth and Pro alike.</li>
+            <li>Résumés and contact info for every matched candidate, not only the ones who turned up.</li>
+            <li>The employer dashboard keeps dispositions, notes and analytics against each candidate.</li>
+            <li>Follow-up interviews and messaging continue after the event, which is why the numbers on this screen keep moving after the day itself.</li>
+          </ul>
+        </div>
+
+        
+        <div class="proof__vis" data-reveal style="--i:1">
+          <div class="shotgap" data-placeholder>
+            <p class="shotgap__t">{{POST-EVENT REPORT / EXPORT — SCREENSHOT NEEDED}}</p>
+            <p>
+              The analytics capture ends at the Events table header row — it shows no
+              export control and no report document. Capture the download before this page
+              ships; do not substitute a mock.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section" id="more" style="padding-top:0">
+    <div class="u-container">
+      <div style="max-width:52ch" data-reveal>
+        <p class="t-eyebrow">The rest of the platform</p>
+        <h2 class="t-h2 t-balance">Where these numbers come from.</h2>
+        <a class="btn btn--ghost rail__up" href="page-platform.html">All six capabilities, on one page →</a>
+      </div>
+
+      <div class="rail">
+        <a class="card" href="page-platform-events-dashboard.html" data-reveal style="--i:0">
+          <span class="rail__t">Events dashboard <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Every event you have registered for, with the interview location you set on each one.</span>
+        </a>
+        <a class="card" href="page-platform-candidate-pipeline.html" data-reveal style="--i:1">
+          <span class="rail__t">Candidate pipeline <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Matched candidates request interviews; you accept, decline or reschedule from the row.</span>
+        </a>
+        <a class="card" href="page-platform-interview-scheduling.html" data-reveal style="--i:2">
+          <span class="rail__t">Interview scheduling <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Accepted requests land on one schedule, whichever interview location they belong to.</span>
+        </a>
+        <a class="card" href="page-platform-event-day.html" data-reveal style="--i:3">
+          <span class="rail__t">Event day <span aria-hidden="true">→</span></span>
+          <span class="rail__d">The lobby, the interview itself, and what the screen shows once a session has ended.</span>
+        </a>
+        <a class="card" href="page-platform-messaging-automations.html" data-reveal style="--i:4">
+          <span class="rail__t">Messaging &amp; automations <span aria-hidden="true">→</span></span>
+          <span class="rail__d">Message candidates directly, or let the automations send as they move through your process.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <section class="u-section ctaband" id="cta">
+    <div class="u-container">
+      <div class="ctaband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Find out what your next event actually does.</h2>
+          <p class="t-lead">
+            Register for an event in your city and post your jobs. Matching activates
+            immediately, the first interview requests arrive within a few hours, and the
+            counting starts there.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+            <a href="page-events.html" class="btn btn--secondary btn--lg">Browse upcoming events</a>
+          </div>
+        </div>
+
+        <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Interviews conducted</span>
+            <strong data-count>500,000+</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Employers who return</span>
+            <strong data-count>87%</strong>
+            <span class="ctaband__src">Based on 2025 platform data</span>
+          </li>
+          <li>
+            <span class="t-eyebrow">Cities</span>
+            <strong data-count>300+</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><span aria-current="page">Analytics</span></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+</body>
+</html>

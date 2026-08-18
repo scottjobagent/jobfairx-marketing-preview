@@ -1,0 +1,1561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security &amp; Trust — JobFairX</title>
+<meta name="description" content="What JobFairX can evidence about data handling, access control, sub-processors, certifications, candidate data and availability during live events — and what is still undocumented.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ==========================================================================
+   PAGE — SECURITY / TRUST  (/employer/security)
+   The procurement gate. 9 of 9 benchmarked competitors have this page; we
+   dead-link ours today (PAGE-INVENTORY, Wave 1 + Wave 3).
+
+   THE RULE THIS PAGE IS BUILT ON: we hold no third-party certification, and
+   SOC 2 has been an unresolved item since day one. Nothing here may imply
+   otherwise. Every assertion is a CLAIM CARD paired with its evidence; where
+   there is no evidence the card says so in its own status chip and carries a
+   visible {{PLACEHOLDER}}.
+
+   There are a lot of placeholders. That is the deliverable — this page is
+   Scott's procurement checklist as much as it is a web page.
+   ========================================================================== */
+
+/* ---------- announcement bar (copied verbatim from page-faq) ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+/* ---------- nav (copied verbatim from page-faq) ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+/* Solid when stuck. No backdrop-filter — a translucent bar over a hard theme
+   cut shows the seam sliding through it. */
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px;
+  background: var(--accent);
+}
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__links { margin-inline: 0; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: var(--void); padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid var(--hairline); }
+  .drawer a.is-current { color: var(--accent); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; }
+}
+
+/* ---------- hero ---------- */
+.shero { position: relative; overflow: hidden; padding-block: clamp(48px, 7vh, 88px) var(--s-20); }
+.shero__glow { position: absolute; inset: -34% -10% auto; height: 620px; pointer-events: none; z-index: 0; }
+.shero__glow::before, .shero__glow::after {
+  content: ''; position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
+}
+.shero__glow::before {
+  width: 620px; height: 520px; left: 4%; top: 16%;
+  background: radial-gradient(circle, rgba(47,92,255,.30), transparent 68%);
+  animation: drift1 26s var(--e-inout) infinite alternate;
+}
+.shero__glow::after {
+  width: 520px; height: 460px; right: 6%; top: 0;
+  background: radial-gradient(circle, rgba(120,80,255,.17), transparent 70%);
+  animation: drift2 32s var(--e-inout) infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(70px,50px,0) scale(1.12); } }
+@keyframes drift2 { to { transform: translate3d(-60px,70px,0) scale(1.08); } }
+
+.shero__grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 18%, #000 25%, transparent 78%);
+}
+.shero__inner { position: relative; z-index: 2; }
+.shero h1 { max-width: 19ch; margin-top: var(--s-4); }
+.shero__sub { max-width: 64ch; margin-top: var(--s-6); }
+
+/* jump strip — wraps rather than scrolls, so there is no mobile overflow risk */
+.jump { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-8); }
+.jump a {
+  font-size: var(--t-xs); letter-spacing: .006em; padding: 7px 13px;
+  border-radius: var(--r-pill); border: 1px solid var(--hairline); color: var(--ink-2);
+  transition: color var(--t-micro) var(--e-inout), border-color var(--t-micro) var(--e-inout), background var(--t-micro) var(--e-inout);
+}
+.jump a:hover { color: var(--ink); border-color: var(--hairline-strong); background: color-mix(in srgb, var(--ink) 5%, transparent); }
+
+/* ---------- the zero callout ----------
+   Same device as the FAQ hero callout. Depth on dark = hairline + rim light.
+   No shadow, no coloured bloom. */
+.callout {
+  position: relative; z-index: 2;
+  margin-top: var(--s-16);
+  display: grid; grid-template-columns: 200px 1fr; gap: var(--s-10);
+  align-items: center;
+  padding: var(--s-8);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--hairline);
+  background: rgba(255,255,255,.045);
+  box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28);
+}
+.callout__fig { text-align: center; border-right: 1px solid var(--hairline); padding-right: var(--s-8); }
+.callout__n {
+  display: block; font-size: clamp(3rem, 2rem + 4vw, 4.5rem); font-weight: 500;
+  line-height: .9; letter-spacing: -.05em; color: var(--ink);
+}
+.callout__u { display: block; margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-3); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; }
+.callout__quote {
+  font-size: clamp(1.0625rem, 1rem + .5vw, 1.375rem); font-weight: 450;
+  line-height: 1.45; letter-spacing: -.02em; color: var(--ink);
+  margin-top: var(--s-4);
+}
+.callout__note { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-4); max-width: 58ch; letter-spacing: .006em; }
+.callout .btn--ghost { margin-top: var(--s-5); font-size: var(--t-sm); color: var(--accent-hover); }
+@media (max-width: 780px) {
+  .callout { grid-template-columns: 1fr; gap: var(--s-6); padding: var(--s-6); margin-top: var(--s-12); }
+  .callout__fig { text-align: left; border-right: 0; border-bottom: 1px solid var(--hairline); padding-right: 0; padding-bottom: var(--s-5); display: flex; align-items: baseline; gap: var(--s-3); }
+  .callout__u { margin-top: 0; }
+}
+
+/* ---------- how to read this page ---------- */
+.legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); margin-top: var(--s-10); position: relative; z-index: 2; }
+.legend li { min-width: 0; padding-top: var(--s-4); border-top: 1px solid var(--hairline); }
+.legend p { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+@media (max-width: 780px) { .legend { grid-template-columns: 1fr; gap: var(--s-4); } }
+
+/* ---------- status chips ----------
+   Three states and only three. "Evidenced" means you can check it today.
+   "Not certified" means we do not hold it — no hedging verb allowed.
+   "Undocumented" means the question is real and the answer is not written. */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase; line-height: 1;
+  padding: 5px 9px; border-radius: var(--r-xs); border: 1px solid;
+}
+.chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+.chip--ok  { color: #1c6b4a; border-color: color-mix(in srgb, #1c6b4a 32%, transparent); background: color-mix(in srgb, #1c6b4a 8%, transparent); }
+.chip--gap { color: #8a5416; border-color: color-mix(in srgb, #b06d1f 36%, transparent); background: color-mix(in srgb, #b06d1f 10%, transparent); }
+.chip--no  { color: var(--ink-2); border-color: var(--hairline-strong); background: color-mix(in srgb, var(--ink) 5%, transparent); }
+[data-theme="dark"] .chip--ok  { color: #56c398; border-color: color-mix(in srgb, #56c398 30%, transparent); background: color-mix(in srgb, #56c398 10%, transparent); }
+[data-theme="dark"] .chip--gap { color: #dda059; border-color: color-mix(in srgb, #dda059 30%, transparent); background: color-mix(in srgb, #dda059 10%, transparent); }
+
+/* ---------- claim card ----------
+   Assertion + status + the evidence behind it, in that order, every time.
+   A card with no evidence line is not allowed on this page. */
+.sec { scroll-margin-top: 96px; }
+.sec + .sec { margin-top: var(--s-24); }
+.sec__head { max-width: 70ch; padding-bottom: var(--s-6); border-bottom: 1px solid var(--hairline); }
+.sec__head h2 { margin-top: var(--s-3); }
+.sec__head > p:not(.t-eyebrow) { margin-top: var(--s-5); }
+
+.claims { display: grid; gap: var(--s-4); margin-top: var(--s-8); grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+.claims > * { min-width: 0; }
+.claim--wide { grid-column: 1 / -1; }
+
+.claim {
+  position: relative; min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-left: 2px solid var(--hairline-strong);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  box-shadow: var(--sh-sm);
+  transition: border-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.claim:hover { box-shadow: var(--sh-md); }
+/* On dark the depth mechanism swaps entirely: plate + rim light, no shadow. */
+[data-theme="dark"] .claim { background: rgba(255,255,255,.045); box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28); }
+[data-theme="dark"] .claim:hover { box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.28); border-color: var(--hairline-strong); }
+
+.claim[data-state="ok"]  { border-left-color: #1c6b4a; }
+.claim[data-state="gap"] { border-left-color: #b06d1f; }
+.claim[data-state="no"]  { border-left-color: var(--ink-3); }
+[data-theme="dark"] .claim[data-state="ok"]  { border-left-color: #3f9d76; }
+[data-theme="dark"] .claim[data-state="gap"] { border-left-color: #c7883f; }
+
+.claim__head { display: flex; align-items: flex-start; gap: var(--s-4); }
+.claim__t { font-size: 1.0625rem; font-weight: 550; line-height: 1.3; letter-spacing: -.018em; color: var(--ink); }
+.claim__head .chip { margin-left: auto; margin-top: 3px; }
+.claim p { margin-top: var(--s-3); font-size: .9375rem; line-height: 1.62; color: var(--ink-2); letter-spacing: .006em; }
+.claim ul { margin-top: var(--s-3); display: grid; gap: var(--s-2); }
+.claim ul li { font-size: .9375rem; line-height: 1.5; color: var(--ink-2); letter-spacing: .006em; padding-left: var(--s-4); position: relative; }
+.claim ul li::before { content: ''; position: absolute; left: 0; top: .62em; width: 5px; height: 1px; background: var(--ink-3); }
+.claim__ev {
+  margin-top: var(--s-5); padding-top: var(--s-4);
+  border-top: 1px dashed var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; line-height: 1.5;
+}
+.claim__ev b {
+  display: block; margin-bottom: 5px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
+}
+@media (max-width: 560px) {
+  .claim__head { flex-direction: column; gap: var(--s-3); }
+  .claim__head .chip { margin-left: 0; margin-top: 0; }
+}
+
+/* ---------- document board ----------
+   Two columns at every width, so it never needs a horizontal scroller. */
+.board {
+  margin-top: var(--s-8); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  background: var(--surface); box-shadow: var(--sh-sm); overflow: hidden;
+}
+.board__row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s-3) var(--s-6);
+  align-items: center; padding: var(--s-4) var(--s-5);
+  border-top: 1px solid var(--hairline);
+}
+.board__row:first-child { border-top: 0; }
+.board__row dt { min-width: 0; font-size: .9375rem; font-weight: 500; color: var(--ink); letter-spacing: -.006em; }
+.board__row dd { min-width: 0; }
+.board__note { display: block; margin-top: 4px; font-size: var(--t-xs); font-weight: 400; color: var(--ink-3); letter-spacing: .006em; }
+@media (max-width: 640px) {
+  .board__row { grid-template-columns: minmax(0, 1fr); align-items: start; }
+}
+
+/* ---------- sub-processor table ----------
+   A four-column table cannot reflow honestly, so it scrolls inside its own
+   box. min-width:0 on the wrapper is load-bearing: a grid/flex child defaults
+   to min-width:auto and would push the whole document wide instead. */
+/* visually hidden, still announced */
+.u-vh {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.tscroll {
+  min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  margin-top: var(--s-4);
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  background: var(--surface); box-shadow: var(--sh-sm);
+}
+.subs { width: 100%; min-width: 660px; border-collapse: collapse; font-size: var(--t-sm); }
+.subs th, .subs td { text-align: left; vertical-align: top; padding: var(--s-4) var(--s-5); border-bottom: 1px solid var(--hairline); letter-spacing: .006em; }
+.subs thead th {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
+  background: var(--surface-2); white-space: nowrap;
+}
+.subs tbody tr:last-child td { border-bottom: 0; }
+.subs td:first-child { color: var(--ink); font-weight: 500; }
+.subs td { color: var(--ink-2); }
+.scroll-hint { margin-top: var(--s-3); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+@media (min-width: 861px) { .scroll-hint { display: none; } }
+
+/* ---------- product evidence figures ---------- */
+.shot { margin: var(--s-8) 0 0; }
+.shot figcaption { margin-top: var(--s-4); max-width: 68ch; }
+.anno { margin-top: var(--s-8); }
+
+/* ---------- request band ---------- */
+.reqband__inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-16); align-items: start; }
+.reqband p { margin-top: var(--s-5); max-width: 50ch; }
+.cta-row { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-8); }
+.reqband__facts { display: grid; gap: var(--s-5); padding-left: var(--s-10); border-left: 1px solid var(--hairline); min-width: 0; }
+.reqband__facts li { display: grid; gap: 4px; min-width: 0; }
+.reqband__facts a, .reqband__facts strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+.reqband__facts span.addr { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.reqband__facts a:hover { color: var(--accent-hover); }
+@media (max-width: 900px) {
+  .reqband__inner { grid-template-columns: 1fr; gap: var(--s-10); }
+  .reqband__facts { padding-left: 0; padding-top: var(--s-8); border-left: 0; border-top: 1px solid var(--hairline); }
+}
+
+/* ---------- footer (copied verbatim from page-faq) ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- placeholders ----------
+   Same find-and-swap contract as the other pages. This page carries dozens of
+   them, so the corner "PLACEHOLDER" badge is kept for block-level unknowns and
+   suppressed on the inline chips — the amber chip already reads as a blank to
+   fill, and 60 corner badges would bury the copy they are pointing at. */
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+.ph {
+  display: inline-block; position: relative;
+  font-family: var(--font-mono); font-size: .78em; line-height: 1.35;
+  letter-spacing: .02em; padding: 2px 6px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416; white-space: normal;
+}
+[data-theme="dark"] .ph {
+  color: #dda059;
+  background: color-mix(in srgb, #dda059 12%, transparent);
+  border-color: color-mix(in srgb, #dda059 30%, transparent);
+}
+.ph[data-placeholder]::after { content: none; }
+</style>
+</head>
+<body>
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-3-hybrid.html#inperson">See how it works →</a>
+  </div>
+
+  
+  <header class="nav" data-nav data-on="dark">
+    <div class="u-container nav__inner">
+      <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="page-events.html">Upcoming Hiring Events</a>
+        <a href="page-pricing.html">Pricing</a>
+        <a href="page-faq.html">FAQ</a>
+        <a href="page-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+      </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+
+    <a href="page-events.html">Upcoming Hiring Events</a>
+    <a href="page-pricing.html">Pricing</a>
+    <a href="page-faq.html">FAQ</a>
+    <a href="page-contact.html">Contact Us</a>
+    <a href="#" class="drawer__signin">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+
+  </div>
+
+  <section class="shero grain">
+    <div class="shero__glow" aria-hidden="true"></div>
+    <div class="shero__grid" aria-hidden="true"></div>
+
+    <div class="u-container shero__inner">
+      <p class="t-eyebrow">Security and trust</p>
+      <h1 class="t-h1 t-balance">What we can evidence, and what we can’t yet.</h1>
+
+      <p class="t-lead shero__sub">
+        This page is written to survive a vendor review rather than to close one.
+        Every claim below is paired with the evidence behind it. Where the evidence
+        does not exist, the card says so, names what is missing and leaves a blank
+        for the answer — including our certifications, which we do not hold.
+      </p>
+
+      <p class="t-sm" style="max-width:64ch;margin-top:var(--s-5);color:var(--ink-3)">
+        4,000+ employers have run events with us and 500,000+ interviews have been
+        conducted on the platform. None of that is a security control, and we are not
+        going to present it as one.
+      </p>
+
+      
+      <aside class="callout" aria-labelledby="callout-h">
+        <div class="callout__fig">
+          <span class="callout__n">0</span>
+          <span class="callout__u">certifications held</span>
+        </div>
+        <div class="callout__body">
+          <p class="t-eyebrow" id="callout-h">Read this before you read anything else</p>
+          <p class="callout__quote">
+            JobFairX holds no third-party security certification today. Not SOC 2, not
+            ISO 27001. There is no report to send you, and nothing here is “in progress”
+            in a way we can evidence.
+          </p>
+          <p class="callout__note">
+            If your review requires a completed SOC 2 Type II report, we will not pass it
+            this quarter. If it requires straight answers, a named owner and signed
+            paperwork, we can do that this week. A page that says
+            “SOC 2 Type II — not yet certified, targeted <span class="ph" data-placeholder>{{DATE}}</span>”
+            is worth more in a review than one that implies otherwise and gets found out at
+            the questionnaire stage.
+          </p>
+          <a href="#certifications" class="btn btn--ghost">Go straight to certifications →</a>
+        </div>
+      </aside>
+
+      
+      <ul class="legend">
+        <li>
+          <span class="chip chip--ok">Evidenced</span>
+          <p>Something you can check today — on this site, in the product, or in a document we already send.</p>
+        </li>
+        <li>
+          <span class="chip chip--no">Not certified</span>
+          <p>A certification or artefact we do not hold. No audit, no report, no softening verb.</p>
+        </li>
+        <li>
+          <span class="chip chip--gap">Undocumented</span>
+          <p>A real question with no written answer yet. It carries a visible blank until someone fills it in.</p>
+        </li>
+      </ul>
+
+      <nav class="jump" aria-label="On this page">
+        <a href="#documents">Documents you can ask for</a>
+        <a href="#data">Data handling &amp; retention</a>
+        <a href="#access">Access control</a>
+        <a href="#subprocessors">Sub-processors</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#candidates">Candidate data &amp; EEOC</a>
+        <a href="#availability">Availability during events</a>
+        <a href="#request">Request a document</a>
+      </nav>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section">
+    <div class="u-container">
+
+      
+      <section class="sec" id="documents">
+        <div class="sec__head" data-reveal>
+          <p class="t-eyebrow">The short version</p>
+          <h2 class="t-h2 t-balance">Every document a review asks for, and whether it exists</h2>
+          <p class="t-lead">
+            Reviewers open a security page looking for artefacts, not adjectives. Here is
+            the list, with the true status of each. Ask for any of them by name — you will
+            be told it exists, or told it doesn’t.
+          </p>
+        </div>
+
+        <dl class="board" data-reveal>
+          <div class="board__row">
+            <dt>SOC 2 Type II report
+              <span class="board__note">No audit performed. Target date <span class="ph" data-placeholder>{{SOC2-II TARGET}}</span></span></dt>
+            <dd><span class="chip chip--no">Not certified</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>SOC 2 Type I report
+              <span class="board__note">Whether we do a Type I first is <span class="ph" data-placeholder>{{DECISION PENDING}}</span></span></dt>
+            <dd><span class="chip chip--no">Not certified</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>ISO/IEC 27001 certificate
+              <span class="board__note">On the roadmap? <span class="ph" data-placeholder>{{CONFIRM — assume no}}</span></span></dt>
+            <dd><span class="chip chip--no">Not certified</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Penetration test summary
+              <span class="board__note">Last test, tester and scope: <span class="ph" data-placeholder>{{NO TEST ON FILE — CONFIRM}}</span></span></dt>
+            <dd><span class="chip chip--gap">Undocumented</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Written information security policy
+              <span class="board__note">Owner and review cadence: <span class="ph" data-placeholder>{{UNASSIGNED}}</span></span></dt>
+            <dd><span class="chip chip--gap">Undocumented</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Data Processing Agreement (DPA)
+              <span class="board__note">A DPA page is planned; nothing is published. Draft status <span class="ph" data-placeholder>{{DPA STATUS}}</span></span></dt>
+            <dd><span class="chip chip--gap">Not published</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Sub-processor list
+              <span class="board__note">Functions are listed below. Vendor names are <span class="ph" data-placeholder>{{TO BE NAMED}}</span></span></dt>
+            <dd><span class="chip chip--gap">Partial</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Completed security questionnaire (SIG Lite, CAIQ)
+              <span class="board__note">No standard response set exists yet: <span class="ph" data-placeholder>{{NONE COMPLETED}}</span></span></dt>
+            <dd><span class="chip chip--gap">Undocumented</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Certificate of insurance — cyber liability
+              <span class="board__note">Carrier and limits: <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></span></dt>
+            <dd><span class="chip chip--gap">Undocumented</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Business continuity / disaster recovery plan
+              <span class="board__note">RTO, RPO and last restore test: <span class="ph" data-placeholder>{{UNDOCUMENTED}}</span></span></dt>
+            <dd><span class="chip chip--gap">Undocumented</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>Accessibility conformance report (VPAT / WCAG 2.1 AA)
+              <span class="board__note">Not produced. See the accessibility card under certifications.</span></dt>
+            <dd><span class="chip chip--no">Not produced</span></dd>
+          </div>
+          <div class="board__row">
+            <dt>W-9 and vendor onboarding pack
+              <span class="board__note">Entity details are at the foot of this page. Pack owner <span class="ph" data-placeholder>{{UNASSIGNED}}</span></span></dt>
+            <dd><span class="chip chip--gap">Undocumented</span></dd>
+          </div>
+        </dl>
+
+        <p class="t-sm" style="margin-top:var(--s-5);max-width:66ch">
+          Page last reviewed <span class="ph" data-placeholder>{{REVIEW DATE}}</span> ·
+          owned by <span class="ph" data-placeholder>{{OWNER NAME + ROLE}}</span>.
+          A security page with no review date is a security page nobody maintains.
+        </p>
+      </section>
+
+      
+      <section class="sec" id="data">
+        <div class="sec__head" data-reveal>
+          <p class="t-eyebrow">01 — Data handling and retention</p>
+          <h2 class="t-h2 t-balance">What we hold, where it came from, how long it stays</h2>
+          <p class="t-lead">
+            Two of these have public answers today. The rest are blanks, and the blank is
+            the honest answer until the policy is written.
+          </p>
+        </div>
+
+        <div class="claims">
+
+          <article class="claim" data-state="ok" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Candidates come from our own audience, not from scraping</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              JobFairX maintains a database of over 3 million job seekers actively looking
+              for new opportunities, added through targeted digital marketing, social media
+              advertising, job distribution across major platforms, email campaigns and
+              organic search. They register with us; they are not lifted from somewhere else.
+            </p>
+            <p>
+              The field-level map of what a candidate submits, and which fields are optional,
+              is <span class="ph" data-placeholder>{{CANDIDATE DATA MAP}}</span>.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — “How are candidates sourced?”, published on jobfairx.com.
+            </p>
+          </article>
+
+          <article class="claim" data-state="ok" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">What leaves our system and enters yours</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              Every package includes résumés and contact information for every matched
+              candidate, plus a post-event report with downloadable data. That is personal
+              data crossing into your systems — from that moment your own retention and
+              deletion rules govern it, not ours.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Pricing page — “All Packages Include”, items 2 and 6.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">How long we keep candidate records</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              We publicly tell employers that access doesn’t expire and that you can keep
+              scheduling follow-ups for as long as you need. That is a product promise. Read
+              as a retention policy — which is how a reviewer will read it — it says
+              “indefinitely”, and no schedule sits behind it.
+            </p>
+            <ul>
+              <li>Retention schedule for candidate records <span class="ph" data-placeholder>{{SCHEDULE}}</span></li>
+              <li>What happens when an employer account closes <span class="ph" data-placeholder>{{POLICY}}</span></li>
+              <li>Backup retention window <span class="ph" data-placeholder>{{WINDOW}}</span></li>
+            </ul>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — “What happens after the hiring event?”. No written schedule exists.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:3">
+            <div class="claim__head">
+              <h3 class="claim__t">Deletion requests</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              How a candidate or an employer asks for erasure, who executes it, and how fast:
+              <span class="ph" data-placeholder>{{DELETION PROCESS}}</span>
+              <span class="ph" data-placeholder>{{RESPONSE SLA}}</span>.
+            </p>
+            <p>
+              One thing we can state without a policy: a résumé you have already downloaded
+              sits on your machine, not ours. No deletion we perform reaches it. Your review
+              should treat the export as the boundary.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              None on file. The export boundary follows from the post-event report being a
+              download.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Encryption, backups and environment separation</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              We are not going to assert TLS versions, key management or backup encryption on
+              a marketing page with nothing behind them. Each of these needs a document and a
+              date, not a sentence:
+            </p>
+            <ul>
+              <li>Encryption in transit <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Encryption at rest <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Backup cadence and last tested restore <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Production / non-production separation <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+            </ul>
+            <p class="claim__ev"><b>Evidence</b> None on file.</p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">Where the data is stored</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Events are listed for the United States only, so the candidate audience is
+              domestic by construction. That describes coverage, not residency — where records
+              are stored and processed, and whether any sub-processor moves them outside the
+              US, is <span class="ph" data-placeholder>{{DATA RESIDENCY}}</span>.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              The public events API is queried for US events only. Storage location is unverified.
+            </p>
+          </article>
+
+          <article class="claim claim--wide" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">Whether candidate or employer data trains a model</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Matching is described publicly as AI matching. Whether résumés, recruiter notes,
+              dispositions or interview content are used to train or fine-tune any model —
+              ours or a vendor’s — is
+              <span class="ph" data-placeholder>{{MODEL TRAINING POSITION}}</span>.
+              This is the question most likely to stall an enterprise review in 2026, and it
+              deserves one line in writing either way. Answering “no, and here is the contract
+              clause” costs nothing if it is true.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              None on file. “AI matching and job promotion” appears in the pricing page’s
+              “All Packages Include” list; the data flow behind it is not published.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      
+      <section class="sec" id="access">
+        <div class="sec__head" data-reveal>
+          <p class="t-eyebrow">02 — Access control and authentication</p>
+          <h2 class="t-h2 t-balance">Who gets into your account, and who inside JobFairX gets in with you</h2>
+          <p class="t-lead">
+            Seat count is the one access control we can point at today. Everything past it is
+            a blank, and blanks in this section are the ones most likely to fail a review
+            outright — so ask before you buy, not after.
+          </p>
+        </div>
+
+        <div class="claims">
+
+          <article class="claim" data-state="ok" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Seats are bounded by your plan</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              Starter includes 2 recruiter seats. Growth includes up to 5. Pro includes
+              unlimited recruiters. The ceiling is contractual and visible before you buy.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Pricing page — tier comparison, “recruiter seats” row.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">Roles and permissions inside an account</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Whether a seat can be scoped — to one event, one job, or view-only on résumés —
+              is <span class="ph" data-placeholder>{{ROLE MODEL}}</span>. The account screen we
+              ship shows a signed-in user editing their own details, and nothing about anyone
+              else’s access.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Product — Account &amp; Billing screen, shown below.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">Single sign-on and provisioning</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              We have no evidence of an SSO configuration surface in the product. Until it is
+              confirmed, treat it as unavailable rather than assuming:
+              <span class="ph" data-placeholder>{{SAML SSO}}</span>
+              <span class="ph" data-placeholder>{{SCIM PROVISIONING}}</span>.
+              If SSO is a hard requirement in your review, raise it before purchase.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              None. Absence of a captured settings surface is not proof of absence — hence the blank.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:3">
+            <div class="claim__head">
+              <h3 class="claim__t">Multi-factor authentication and password policy</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <ul>
+              <li>MFA available / enforced / optional <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Password complexity and rotation rules <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Session timeout and concurrent-session handling <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+            </ul>
+            <p class="claim__ev"><b>Evidence</b> None on file.</p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Removing a recruiter</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              When someone leaves your team: who removes the seat, how quickly it takes effect,
+              and what happens to the candidate conversations they owned —
+              <span class="ph" data-placeholder>{{OFFBOARDING PROCESS}}</span>.
+              Offboarding is the control an auditor tests first, because it is the one that
+              silently rots.
+            </p>
+            <p class="claim__ev"><b>Evidence</b> None on file.</p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">JobFairX staff access to your account</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Support cannot help you mid-event without seeing something. Which staff can view
+              your candidate records, under what approval, and whether that view is logged and
+              shown to you: <span class="ph" data-placeholder>{{INTERNAL ACCESS POLICY}}</span>
+              <span class="ph" data-placeholder>{{ACCESS LOGGING}}</span>.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              None on file. Dedicated human support is included in every package, which implies
+              access exists — the policy governing it does not.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">Audit log</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              The dashboard records dispositions and notes against each candidate. That is a
+              hiring record, not a security audit log — it does not tell you who signed in,
+              from where, or what they exported.
+              <span class="ph" data-placeholder>{{AUDIT LOG + EXPORT}}</span>
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Pricing page — “employer dashboard with dispositions, notes, analytics”.
+            </p>
+          </article>
+
+        </div>
+
+        <figure class="shot" data-reveal>
+          <div class="panel">
+            <div class="crop crop--16x10">
+              <img src="assets/product/account-billing.png"
+                   alt="The JobFairX Account and Billing screen, showing a signed-in recruiter's own details — first name, last name, company name, job title, email and phone — with Account and Billing tabs and no controls for other users' access."
+                   width="3200" height="2000"
+                   style="--z:1.5; --l:-30%; --t:0%; --zm:2; --lm:-32%; --tm:-14%">
+            </div>
+          </div>
+          <figcaption class="t-sm">
+            The account surface as it ships: one signed-in user, their own details, and the
+            billing tab. No role assignment, no seat management, no authentication settings
+            appear here — which is why the cards above are blanks rather than claims.
+          </figcaption>
+        </figure>
+      </section>
+
+      
+      <section class="sec" id="subprocessors">
+        <div class="sec__head" data-reveal>
+          <p class="t-eyebrow">03 — Sub-processors</p>
+          <h2 class="t-h2 t-balance">The list enterprise reviews ask for by name</h2>
+          <p class="t-lead">
+            Ours does not exist yet. What follows is the honest halfway house: the functions
+            the platform demonstrably performs, with the vendor column left open. Filling it
+            in is roughly a half-day of work and it is the highest-value unfinished item on
+            this page.
+          </p>
+        </div>
+
+        <p class="t-sm" data-reveal style="margin-top:var(--s-8);max-width:66ch">
+          Functions are established from what the product visibly does. Vendors, data scope
+          and regions are unfilled.
+        </p>
+
+        <div class="tscroll" data-reveal data-placeholder>
+          <table class="subs">
+            
+            <caption class="u-vh">
+              JobFairX sub-processors by function. Vendor, data scope and region are not yet filled in.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Function</th>
+                <th scope="col">Sub-processor</th>
+                <th scope="col">Data shared</th>
+                <th scope="col">Region</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Application hosting and database</td>
+                <td><span class="ph" data-placeholder>{{VENDOR}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>JobFairX video interview rooms</td>
+                <td><span class="ph" data-placeholder>{{VENDOR — or in-house?}}</span></td>
+                <td><span class="ph" data-placeholder>{{Is video recorded at all?}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>Transactional email — interview confirmations and the 9:00 AM daily summary</td>
+                <td><span class="ph" data-placeholder>{{VENDOR}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>SMS reminders to candidates before their interview</td>
+                <td><span class="ph" data-placeholder>{{VENDOR}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>Card payments for event registration and bundles</td>
+                <td><span class="ph" data-placeholder>{{PAYMENT PROCESSOR}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>Résumé storage and post-event report downloads</td>
+                <td><span class="ph" data-placeholder>{{VENDOR}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>Candidate matching</td>
+                <td><span class="ph" data-placeholder>{{IN-HOUSE OR THIRD-PARTY MODEL?}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+              <tr>
+                <td>Product analytics and marketing tooling</td>
+                <td><span class="ph" data-placeholder>{{VENDOR}}</span></td>
+                <td><span class="ph" data-placeholder>{{SCOPE}}</span></td>
+                <td><span class="ph" data-placeholder>{{REGION}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="scroll-hint">Scroll the table sideways to see every column →</p>
+
+        <div class="claims">
+          <article class="claim" data-state="gap" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Change notification</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              How much notice you get before a new sub-processor is added, and whether you can
+              object: <span class="ph" data-placeholder>{{NOTICE PERIOD}}</span>
+              <span class="ph" data-placeholder>{{OBJECTION RIGHT}}</span>.
+              Most enterprise DPAs require 30 days and a right to object; ours has to say
+              something before it can say that.
+            </p>
+            <p class="claim__ev"><b>Evidence</b> None — no DPA is published.</p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">How this list was assembled</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              By reading the product, not a register: video rooms, SMS and email reminders,
+              card payments and résumé downloads all have to run on something. That makes the
+              function column trustworthy and the vendor column empty.
+              <span class="ph" data-placeholder>{{REGISTER OWNER}}</span>
+              <span class="ph" data-placeholder>{{REVIEW CADENCE}}</span>
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — automated emails and SMS before each interview; pricing page —
+              downloadable post-event report.
+            </p>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <section class="u-section" id="certifications">
+    <div class="u-container">
+
+      <div class="sec__head" data-reveal>
+        <p class="t-eyebrow">04 — Certifications</p>
+        <h2 class="t-h2 t-balance">We hold none. Here is the state of each one anyway.</h2>
+        <p class="t-lead">
+          This is the section other security pages are written to blur — “enterprise-grade”,
+          “bank-level”, “aligned with”. None of those words appear below. Each card names a
+          certification a reviewer asks for and states what is actually true about it today.
+        </p>
+      </div>
+
+      <div class="claims">
+
+        <article class="claim claim--wide" data-state="no" data-reveal>
+          <div class="claim__head">
+            <h3 class="claim__t">SOC 2 Type II</h3>
+            <span class="chip chip--no">Not certified</span>
+          </div>
+          <p>
+            No audit has been performed and no report exists. This has been an open item since
+            the company started and it is still open — it is the single most-requested artefact
+            in our pipeline and the one we cannot produce.
+          </p>
+          <ul>
+            <li>Target date for a completed report <span class="ph" data-placeholder>{{TARGET DATE}}</span></li>
+            <li>Auditor <span class="ph" data-placeholder>{{NOT SELECTED}}</span></li>
+            <li>Readiness assessment <span class="ph" data-placeholder>{{NOT STARTED — CONFIRM}}</span></li>
+            <li>Observation window, once started <span class="ph" data-placeholder>{{TBD}}</span></li>
+          </ul>
+          <p class="claim__ev"><b>Evidence</b>
+            None. Nothing is in progress that we can evidence, so nothing is described as in progress.
+          </p>
+        </article>
+
+        <article class="claim" data-state="no" data-reveal style="--i:1">
+          <div class="claim__head">
+            <h3 class="claim__t">SOC 2 Type I</h3>
+            <span class="chip chip--no">Not certified</span>
+          </div>
+          <p>
+            A Type I is a point-in-time opinion on control design rather than operation. If your
+            review accepts one it is the faster path and worth asking about. Whether we pursue
+            it first is <span class="ph" data-placeholder>{{DECISION PENDING}}</span>.
+          </p>
+          <p class="claim__ev"><b>Evidence</b> None.</p>
+        </article>
+
+        <article class="claim" data-state="no" data-reveal style="--i:2">
+          <div class="claim__head">
+            <h3 class="claim__t">ISO/IEC 27001</h3>
+            <span class="chip chip--no">Not certified</span>
+          </div>
+          <p>
+            Not held, and not currently being pursued as far as we can establish:
+            <span class="ph" data-placeholder>{{ON ROADMAP? — CONFIRM}}</span>.
+            Assume no when scoring us.
+          </p>
+          <p class="claim__ev"><b>Evidence</b> None.</p>
+        </article>
+
+        <article class="claim" data-state="no" data-reveal style="--i:3">
+          <div class="claim__head">
+            <h3 class="claim__t">HIPAA and business associate agreements</h3>
+            <span class="chip chip--no">Not offered</span>
+          </div>
+          <p>
+            We run healthcare hiring events, so hospital procurement asks this every time.
+            Interview scheduling data is not a medical record — but that is our reading, not a
+            signed position. Whether JobFairX will sign a BAA is
+            <span class="ph" data-placeholder>{{UNANSWERED}}</span>, and it needs a real answer
+            before the next healthcare event sells.
+          </p>
+          <p class="claim__ev"><b>Evidence</b>
+            Healthcare is one of five event audiences on the public calendar. No BAA position is published.
+          </p>
+        </article>
+
+        <article class="claim" data-state="gap" data-reveal>
+          <div class="claim__head">
+            <h3 class="claim__t">PCI DSS</h3>
+            <span class="chip chip--gap">Undocumented</span>
+          </div>
+          <p>
+            Event registrations and multi-event bundles are paid by card, so card data is in
+            play somewhere. Handling sits with
+            <span class="ph" data-placeholder>{{PAYMENT PROCESSOR}}</span>, and our own scope
+            and SAQ type is <span class="ph" data-placeholder>{{UNCONFIRMED}}</span>.
+          </p>
+          <p class="claim__ev"><b>Evidence</b>
+            Card checkout exists on the pricing and bundle pages. Nothing further is published.
+          </p>
+        </article>
+
+        <article class="claim" data-state="gap" data-reveal style="--i:1">
+          <div class="claim__head">
+            <h3 class="claim__t">GDPR and UK GDPR</h3>
+            <span class="chip chip--gap">Undocumented</span>
+          </div>
+          <p>
+            Events are listed for the United States only, which probably narrows this — but
+            “probably” is not a position.
+          </p>
+          <ul>
+            <li>Do we process data of candidates outside the US? <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+            <li>DPA available to sign <span class="ph" data-placeholder>{{NOT PUBLISHED}}</span></li>
+            <li>Standard contractual clauses <span class="ph" data-placeholder>{{N/A? — CONFIRM}}</span></li>
+          </ul>
+          <p class="claim__ev"><b>Evidence</b> None published.</p>
+        </article>
+
+        <article class="claim" data-state="gap" data-reveal style="--i:2">
+          <div class="claim__head">
+            <h3 class="claim__t">CCPA / CPRA</h3>
+            <span class="chip chip--gap">Undocumented</span>
+          </div>
+          <p>
+            We run events in 300+ cities, so California candidates are certainly in the database.
+            The consumer request process, the verification steps and our do-not-sell-or-share
+            position are <span class="ph" data-placeholder>{{UNDOCUMENTED}}</span>.
+          </p>
+          <p class="claim__ev"><b>Evidence</b> None published.</p>
+        </article>
+
+        <article class="claim claim--wide" data-state="no" data-reveal style="--i:3">
+          <div class="claim__head">
+            <h3 class="claim__t">WCAG 2.1 AA and VPAT</h3>
+            <span class="chip chip--no">Not produced</span>
+          </div>
+          <p>
+            No conformance report exists. And one defect we found in our own audit rather than
+            waiting for yours: on the live contact form, required fields are marked with an
+            asterisk in the label text only — the <code>required</code> attribute appears zero
+            times on the page, so screen readers and native browser validation get nothing. It
+            is fixed in the rebuild this page belongs to; ship date
+            <span class="ph" data-placeholder>{{DATE}}</span>. A full audit is
+            <span class="ph" data-placeholder>{{NOT SCHEDULED}}</span>.
+          </p>
+          <p class="claim__ev"><b>Evidence</b>
+            Internal audit of jobfairx.com/employer/contact, 17 Aug 2026 — reproducible on the
+            live page today.
+          </p>
+        </article>
+
+      </div>
+
+      <p class="t-lead" style="margin-top:var(--s-10);max-width:60ch" data-reveal>
+        An honest “no” is checkable, and a reviewer can price it. “We take security seriously”
+        is not, and every reviewer knows it.
+      </p>
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="light" style="background:var(--canvas)">
+  <section class="u-section">
+    <div class="u-container">
+
+      
+      <section class="sec" id="candidates">
+        <div class="sec__head" data-reveal>
+          <p class="t-eyebrow">05 — Candidate data and EEOC posture</p>
+          <h2 class="t-h2 t-balance">The inversion changes the compliance questions</h2>
+          <p class="t-lead">
+            Candidates request interviews; you accept, and accepting schedules them. Nobody is
+            pushed into your pipeline. That helps with some questions and creates others —
+            both are below.
+          </p>
+        </div>
+
+        <div class="claims">
+
+          <article class="claim" data-state="ok" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Candidates initiate, and they opt in</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              Matched job seekers request an interview with you. You review the résumé and
+              accept or decline; accepting schedules the interview. Everyone in your pipeline
+              asked to be there.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — “How does candidate matching and interviewing work?”
+            </p>
+          </article>
+
+          <article class="claim" data-state="ok" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">Candidates are local to the event city</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              Candidates are verified to be within approximately 20 miles of the event city.
+              The method behind that verification — self-declared, inferred, or documented —
+              is <span class="ph" data-placeholder>{{VERIFICATION METHOD}}</span>, and a
+              reviewer will ask, because location is inferred data.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — “Are candidates local to the city where the event is held?”
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">What matching actually uses</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Published: “job seekers whose background and interests align with your roles are
+              invited to request interviews.” Which signals the model uses — and specifically
+              whether any protected characteristic is among them — is
+              <span class="ph" data-placeholder>{{MATCHING SIGNALS}}</span>.
+              This is the first question a legal reviewer asks, and it is the one we currently
+              cannot answer.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ. The signal list itself is not published.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:3">
+            <div class="claim__head">
+              <h3 class="claim__t">Audience-themed events</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Events are themed by audience — Healthcare, Technology, Entry-Level, Diversity,
+              Veteran. Our understanding is that a theme describes who an event is marketed to
+              and who chooses to register, not a filter applied to matching. Whether any
+              protected characteristic is used to include or exclude a candidate is
+              <span class="ph" data-placeholder>{{UNANSWERED}}</span>.
+              The answer is probably benign. It still has to exist in writing before it is
+              asked in a review.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — “What types of targeted hiring events do you host?” Nothing states
+              how a theme interacts with matching.
+            </p>
+          </article>
+
+          <article class="claim claim--wide" data-state="gap" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Automated decisions and AI hiring law</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Automatic interview scheduling accepts requests on your behalf. It books a
+              conversation; we have no evidence it rejects, ranks or scores anyone — but “no
+              evidence” is not a compliance position. Three questions need answering before an
+              enterprise legal team asks them:
+            </p>
+            <ul>
+              <li>Does matching rank or score candidates, or only surface them? <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Is matching an automated employment decision tool under NYC Local Law 144, and has a bias audit been conducted? <span class="ph" data-placeholder>{{NOT CONDUCTED — CONFIRM}}</span></li>
+              <li>Illinois AI Video Interview Act — is any notice or consent required for JobFairX video interviews? <span class="ph" data-placeholder>{{UNANSWERED}}</span></li>
+            </ul>
+            <p class="claim__ev"><b>Evidence</b>
+              Employer FAQ — “You can also enable automatic interview scheduling to accept
+              requests automatically.” Pricing page — “auto-accept or review each request”.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">EEO and demographic data</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <ul>
+              <li>Do we collect protected-characteristic data from candidates? <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>Can employers see it? <span class="ph" data-placeholder>{{UNCONFIRMED}}</span></li>
+              <li>What JobFairX retains that you could later be asked to produce <span class="ph" data-placeholder>{{UNDOCUMENTED}}</span></li>
+            </ul>
+            <p>
+              Your own EEOC record-keeping obligations stay yours. The post-event report is
+              downloadable, so you can retain what your policy requires.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Pricing page — “post-event report with downloadable data”.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">Accommodation requests</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Interview location is set by you, per event — not per candidate. A candidate who
+              cannot use the location you chose cannot switch it themselves. How an
+              accommodation request reaches you, and whether it can be made before or only
+              during the event, is
+              <span class="ph" data-placeholder>{{ACCOMMODATION PROCESS}}</span>.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Product — interview location is an employer setting on the events dashboard.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      
+      <section class="sec" id="availability">
+        <div class="sec__head" data-reveal>
+          <p class="t-eyebrow">06 — Availability during live events</p>
+          <h2 class="t-h2 t-balance">An outage inside the window is not degraded service. It is a candidate who took the morning off.</h2>
+          <p class="t-lead">
+            An event is a fixed window, and interviews inside it are half-hour slots with a
+            person waiting on each end. There is no retry at 11:15. That makes availability the
+            security question with the shortest fuse for this product, and it is where a
+            generic uptime page would be most misleading.
+          </p>
+        </div>
+
+        <figure class="anno anno--side" data-reveal>
+          <div class="anno__stage">
+            <div class="panel">
+              <div class="crop crop--16x10">
+                <img src="assets/product/lobby-live.png"
+                     alt="The live event view for the Dallas Healthcare Hiring Event: the event is live with 2 hours 42 minutes remaining in an 11:00 AM to 3:00 PM CT window, three candidates in interview rooms with half-hour slots and wait times, and three more in waiting rooms awaiting an available interviewer."
+                     width="3200" height="2000"
+                     style="--z:1; --l:0%; --t:0%">
+              </div>
+            </div>
+            <button class="anno__pin" style="--x:15%;--y:13.5%" data-anno="1" aria-label="Detail 1">1</button>
+            <button class="anno__pin" style="--x:54%;--y:45%"   data-anno="2" aria-label="Detail 2">2</button>
+            <button class="anno__pin" style="--x:90%;--y:45%"   data-anno="3" aria-label="Detail 3">3</button>
+            <button class="anno__pin" style="--x:81%;--y:87%"   data-anno="4" aria-label="Detail 4">4</button>
+          </div>
+          <ol class="anno__key">
+            <li data-anno="1"><b>1</b><span>The window is fixed and counting down — 11:00 AM to 3:00 PM CT on the day. Everything below it has to work inside that.</span></li>
+            <li data-anno="2"><b>2</b><span>Interviews are half-hour slots. A slot lost to a failure cannot be re-run at that time, for that person.</span></li>
+            <li data-anno="3"><b>3</b><span>Start interview opens the JobFairX video room. This is the only interview location that puts the conversation itself on our infrastructure.</span></li>
+            <li data-anno="4"><b>4</b><span>Candidates sit in a waiting room in real time and can see their own status. Silence during an incident is visible to them, not just to you.</span></li>
+          </ol>
+        </figure>
+
+        <div class="claims">
+
+          <article class="claim" data-state="ok" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Support window</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              <strong style="color:var(--ink);font-weight:550">Mon–Fri, 5:00 AM – 5:00 PM PST.</strong>
+              info@jobfairx.com and (702) 269-0808. Dedicated human support is included in every
+              package, at every tier — it is not an enterprise add-on.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Contact page hours; pricing page — “All Packages Include”, item 8.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">Events outside the support window</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Do events ever run at a weekend, or outside 5:00 AM – 5:00 PM PST?
+              <span class="ph" data-placeholder>{{CONFIRM}}</span>
+              If they do, there is a window where an event is live and support is not. That is
+              worth stating on the page rather than being discovered at 6:10 PM.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Published support hours are weekdays only. Event start times vary by market and
+              time zone; the overlap has not been checked.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">Uptime target, SLA and credits</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <ul>
+              <li>Published uptime target <span class="ph" data-placeholder>{{NONE}}</span></li>
+              <li>Contractual SLA <span class="ph" data-placeholder>{{NONE}}</span></li>
+              <li>Service credit for a failed event window <span class="ph" data-placeholder>{{NO POLICY}}</span></li>
+              <li>Public status page <span class="ph" data-placeholder>{{NOT PUBLISHED}}</span></li>
+            </ul>
+            <p class="claim__ev"><b>Evidence</b>
+              None. We publish no status page and no availability figure today.
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:3">
+            <div class="claim__head">
+              <h3 class="claim__t">Incident and breach notification</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <p>
+              Who tells you, how quickly, and through which channel — during a live event and
+              after a data incident:
+              <span class="ph" data-placeholder>{{INCIDENT COMMS}}</span>
+              <span class="ph" data-placeholder>{{BREACH NOTIFICATION TIMELINE}}</span>.
+              Most enterprise contracts require 72 hours in writing.
+            </p>
+            <p class="claim__ev"><b>Evidence</b> None on file.</p>
+          </article>
+
+          <article class="claim" data-state="ok" data-reveal>
+            <div class="claim__head">
+              <h3 class="claim__t">Three of the four interview locations survive an outage of ours</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              You set your own interview location per event. If it is phone, in person at your
+              address, or your own Zoom, Teams or Meet link, the conversation does not run on
+              our infrastructure at all — you have the time slot and you have your own room.
+              Only JobFairX video puts the interview inside our platform. That is architecture,
+              not a promise, and it is the strongest availability answer we own.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Product — the interview location column on the events dashboard: JobFairX video
+              call, you call each candidate, a street address, or your own link.
+            </p>
+          </article>
+
+          <article class="claim" data-state="ok" data-reveal style="--i:1">
+            <div class="claim__head">
+              <h3 class="claim__t">A lost slot can be rebooked</h3>
+              <span class="chip chip--ok">Evidenced</span>
+            </div>
+            <p>
+              Every package includes unlimited interviews before, during and after the event,
+              and employer access doesn’t expire — you can keep scheduling follow-ups for as
+              long as you need. A slot lost to a failure can be rebooked at no extra cost. What
+              cannot be restored is the candidate’s willingness to come back, and that is the
+              real cost of an incident here.
+            </p>
+            <p class="claim__ev"><b>Evidence</b>
+              Pricing page — “All Packages Include”, item 3; employer FAQ — “What happens after
+              the hiring event?”
+            </p>
+          </article>
+
+          <article class="claim" data-state="gap" data-reveal style="--i:2">
+            <div class="claim__head">
+              <h3 class="claim__t">Business continuity</h3>
+              <span class="chip chip--gap">Undocumented</span>
+            </div>
+            <ul>
+              <li>Documented BC/DR plan <span class="ph" data-placeholder>{{NONE}}</span></li>
+              <li>Recovery time objective <span class="ph" data-placeholder>{{RTO}}</span></li>
+              <li>Recovery point objective <span class="ph" data-placeholder>{{RPO}}</span></li>
+              <li>Date of last restore test <span class="ph" data-placeholder>{{NEVER? — CONFIRM}}</span></li>
+            </ul>
+            <p class="claim__ev"><b>Evidence</b> None on file.</p>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </section>
+</div>
+
+
+
+<div data-theme="dark" style="background:var(--canvas)">
+
+  <section class="u-section reqband" id="request">
+    <div class="u-container">
+      <div class="reqband__inner">
+        <div data-reveal>
+          <h2 class="t-h2 t-balance">Ask for the document by name.</h2>
+          <p class="t-lead">
+            Send the list your review actually requires. You will get one of three answers for
+            every item on it: here it is, here is the date it exists by, or we do not have it
+            and here is what we do instead. Nothing on this page gets dressed up in the reply.
+          </p>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:50ch">
+            If a certification is a hard gate for your organisation, tell us at the first
+            conversation rather than the fifth. We would rather lose the deal on this page than
+            win it and fail the questionnaire.
+          </p>
+          <div class="cta-row">
+            <a href="page-contact.html" class="btn btn--primary btn--lg">Request a document</a>
+            <a href="mailto:info@jobfairx.com" class="btn btn--secondary btn--lg">Email info@jobfairx.com</a>
+          </div>
+        </div>
+
+        <ul class="reqband__facts" data-reveal style="--i:1">
+          <li>
+            <span class="t-eyebrow">Security contact</span>
+            <strong><span class="ph" data-placeholder>{{NAMED OWNER — UNASSIGNED}}</span></strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Vulnerability reports</span>
+            <strong><span class="ph" data-placeholder>{{DISCLOSURE ADDRESS — NONE PUBLISHED}}</span></strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">General enquiries</span>
+            <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Phone</span>
+            <a href="tel:+17022690808">(702) 269-0808</a>
+          </li>
+          <li>
+            <span class="t-eyebrow">Support hours</span>
+            <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+          </li>
+          <li>
+            <span class="t-eyebrow">Contracting entity</span>
+            <span class="addr">JobFairX, LLC · 209 S Stephanie St. STE B #144, Henderson, Nevada 89012</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-3-hybrid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="page-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="page-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="page-faq.html">FAQ</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><span aria-current="page">Security</span></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+
+<script src="shared/motion.js"></script>
+</body>
+</html>
