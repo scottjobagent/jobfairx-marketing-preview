@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — SOLUTIONS / TECHNOLOGY
@@ -485,7 +486,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -582,8 +582,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
@@ -633,11 +631,52 @@
           by someone already in that market, not a national applicant pool.
         </figcaption>
       </figure>
+
+      
+      <div data-reveal style="max-width:840px;margin-top:var(--s-16)">
+        <p class="t-eyebrow">AI matching — illustration</p>
+        <div class="vg-diagram" data-vignette="ai-match" data-beats="2" data-beat-ms="2200" aria-hidden="true" style="margin-top:var(--s-6)">
+          <div class="vg-diagram__job vg-card">
+            <div class="vg-eyebrow">Your job post</div>
+            <div class="vg-name">Software Engineer</div>
+            <div class="vg-meta">Chicago Technology Event</div>
+          </div>
+          <svg class="vg-wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path pathLength="100" d="M0,50 H38 V17 H100"/>
+            <path pathLength="100" d="M0,50 H100"/>
+            <path pathLength="100" d="M0,50 H38 V83 H100"/>
+          </svg>
+          <div class="vg-diagram__cands">
+            <div class="vg-node vg-card" style="--i:0">
+              <div class="vg-avatar">DW</div>
+              <div><div class="vg-name">Dana Whitfield</div><div class="vg-meta">Software Engineer</div></div>
+              <span class="vg-matchchip" data-at="2" style="--i:0">Matched</span>
+            </div>
+            <div class="vg-node vg-card" style="--i:1">
+              <div class="vg-avatar">KM</div>
+              <div><div class="vg-name">Ken Mbeki</div><div class="vg-meta">Software Engineer</div></div>
+              <span class="vg-matchchip" data-at="2" style="--i:1">Matched</span>
+            </div>
+            <div class="vg-node vg-card" style="--i:2">
+              <div class="vg-avatar">NF</div>
+              <div><div class="vg-name">Nina Farrow</div><div class="vg-meta">Software Engineer</div></div>
+              <span class="vg-matchchip" data-at="2" style="--i:2">Matched</span>
+            </div>
+          </div>
+        </div>
+        <p class="t-sm" style="margin-top:var(--s-5);max-width:74ch">
+          An illustration of the matching mechanic — not a screen from the product. The
+          job titles you post are what candidates match against; matched candidates
+          request the interview, and accepting a request is what schedules it.
+        </p>
+      </div>
     </div>
   </section>
 
   
   <section class="u-section" id="screen" style="padding-top:0">
+    
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="head" data-reveal>
@@ -649,7 +688,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--evtech">
@@ -661,11 +700,11 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:32.7%;--y:73.1%" data-anno="1" aria-label="Detail 1: the event, its date and its window">1</button>
-          <button class="anno__pin" style="--x:49.2%;--y:66.1%" data-anno="2" aria-label="Detail 2: the interview location for this event">2</button>
-          <button class="anno__pin" style="--x:64.8%;--y:84.4%" data-anno="3" aria-label="Detail 3: recruiter seats in use">3</button>
-          <button class="anno__pin" style="--x:83.4%;--y:80.6%" data-anno="4" aria-label="Detail 4: the technical job titles posted">4</button>
-          <button class="anno__pin" style="--x:95.4%;--y:65.6%" data-anno="5" aria-label="Detail 5: pending and upcoming candidates">5</button>
+          <button class="anno__pin" style="--x:32.7%;--y:73.1%;--i:0" data-anno="1" aria-label="Detail 1: the event, its date and its window">1</button>
+          <button class="anno__pin" style="--x:49.2%;--y:66.1%;--i:1" data-anno="2" aria-label="Detail 2: the interview location for this event">2</button>
+          <button class="anno__pin" style="--x:64.8%;--y:84.4%;--i:2" data-anno="3" aria-label="Detail 3: recruiter seats in use">3</button>
+          <button class="anno__pin" style="--x:83.4%;--y:80.6%;--i:3" data-anno="4" aria-label="Detail 4: the technical job titles posted">4</button>
+          <button class="anno__pin" style="--x:95.4%;--y:65.6%;--i:4" data-anno="5" aria-label="Detail 5: pending and upcoming candidates">5</button>
         </div>
 
         <ol class="anno__key">
@@ -685,8 +724,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 
@@ -795,8 +832,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
 
@@ -1065,8 +1100,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

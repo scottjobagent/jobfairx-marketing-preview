@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — BOOK A DEMO
@@ -147,6 +148,16 @@
 .rail a, .rail strong { font-size: 1.0625rem; font-weight: 500; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
 .rail a:hover { color: var(--accent); }
 .rail__note { margin-top: var(--s-2); font-size: var(--t-xs); color: var(--ink-3); letter-spacing: .006em; }
+
+/* ---------- S1 static composition (VISUAL-AUDIT C7) ----------
+   One rebuilt request card + the three package volumes, under the contact
+   rail. Static by design — the form is this page's focus; nothing moves.
+   The gridfield backs only this card composition (never the text rail);
+   the whole block goes when the columns stack. */
+.demo-vig { position: relative; margin-top: var(--s-10); max-width: 300px; }
+.demo-vig__chips { display: flex; gap: 6px; margin: var(--s-5) 0 var(--s-2); }
+.demo-vig > .vg-meta { max-width: 32ch; }
+@media (max-width: 1000px) { .demo-vig { display: none; } }
 
 /* the .card primitive lifts on hover; a 700px-tall form must not */
 .form-card { padding: var(--s-8); }
@@ -310,7 +321,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -401,8 +411,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section formzone" id="demo-form">
     <div class="u-container">
@@ -466,6 +474,33 @@
               </p>
             </li>
           </ul>
+
+          
+          <div class="demo-vig" aria-hidden="true">
+            
+            <div class="gridfield" aria-hidden="true" style="inset:-24px"></div>
+            <div class="vg-card">
+              <div class="vg-eyebrow">Interview request</div>
+              <div class="vg-row">
+                <div class="vg-avatar">AO</div>
+                <div>
+                  <div class="vg-name">Amara Osei</div>
+                  <div class="vg-meta">Medical Assistant · Requested today</div>
+                </div>
+              </div>
+              <div class="vg-actions">
+                <span class="vg-btn vg-btn--accept">Accept</span>
+                <span class="vg-btn">Decline</span>
+                <span class="vg-btn">Reschedule</span>
+              </div>
+            </div>
+            <div class="demo-vig__chips">
+              <span class="vg-chip">20+</span>
+              <span class="vg-chip">60+</span>
+              <span class="vg-chip">100+</span>
+            </div>
+            <p class="vg-meta">scheduled candidate interviews per event, by package</p>
+          </div>
         </div>
 
         
@@ -629,8 +664,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

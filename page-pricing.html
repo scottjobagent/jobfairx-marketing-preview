@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PRICING
@@ -188,6 +189,12 @@
   font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em;
 }
 .tier__promise b { display: block; font-size: 1.375rem; font-weight: 600; letter-spacing: -.03em; color: var(--accent); }
+/* The scheduled-interviews promise — the strongest line on the page — gets a
+   1px accent rule that draws itself on reveal (vignettes.css .vg-draw). The
+   tiers already carry --i:0/1/2 for the reveal stagger; the rule inherits it,
+   so the three draws land left to right. */
+.tier .vg-draw { margin-top: var(--s-2); }
+.js .tier [data-reveal].vg-draw { transition-delay: calc(150ms + var(--i, 0) * 120ms); }
 .tier__list { display: grid; gap: var(--s-3); margin: var(--s-6) 0; }
 .tier__list li { display: flex; gap: var(--s-3); font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
 .tier__list svg { flex: none; margin-top: 3px; color: var(--accent); }
@@ -225,7 +232,11 @@
 .buy__out { margin-top: var(--s-5); }
 .buy__line { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
 .buy__k { font-size: var(--t-sm); color: var(--ink-2); }
-.buy__v { font-size: 1.75rem; font-weight: 500; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.buy__v { font-size: 1.75rem; font-weight: 500; letter-spacing: -.04em; font-variant-numeric: tabular-nums;
+  transition: opacity 75ms linear; }
+/* the calculator dips the total to transparent, swaps the text at the trough,
+   and fades back — a ~150ms crossfade instead of a snapping number */
+.buy__v.is-swap { opacity: 0; }
 /* the placeholder token is prose, not a number — it gets its own line so the
    label above it doesn't get squeezed into a column */
 .buy__v[data-placeholder] { display: block; margin-top: var(--s-2); font-size: .9375rem; font-weight: 500; letter-spacing: .006em; color: var(--ink-2); }
@@ -410,7 +421,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   <div class="announce">
@@ -502,8 +512,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
@@ -529,6 +537,7 @@
             <div class="tier__name">Starter</div>
             <div class="tier__price">$495<small> / event</small></div>
             <div class="tier__promise"><b>20+</b> scheduled candidate interviews</div>
+            <span class="vg-draw" data-reveal aria-hidden="true"></span>
             <ul class="tier__list">
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote 1 job</li>
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 2 recruiter seats</li>
@@ -584,6 +593,7 @@
             <div class="tier__name">Growth</div>
             <div class="tier__price">$895<small> / event</small></div>
             <div class="tier__promise"><b>60+</b> scheduled candidate interviews</div>
+            <span class="vg-draw" data-reveal aria-hidden="true"></span>
             <ul class="tier__list">
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote up to 3 jobs</li>
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Up to 5 recruiter seats</li>
@@ -638,6 +648,7 @@
             <div class="tier__name">Pro</div>
             <div class="tier__price">$1,495<small> / event</small></div>
             <div class="tier__promise"><b>100+</b> scheduled candidate interviews</div>
+            <span class="vg-draw" data-reveal aria-hidden="true"></span>
             <ul class="tier__list">
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote up to 6 jobs</li>
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited recruiters</li>
@@ -901,8 +912,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section">
     <div class="u-container">
@@ -933,8 +942,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section">
@@ -969,8 +976,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="close" id="cta">
@@ -1070,6 +1075,32 @@
 
   function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
 
+  /* Presentation only: the total dips to transparent, the text swaps at the
+     trough, and it fades back — ~150ms round trip via the .is-swap class and
+     the .buy__v opacity transition in the page CSS. The value written is
+     byte-identical to a direct assignment; reduced-motion (and an unchanged
+     value) writes directly. */
+  function setTotal(el, text, after) {
+    // A pending swap may still be about to overwrite the display — every path,
+    // including the "already showing this text" one, must cancel it first, or
+    // a fast +/− pair leaves the abandoned value on screen (and announced).
+    clearTimeout(el._swapT);
+    if (el.textContent === text) {
+      el.classList.remove('is-swap');
+      if (after) after(); return;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.classList.remove('is-swap');
+      el.textContent = text; if (after) after(); return;
+    }
+    el.classList.add('is-swap');
+    el._swapT = setTimeout(function () {
+      el.textContent = text;
+      if (after) after();   // style/attribute changes land WITH the new text
+      el.classList.remove('is-swap');
+    }, 75);
+  }
+
   function render() {
     Object.keys(TIERS).forEach(function (key) {
       var card = document.querySelector('[data-tier="' + key + '"]');
@@ -1121,17 +1152,19 @@
       }
 
       if (unknown) {
-        totalEl.textContent = '{{' + key.toUpperCase() + ' BUNDLE TOTAL}}';
-        totalEl.setAttribute('data-placeholder', '');
-        totalEl.parentNode.classList.add('is-ph');
+        setTotal(totalEl, '{{' + key.toUpperCase() + ' BUNDLE TOTAL}}', function () {
+          totalEl.setAttribute('data-placeholder', '');
+          totalEl.parentNode.classList.add('is-ph');
+        });
         perEl.textContent = '{{per-event bundle price}}';
         saveEl.hidden = true;
         noteEl.hidden = false;
         noteEl.textContent = 'The live bundles page prices each package on its own tab. Only the Starter ladder was captured, so this figure is not estimated.';
       } else {
-        totalEl.textContent = money(total);
-        totalEl.removeAttribute('data-placeholder');
-        totalEl.parentNode.classList.remove('is-ph');
+        setTotal(totalEl, money(total), function () {
+          totalEl.removeAttribute('data-placeholder');
+          totalEl.parentNode.classList.remove('is-ph');
+        });
         perEl.textContent = money(per) + ' per event';
         saveEl.hidden = save <= 0;
         saveEl.textContent = 'You save ' + money(save);

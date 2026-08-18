@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — SOLUTIONS / HEALTHCARE
@@ -475,7 +476,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -571,8 +571,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
@@ -646,6 +644,7 @@
 
   
   <section class="u-section" id="screen" style="padding-top:0">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="head" data-reveal>
@@ -657,7 +656,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--roles">
@@ -669,11 +668,11 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:36.5%;--y:19.5%" data-anno="1" aria-label="Detail 1: the desired job is the clinical title">1</button>
-          <button class="anno__pin" style="--x:57.9%;--y:53.2%" data-anno="2" aria-label="Detail 2: the desired location is local">2</button>
-          <button class="anno__pin" style="--x:17.3%;--y:60.4%" data-anno="3" aria-label="Detail 3: the interview location chip">3</button>
-          <button class="anno__pin" style="--x:71.7%;--y:53.2%" data-anno="4" aria-label="Detail 4: the time the candidate asked for">4</button>
-          <button class="anno__pin" style="--x:88.5%;--y:59.7%" data-anno="5" aria-label="Detail 5: the actions available in that state">5</button>
+          <button class="anno__pin" style="--x:36.5%;--y:19.5%;--i:0" data-anno="1" aria-label="Detail 1: the desired job is the clinical title">1</button>
+          <button class="anno__pin" style="--x:57.9%;--y:53.2%;--i:1" data-anno="2" aria-label="Detail 2: the desired location is local">2</button>
+          <button class="anno__pin" style="--x:17.3%;--y:60.4%;--i:2" data-anno="3" aria-label="Detail 3: the interview location chip">3</button>
+          <button class="anno__pin" style="--x:71.7%;--y:53.2%;--i:3" data-anno="4" aria-label="Detail 4: the time the candidate asked for">4</button>
+          <button class="anno__pin" style="--x:88.5%;--y:59.7%;--i:4" data-anno="5" aria-label="Detail 5: the actions available in that state">5</button>
         </div>
 
         <ol class="anno__key">
@@ -692,8 +691,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 
@@ -765,13 +762,27 @@
       </ol>
 
       <figure class="evrow" data-reveal>
-        <div class="panel">
-          <div class="crop crop--evrow">
-            <img src="assets/product/dashboard-events.png"
-                 alt="One row of the JobFairX events dashboard under its column headings Actions, Event details, Interview location, Interview setup, Job titles and Candidates. The row reads Dallas Healthcare Event, Apr 22 2026, 11:00 AM to 3:00 PM CT; interview location Video, JobFairX video call, with a Go to lobby link and a green Setup complete marker; interview setup 2 interviewers, 1 of 5 seats; job titles Registered Nurse, 1 of 3 jobs; candidates 3 pending, 16 upcoming, with a Manage applicants link."
-                 width="3200" height="2000"
-                 style="--z:1.22; --l:-15.5%; --t:-27%; --zm:3.6; --lm:-24.5%; --tm:-29%">
+        
+        <div class="vg-stage" data-vignette="kpi" data-beats="2">
+          <div class="panel">
+            <div class="crop crop--evrow">
+              <img src="assets/product/dashboard-events.png"
+                   alt="One row of the JobFairX events dashboard under its column headings Actions, Event details, Interview location, Interview setup, Job titles and Candidates. The row reads Dallas Healthcare Event, Apr 22 2026, 11:00 AM to 3:00 PM CT; interview location Video, JobFairX video call, with a Go to lobby link and a green Setup complete marker; interview setup 2 interviewers, 1 of 5 seats; job titles Registered Nurse, 1 of 3 jobs; candidates 3 pending, 16 upcoming, with a Manage applicants link."
+                   width="3200" height="2000"
+                   style="--z:1.22; --l:-15.5%; --t:-27%; --zm:3.6; --lm:-24.5%; --tm:-29%">
+            </div>
           </div>
+          <aside class="vg-over vg-card vg-kpi vg-pop" data-at="1" aria-hidden="true"
+                 style="--oxr:14px; --oy:-34px; --ow:200px">
+            <b data-count>91%</b>
+            <span>Interview show rate</span>
+            <div class="vg-meta">2025 platform data</div>
+          </aside>
+          <aside class="vg-over vg-card vg-kpi vg-pop" data-at="2" aria-hidden="true"
+                 style="--oxr:288px; --oyb:-34px; --ow:170px">
+            <b data-count>582</b>
+            <span>Events in 2025</span>
+          </aside>
         </div>
         <figcaption class="t-sm">
           One healthcare event, as the dashboard shows it. Read left to right: the event and
@@ -789,8 +800,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
 
@@ -1044,8 +1053,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

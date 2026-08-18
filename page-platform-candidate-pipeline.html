@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM / CANDIDATE PIPELINE
@@ -308,6 +309,13 @@
 @media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
 
+/* ---------- vignette placement (page-specific) ----------
+   The hero's floating V1 card needs the full-width canvas; below 1180px it
+   would crowd the headline, so it goes — same logic as the homepage
+   hero fragments. */
+.cap-hero__vig { right: max(24px, calc(50% - 590px)); top: 96px; }
+@media (max-width: 1180px) { .cap-hero .vg-over { display: none; } }
+
 /* ---------- placeholder affordance (same rule as every other page) ---------- */
 [data-placeholder]::after {
   content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
@@ -318,7 +326,6 @@
 </style>
 </head>
 <body>
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 
@@ -366,7 +373,8 @@
     <div class="cap-hero__glow" aria-hidden="true"></div>
     <div class="cap-hero__grid" aria-hidden="true"></div>
 
-    <div class="u-container cap-hero__inner">
+    
+    <div class="u-container cap-hero__inner" data-vignette="cap-hero" data-beats="3" data-beat-ms="2600" data-hold-ms="2600">
       <p class="t-eyebrow cap-hero__crumb">
         <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Candidate pipeline
       </p>
@@ -382,7 +390,32 @@
       </p>
 
       
-      <ol class="flow" data-reveal>
+      <aside class="vg-over vg-card cap-hero__vig" data-parallax="8" aria-hidden="true" style="--ow:270px">
+        <div class="vg-eyebrow">Interview request</div>
+        <div class="vg-row">
+          <div class="vg-avatar">DW</div>
+          <div>
+            <div class="vg-name">Dana Whitfield</div>
+            <div class="vg-meta vg-swap">
+              <span data-a>Registered Nurse · Requested today</span>
+              <span data-b>Registered Nurse · <b style="color:var(--accent);font-weight:600">Scheduled</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="vg-actions">
+          <span class="vg-btn vg-btn--accept vg-press">Accept</span>
+          <span class="vg-btn vg-dim">Decline</span>
+          <span class="vg-btn vg-dim">Reschedule</span>
+          <span class="vg-ring vg-ring--first"></span>
+        </div>
+        <div class="vg-note" data-at="3">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+          Candidate notified — added to your schedule
+        </div>
+      </aside>
+
+      
+      <ol class="flow">
         <li style="--i:0">
           <p class="flow__n">01 — Requested</p>
           <p class="flow__t">They request</p>
@@ -412,12 +445,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="pipeline">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -429,7 +461,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--anno">
@@ -441,11 +473,11 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:28.8%;--y:15.2%" data-anno="1" aria-label="Detail 1: the pipeline state tabs">1</button>
-          <button class="anno__pin" style="--x:39.4%;--y:22.7%" data-anno="2" aria-label="Detail 2: sort, filter and search">2</button>
-          <button class="anno__pin" style="--x:75.5%;--y:29.5%" data-anno="3" aria-label="Detail 3: accept, decline and reschedule">3</button>
-          <button class="anno__pin" style="--x:13.1%;--y:59.4%" data-anno="4" aria-label="Detail 4: view resume and message">4</button>
-          <button class="anno__pin" style="--x:57.1%;--y:78.8%" data-anno="5" aria-label="Detail 5: what each row tells you">5</button>
+          <button class="anno__pin" style="--x:28.8%;--y:15.2%;--i:0" data-anno="1" aria-label="Detail 1: the pipeline state tabs">1</button>
+          <button class="anno__pin" style="--x:39.4%;--y:22.7%;--i:1" data-anno="2" aria-label="Detail 2: sort, filter and search">2</button>
+          <button class="anno__pin" style="--x:75.5%;--y:29.5%;--i:2" data-anno="3" aria-label="Detail 3: accept, decline and reschedule">3</button>
+          <button class="anno__pin" style="--x:13.1%;--y:59.4%;--i:3" data-anno="4" aria-label="Detail 4: view resume and message">4</button>
+          <button class="anno__pin" style="--x:57.1%;--y:78.8%;--i:4" data-anno="5" aria-label="Detail 5: what each row tells you">5</button>
         </div>
 
         <ol class="anno__key">
@@ -513,8 +545,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="accept">
     <div class="u-container">
@@ -538,13 +568,28 @@
         </div>
 
         <figure class="proof__vis" data-reveal style="--i:1">
-          <div class="panel">
-            <div class="crop crop--band">
-              <img src="assets/product/candidates.png"
-                   alt="Close crop of two candidate rows: the interview time Apr 22 at 10:00 AM CT beside an Accept, Decline and Reschedule button group on the requested row, and an empty action area on the row below it."
-                   width="3200" height="2000"
-                   style="--z:2.7; --l:-62%; --t:-33.6%; --zm:4; --lm:-63%; --tm:-34%">
+          
+          <div class="vg-stage" data-vignette="accept-shot" data-beats="3" data-hold-ms="4200">
+            <div class="panel">
+              <div class="crop crop--band">
+                <img src="assets/product/candidates.png"
+                     alt="Close crop of two candidate rows: the interview time Apr 22 at 10:00 AM CT beside an Accept, Decline and Reschedule button group on the requested row, and an empty action area on the row below it."
+                     width="3200" height="2000"
+                     style="--z:2.7; --l:-62%; --t:-33.6%; --zm:4; --lm:-63%; --tm:-34%">
+                <span class="vg-ring vg-ring--at" aria-hidden="true" style="--x:44.4%;--y:16%;--w:13%;--h:24%"></span>
+              </div>
             </div>
+            <aside class="vg-over vg-card vg-pop" data-at="2" aria-hidden="true"
+                   style="--oxr:24px; --oyb:-20px; --ow:290px">
+              <div class="vg-row">
+                <span class="vg-chip vg-chip--sched">Scheduled</span>
+                <div class="vg-name">Apr 22 · 10:00 AM CT</div>
+              </div>
+              <div class="vg-note" style="margin-top:var(--s-2)">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+                Accepting is the scheduling step
+              </div>
+            </aside>
           </div>
           <figcaption class="t-sm">
             The time and the decision sit on the same line. That is the whole scheduling step.
@@ -574,6 +619,18 @@
         <div class="proof__vis" data-reveal style="--i:1">
           <div class="shotgap" data-placeholder>
             <p class="shotgap__t">{{AUTO-ACCEPT SETTING — SCREENSHOT NEEDED}}</p>
+            
+            <div class="vg-card vg-fade" data-vignette="auto-toggle" data-beats="2" data-beat-ms="2800"
+                 aria-hidden="true" style="width:min(300px,100%);text-align:left">
+              <div class="vg-eyebrow">Illustration — not the product UI</div>
+              <div class="vg-row" style="justify-content:space-between">
+                <div>
+                  <div class="vg-name">Automatic interview scheduling</div>
+                  <div class="vg-meta">Requests are accepted for you</div>
+                </div>
+                <span class="vg-toggle vg-toggle--auto"></span>
+              </div>
+            </div>
             <p>
               None of the 14 captured product screenshots shows the automatic interview
               scheduling toggle. Capture it before this page ships; do not substitute a mock.
@@ -590,8 +647,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="resumes">
@@ -667,8 +722,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -688,6 +741,7 @@
         </div>
 
         <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li aria-hidden="true"><span class="vg-draw" data-reveal></span></li>
           <li>
             <span class="t-eyebrow">Interviews conducted</span>
             <strong data-count>500,000+</strong>

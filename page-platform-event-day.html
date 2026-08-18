@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM / EVENT DAY
@@ -327,7 +328,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -374,7 +374,8 @@
     <div class="cap-hero__glow" aria-hidden="true"></div>
     <div class="cap-hero__grid" aria-hidden="true"></div>
 
-    <div class="u-container cap-hero__inner">
+    
+    <div class="u-container cap-hero__inner" data-vignette="cap-hero" data-beats="3" data-beat-ms="2600" data-hold-ms="2600">
       <p class="t-eyebrow cap-hero__crumb">
         <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Event day
       </p>
@@ -388,7 +389,8 @@
         Nothing about the four hours is left to improvise.
       </p>
 
-      <ol class="flow" data-reveal>
+      
+      <ol class="flow">
         <li style="--i:0">
           <p class="flow__n">01 — Waiting to interview</p>
           <p class="flow__t">They turn up</p>
@@ -418,12 +420,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="lobby">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -435,7 +436,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--anno">
@@ -447,12 +448,12 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:37.5%;--y:11.6%" data-anno="1" aria-label="Detail 1: the event is live and the clock is running">1</button>
-          <button class="anno__pin" style="--x:17.2%;--y:15.6%" data-anno="2" aria-label="Detail 2: your interview location for this event">2</button>
-          <button class="anno__pin" style="--x:50.0%;--y:24.0%" data-anno="3" aria-label="Detail 3: the four queue tabs">3</button>
-          <button class="anno__pin" style="--x:63.5%;--y:45.3%" data-anno="4" aria-label="Detail 4: the wait time column">4</button>
-          <button class="anno__pin" style="--x:82.2%;--y:52.5%" data-anno="5" aria-label="Detail 5: the Start interview button">5</button>
-          <button class="anno__pin" style="--x:73.1%;--y:82.4%" data-anno="6" aria-label="Detail 6: what a waiting room status tells you">6</button>
+          <button class="anno__pin" style="--x:37.5%;--y:11.6%;--i:0" data-anno="1" aria-label="Detail 1: the event is live and the clock is running">1</button>
+          <button class="anno__pin" style="--x:17.2%;--y:15.6%;--i:1" data-anno="2" aria-label="Detail 2: your interview location for this event">2</button>
+          <button class="anno__pin" style="--x:50.0%;--y:24.0%;--i:2" data-anno="3" aria-label="Detail 3: the four queue tabs">3</button>
+          <button class="anno__pin" style="--x:63.5%;--y:45.3%;--i:3" data-anno="4" aria-label="Detail 4: the wait time column">4</button>
+          <button class="anno__pin" style="--x:82.2%;--y:52.5%;--i:4" data-anno="5" aria-label="Detail 5: the Start interview button">5</button>
+          <button class="anno__pin" style="--x:73.1%;--y:82.4%;--i:5" data-anno="6" aria-label="Detail 6: what a waiting room status tells you">6</button>
         </div>
 
         <ol class="anno__key">
@@ -519,8 +520,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="rooms">
     <div class="u-container">
@@ -544,13 +543,56 @@
         </div>
 
         <figure class="proof__vis" data-reveal style="--i:1">
-          <div class="panel">
-            <div class="crop crop--band">
-              <img src="assets/product/lobby-live.png"
-                   alt="Close crop of the Waiting rooms table: three rows showing interview time, a wait time of 3 minutes, 1 minute and 0 minutes, and grey status chips reading Entering interview room, Awaiting available interviewer and Awaiting available interviewer."
-                   width="3200" height="2000"
-                   style="--z:1.667; --l:-30%; --t:-66%; --zm:3.2; --lm:-65%; --tm:-70%">
+          
+          <div class="vg-stage">
+            <div class="panel">
+              <div class="crop crop--band">
+                <img src="assets/product/lobby-live.png"
+                     alt="Close crop of the Waiting rooms table: three rows showing interview time, a wait time of 3 minutes, 1 minute and 0 minutes, and grey status chips reading Entering interview room, Awaiting available interviewer and Awaiting available interviewer."
+                     width="3200" height="2000"
+                     style="--z:1.667; --l:-30%; --t:-66%; --zm:3.2; --lm:-65%; --tm:-70%">
+              </div>
             </div>
+            <aside class="vg-over vg-card vg-fade" data-vignette="queue" data-beats="3"
+                   data-hold-ms="4200" aria-hidden="true"
+                   style="--ox:-24px; --oyb:-6px; --ow:250px">
+              <div class="vg-eyebrow">Lobby — waiting</div>
+              <div class="vg-queue">
+                <div class="vg-queue__chip vg-queue__chip--next vg-row">
+                  <div class="vg-avatar">AR</div>
+                  <div>
+                    <div class="vg-name">Aisha Rahman</div>
+                    <div class="vg-meta">Registered Nurse</div>
+                  </div>
+                </div>
+                <div class="vg-queue__chip vg-row">
+                  <div class="vg-avatar">JC</div>
+                  <div>
+                    <div class="vg-name">James Cooper</div>
+                    <div class="vg-meta">Physical Therapist</div>
+                  </div>
+                </div>
+                <div class="vg-queue__chip vg-row">
+                  <div class="vg-avatar">SM</div>
+                  <div>
+                    <div class="vg-name">Sofia Martinez</div>
+                    <div class="vg-meta">Medical Assistant</div>
+                  </div>
+                </div>
+              </div>
+              <div data-at="2" style="height:1px;background:rgba(20,22,26,.08);margin:var(--s-3) 0"></div>
+              <div class="vg-row" data-at="2">
+                <span class="vg-live-dot"></span>
+                <div>
+                  <div class="vg-name">Aisha Rahman</div>
+                  <div class="vg-meta">Interview in progress</div>
+                </div>
+              </div>
+              <div class="vg-note" data-at="3">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+                The queue shows who is next
+              </div>
+            </aside>
           </div>
           <figcaption class="t-sm">
             Two of these three are waiting on a person, not on a process. The wait time is
@@ -579,7 +621,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--band">
+            <div class="crop crop--band crop--zh">
               <img src="assets/product/interview-screen.png"
                    alt="Close crop of the bottom of a JobFairX interview room: the recruiter's own small video tile labelled You, a mute and video control pair, a red End button, and four labelled tools along the right of the bar reading Notes, Resume, Chat and Background."
                    width="3200" height="2000"
@@ -600,8 +642,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="anywhere">
@@ -660,7 +700,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--ended">
+            <div class="crop crop--ended crop--zh">
               <img src="assets/product/lobby-ended.png"
                    alt="The same event lobby after the event has finished. The status line reads Ended, the tabs read Summary, Interviewed 12 and Not interviewed 85, a card headed Interviewing has ended explains that follow-up interviews, feedback and notes are available in the completed event report, and a second card reads Follow up with 12 candidates you interviewed above a View Interview Summary link."
                    width="3200" height="2000"
@@ -712,8 +752,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -733,6 +771,7 @@
         </div>
 
         <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li aria-hidden="true"><span class="vg-draw" data-reveal></span></li>
           <li>
             <span class="t-eyebrow">Interviews conducted</span>
             <strong data-count>500,000+</strong>

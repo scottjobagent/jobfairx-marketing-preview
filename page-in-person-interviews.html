@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — IN-PERSON INTERVIEWS  (/employer/in-person-interviews)
@@ -348,7 +349,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -416,13 +416,38 @@
 
       
       <figure class="hero__shot" data-reveal>
-        <div class="panel">
-          <div class="crop">
-            <img src="assets/product/dashboard-events.png"
-                 alt="The Interview Location column of the employer events dashboard. The Atlanta Diversity Event on April 5, 2026 reads “In person — 1201 Peachtree St NE, Suite 300, Atlanta, GA”. The Denver Technology Event below it reads “Video — Microsoft Teams”."
-                 width="3200" height="2000"
-                 style="--z:2.15; --l:-24%; --t:-55%; --zm:4.8; --lm:-43%; --tm:-55%">
+        <div class="vg-stage">
+          <div class="panel">
+            <div class="crop">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The Interview Location column of the employer events dashboard. The Atlanta Diversity Event on April 5, 2026 reads “In person — 1201 Peachtree St NE, Suite 300, Atlanta, GA”. The Denver Technology Event below it reads “Video — Microsoft Teams”."
+                   width="3200" height="2000"
+                   style="--z:2.15; --l:-24%; --t:-55%; --zm:4.8; --lm:-43%; --tm:-55%">
+            </div>
           </div>
+          
+          
+          <aside class="vg-over vg-card vg-fade" data-vignette="location-select" data-beats="3"
+                 data-beat-ms="2800" aria-hidden="true"
+                 style="--oxr:-36px; --oy:-36px; --ow:300px">
+            <div class="vg-eyebrow">Interview location</div>
+            <div class="vg-loc">
+              <div class="vg-loc__row"><b>JobFairX video</b><i>JobFairX video call</i></div>
+              <div class="vg-loc__row"><b>Phone</b><i>You call each candidate</i></div>
+              <div class="vg-loc__row vg-loc__row--person">
+                <div style="min-width:0">
+                  <b>In person</b>
+                  <span class="vg-loc__addr">1201 Peachtree St NE, Suite 300 · Atlanta, GA</span>
+                </div>
+                <span class="vg-ring" style="left:-4px;right:-4px;top:-3px;bottom:-3px"></span>
+              </div>
+              <div class="vg-loc__row"><b>Your own link</b><i>Microsoft Teams</i></div>
+            </div>
+            <div class="vg-note" data-at="3">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+              On every confirmation and every reminder
+            </div>
+          </aside>
         </div>
         <figcaption class="t-sm">
           Real product view. Two events on one employer’s dashboard — one meeting
@@ -432,8 +457,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="local">
@@ -447,6 +470,12 @@
           <div class="local__fig" style="margin-top:var(--s-10)">
             <span class="local__n">~20</span>
             <span class="local__u">miles</span>
+          </div>
+          
+          <div class="vg-card" aria-hidden="true"
+               style="display:inline-flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-4);margin-top:var(--s-8)">
+            <span class="vg-chip">Verified</span>
+            <span class="vg-meta">within ~20 miles of the event city</span>
           </div>
         </div>
 
@@ -491,8 +520,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="model">
     <div class="u-container">
@@ -528,7 +555,7 @@
       </div>
 
       
-      <figure class="anno anno--loc" data-reveal>
+      <figure class="anno anno--loc vg-intro" data-reveal>
         <div class="anno__stage">
           <div class="panel">
             <div class="crop">
@@ -538,10 +565,10 @@
                    style="--z:2; --l:-15%; --t:-26%; --zm:5.26; --lm:-44%; --tm:-26%">
             </div>
           </div>
-          <button class="anno__pin" style="--x:57%; --y:16.1%" data-anno="1" aria-label="Interview location 1: JobFairX video">1</button>
-          <button class="anno__pin" style="--x:57%; --y:37.1%" data-anno="2" aria-label="Interview location 2: phone">2</button>
-          <button class="anno__pin" style="--x:57%; --y:61.9%" data-anno="3" aria-label="Interview location 3: in person">3</button>
-          <button class="anno__pin" style="--x:57%; --y:86.8%" data-anno="4" aria-label="Interview location 4: your own link">4</button>
+          <button class="anno__pin" style="--x:57%; --y:16.1%; --i:0" data-anno="1" aria-label="Interview location 1: JobFairX video">1</button>
+          <button class="anno__pin" style="--x:57%; --y:37.1%; --i:1" data-anno="2" aria-label="Interview location 2: phone">2</button>
+          <button class="anno__pin" style="--x:57%; --y:61.9%; --i:2" data-anno="3" aria-label="Interview location 3: in person">3</button>
+          <button class="anno__pin" style="--x:57%; --y:86.8%; --i:3" data-anno="4" aria-label="Interview location 4: your own link">4</button>
         </div>
 
         <ol class="anno__key">
@@ -559,12 +586,12 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="how">
+    
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
       <p class="t-eyebrow" data-reveal>How it works</p>
       <h2 class="t-h2 t-balance" data-reveal style="--i:1; max-width:18ch; margin-top:var(--s-5)">
@@ -825,8 +852,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

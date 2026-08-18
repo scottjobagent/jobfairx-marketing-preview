@@ -270,7 +270,8 @@
   column-gap: var(--s-5);
   padding: var(--s-5) var(--s-3);
   border-bottom: 1px solid var(--hairline);
-  transition: background var(--t-fast) var(--e-out);
+  transition: background var(--t-fast) var(--e-out),
+              transform 150ms var(--e-inout), box-shadow 150ms var(--e-inout);
 }
 /* "hover raises the row border": an ink hairline grows in from the left. */
 .ev::after {
@@ -278,7 +279,13 @@
   background: var(--ink); transform: scaleX(0); transform-origin: left;
   transition: transform var(--t-base) var(--e-out);
 }
-.ev:hover { background: var(--surface); }
+/* Hover: the row nudges 2px right and a 2px type-coloured rule lands on its
+   left edge. The rule is an INSET box-shadow (never a border-width change), so
+   nothing reflows. Colour comes from the same .ty-* / --c mechanism as the
+   type dots — each row carries its own .ty-* class, so there is exactly one
+   colour table on this page. */
+.ev:hover { background: var(--surface); transform: translateX(2px);
+  box-shadow: inset 2px 0 0 var(--c, var(--accent)); }
 .ev:hover::after, .ev:focus-visible::after { transform: scaleX(1); }
 .ev:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--r-sm); }
 .ev[hidden] { display: none; }
@@ -474,7 +481,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -550,8 +556,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
@@ -623,7 +627,7 @@
       
       <div data-ev-list>
 
-        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="dallas tx texas">
+        <a class="ev ty-healthcare" href="page-event-detail.html" data-type="healthcare" data-search="dallas tx texas">
           <span class="ev__date"><i>Tuesday</i><b>Aug 25</b></span>
           <span class="ev__name"><b>Dallas, TX Healthcare Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
@@ -631,7 +635,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="entry" data-search="nashville tn tennessee">
+        <a class="ev ty-entry" href="page-event-detail.html" data-type="entry" data-search="nashville tn tennessee">
           <span class="ev__date"><i>Thursday</i><b>Aug 27</b></span>
           <span class="ev__name"><b>Nashville, TN Entry Level Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
@@ -639,7 +643,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="veterans" data-search="norfolk va virginia">
+        <a class="ev ty-veterans" href="page-event-detail.html" data-type="veterans" data-search="norfolk va virginia">
           <span class="ev__date"><i>Friday</i><b>Aug 28</b></span>
           <span class="ev__name"><b>Norfolk, VA Veterans Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
@@ -647,7 +651,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="diversity" data-search="chicago il illinois">
+        <a class="ev ty-diversity" href="page-event-detail.html" data-type="diversity" data-search="chicago il illinois">
           <span class="ev__date"><i>Tuesday</i><b>Sep 1</b></span>
           <span class="ev__name"><b>Chicago, IL Diversity Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
@@ -655,7 +659,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="miami fl florida">
+        <a class="ev ty-healthcare" href="page-event-detail.html" data-type="healthcare" data-search="miami fl florida">
           <span class="ev__date"><i>Thursday</i><b>Sep 3</b></span>
           <span class="ev__name"><b>Miami, FL Healthcare Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
@@ -663,7 +667,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="technology" data-search="seattle wa washington">
+        <a class="ev ty-technology" href="page-event-detail.html" data-type="technology" data-search="seattle wa washington">
           <span class="ev__date"><i>Tuesday</i><b>Sep 8</b></span>
           <span class="ev__name"><b>Seattle, WA Technology Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
@@ -671,7 +675,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="entry" data-search="denver co colorado">
+        <a class="ev ty-entry" href="page-event-detail.html" data-type="entry" data-search="denver co colorado">
           <span class="ev__date"><i>Thursday</i><b>Sep 10</b></span>
           <span class="ev__name"><b>Denver, CO Entry Level Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
@@ -679,7 +683,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="boston ma massachusetts">
+        <a class="ev ty-healthcare" href="page-event-detail.html" data-type="healthcare" data-search="boston ma massachusetts">
           <span class="ev__date"><i>Tuesday</i><b>Sep 15</b></span>
           <span class="ev__name"><b>Boston, MA Healthcare Hiring Event</b></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
@@ -687,7 +691,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="technology" data-search="austin tx texas">
+        <a class="ev ty-technology" href="page-event-detail.html" data-type="technology" data-search="austin tx texas">
           <span class="ev__date"><i>Thursday</i><b>Sep 17</b></span>
           <span class="ev__name">
             <b>Austin, TX Technology Hiring Event</b>
@@ -698,7 +702,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="diversity" data-search="cincinnati oh ohio">
+        <a class="ev ty-diversity" href="page-event-detail.html" data-type="diversity" data-search="cincinnati oh ohio">
           <span class="ev__date"><i>Friday</i><b>Sep 18</b></span>
           <span class="ev__name">
             <b>Cincinnati, OH Diversity Hiring Event</b>
@@ -710,7 +714,7 @@
         </a>
 
         
-        <a class="ev" href="page-event-detail.html" data-type="veterans" data-search="pearland tx texas houston">
+        <a class="ev ty-veterans" href="page-event-detail.html" data-type="veterans" data-search="pearland tx texas houston">
           <span class="ev__date"><i>Tuesday</i><b>Sep 22</b></span>
           <span class="ev__name">
             <b>Pearland, TX Veterans Hiring Event</b>
@@ -721,7 +725,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="entry" data-search="new york ny nyc">
+        <a class="ev ty-entry" href="page-event-detail.html" data-type="entry" data-search="new york ny nyc">
           <span class="ev__date"><i>Thursday</i><b>Sep 24</b></span>
           <span class="ev__name">
             <b>New York, NY Entry Level Hiring Event</b>
@@ -732,7 +736,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="healthcare" data-search="portland or oregon">
+        <a class="ev ty-healthcare" href="page-event-detail.html" data-type="healthcare" data-search="portland or oregon">
           <span class="ev__date"><i>Tuesday</i><b>Sep 29</b></span>
           <span class="ev__name">
             <b>Portland, OR Healthcare Hiring Event</b>
@@ -743,7 +747,7 @@
           <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a class="ev" href="page-event-detail.html" data-type="technology" data-search="manchester nh new hampshire">
+        <a class="ev ty-technology" href="page-event-detail.html" data-type="technology" data-search="manchester nh new hampshire">
           <span class="ev__date"><i>Wednesday</i><b>Sep 30</b></span>
           <span class="ev__name">
             <b>Manchester, NH Technology Hiring Event</b>
@@ -847,8 +851,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="close" id="cta">

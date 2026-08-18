@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM HUB  (/employer/platform)
@@ -230,7 +231,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -313,8 +313,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="capabilities">
     <div class="u-container">
@@ -334,7 +332,7 @@
         <div class="card cap cap--soon">
           <div class="cap__shot">
             <span class="chip-soon">Coming soon</span>
-            <div class="crop crop--4x3">
+            <div class="crop crop--4x3 crop--zh">
               <img src="assets/product/dashboard-events.png"
                    alt="The employer events dashboard: four upcoming events in rows, each with its own interview location, setup state, job titles and candidate counts."
                    width="3200" height="2000"
@@ -352,7 +350,7 @@
         
         <a class="card cap" href="page-platform-candidate-pipeline.html" data-reveal style="--i:1">
           <div class="cap__shot">
-            <div class="crop crop--4x3">
+            <div class="crop crop--4x3 crop--zh">
               <img src="assets/product/candidates.png"
                    alt="The candidate pipeline, showing interview requests with Accept, Decline and Reschedule actions on each row."
                    width="3200" height="2000"
@@ -373,7 +371,7 @@
         <div class="card cap cap--soon">
           <div class="cap__shot">
             <span class="chip-soon">Coming soon</span>
-            <div class="crop crop--4x3">
+            <div class="crop crop--4x3 crop--zh">
               <img src="assets/product/interviews.png"
                    alt="The interview schedule, showing upcoming, pending and past interviews with the interview location on each line."
                    width="3200" height="2000"
@@ -392,7 +390,7 @@
         <div class="card cap cap--soon">
           <div class="cap__shot">
             <span class="chip-soon">Coming soon</span>
-            <div class="crop crop--4x3">
+            <div class="crop crop--4x3 crop--zh">
               <img src="assets/product/lobby-live.png"
                    alt="The event lobby during a live hiring event: candidates waiting and interview rooms in progress."
                    width="3200" height="2000"
@@ -411,7 +409,7 @@
         <div class="card cap cap--soon">
           <div class="cap__shot">
             <span class="chip-soon">Coming soon</span>
-            <div class="crop crop--4x3">
+            <div class="crop crop--4x3 crop--zh">
               <img src="assets/product/messages-thread.png"
                    alt="A message thread with a candidate inside the platform, alongside the list of other candidate conversations."
                    width="3200" height="2000"
@@ -430,7 +428,7 @@
         <div class="card cap cap--soon">
           <div class="cap__shot">
             <span class="chip-soon">Coming soon</span>
-            <div class="crop crop--4x3">
+            <div class="crop crop--4x3 crop--zh">
               <img src="assets/product/analytics.png"
                    alt="The analytics view for a hiring event: scheduled versus completed interviews, attendance rate and missed interviews."
                    width="3200" height="2000"
@@ -449,8 +447,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="interview-locations">
@@ -508,10 +504,10 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="included">
+    
+    <div class="gridfield" aria-hidden="true" style="--gf-y:68%"></div>
     <div class="u-container">
 
       <div class="head" data-reveal>
@@ -535,6 +531,44 @@
         <li data-reveal style="--i:7"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Dedicated human support</li>
       </ul>
 
+      
+      <div style="max-width:820px; margin-top:var(--s-16)" data-reveal>
+        <p class="t-eyebrow">AI matching — illustration</p>
+        <div class="vg-diagram" data-vignette="ai-match" data-beats="2" data-beat-ms="2200" aria-hidden="true" style="margin-top:var(--s-6)">
+          <div class="vg-diagram__job vg-card">
+            <div class="vg-eyebrow">Your job post</div>
+            <div class="vg-name">Registered Nurse</div>
+            <div class="vg-meta">Dallas Healthcare Event</div>
+          </div>
+          <svg class="vg-wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path pathLength="100" d="M0,50 H38 V17 H100"/>
+            <path pathLength="100" d="M0,50 H100"/>
+            <path pathLength="100" d="M0,50 H38 V83 H100"/>
+          </svg>
+          <div class="vg-diagram__cands">
+            <div class="vg-node vg-card" style="--i:0">
+              <div class="vg-avatar">DW</div>
+              <div><div class="vg-name">Dana Whitfield</div><div class="vg-meta">Registered Nurse</div></div>
+              <span class="vg-matchchip" data-at="2" style="--i:0">Matched</span>
+            </div>
+            <div class="vg-node vg-card" style="--i:1">
+              <div class="vg-avatar">KM</div>
+              <div><div class="vg-name">Ken Mbeki</div><div class="vg-meta">Registered Nurse</div></div>
+              <span class="vg-matchchip" data-at="2" style="--i:1">Matched</span>
+            </div>
+            <div class="vg-node vg-card" style="--i:2">
+              <div class="vg-avatar">NF</div>
+              <div><div class="vg-name">Nina Farrow</div><div class="vg-meta">Registered Nurse</div></div>
+              <span class="vg-matchchip" data-at="2" style="--i:2">Matched</span>
+            </div>
+          </div>
+        </div>
+        <p class="t-sm" style="margin-top:var(--s-5); color:var(--ink-3); max-width:64ch">
+          An illustration of the mechanic, not the product UI. Post a job and matching
+          activates — matched candidates then request interviews from your availability.
+        </p>
+      </div>
+
       <div class="cta-row" style="margin-top:var(--s-10)" data-reveal>
         <a href="page-pricing.html" class="btn btn--secondary btn--lg">Compare packages</a>
         <a href="page-faq.html" class="btn btn--secondary btn--lg">Read the employer FAQ</a>
@@ -542,8 +576,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

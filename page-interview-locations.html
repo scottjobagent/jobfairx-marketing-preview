@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — INTERVIEW LOCATIONS  (/employer/interview-locations)
@@ -250,6 +251,19 @@
   }
 }
 
+/* ---------- the four strings, rebuilt sharp (S1 static fragments) ----------
+   One mini-card per INTERVIEW LOCATION value, verbatim from the dashboard.
+   Deliberately static — this page's comparison must read at rest, so the
+   motion budget is spent nowhere on it. */
+.locrow {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-4); margin-bottom: var(--s-10);
+}
+.locrow .vg-card { display: grid; gap: 5px; align-content: start; padding: var(--s-4) var(--s-5); }
+.locrow .vg-eyebrow { margin-bottom: 0; }
+@media (max-width: 900px) { .locrow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .locrow { grid-template-columns: minmax(0, 1fr); } }
+
 /* ---------- what does not change ---------- */
 .same { background: var(--void); }
 .same__head { max-width: 60ch; }
@@ -375,7 +389,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -488,12 +501,12 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="proof">
+    
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
       <div class="proof__head" data-reveal>
         <p class="t-eyebrow">The single column that explains it</p>
@@ -504,7 +517,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--side locshot" data-reveal>
+      <figure class="anno anno--side locshot vg-intro" data-reveal>
         <div class="anno__stage">
           <div class="panel">
             <div class="crop">
@@ -515,11 +528,11 @@
             </div>
           </div>
 
-          <button class="anno__pin" style="--x:75.6%;--y:7%;--xm:57%;--ym:5.3%"     data-anno="1" aria-label="The INTERVIEW LOCATION column">1</button>
-          <button class="anno__pin" style="--x:50%;--y:21%;--xm:15.4%;--ym:20.7%"   data-anno="2" aria-label="JobFairX video row">2</button>
-          <button class="anno__pin" style="--x:50%;--y:41%;--xm:15.4%;--ym:42.5%"   data-anno="3" aria-label="Phone row">3</button>
-          <button class="anno__pin" style="--x:50%;--y:64.6%;--xm:15.4%;--ym:68.1%" data-anno="4" aria-label="In person row">4</button>
-          <button class="anno__pin" style="--x:50%;--y:88.3%;--xm:15.4%;--ym:93.9%" data-anno="5" aria-label="Your own link row">5</button>
+          <button class="anno__pin" style="--x:75.6%;--y:7%;--xm:57%;--ym:5.3%;--i:0"     data-anno="1" aria-label="The INTERVIEW LOCATION column">1</button>
+          <button class="anno__pin" style="--x:50%;--y:21%;--xm:15.4%;--ym:20.7%;--i:1"   data-anno="2" aria-label="JobFairX video row">2</button>
+          <button class="anno__pin" style="--x:50%;--y:41%;--xm:15.4%;--ym:42.5%;--i:2"   data-anno="3" aria-label="Phone row">3</button>
+          <button class="anno__pin" style="--x:50%;--y:64.6%;--xm:15.4%;--ym:68.1%;--i:3" data-anno="4" aria-label="In person row">4</button>
+          <button class="anno__pin" style="--x:50%;--y:88.3%;--xm:15.4%;--ym:93.9%;--i:4" data-anno="5" aria-label="Your own link row">5</button>
         </div>
 
         <ol class="anno__key">
@@ -543,6 +556,26 @@
           Four columns, four rows, and nothing else moves. Pick on how you actually want
           to meet people — not on what the event is.
         </p>
+      </div>
+
+      
+      <div class="locrow" aria-hidden="true" data-reveal>
+        <div class="vg-card">
+          <div class="vg-eyebrow">JobFairX video</div>
+          <div class="vg-name">JobFairX video call</div>
+        </div>
+        <div class="vg-card">
+          <div class="vg-eyebrow">Phone</div>
+          <div class="vg-name">You call each candidate</div>
+        </div>
+        <div class="vg-card">
+          <div class="vg-eyebrow">In person</div>
+          <div class="vg-name">1201 Peachtree St NE, Suite 300 · Atlanta, GA</div>
+        </div>
+        <div class="vg-card">
+          <div class="vg-eyebrow">Your own link</div>
+          <div class="vg-name">Microsoft Teams</div>
+        </div>
       </div>
 
       <div class="mx" data-reveal>
@@ -670,8 +703,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

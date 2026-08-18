@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — SECURITY / TRUST  (/employer/security)
@@ -180,6 +181,9 @@
    A card with no evidence line is not allowed on this page. */
 .sec { scroll-margin-top: 96px; }
 .sec + .sec { margin-top: var(--s-24); }
+/* the S3 gridfield behind the opening head needs a positioned ancestor
+   scoped to that section, not the whole four-section light band */
+#documents { position: relative; }
 .sec__head { max-width: 70ch; padding-bottom: var(--s-6); border-bottom: 1px solid var(--hairline); }
 .sec__head h2 { margin-top: var(--s-3); }
 .sec__head > p:not(.t-eyebrow) { margin-top: var(--s-5); }
@@ -353,7 +357,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -471,14 +474,14 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section">
     <div class="u-container">
 
       
       <section class="sec" id="documents">
+        
+        <div class="gridfield" aria-hidden="true"></div>
         <div class="sec__head" data-reveal>
           <p class="t-eyebrow">The short version</p>
           <h2 class="t-h2 t-balance">Every document a review asks for, and whether it exists</h2>
@@ -975,8 +978,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="certifications">
     <div class="u-container">
@@ -1132,8 +1133,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section">
@@ -1441,8 +1440,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   <section class="u-section reqband" id="request">
@@ -1553,8 +1550,6 @@
     </div>
   </footer>
 </div>
-
-
 
 <script src="shared/motion.js"></script>
 </body>

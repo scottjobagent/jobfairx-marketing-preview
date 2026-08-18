@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM / ANALYTICS & REPORTING
@@ -343,7 +344,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -390,7 +390,8 @@
     <div class="cap-hero__glow" aria-hidden="true"></div>
     <div class="cap-hero__grid" aria-hidden="true"></div>
 
-    <div class="u-container cap-hero__inner">
+    
+    <div class="u-container cap-hero__inner" data-vignette="cap-hero" data-beats="3" data-beat-ms="2600" data-hold-ms="2600">
       <p class="t-eyebrow cap-hero__crumb">
         <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Analytics &amp; reporting
       </p>
@@ -404,7 +405,8 @@
         moment the event is over.
       </p>
 
-      <ol class="flow" data-reveal>
+      
+      <ol class="flow">
         <li style="--i:0">
           <p class="flow__n">01 — During</p>
           <p class="flow__t">It counts as it happens</p>
@@ -434,12 +436,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="report">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -451,8 +452,10 @@
         </p>
       </div>
 
+      
       <figure class="anno anno--wide" data-reveal style="--i:1">
-        <div class="anno__stage">
+        
+        <div class="anno__stage vg-stage" data-vignette="kpi" data-beats="3">
           <div class="panel">
             <div class="crop crop--anno">
               <img src="assets/product/analytics.png"
@@ -463,12 +466,32 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:71.6%;--y:6.4%"  data-anno="1" aria-label="Detail 1: the date range control">1</button>
-          <button class="anno__pin" style="--x:17.3%;--y:25.1%" data-anno="2" aria-label="Detail 2: interviews scheduled">2</button>
-          <button class="anno__pin" style="--x:41.6%;--y:25.1%" data-anno="3" aria-label="Detail 3: attendance rate">3</button>
-          <button class="anno__pin" style="--x:66.0%;--y:25.1%" data-anno="4" aria-label="Detail 4: missed interviews and marked yes">4</button>
-          <button class="anno__pin" style="--x:47.3%;--y:44.7%" data-anno="5" aria-label="Detail 5: scheduled against completed">5</button>
-          <button class="anno__pin" style="--x:36.0%;--y:93.3%" data-anno="6" aria-label="Detail 6: the events table">6</button>
+          <button class="anno__pin" style="--x:71.6%;--y:6.4%;--i:0"  data-anno="1" aria-label="Detail 1: the date range control">1</button>
+          <button class="anno__pin" style="--x:17.3%;--y:25.1%;--i:1" data-anno="2" aria-label="Detail 2: interviews scheduled">2</button>
+          <button class="anno__pin" style="--x:41.6%;--y:25.1%;--i:2" data-anno="3" aria-label="Detail 3: attendance rate">3</button>
+          <button class="anno__pin" style="--x:66.0%;--y:25.1%;--i:3" data-anno="4" aria-label="Detail 4: missed interviews and marked yes">4</button>
+          <button class="anno__pin" style="--x:47.3%;--y:44.7%;--i:4" data-anno="5" aria-label="Detail 5: scheduled against completed">5</button>
+          <button class="anno__pin" style="--x:36.0%;--y:93.3%;--i:5" data-anno="6" aria-label="Detail 6: the events table">6</button>
+
+          
+          <aside class="vg-over vg-card vg-kpi vg-pop" data-at="1" aria-hidden="true"
+                 style="--oxr:-20px; --oy:42%; --ow:200px">
+            <b data-count>87%</b>
+            <span>Employers who return</span>
+            <div style="font-size:10px;color:#8b909b;letter-spacing:.01em">Based on 2025 platform data</div>
+          </aside>
+          <aside class="vg-over vg-card vg-kpi vg-pop" data-at="2" aria-hidden="true"
+                 style="--oxr:-20px; --oy:57%; --ow:200px">
+            <b data-count>500,000+</b>
+            <span>Interviews conducted</span>
+          </aside>
+          
+          <aside class="vg-over vg-card vg-pop" data-at="3" aria-hidden="true"
+                 style="--ox:22%; --oy:52%; --ow:210px">
+            <div class="vg-meta" style="margin-bottom:var(--s-2)">Attendance rate · this range</div>
+            <div class="vg-bar" style="--w:66%"><i></i></div>
+            <div class="vg-name" style="margin-top:var(--s-2);text-align:right">66%</div>
+          </aside>
         </div>
 
         <ol class="anno__key">
@@ -536,8 +559,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="funnel">
     <div class="u-container">
@@ -562,7 +583,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--chart">
+            <div class="crop crop--chart crop--zh">
               <img src="assets/product/analytics.png"
                    alt="Close crop of the Interviews over time chart: a blue Interviews scheduled line running above an amber Interviews completed line across the weeks labelled Apr 22 to Apr 28, Apr 29 to May 5, May 6 to May 12 and May 13 to May 19, with both lines falling to zero in the week of Apr 29."
                    width="3200" height="2000"
@@ -596,7 +617,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--strip">
+            <div class="crop crop--strip crop--zh">
               <img src="assets/product/analytics.png"
                    alt="Close crop of the Events section at the foot of the analytics screen: the heading Events beside an All events dropdown, and the start of the table header row reading EVENT, DATE and REQUESTS."
                    width="3200" height="2000"
@@ -617,8 +638,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="export">
@@ -692,8 +711,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -714,6 +731,7 @@
         </div>
 
         <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li aria-hidden="true"><span class="vg-draw" data-reveal></span></li>
           <li>
             <span class="t-eyebrow">Interviews conducted</span>
             <strong data-count>500,000+</strong>

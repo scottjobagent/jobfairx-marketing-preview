@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — SOLUTIONS / VETERAN
@@ -361,7 +362,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -457,12 +457,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="screen">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -474,7 +473,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--anno">
@@ -486,11 +485,11 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:28.8%;--y:15.2%" data-anno="1" aria-label="Detail 1: the pipeline state tabs">1</button>
-          <button class="anno__pin" style="--x:39.4%;--y:22.7%" data-anno="2" aria-label="Detail 2: sort, filter and search">2</button>
-          <button class="anno__pin" style="--x:75.5%;--y:29.5%" data-anno="3" aria-label="Detail 3: accept, decline and reschedule">3</button>
-          <button class="anno__pin" style="--x:13.1%;--y:59.4%" data-anno="4" aria-label="Detail 4: view resume and message">4</button>
-          <button class="anno__pin" style="--x:57.1%;--y:78.8%" data-anno="5" aria-label="Detail 5: what each row tells you">5</button>
+          <button class="anno__pin" style="--x:28.8%;--y:15.2%;--i:0" data-anno="1" aria-label="Detail 1: the pipeline state tabs">1</button>
+          <button class="anno__pin" style="--x:39.4%;--y:22.7%;--i:1" data-anno="2" aria-label="Detail 2: sort, filter and search">2</button>
+          <button class="anno__pin" style="--x:75.5%;--y:29.5%;--i:2" data-anno="3" aria-label="Detail 3: accept, decline and reschedule">3</button>
+          <button class="anno__pin" style="--x:13.1%;--y:59.4%;--i:3" data-anno="4" aria-label="Detail 4: view resume and message">4</button>
+          <button class="anno__pin" style="--x:57.1%;--y:78.8%;--i:4" data-anno="5" aria-label="Detail 5: what each row tells you">5</button>
         </div>
 
         <ol class="anno__key">
@@ -557,8 +556,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="schedule">
     <div class="u-container">
@@ -582,14 +579,24 @@
         </div>
 
         <figure class="proof__vis" data-reveal style="--i:1">
-          <div class="panel">
-            <div class="crop crop--4x3">
+          
+          <div class="vg-stage" data-vignette="kpi" data-beats="2">
+            <div class="panel">
+              <div class="crop crop--4x3">
               
               <img src="assets/product/interviews.png"
                    alt="Close crop of four consecutive rows in the employer interview schedule, each showing the scheduled half-hour slot and the interview location tag for that interview: Video, then In person, In person, and Phone."
                    width="3200" height="2000"
                    style="--z:4.4; --l:-53%; --t:-60.6%">
+              </div>
             </div>
+            
+            <aside class="vg-over vg-card vg-kpi vg-pop" data-at="1" aria-hidden="true"
+                   style="--oxr:20px; --oy:-56px; --ow:200px">
+              <b data-count>89%</b>
+              <span>Interview show rate</span>
+              <div class="vg-meta">2025 platform data</div>
+            </aside>
           </div>
           <figcaption class="t-sm">
             Video, In person, Phone — three interview locations inside four consecutive
@@ -649,8 +656,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
 
@@ -771,8 +776,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

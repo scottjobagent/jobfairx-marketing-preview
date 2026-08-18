@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — SOLUTIONS / ENTRY-LEVEL
@@ -536,7 +537,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -634,8 +634,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
@@ -715,6 +713,8 @@
 
   
   <section class="u-section" id="screen" style="padding-top:0">
+    
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="head" data-reveal>
@@ -727,7 +727,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--triage">
@@ -739,11 +739,11 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:61.2%;--y:9.6%" data-anno="1" aria-label="Detail 1: six state tabs with live counts">1</button>
-          <button class="anno__pin" style="--x:14.6%;--y:34.3%" data-anno="2" aria-label="Detail 2: sort by interview time">2</button>
-          <button class="anno__pin" style="--x:35.0%;--y:34.3%" data-anno="3" aria-label="Detail 3: filter by job and by feedback">3</button>
-          <button class="anno__pin" style="--x:70.8%;--y:34.3%" data-anno="4" aria-label="Detail 4: search candidates">4</button>
-          <button class="anno__pin" style="--x:82.2%;--y:65.7%" data-anno="5" aria-label="Detail 5: accept, decline and reschedule">5</button>
+          <button class="anno__pin" style="--x:61.2%;--y:9.6%;--i:0" data-anno="1" aria-label="Detail 1: six state tabs with live counts">1</button>
+          <button class="anno__pin" style="--x:14.6%;--y:34.3%;--i:1" data-anno="2" aria-label="Detail 2: sort by interview time">2</button>
+          <button class="anno__pin" style="--x:35.0%;--y:34.3%;--i:2" data-anno="3" aria-label="Detail 3: filter by job and by feedback">3</button>
+          <button class="anno__pin" style="--x:70.8%;--y:34.3%;--i:3" data-anno="4" aria-label="Detail 4: search candidates">4</button>
+          <button class="anno__pin" style="--x:82.2%;--y:65.7%;--i:4" data-anno="5" aria-label="Detail 5: accept, decline and reschedule">5</button>
         </div>
 
         <ol class="anno__key">
@@ -806,8 +806,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 
@@ -893,6 +891,8 @@
       </ol>
 
       <figure class="evrow" data-reveal>
+        
+        <div class="vg-stage" data-vignette="kpi" data-beats="1" data-beat-ms="1400" data-hold-ms="5600">
         <div class="panel">
           <div class="crop crop--evtable">
             <img src="assets/product/dashboard-events.png"
@@ -900,6 +900,13 @@
                  width="3200" height="2000"
                  style="--z:1.2; --l:-15.5%; --t:-26.9%; --zm:2.4; --lm:-16%; --tm:-27%">
           </div>
+        </div>
+        <aside class="vg-over vg-card vg-kpi vg-pop" data-at="1" aria-hidden="true"
+               style="--oxr:26px; --oy:-28px; --ow:212px">
+          <b data-count>86%</b>
+          <span>Interview show rate</span>
+          <div class="vg-meta">2025 platform data</div>
+        </aside>
         </div>
         <figcaption class="t-sm">
           Four events on one dashboard, and four different answers in the Interview location
@@ -920,8 +927,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
 
@@ -1241,8 +1246,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 

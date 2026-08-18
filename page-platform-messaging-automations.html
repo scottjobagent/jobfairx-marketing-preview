@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM / MESSAGING & AUTOMATIONS
@@ -341,7 +342,6 @@
 </head>
 <body>
 
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -388,7 +388,8 @@
     <div class="cap-hero__glow" aria-hidden="true"></div>
     <div class="cap-hero__grid" aria-hidden="true"></div>
 
-    <div class="u-container cap-hero__inner">
+    
+    <div class="u-container cap-hero__inner" data-vignette="cap-hero" data-beats="3" data-beat-ms="2600" data-hold-ms="2600">
       <p class="t-eyebrow cap-hero__crumb">
         <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Messaging &amp; automations
       </p>
@@ -403,7 +404,7 @@
       </p>
 
       
-      <ol class="flow" data-reveal>
+      <ol class="flow">
         <li style="--i:0">
           <p class="flow__n">01 — Presets</p>
           <p class="flow__t">Turn one on</p>
@@ -433,12 +434,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="inbox">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -450,7 +450,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--side" data-reveal style="--i:1">
+      <figure class="anno anno--side vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--anno">
@@ -463,11 +463,11 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:28.3%;--y:44.1%" data-anno="1" aria-label="Detail 1: Automations in the navigation rail">1</button>
-          <button class="anno__pin" style="--x:63.6%;--y:21.5%" data-anno="2" aria-label="Detail 2: the Inbox and Archived tabs">2</button>
-          <button class="anno__pin" style="--x:86.9%;--y:30.4%" data-anno="3" aria-label="Detail 3: the event and job filters">3</button>
-          <button class="anno__pin" style="--x:71.8%;--y:55.8%" data-anno="4" aria-label="Detail 4: one row is one conversation">4</button>
-          <button class="anno__pin" style="--x:63.0%;--y:79.0%" data-anno="5" aria-label="Detail 5: the last line of each thread">5</button>
+          <button class="anno__pin" style="--x:28.3%;--y:44.1%;--i:0" data-anno="1" aria-label="Detail 1: Automations in the navigation rail">1</button>
+          <button class="anno__pin" style="--x:63.6%;--y:21.5%;--i:1" data-anno="2" aria-label="Detail 2: the Inbox and Archived tabs">2</button>
+          <button class="anno__pin" style="--x:86.9%;--y:30.4%;--i:2" data-anno="3" aria-label="Detail 3: the event and job filters">3</button>
+          <button class="anno__pin" style="--x:71.8%;--y:55.8%;--i:3" data-anno="4" aria-label="Detail 4: one row is one conversation">4</button>
+          <button class="anno__pin" style="--x:63.0%;--y:79.0%;--i:4" data-anno="5" aria-label="Detail 5: the last line of each thread">5</button>
         </div>
 
         <ol class="anno__key">
@@ -555,8 +555,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="automations">
     <div class="u-container">
@@ -638,8 +636,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="after">
     <div class="u-container">
@@ -664,13 +660,50 @@
         </div>
 
         <figure class="proof__vis" data-reveal style="--i:1">
-          <div class="panel">
-            <div class="crop crop--rail">
-              <img src="assets/product/messages-thread.png"
-                   alt="Close crop of the conversation column on the Messages screen: the heading Messages with a Manage link, an Inbox tab carrying a count of 18 next to an Archived tab, an All Events dropdown and an All Jobs dropdown, and four conversation rows below them. Each row carries a candidate name, a Today timestamp, the job the conversation belongs to and the opening words of the most recent message."
-                   width="3200" height="2000"
-                   style="--z:3.861; --l:-13.75%; --t:-6%">
+          <div class="vg-stage">
+            <div class="panel">
+              <div class="crop crop--rail">
+                <img src="assets/product/messages-thread.png"
+                     alt="Close crop of the conversation column on the Messages screen: the heading Messages with a Manage link, an Inbox tab carrying a count of 18 next to an Archived tab, an All Events dropdown and an All Jobs dropdown, and four conversation rows below them. Each row carries a candidate name, a Today timestamp, the job the conversation belongs to and the opening words of the most recent message."
+                     width="3200" height="2000"
+                     style="--z:3.861; --l:-13.75%; --t:-6%">
+              </div>
             </div>
+
+            
+            <aside class="vg-over vg-card vg-fade" data-vignette="msg-flow" data-beats="3"
+                   data-hold-ms="4000" aria-hidden="true"
+                   style="--oxr:-18px; --oyb:-22px; --ow:290px">
+              <div class="vg-eyebrow">Automations</div>
+              <div class="vg-flow">
+                <span class="vg-playline"></span>
+                <div class="vg-flow__stage vg-row" style="justify-content:space-between">
+                  <div>
+                    <div class="vg-name" style="font-size:12px">Message new candidates</div>
+                    <div class="vg-meta">Automation</div>
+                  </div>
+                  <span class="vg-matchchip" data-at="1">Sent</span>
+                </div>
+                <div class="vg-flow__stage vg-row" style="justify-content:space-between">
+                  <div>
+                    <div class="vg-name" style="font-size:12px">Message scheduled candidates</div>
+                    <div class="vg-meta">Automation</div>
+                  </div>
+                  <span class="vg-matchchip" data-at="2">Sent</span>
+                </div>
+                <div class="vg-flow__stage vg-row" style="justify-content:space-between">
+                  <div>
+                    <div class="vg-name" style="font-size:12px">Missed interview follow-up</div>
+                    <div class="vg-meta">Automation</div>
+                  </div>
+                  <span class="vg-matchchip" data-at="3">Sent</span>
+                </div>
+              </div>
+              <div class="vg-note" data-at="3">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+                They send on their own
+              </div>
+            </aside>
           </div>
           <figcaption class="t-sm">
             Inbox and Archived, the event and job filters, and the threads themselves —
@@ -719,8 +752,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -741,6 +772,7 @@
         </div>
 
         <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li aria-hidden="true"><span class="vg-draw" data-reveal></span></li>
           <li>
             <span class="t-eyebrow">Employers on the platform</span>
             <strong data-count>4,000+</strong>

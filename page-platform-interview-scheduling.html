@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM / INTERVIEW SCHEDULING
@@ -303,6 +304,13 @@
 @media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
 
+/* ---------- vignette placement (page-specific) ----------
+   The hero's floating V1 card needs the full-width canvas; below 1180px it
+   would crowd the headline, so it goes — same logic as the pipeline
+   reference and the homepage hero fragments. */
+.cap-hero__vig { right: max(24px, calc(50% - 590px)); top: 96px; }
+@media (max-width: 1180px) { .cap-hero .vg-over { display: none; } }
+
 /* ---------- placeholder affordance (same rule as every other page) ---------- */
 [data-placeholder]::after {
   content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
@@ -313,7 +321,6 @@
 </style>
 </head>
 <body>
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 
@@ -361,7 +368,8 @@
     <div class="cap-hero__glow" aria-hidden="true"></div>
     <div class="cap-hero__grid" aria-hidden="true"></div>
 
-    <div class="u-container cap-hero__inner">
+    
+    <div class="u-container cap-hero__inner" data-vignette="cap-hero" data-beats="3" data-beat-ms="2600" data-hold-ms="2600">
       <p class="t-eyebrow cap-hero__crumb">
         <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Interview scheduling
       </p>
@@ -374,7 +382,33 @@
         Pending is nothing more exotic than the requests you have not answered yet.
       </p>
 
-      <ol class="flow" data-reveal>
+      
+      <aside class="vg-over vg-card cap-hero__vig" data-parallax="8" aria-hidden="true" style="--ow:270px">
+        <div class="vg-eyebrow">Interview request</div>
+        <div class="vg-row">
+          <div class="vg-avatar">RD</div>
+          <div>
+            <div class="vg-name">Rosa Delgado</div>
+            <div class="vg-meta vg-swap">
+              <span data-a>Physical Therapist · Requested today</span>
+              <span data-b>Physical Therapist · <b style="color:var(--accent);font-weight:600">Scheduled</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="vg-actions">
+          <span class="vg-btn vg-btn--accept vg-press">Accept</span>
+          <span class="vg-btn vg-dim">Decline</span>
+          <span class="vg-btn vg-dim">Reschedule</span>
+          <span class="vg-ring vg-ring--first"></span>
+        </div>
+        <div class="vg-note" data-at="3">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+          Candidate notified — added to your schedule
+        </div>
+      </aside>
+
+      
+      <ol class="flow">
         <li style="--i:0">
           <p class="flow__n">01 — Pending</p>
           <p class="flow__t">The request lands</p>
@@ -404,12 +438,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="schedule">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -421,7 +454,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--anno">
@@ -433,12 +466,12 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:40.5%;--y:5.8%"  data-anno="1" aria-label="Detail 1: the all hiring events selector">1</button>
-          <button class="anno__pin" style="--x:49.6%;--y:20.5%" data-anno="2" aria-label="Detail 2: the Upcoming, Pending and Past tabs">2</button>
-          <button class="anno__pin" style="--x:85.0%;--y:42.7%" data-anno="3" aria-label="Detail 3: reschedule and cancel">3</button>
-          <button class="anno__pin" style="--x:8.6%;--y:47.6%"  data-anno="4" aria-label="Detail 4: view resume and message">4</button>
-          <button class="anno__pin" style="--x:42.9%;--y:68.6%" data-anno="5" aria-label="Detail 5: the interview time column">5</button>
-          <button class="anno__pin" style="--x:66.9%;--y:79.6%" data-anno="6" aria-label="Detail 6: the interview location badges">6</button>
+          <button class="anno__pin" style="--x:40.5%;--y:5.8%;--i:0"  data-anno="1" aria-label="Detail 1: the all hiring events selector">1</button>
+          <button class="anno__pin" style="--x:49.6%;--y:20.5%;--i:1" data-anno="2" aria-label="Detail 2: the Upcoming, Pending and Past tabs">2</button>
+          <button class="anno__pin" style="--x:85.0%;--y:42.7%;--i:2" data-anno="3" aria-label="Detail 3: reschedule and cancel">3</button>
+          <button class="anno__pin" style="--x:8.6%;--y:47.6%;--i:3"  data-anno="4" aria-label="Detail 4: view resume and message">4</button>
+          <button class="anno__pin" style="--x:42.9%;--y:68.6%;--i:4" data-anno="5" aria-label="Detail 5: the interview time column">5</button>
+          <button class="anno__pin" style="--x:66.9%;--y:79.6%;--i:5" data-anno="6" aria-label="Detail 6: the interview location badges">6</button>
         </div>
 
         <ol class="anno__key">
@@ -502,8 +535,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="accept">
     <div class="u-container">
@@ -558,13 +589,23 @@
         </div>
 
         <figure class="proof__vis" data-reveal style="--i:1">
-          <div class="panel">
-            <div class="crop crop--band">
-              <img src="assets/product/interviews.png"
-                   alt="Close crop of four consecutive schedule rows showing the interview time, the interview location badge and the action buttons: 11:30 AM to 12:00 PM PDT marked In person, 12:00 PM to 12:30 PM PDT marked In person, 12:00 PM to 12:30 PM PDT marked Phone, and 12:30 PM to 1:00 PM PDT marked Phone, each with a Reschedule and Cancel pair."
-                   width="3200" height="2000"
-                   style="--z:2.2; --l:-52%; --t:-68.8%; --zm:3; --lm:-54%; --tm:-70%">
+          
+          <div class="vg-stage">
+            <div class="panel">
+              <div class="crop crop--band">
+                <img src="assets/product/interviews.png"
+                     alt="Close crop of four consecutive schedule rows showing the interview time, the interview location badge and the action buttons: 11:30 AM to 12:00 PM PDT marked In person, 12:00 PM to 12:30 PM PDT marked In person, 12:00 PM to 12:30 PM PDT marked Phone, and 12:30 PM to 1:00 PM PDT marked Phone, each with a Reschedule and Cancel pair."
+                     width="3200" height="2000"
+                     style="--z:2.2; --l:-52%; --t:-68.8%; --zm:3; --lm:-54%; --tm:-70%">
+              </div>
             </div>
+            <aside class="vg-over vg-card" aria-hidden="true" style="--oxr:-16px; --oyb:-18px; --ow:290px">
+              <div class="vg-row">
+                <span class="vg-chip vg-chip--sched">Scheduled</span>
+                <div class="vg-name">Apr 22 · 10:00 AM CT</div>
+              </div>
+              <div class="vg-meta" style="margin-top:6px">JobFairX video call</div>
+            </aside>
           </div>
           <figcaption class="t-sm">
             Consecutive rows across the events you are registered for: two in-person interviews followed
@@ -581,8 +622,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="automations">
@@ -608,7 +647,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--band">
+            <div class="crop crop--band crop--zh">
               <img src="assets/product/automations.png"
                    alt="Close crop of the My automations table: three rows, each with a green On pill beside an automation name — Message new candidates, Message scheduled candidates, and Missed interview follow-up."
                    width="3200" height="2000"
@@ -642,7 +681,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--rail">
+            <div class="crop crop--rail crop--zh">
               <img src="assets/product/interviews.png"
                    alt="Close vertical crop of the Interview time and Interview location columns: six consecutive rows reading 10:30 to 11:00 AM PDT twice, 11:00 to 11:30 AM twice, 11:30 AM to 12:00 PM and 12:00 to 12:30 PM, the first four paired with a Video badge and the last two with an In person badge."
                    width="3200" height="2000"
@@ -695,8 +734,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -716,6 +753,7 @@
         </div>
 
         <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li aria-hidden="true"><span class="vg-draw" data-reveal></span></li>
           <li>
             <span class="t-eyebrow">Interviews conducted</span>
             <strong data-count>500,000+</strong>

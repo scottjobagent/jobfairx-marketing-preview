@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
 <style>
 /* ==========================================================================
    PAGE — PLATFORM / EVENTS DASHBOARD
@@ -314,6 +315,13 @@
 @media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
 
+/* ---------- vignette placement (page-specific) ----------
+   The hero's floating location card needs the full-width canvas; below 1180px
+   it would crowd the headline, so it goes — same logic as the pipeline
+   reference and the homepage hero fragments. */
+.cap-hero__vig { right: max(24px, calc(50% - 590px)); top: 96px; }
+@media (max-width: 1180px) { .cap-hero .vg-over { display: none; } }
+
 /* ---------- placeholder affordance (same rule as every other page) ---------- */
 [data-placeholder]::after {
   content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
@@ -324,7 +332,6 @@
 </style>
 </head>
 <body>
-
 
 <div data-theme="dark" style="background:var(--canvas)">
 
@@ -372,7 +379,8 @@
     <div class="cap-hero__glow" aria-hidden="true"></div>
     <div class="cap-hero__grid" aria-hidden="true"></div>
 
-    <div class="u-container cap-hero__inner">
+    
+    <div class="u-container cap-hero__inner" data-vignette="cap-hero" data-beats="3" data-beat-ms="2600" data-hold-ms="2600">
       <p class="t-eyebrow cap-hero__crumb">
         <a href="page-platform.html">Platform</a> <span aria-hidden="true">·</span> Events dashboard
       </p>
@@ -388,7 +396,35 @@
         upcoming.
       </p>
 
-      <ol class="flow" data-reveal>
+      
+      <aside class="vg-over vg-card cap-hero__vig" data-parallax="8" aria-hidden="true" style="--ow:280px">
+        <div class="vg-eyebrow">Interview location</div>
+        <div class="vgc">
+          <div data-v="0">
+            <span class="vg-chip">Video</span>
+            <div class="vg-name" style="margin-top:8px">JobFairX video call</div>
+            <div class="vg-meta">Dallas Healthcare Event</div>
+          </div>
+          <div data-v="1">
+            <span class="vg-chip">Phone</span>
+            <div class="vg-name" style="margin-top:8px">You call each candidate</div>
+            <div class="vg-meta">Chicago Technology Event</div>
+          </div>
+          <div data-v="2">
+            <span class="vg-chip">In person</span>
+            <div class="vg-name" style="margin-top:8px">1201 Peachtree St NE, Suite 300</div>
+            <div class="vg-meta">Atlanta Diversity Event</div>
+          </div>
+          <div data-v="3">
+            <span class="vg-chip">Video</span>
+            <div class="vg-name" style="margin-top:8px">Microsoft Teams</div>
+            <div class="vg-meta">Denver Technology Event</div>
+          </div>
+        </div>
+      </aside>
+
+      
+      <ol class="flow">
         <li style="--i:0">
           <p class="flow__n">01 — Register</p>
           <p class="flow__t">The event is the moment</p>
@@ -420,12 +456,11 @@
   </section>
 </div>
 
-
-
 <div data-theme="light" style="background:var(--canvas)">
 
   
   <section class="u-section" id="dashboard">
+    <div class="gridfield" aria-hidden="true"></div>
     <div class="u-container">
 
       <div class="annoband__head" data-reveal>
@@ -437,7 +472,7 @@
         </p>
       </div>
 
-      <figure class="anno anno--wide" data-reveal style="--i:1">
+      <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
         <div class="anno__stage">
           <div class="panel">
             <div class="crop crop--anno">
@@ -449,12 +484,12 @@
           </div>
 
           
-          <button class="anno__pin" style="--x:48.0%;--y:26.7%" data-anno="1" aria-label="Detail 1: the interview location column">1</button>
-          <button class="anno__pin" style="--x:50.3%;--y:69.6%" data-anno="2" aria-label="Detail 2: an in-person interview location">2</button>
-          <button class="anno__pin" style="--x:63.2%;--y:40.2%" data-anno="3" aria-label="Detail 3: interviewers and seats">3</button>
-          <button class="anno__pin" style="--x:81.3%;--y:55.8%" data-anno="4" aria-label="Detail 4: job titles on the event">4</button>
-          <button class="anno__pin" style="--x:21.1%;--y:53.8%" data-anno="5" aria-label="Detail 5: setup state per event">5</button>
-          <button class="anno__pin" style="--x:88.9%;--y:42.1%" data-anno="6" aria-label="Detail 6: pending and upcoming candidates">6</button>
+          <button class="anno__pin" style="--x:48.0%;--y:26.7%;--i:0" data-anno="1" aria-label="Detail 1: the interview location column">1</button>
+          <button class="anno__pin" style="--x:50.3%;--y:69.6%;--i:1" data-anno="2" aria-label="Detail 2: an in-person interview location">2</button>
+          <button class="anno__pin" style="--x:63.2%;--y:40.2%;--i:2" data-anno="3" aria-label="Detail 3: interviewers and seats">3</button>
+          <button class="anno__pin" style="--x:81.3%;--y:55.8%;--i:3" data-anno="4" aria-label="Detail 4: job titles on the event">4</button>
+          <button class="anno__pin" style="--x:21.1%;--y:53.8%;--i:4" data-anno="5" aria-label="Detail 5: setup state per event">5</button>
+          <button class="anno__pin" style="--x:88.9%;--y:42.1%;--i:5" data-anno="6" aria-label="Detail 6: pending and upcoming candidates">6</button>
         </div>
 
         <ol class="anno__key">
@@ -524,8 +559,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
   <section class="u-section" id="setup">
     <div class="u-container">
@@ -550,13 +583,21 @@
         </div>
 
         <figure class="proof__vis" data-reveal style="--i:1">
-          <div class="panel">
-            <div class="crop crop--tall">
-              <img src="assets/product/dashboard-events.png"
-                   alt="Close crop of the Actions and Event details columns of the events dashboard. The Dallas Healthcare Event row shows only edit and more buttons; the Chicago Technology Event and Atlanta Diversity Event rows below each add a blue Complete setup button and a red Setup chip beneath the event date."
-                   width="3200" height="2000"
-                   style="--z:3.45; --l:-15%; --t:-32.2%; --zm:3.9; --lm:-15.5%; --tm:-33%">
+          
+          <div class="vg-stage">
+            <div class="panel">
+              <div class="crop crop--tall">
+                <img src="assets/product/dashboard-events.png"
+                     alt="Close crop of the Actions and Event details columns of the events dashboard. The Dallas Healthcare Event row shows only edit and more buttons; the Chicago Technology Event and Atlanta Diversity Event rows below each add a blue Complete setup button and a red Setup chip beneath the event date."
+                     width="3200" height="2000"
+                     style="--z:3.45; --l:-15%; --t:-32.2%; --zm:3.9; --lm:-15.5%; --tm:-33%">
+              </div>
             </div>
+            <aside class="vg-over vg-card" aria-hidden="true" style="--oxr:-40px; --oyb:-10px; --ow:290px">
+              <span class="vg-chip">In person</span>
+              <div class="vg-name" style="margin-top:8px">1201 Peachtree St NE, Suite 300</div>
+              <div class="vg-meta">Atlanta Diversity Event</div>
+            </aside>
           </div>
           <figcaption class="t-sm">
             Complete setup, and a red Setup chip, sitting on the two events that are not
@@ -585,7 +626,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--rail">
+            <div class="crop crop--rail crop--zh">
               <img src="assets/product/dashboard-events.png"
                    alt="Close crop of the Interview setup and Job titles columns for all four events: 2 interviewers with 1 of 5 seats and Registered Nurse at 1 of 3 jobs; a red Incomplete with 4 of unlimited seats and three job titles at 3 of 6 jobs; a red Incomplete with 1 of 1 seat and 0 of 1 jobs; and 3 interviewers with 3 of 5 seats."
                    width="3200" height="2000"
@@ -607,8 +648,6 @@
     </div>
   </section>
 </div>
-
-
 
 <div data-theme="light" style="background:var(--canvas)">
   <section class="u-section" id="jobs">
@@ -634,7 +673,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--wideband">
+            <div class="crop crop--wideband crop--zh">
               <img src="assets/product/setup-flow.png"
                    alt="The top of the Create a job post screen. Under the heading, a line reads Growth package, 2 of 3 jobs added, followed by the question How would you like to post your job? with two options: Use a previous job as a template, tagged Save time, and the selected Create a brand new post."
                    width="3200" height="2000"
@@ -668,7 +707,7 @@
 
         <figure class="proof__vis" data-reveal style="--i:1">
           <div class="panel">
-            <div class="crop crop--strip">
+            <div class="crop crop--strip crop--zh">
               <img src="assets/product/dashboard-events.png"
                    alt="Close crop of the top of the events dashboard: the account name Northwind Health, a blue Register for an event button, and a tab strip reading Upcoming events 4 and Past events 1 beside a link to test your audio and video before your event and a Search Hiring Events control."
                    width="3200" height="2000"
@@ -719,8 +758,6 @@
   </section>
 </div>
 
-
-
 <div data-theme="dark" style="background:var(--canvas)">
 
   
@@ -740,6 +777,7 @@
         </div>
 
         <ul class="ctaband__facts" data-reveal style="--i:1">
+          <li aria-hidden="true"><span class="vg-draw" data-reveal></span></li>
           <li>
             <span class="t-eyebrow">Employers</span>
             <strong data-count>4,000+</strong>
