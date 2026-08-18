@@ -271,9 +271,91 @@
     });
   }
 
+  /* ---------- 8. vignettes -------------------------------------------------
+     The beat stepper for [data-vignette] containers (see vignettes.css for
+     the CSS side of the contract). Classes vg-b1..vg-bN land cumulatively on
+     a timeline while the container is in view; a short .vg-resetting fade
+     covers the loop point. The authored markup is beat 0, so with reduced
+     motion, no IntersectionObserver, or a failed script the vignette simply
+     never plays and the page shows the approved static composition. */
+  function initVignettes() {
+    var vigs = document.querySelectorAll('[data-vignette]');
+    if (!vigs.length || reduced || !('IntersectionObserver' in window)) return;
+
+    vigs.forEach(function (el) {
+      var beats  = parseInt(el.getAttribute('data-beats'), 10) || 3;
+      var beatMs = parseInt(el.getAttribute('data-beat-ms'), 10) || 2400;
+      var holdMs = parseInt(el.getAttribute('data-hold-ms'), 10) || 3600;
+      var timers = [], playing = false;
+
+      function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+      function setBeat(n) {
+        for (var i = 1; i <= beats; i++) el.classList.toggle('vg-b' + i, i <= n);
+      }
+      function stop() {
+        timers.forEach(clearTimeout); timers = [];
+        el.classList.remove('vg-resetting'); setBeat(0);
+      }
+      function cycle() {
+        for (var i = 1; i <= beats; i++) (function (n) {
+          later(function () { setBeat(n); }, beatMs * n);
+        })(i);
+        later(function () {
+          el.classList.add('vg-resetting');
+          later(function () {
+            setBeat(0);
+            void el.offsetWidth;                 // settle beat-0 styles while hidden
+            el.classList.remove('vg-resetting');
+            later(cycle, 400);
+          }, 220);
+        }, beatMs * beats + holdMs);
+      }
+
+      new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting) {
+          if (!playing) { playing = true; cycle(); }
+        } else if (playing) { playing = false; stop(); }
+      }, { threshold: 0.45 }).observe(el);
+    });
+  }
+
+  /* ---------- 9. anno attract pass ----------------------------------------
+     For .anno.vg-intro figures: after the pins pop in (CSS, keyed off the
+     reveal observer's .is-in), light each pin/caption pair once, in order —
+     a single guided read of the figure. Any interaction cancels it; hover
+     then owns the pairing exactly as before. */
+  function initAnnoIntro() {
+    if (reduced || !('IntersectionObserver' in window)) return;
+    document.querySelectorAll('.anno.vg-intro').forEach(function (fig) {
+      var pins = fig.querySelectorAll('.anno__pin');
+      if (!pins.length) return;
+      var cancelled = false;
+      ['pointerenter', 'focusin', 'touchstart'].forEach(function (ev) {
+        fig.addEventListener(ev, function () { cancelled = true; }, { once: true, passive: true });
+      });
+      var io = new IntersectionObserver(function (e) {
+        if (!e[0].isIntersecting) return;
+        io.disconnect();
+        var start = 300 + pins.length * 60 + 600;   // wait out the pin pop
+        pins.forEach(function (p, i) {
+          setTimeout(function () {
+            if (cancelled) return;
+            var pair = fig.querySelectorAll('[data-anno="' + p.getAttribute('data-anno') + '"]');
+            pair.forEach(function (n) { n.classList.add('is-on'); });
+            setTimeout(function () {
+              pair.forEach(function (n) { n.classList.remove('is-on'); });
+            }, 360);
+          }, start + i * 420);
+        });
+      }, { threshold: 0.55 });
+      io.observe(fig);
+    });
+  }
+
   function init() {
     initReveal(); initParallax(); initNav();
     initTabs(); initJourney(); initCounters(); initAnno();
+    initVignettes(); initAnnoIntro();
   }
 
   if (document.readyState === 'loading') {

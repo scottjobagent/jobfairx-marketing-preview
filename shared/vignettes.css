@@ -1,0 +1,420 @@
+/* ==========================================================================
+   JobFairX Marketing — vignette layer
+   Animated product vignettes + static composition upgrades (VISUAL-AUDIT.md).
+   Loads AFTER base.css on pages that use it. Same contract as base.css:
+   no dependencies, transform/opacity only, and the AUTHORED markup is the
+   complete, truthful screen — beats are pure enhancement. With scripting
+   absent, blocked, or prefers-reduced-motion, nothing here ever runs and the
+   page renders exactly as authored.
+
+   THE BEAT CONTRACT
+   A container carries data-vignette="<name>" data-beats="N" (and optionally
+   data-beat-ms / data-hold-ms). motion.js adds vg-b1..vg-bN CUMULATIVELY on a
+   timeline while the container is in view, then fades the container out for
+   ~200ms (.vg-resetting), clears the classes, and loops. Beat 0 == authored.
+
+   Generic primitives (compose these before writing bespoke rules):
+     [data-at="N"]   appears when beat N lands (fade+rise; add .vg-pop to scale in)
+     .vg-swap        two stacked values; [data-a] visible until b3, [data-b] after
+     .vgc            2–4 stacked values; child [data-v="K"] visible during beat K
+     .vg-ring        focus ring; shows at b1, hides at b3 (override per vignette)
+     .vg-press       one-shot press animation fired at b2
+     .vg-dim         dims to 45% at b3
+     .vg-bar > i     grows scaleX 0→1 at b3
+   All rebuilt-UI text obeys HANDOFF §2 vocabulary and uses only verified
+   strings or the fictional demo-name set. Vignette containers are decorative
+   duplicates of adjacent copy: aria-hidden="true", tabindex="-1" on anything
+   focusable inside. Never put data-reveal on the vignette container itself.
+   ========================================================================== */
+
+/* ---------- container ----------
+   A container may hold several synchronized pieces (e.g. a capability hero
+   whose flow strip and floating card share one timeline): ONE container per
+   viewport, one story. Self-contained cards opt into a loop-point fade with
+   .vg-fade; containers that wrap real page content must NOT take it — their
+   pieces transition gracefully back to beat 0 instead. */
+[data-vignette].vg-fade { transition: opacity 180ms linear; }
+[data-vignette].vg-fade.vg-resetting { opacity: 0; }
+
+/* ---------- appear-at-beat ----------
+   Hidden ONLY under .js (motion.js running): without scripting the page shows
+   the complete final frame, and the reduced-motion block at the bottom of this
+   file reveals everything too — nobody gets a story with missing props. */
+.js [data-vignette] [data-at] {
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 180ms linear, transform 600ms var(--e-out);
+  transition-delay: calc(var(--i, 0) * 140ms);
+}
+.js [data-vignette] [data-at].vg-pop { transform: scale(.6); }
+[data-vignette].vg-b1 [data-at="1"],
+[data-vignette].vg-b2 [data-at="2"],
+[data-vignette].vg-b3 [data-at="3"],
+[data-vignette].vg-b4 [data-at="4"] { opacity: 1; transform: none; }
+
+/* ---------- two-state swap (flips at b3) ---------- */
+.vg-swap { display: grid; }
+.vg-swap > * { grid-area: 1 / 1; transition: opacity 200ms linear, transform 300ms var(--e-out); }
+.vg-swap > [data-b] { opacity: 0; transform: translateY(3px); }
+[data-vignette].vg-b3 .vg-swap > [data-a] { opacity: 0; }
+[data-vignette].vg-b3 .vg-swap > [data-b] { opacity: 1; transform: none; }
+
+/* ---------- value cycle (one visible child per beat) ---------- */
+.vgc { display: grid; }
+.vgc > * { grid-area: 1 / 1; opacity: 0; transform: translateY(4px);
+  transition: opacity 200ms linear, transform 400ms var(--e-out); }
+[data-vignette]:not(.vg-b1) .vgc > [data-v="0"],
+[data-vignette].vg-b1:not(.vg-b2) .vgc > [data-v="1"],
+[data-vignette].vg-b2:not(.vg-b3) .vgc > [data-v="2"],
+[data-vignette].vg-b3 .vgc > [data-v="3"] { opacity: 1; transform: none; }
+
+/* ---------- focus ring ----------
+   The product-honest cursor: a keyboard focus ring, not a fake mouse.
+   .vg-ring--first wraps the first of three equal flex buttons (the Accept
+   position). .vg-ring--at places over screenshot pixels via --x/--y/--w/--h,
+   percentages of the nearest .vg-stage — derived like anno pins: computed
+   from the crop maths, never nudged by eye. */
+.vg-ring {
+  position: absolute; pointer-events: none; z-index: 4;
+  border: 2px solid var(--accent); border-radius: calc(var(--r-md) + 2px);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+  opacity: 0; transform: scale(1.08);
+  transition: opacity 150ms linear, transform 400ms var(--e-out);
+}
+.vg-ring--first {
+  left: -4px; top: -4px;
+  width: calc((100% - 12px) / 3 + 10px); height: calc(100% + 8px);
+}
+.vg-ring--at {
+  left: var(--x); top: var(--y); width: var(--w, 14%); height: var(--h, 14%);
+  transform: translate(-50%, -50%) scale(1.08); border-radius: var(--r-md);
+}
+[data-vignette].vg-b1 .vg-ring { opacity: 1; transform: scale(1); }
+[data-vignette].vg-b1 .vg-ring--at { transform: translate(-50%, -50%) scale(1); }
+[data-vignette].vg-b3 .vg-ring { opacity: 0; }
+
+/* ---------- press + dim ---------- */
+@keyframes vg-press { 50% { transform: scale(.955); } }
+[data-vignette].vg-b2 .vg-press { animation: vg-press 340ms var(--e-inout) both; }
+.vg-dim { transition: opacity 300ms var(--e-inout); }
+[data-vignette].vg-b3 .vg-dim { opacity: .45; }
+/* the hero Accept sheen yields while its vignette is mid-story */
+[data-vignette].vg-b1 .frag__btn--accept::after { animation: none; }
+
+/* ---------- confirmation note ---------- */
+.vg-note {
+  display: flex; align-items: center; gap: var(--s-2);
+  margin-top: var(--s-3); font-size: 12px; font-weight: 550; letter-spacing: -.01em;
+  color: var(--accent);
+}
+.vg-note svg { flex: none; }
+
+/* ---------- rebuilt product fragments ----------
+   Product UI is light, so fragments are white on BOTH grounds — the same
+   decision the homepage hero made. Sharp DOM, never a cropped PNG. */
+.vg-card {
+  background: #fff; color: #14161a;
+  border: 1px solid rgba(20, 22, 26, .08); border-radius: var(--r-lg);
+  box-shadow: var(--sh-float); padding: var(--s-4);
+}
+[data-theme="dark"] .vg-card {
+  border-color: rgba(255, 255, 255, .14);
+  box-shadow: 0 1px 3px -1px rgba(4,6,14,.5), 0 24px 48px -12px rgba(4,6,14,.55);
+}
+.vg-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: #8b909b; margin-bottom: var(--s-3); }
+.vg-row { display: flex; align-items: center; gap: var(--s-3); }
+.vg-avatar { width: 34px; height: 34px; border-radius: 50%; background: #e8eaf0;
+  color: #565b66; display: grid; place-items: center; font-size: 12px; font-weight: 600; flex: none; }
+.vg-name { font-size: var(--t-sm); font-weight: 600; letter-spacing: -.01em; }
+.vg-meta { font-size: 11px; color: #8b909b; }
+.vg-actions { position: relative; display: flex; gap: 6px; margin-top: var(--s-3); }
+.vg-btn { flex: 1; height: 30px; border-radius: var(--r-sm); display: grid; place-items: center;
+  font-size: 12px; font-weight: 550; border: 1px solid #e6e3dd; color: #14161a; background: #fff; }
+.vg-btn--accept { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* state chip, exactly the two-tone pill the dashboard uses */
+.vg-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 600; letter-spacing: .01em;
+  background: #fdf3e3; color: #b06d1f;
+}
+.vg-chip--sched { background: color-mix(in srgb, var(--accent) 12%, #fff); color: var(--accent-press); }
+
+/* ---------- overhang placement (S1) ----------
+   One fragment per figure, most of it hanging OUTSIDE the panel edge.
+   Position via inline --ox/--oy from either edge. Hidden on small screens —
+   same rationale as the hero fragments. */
+.vg-stage { position: relative; }
+.vg-over { position: absolute; z-index: 5; width: var(--ow, 280px);
+  left: var(--ox, auto); right: var(--oxr, auto); top: var(--oy, auto); bottom: var(--oyb, auto); }
+
+/* ==========================================================================
+   V2 — AI MATCHING DIAGRAM  [data-vignette="ai-match"]
+   Deliberately an illustration: hairlines, mono labels, no app chrome.
+   b1 candidates appear → b2 wires draw toward the job → b3 match chips pop.
+   ========================================================================== */
+.vg-diagram { display: grid; grid-template-columns: minmax(0, 1fr) clamp(44px, 7vw, 76px) minmax(0, 1.15fr);
+  align-items: stretch; }
+.vg-diagram__job { align-self: center; }
+.vg-diagram__job .vg-meta { margin-top: 2px; }
+.vg-wires { width: 100%; height: 100%; min-height: 200px; }
+/* dash values overshoot to 120: with pathLength=100 + preserveAspectRatio=none,
+   Chrome's per-segment dash rounding leaves a ~1px sliver of the elbow wires
+   visible at 100/100 (found on the technology page; fixed here for all). */
+.vg-wires path { fill: none; stroke: color-mix(in srgb, var(--accent) 45%, transparent);
+  stroke-width: 1.5; vector-effect: non-scaling-stroke;
+  stroke-dasharray: 120; stroke-dashoffset: 120;
+  transition: stroke-dashoffset 700ms var(--e-out); }
+.vg-wires path:nth-child(2) { transition-delay: 140ms; }
+.vg-wires path:nth-child(3) { transition-delay: 280ms; }
+/* Nodes are ALWAYS visible (authored state = the complete diagram); beats add
+   emphasis only — b1 draws the wires, b2 lands the Matched chips. Use
+   data-beats="2" on ai-match containers. */
+[data-vignette="ai-match"].vg-b1 .vg-wires path { stroke-dashoffset: 0; }
+.vg-diagram__cands { display: grid; gap: var(--s-3); align-content: center; }
+.vg-node { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); }
+.vg-node .vg-matchchip { margin-left: auto; }
+.vg-matchchip {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .05em;
+  padding: 3px 8px; border-radius: var(--r-pill); white-space: nowrap;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  color: var(--accent);
+}
+.vg-diagram__tag {
+  display: inline-flex; align-items: center; gap: 6px; margin-bottom: var(--s-4);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+@media (max-width: 640px) {
+  .vg-diagram { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .vg-wires { display: none; }
+}
+
+/* ==========================================================================
+   V3 — LOCATION ROWS  (in-person / interview-locations pages)
+   Rows carry the dashboard's verbatim strings. Ring lands on "In person",
+   the row selects, the address line expands, a confirmation appears.
+   ========================================================================== */
+.vg-loc { display: grid; gap: 7px; }
+.vg-loc__row { position: relative; display: flex; align-items: baseline; gap: var(--s-3);
+  padding: var(--s-2) var(--s-3); border-radius: var(--r-sm); font-size: 12px;
+  transition: background 300ms var(--e-inout); }
+.vg-loc__row b { font-weight: 550; letter-spacing: -.01em; }
+.vg-loc__row i { font-style: normal; color: #8b909b; margin-left: auto; font-size: 11px;
+  text-align: right; }
+[data-vignette].vg-b2 .vg-loc__row--person { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.vg-loc__addr { display: block; max-height: 0; overflow: hidden; opacity: 0;
+  font-size: 11px; color: #565b66; letter-spacing: .006em;
+  transition: max-height 500ms var(--e-out), opacity 250ms linear; }
+[data-vignette].vg-b2 .vg-loc__addr { max-height: 2.6em; opacity: 1; }
+
+/* ==========================================================================
+   V4 — QUEUE  [data-vignette="queue"]  (event-day)
+   State-change, not physical glide: the chip leaves the queue and appears in
+   the room; the count swaps; a live dot breathes — the section's one alive
+   element.
+   ========================================================================== */
+.vg-queue { display: grid; gap: var(--s-3); }
+.vg-queue__chip { transition: opacity 300ms linear, transform 300ms var(--e-out); }
+[data-vignette].vg-b2 .vg-queue__chip--next { opacity: 0; transform: translateY(-4px); }
+@keyframes vg-pulse { 50% { opacity: .35; } }
+.vg-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #1a9a5c; flex: none; }
+[data-vignette].vg-b3 .vg-live-dot { animation: vg-pulse 2.2s var(--e-inout) infinite; }
+
+/* ==========================================================================
+   V5 — KPI + BAR  (analytics, solutions stats)
+   Chips reuse [data-at] + .vg-pop; counters inside reuse data-count.
+   ========================================================================== */
+.vg-kpi { display: grid; gap: 2px; padding: var(--s-3) var(--s-4); }
+.vg-kpi b { font-size: 1.25rem; font-weight: 550; letter-spacing: -.03em; }
+.vg-kpi span { font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: #8b909b; }
+.vg-bar { height: 6px; border-radius: 3px; background: #eef0f3; overflow: hidden; }
+.vg-bar > i { display: block; height: 100%; width: var(--w, 60%); border-radius: 3px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform 800ms var(--e-out) 150ms; }
+[data-vignette].vg-b3 .vg-bar > i { transform: scaleX(1); }
+
+/* ==========================================================================
+   V6 — MESSAGE TIMELINE  [data-vignette="msg-flow"]
+   A playhead line descends a rail; bubbles land beside stages via data-at.
+   ========================================================================== */
+.vg-flow { position: relative; display: grid; gap: var(--s-5); padding-left: var(--s-6); }
+.vg-flow::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px;
+  width: 1px; background: var(--hairline); }
+.vg-playline { position: absolute; left: 8px; top: 6px; bottom: 6px; width: 1px;
+  background: var(--accent); transform: scaleY(0); transform-origin: top;
+  transition: transform 900ms var(--e-out); }
+[data-vignette].vg-b1 .vg-playline { transform: scaleY(.34); }
+[data-vignette].vg-b2 .vg-playline { transform: scaleY(.67); }
+[data-vignette].vg-b3 .vg-playline { transform: scaleY(1); }
+.vg-flow__stage { position: relative; }
+.vg-flow__stage::before { content: ''; position: absolute; left: calc(-1 * var(--s-6) + 5px);
+  top: .45em; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--hairline-strong); }
+
+/* ==========================================================================
+   AUTO-ACCEPT TOGGLE  (shotgap illustration; capture still pending)
+   ========================================================================== */
+.vg-toggle { position: relative; width: 34px; height: 20px; border-radius: 10px;
+  background: #d6d2c9; flex: none; transition: background 300ms var(--e-inout); }
+.vg-toggle::after { content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 22, 62, .3);
+  transition: transform 300ms var(--e-out); }
+[data-vignette].vg-b2 .vg-toggle--auto { background: var(--accent); }
+[data-vignette].vg-b2 .vg-toggle--auto::after { transform: translateX(14px); }
+
+/* ==========================================================================
+   S2 — ANNO STAGE-BUILD  (.anno.vg-intro; pins need inline --i)
+   Reveal (data-reveal → .is-in) triggers the pin pop; motion.js runs one
+   attract pass over the pin/caption pairs unless the user interacts first.
+   ========================================================================== */
+.js .anno.vg-intro .anno__pin { opacity: 0; transform: translate(-50%, -50%) scale(.6); }
+.js .anno.vg-intro.is-in .anno__pin {
+  opacity: 1; transform: translate(-50%, -50%);
+  transition: opacity 150ms linear, transform 500ms var(--e-out);
+  transition-delay: calc(300ms + var(--i, 0) * 60ms);
+}
+.js .anno.vg-intro.is-in .anno__pin:hover,
+.js .anno.vg-intro.is-in .anno__pin:focus-visible,
+.js .anno.vg-intro.is-in .anno__pin.is-on {
+  transform: translate(-50%, -50%) scale(1.18); transition-delay: 0ms;
+}
+/* focus escape valve: a pin that receives keyboard focus is visible even if
+   the reveal observer has not fired yet — focus must never be invisible */
+.js .anno.vg-intro .anno__pin:focus-visible {
+  opacity: 1; transform: translate(-50%, -50%) scale(1.18); transition-delay: 0ms;
+}
+
+/* ==========================================================================
+   S3 — GRIDFIELD  (light-section atmosphere; the hero grid's daylight twin)
+   Absolutely fills its nearest positioned ancestor; sits behind figures,
+   never behind text columns. Modifiers bias the mask toward the figure side.
+   ========================================================================== */
+.gridfield { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--gf-line, rgba(20, 22, 26, .05)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gf-line, rgba(20, 22, 26, .05)) 1px, transparent 1px);
+  background-size: 72px 72px; opacity: .6;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at var(--gf-x, 50%) var(--gf-y, 45%), #000 20%, transparent 74%);
+  mask-image: radial-gradient(ellipse 70% 60% at var(--gf-x, 50%) var(--gf-y, 45%), #000 20%, transparent 74%);
+}
+.gridfield--r { --gf-x: 72%; }
+.gridfield--l { --gf-x: 28%; }
+[data-theme="dark"] .gridfield { --gf-line: rgba(255, 255, 255, .03); }
+.gridfield ~ * { position: relative; z-index: 2; }
+
+/* ==========================================================================
+   S4 — LIVING VIDEO POSTER  (.video-ph gains a first-child poster)
+   A real crop, dimmed, drifting imperceptibly. Reduced-motion: static frame.
+   ========================================================================== */
+@keyframes vg-drift { to { transform: scale(1.05); } }
+.video-ph { isolation: isolate; }
+.video-ph > * { position: relative; z-index: 2; }
+.video-ph__poster { position: absolute !important; inset: 0; z-index: 1 !important; overflow: hidden; }
+.video-ph__poster img { width: 100%; height: 100%; object-fit: cover; max-width: none;
+  filter: saturate(.85) brightness(.6);
+  animation: vg-drift 36s var(--e-inout) infinite alternate; }
+.video-ph__poster::after { content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8, 9, 12, .12), rgba(8, 9, 12, .55)); }
+.video-ph__poster ~ .video-ph__label { color: #f4f6fa; }
+.video-ph__poster ~ .video-ph__label strong { color: #fff !important; }
+.video-ph__poster ~ .video-ph__meta { background: rgba(8, 9, 12, .5); color: #cdd3de;
+  border-color: rgba(255, 255, 255, .16); }
+
+/* ---------- tab-pane crossfade (site-wide, JS-free) ---------- */
+@keyframes vg-pane-in { from { opacity: 0; transform: translateY(4px); } }
+.js [data-tabs] [data-pane].is-active { animation: vg-pane-in 240ms var(--e-out); }
+
+/* ---------- crop zoom-into-story hover (capability grids, resource cards) ---------- */
+.crop--zh > img { transition: transform 300ms var(--e-out); }
+@media (min-width: 781px) and (hover: hover) {
+  a:hover .crop--zh > img, .card:hover .crop--zh > img, .crop--zh:hover > img {
+    transform: translate(var(--l, 0%), var(--t, 0%)) scale(1.05);
+  }
+}
+
+/* ---------- accent rule that draws itself (reuses the reveal observer) ---------- */
+.vg-draw { display: block; height: 1px; background: var(--accent); }
+.js [data-reveal].vg-draw { opacity: 1; transform: scaleX(0); transform-origin: left;
+  transition: transform 700ms var(--e-out) 150ms; }
+.js [data-reveal].vg-draw.is-in { transform: scaleX(1); }
+
+/* ==========================================================================
+   FLOW-STRIP SEQUENCE  (capability-page heroes)
+   The vignette container is the hero WRAPPER (e.g. .cap-hero__inner), so the
+   strip and any floating card share one timeline. The three beats light in
+   turn; non-active beats recede slightly. Beat 0 (authored) shows all three
+   at full strength — nothing is hidden.
+   ========================================================================== */
+[data-vignette] .flow > li { transition: opacity 400ms var(--e-inout); }
+[data-vignette] .flow > li::after { content: ''; display: block; height: 1px; margin-top: var(--s-4);
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform 600ms var(--e-out); }
+/* beat classes are CUMULATIVE — ':not(next)' isolates the current beat */
+[data-vignette].vg-b1:not(.vg-b2) .flow > li:not(:nth-child(1)),
+[data-vignette].vg-b2:not(.vg-b3) .flow > li:not(:nth-child(2)),
+[data-vignette].vg-b3 .flow > li:not(:nth-child(3)) { opacity: .55; }
+[data-vignette].vg-b1:not(.vg-b2) .flow > li:nth-child(1)::after,
+[data-vignette].vg-b2:not(.vg-b3) .flow > li:nth-child(2)::after,
+[data-vignette].vg-b3 .flow > li:nth-child(3)::after { transform: scaleX(1); }
+
+/* ---------- small screens: overlays whose coordinates assume the desktop
+   crop cannot survive the --zm/--lm/--tm art-direction swap; the gridfield
+   adds nothing on a phone and can land behind stacked text ---------- */
+@media (max-width: 780px) {
+  .vg-over, .vg-ring--at { display: none; }
+}
+@media (max-width: 640px) {
+  .gridfield { display: none; }
+}
+
+/* ==========================================================================
+   THE FINAL FRAME
+   When beats can never land — scripting absent/failed, or reduced motion —
+   the page must rest on ONE coherent frame: the completed story, not beat 0
+   with the props revealed (a request card reading "Requested today" beside a
+   "candidate notified" note is a contradiction, not a state). The two blocks
+   below are the SAME frame in the two contexts. The flow strip is the one
+   deliberate exception: its final frame would permanently dim two of three
+   steps, so it rests at beat 0 (all equal), which is complete on its own.
+   Keep both blocks in sync with any new stateful primitive.
+   ========================================================================== */
+:root:not(.js) [data-vignette] .vg-swap > [data-a] { opacity: 0; }
+:root:not(.js) [data-vignette] .vg-swap > [data-b] { opacity: 1; transform: none; }
+:root:not(.js) [data-vignette] .vgc > :not(:last-child) { opacity: 0; }
+:root:not(.js) [data-vignette] .vgc > :last-child { opacity: 1; transform: none; }
+:root:not(.js) [data-vignette] .vg-dim { opacity: .45; }
+:root:not(.js) [data-vignette] .vg-playline { transform: scaleY(1); }
+:root:not(.js) [data-vignette] .vg-bar > i { transform: scaleX(1); }
+:root:not(.js) .vg-wires path { stroke-dashoffset: 0; }
+:root:not(.js) [data-vignette] .vg-loc__addr { max-height: 2.6em; opacity: 1; }
+:root:not(.js) [data-vignette] .vg-loc__row--person { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+:root:not(.js) [data-vignette] .vg-queue__chip--next { opacity: 0; }
+:root:not(.js) [data-vignette] .vg-toggle--auto { background: var(--accent); }
+:root:not(.js) [data-vignette] .vg-toggle--auto::after { transform: translateX(14px); }
+
+/* ---------- reduced motion: same final frame, plus the two free-running
+   loops go still. motion.js never initialises vignettes here, and [data-at]
+   props (hidden only under .js) are revealed back. ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .js [data-vignette] [data-at] { opacity: 1; transform: none; }
+  [data-vignette] .vg-swap > [data-a] { opacity: 0; }
+  [data-vignette] .vg-swap > [data-b] { opacity: 1; transform: none; }
+  [data-vignette] .vgc > :not(:last-child) { opacity: 0; }
+  [data-vignette] .vgc > :last-child { opacity: 1; transform: none; }
+  [data-vignette] .vg-dim { opacity: .45; }
+  [data-vignette] .vg-playline { transform: scaleY(1); }
+  [data-vignette] .vg-bar > i { transform: scaleX(1); }
+  .vg-wires path { stroke-dashoffset: 0; }
+  [data-vignette] .vg-loc__addr { max-height: 2.6em; opacity: 1; }
+  [data-vignette] .vg-loc__row--person { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  [data-vignette] .vg-queue__chip--next { opacity: 0; }
+  [data-vignette] .vg-toggle--auto { background: var(--accent); }
+  [data-vignette] .vg-toggle--auto::after { transform: translateX(14px); }
+  .video-ph__poster img { animation: none; }
+  .vg-live-dot { animation: none !important; }
+}
