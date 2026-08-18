@@ -1,0 +1,389 @@
+/* ==========================================================================
+   JobFairX Marketing — shared foundation
+   Tokens + primitives used by all three homepage concepts.
+   Each concept overrides the palette and adds its own signature treatments.
+   ========================================================================== */
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img, svg, video { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; padding: 0; }
+
+/* ---------- tokens ---------- */
+:root {
+  --font-sans: 'Inter var', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+
+  /* type scale — display weight is 500, never 700 */
+  --t-display: clamp(2.75rem, 1.4rem + 5.6vw, 5rem);
+  --t-h1:      clamp(2.25rem, 1.3rem + 4vw, 3.75rem);
+  --t-h2:      clamp(1.875rem, 1.2rem + 2.8vw, 3rem);
+  --t-h3:      clamp(1.375rem, 1.05rem + 1.4vw, 1.875rem);
+  --t-lead:    clamp(1.0625rem, 1rem + 0.5vw, 1.25rem);
+  --t-body:    1rem;
+  --t-sm:      0.875rem;
+  --t-xs:      0.8125rem;
+  --t-eyebrow: 0.75rem;
+
+  /* spacing — 4px base */
+  --s-1:4px;  --s-2:8px;  --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
+  --s-8:32px; --s-10:40px; --s-12:48px; --s-16:64px; --s-20:80px;
+  --s-24:96px; --s-32:128px; --s-40:160px;
+
+  --container: 1200px;
+  --container-narrow: 760px;
+  --gutter: 24px;
+  --section-y: 96px;
+
+  /* radius — low reads enterprise */
+  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:24px;
+  --r-pill:999px;
+
+  /* accent */
+  --accent:       #2f5cff;
+  --accent-hover: #4a72ff;
+  --accent-press: #1f45d6;
+  --accent-ink:   #ffffff;
+  --accent-glow:  rgba(47,92,255,.35);
+
+  /* motion */
+  --e-out:   cubic-bezier(.16,1,.3,1);
+  --e-inout: cubic-bezier(.4,0,.2,1);
+  --t-micro: 120ms; --t-fast: 200ms; --t-base: 320ms; --t-slow: 520ms;
+
+  /* 3D tilt on product panels.
+     Research: not one premium reference site perspective-tilts a screenshot.
+     Set to 8deg to get the literal "floating 3D card" look from the brief. */
+  --tilt: 0deg;
+
+  /* Light elevation ladder. Shadows are tinted navy, never pure black —
+     rgba(0,0,0,x) over a warm canvas goes muddy grey. Each stack has three
+     jobs: a tight contact layer, a soft ambient layer, and an edge ring. */
+  --sh-sm:    0 0 1px 1px rgba(0,22,62,.010), 0 1px 3px -1px rgba(0,22,62,.14);
+  --sh-md:    0 0 1px 1px rgba(0,22,62,.010), 0 4px 12px -1px rgba(0,22,62,.05), 0 1px 3px -1px rgba(0,22,62,.16);
+  --sh-lg:    0 2px 6px -1px rgba(0,22,62,.06), 0 12px 28px -6px rgba(0,22,62,.10);
+  --sh-float: 0 1px 3px -1px rgba(0,22,62,.18), 0 12px 28px -6px rgba(0,22,62,.12);
+  /* hero-scale slabs need a much longer falloff than cards: offsets grow ~2.2x
+     per step while blur grows slowly and alpha decays toward nothing */
+  --sh-panel: 0 9px 20px rgba(0,22,62,.10), 0 37px 37px -20px rgba(0,22,62,.10),
+              0 84px 50px -40px rgba(0,22,62,.07), 0 149px 60px -60px rgba(0,22,62,.03);
+}
+
+@media (max-width: 780px) {
+  :root { --section-y: 60px; --gutter: 20px; }
+}
+
+/* ---------- theme scopes ----------
+   Sections opt into a theme; every primitive reads these four vars, so the
+   same component works on either ground without a variant class. */
+[data-theme="dark"] {
+  --canvas:   #0b0d12;
+  --void:     #08090c;
+  --surface:  #12151c;
+  --surface-2:#191d26;
+  --hairline: rgba(255,255,255,.09);
+  --hairline-strong: rgba(255,255,255,.16);
+  --ink:   #f4f6fa;
+  --ink-2: #a8b0be;
+  --ink-3: #6b7383;
+  --elev: none;                       /* dark uses glow, not shadow */
+  --elev-panel: 0 0 0 1px var(--hairline), 0 40px 90px -30px var(--accent-glow);
+  color-scheme: dark;
+  background: var(--canvas);
+  color: var(--ink);
+}
+[data-theme="light"] {
+  --canvas:   #fbfaf8;                /* warm off-white, never #fff */
+  --void:     #f3f1ed;
+  --surface:  #ffffff;
+  --surface-2:#f7f5f2;
+  --hairline: #e6e3dd;
+  --hairline-strong: #d6d2c9;
+  --ink:   #14161a;                   /* cool near-black, never #000 */
+  --ink-2: #565b66;
+  --ink-3: #8b909b;
+  --elev: var(--sh-md);
+  --elev-panel: var(--sh-panel);
+  color-scheme: light;
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+body {
+  background: #0b0d12;          /* never let the page flash white behind sections */
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv01' 1, 'ss03' 1;   /* Linear's exact config */
+  font-size: var(--t-body);
+  line-height: 1.6;
+  letter-spacing: .004em;   /* positive at body size — see the ramp note below */
+}
+
+/* ---------- layout primitives ---------- */
+.u-container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.u-narrow    { max-width: var(--container-narrow); }
+.u-section   { padding-block: var(--section-y); background: var(--canvas); color: var(--ink); position: relative; }
+
+/* ---------- type primitives ---------- */
+.t-display { font-size: var(--t-display); font-weight: 500; line-height: .98; letter-spacing: -.042em; }
+.t-h1      { font-size: var(--t-h1);      font-weight: 500; line-height: 1.02; letter-spacing: -.038em; }
+.t-h2      { font-size: var(--t-h2);      font-weight: 500; line-height: 1.06; letter-spacing: -.032em; }
+.t-h3      { font-size: var(--t-h3);      font-weight: 550; line-height: 1.15; letter-spacing: -.022em; }
+.t-lead    { font-size: var(--t-lead);    font-weight: 400; line-height: 1.5;  letter-spacing: -.01em; color: var(--ink-2); }
+/* Tracking is a ramp tied to size and it crosses zero: negative on display,
+   slightly POSITIVE at 14–16px. Cursor's ladder runs +0.01em @14 → -0.03em @72;
+   Retool ships a deliberate +0.0126em on body. Negative tracking on small text
+   is the most common way a good type system still reads cramped. */
+.t-sm      { font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em; }
+.t-eyebrow {
+  font-size: var(--t-eyebrow); font-weight: 600; line-height: 1.3;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+}
+.t-balance { text-wrap: balance; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  height: 44px; padding-inline: var(--s-6);
+  font-size: var(--t-sm); font-weight: 500; letter-spacing: -.01em;
+  border-radius: var(--r-md); white-space: nowrap;
+  transition: background var(--t-micro) var(--e-inout),
+              border-color var(--t-micro) var(--e-inout),
+              color var(--t-micro) var(--e-inout),
+              transform var(--t-micro) var(--e-inout);
+}
+.btn:active { transform: scale(.975); }          /* scale, never darken */
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: var(--accent-hover); }
+.btn--secondary { border: 1px solid var(--hairline-strong); color: var(--ink); }
+.btn--secondary:hover { border-color: var(--ink-3); background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.btn--lg { height: 52px; padding-inline: var(--s-8); font-size: var(--t-body); }
+
+/* underline that grows from the left */
+.btn--ghost { position: relative; padding-inline: 0; height: auto; }
+.btn--ghost::after {
+  content: ''; position: absolute; left: 0; bottom: -2px; height: 1px; width: 100%;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t-fast) var(--e-out);
+}
+.btn--ghost:hover::after { transform: scaleX(1); }
+
+/* ---------- cards ---------- */
+.card {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-lg); padding: var(--s-6);
+  box-shadow: var(--elev);
+  transition: transform var(--t-fast) var(--e-out),
+              border-color var(--t-fast) var(--e-out),
+              box-shadow var(--t-fast) var(--e-out);
+}
+.card:hover { transform: translateY(-2px); border-color: var(--hairline-strong); }
+[data-theme="light"] .card:hover { box-shadow: var(--sh-lg); }
+
+/* ---------- product panel ----------
+   Depth comes from ONE mechanism per theme: hairline+glow on dark,
+   shadow on light. Never both on the same element. */
+.panel {
+  position: relative; border-radius: var(--r-xl); overflow: hidden;
+  border: 1px solid var(--hairline);
+  box-shadow: var(--elev-panel);
+  background: var(--surface);
+  transform: perspective(2000px) rotateX(var(--tilt));
+  transform-style: preserve-3d;
+}
+/* A white screenshot on near-black reads as a hole. Inset it on a translucent
+   plate and add a half-pixel top rim light — that rim is what makes a dark
+   panel read as glass rather than a cut-out. Concentric radius rule: the outer
+   radius equals the inner radius plus the bezel, minus a couple of px. */
+[data-theme="dark"] .panel {
+  padding: 10px;
+  background: rgba(255,255,255,.045);
+  box-shadow: var(--elev-panel), inset 0 .5px 0 0 rgba(255,255,255,.28);
+}
+[data-theme="dark"] .panel > .crop { border-radius: calc(var(--r-xl) - 8px); }
+
+/* ---------- screenshot cropping ----------
+   Crop into the region that carries the story; never squash the whole frame.
+   --z  zoom (1 = fit width). At z, you see 1/z of the image's width.
+   --l/--t  offsets expressed as a percentage of THE IMAGE, via translate —
+            so a crop stays on the same region at every breakpoint.
+   NB: never use `inset:0` plus an explicit width here; the used height then
+   becomes bottom−top and the image scales wrong. */
+.crop { position: relative; overflow: hidden; border-radius: var(--r-lg); background: var(--surface-2); }
+.crop > img {
+  position: absolute; top: 0; left: 0;
+  width: calc(100% * var(--z, 1));
+  height: auto; max-width: none;
+  transform: translate(var(--l, 0%), var(--t, 0%));
+}
+/* Art-direct the crop on small screens rather than shrinking a wide dashboard
+   into illegibility. Declare --zm/--lm/--tm inline for a tighter mobile region;
+   without them this falls back to the desktop crop. NB: the override sets
+   width/transform, not the custom properties, because inline styles would
+   otherwise win. */
+@media (max-width: 780px) {
+  .crop > img {
+    width: calc(100% * var(--zm, var(--z, 1)));
+    transform: translate(var(--lm, var(--l, 0%)), var(--tm, var(--t, 0%)));
+  }
+}
+.crop--16x9  { aspect-ratio: 16/9; }
+.crop--16x10 { aspect-ratio: 16/10; }
+.crop--4x3   { aspect-ratio: 4/3; }
+.crop--wide  { aspect-ratio: 21/9; }
+
+/* fade a panel that runs into the next section */
+.mask-b { -webkit-mask-image: linear-gradient(to bottom, #000 66%, transparent); mask-image: linear-gradient(to bottom, #000 66%, transparent); }
+
+/* ---------- grain ----------
+   The standard anti-flatness device across the peer set: Linear tiles at 256px
+   with mix-blend-mode:overlay, ElevenLabs at ~1% opacity, stability.ai inlines
+   feTurbulence. Zero network cost, and it stops large flat fills from banding. */
+.grain::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  border-radius: inherit;
+  opacity: .34; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='256' height='256' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-size: 256px 256px;
+}
+/* Safari renders feTurbulence + overlay far heavier than Chrome — drop it there */
+@supports (-webkit-hyphens: none) { .grain::after { opacity: .16; } }
+
+/* ---------- video placeholder ---------- */
+.video-ph {
+  position: relative; aspect-ratio: 16/9; border-radius: var(--r-xl);
+  border: 1px solid var(--hairline); overflow: hidden;
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  transition: border-color var(--t-fast) var(--e-out);
+}
+.video-ph:hover { border-color: var(--accent); }
+.video-ph__play {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  display: grid; place-items: center;
+  transition: transform var(--t-fast) var(--e-out), background var(--t-fast) var(--e-out);
+}
+.video-ph:hover .video-ph__play { transform: scale(1.06); background: color-mix(in srgb, var(--accent) 26%, transparent); }
+.video-ph__play svg { fill: var(--accent); margin-left: 3px; }
+.video-ph__meta {
+  position: absolute; top: var(--s-3); right: var(--s-3);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em;
+  padding: 4px 8px; border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  border: 1px solid var(--hairline); color: var(--ink-3);
+}
+.video-ph__label { position: absolute; left: var(--s-5); bottom: var(--s-5); }
+
+/* everything replaceable is flagged for a single find-and-swap pass */
+[data-placeholder] { position: relative; }
+
+/* ---------- scroll reveal ----------
+   The visible state is the DEFAULT. Content is only hidden once the `js` class
+   confirms the script that will reveal it is actually running — so a blocked or
+   failed script degrades to a fully readable page instead of a blank one. */
+[data-reveal] { opacity: 1; transform: none; }
+
+/* Opacity and transform run on DIFFERENT clocks — Stripe fades in over 150ms
+   linear while the translate takes 800ms on an expo curve. The fast fade is
+   what stops a long entrance from feeling laggy. */
+.js [data-reveal] {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 150ms linear, transform 800ms var(--e-out);
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; }
+  [data-parallax] { transform: none !important; }
+}
+
+/* ==========================================================================
+   ANNOTATED SCREENSHOT
+   A 3200x2000 dashboard shot is illegible at page width. This is the device
+   that makes a capability page work: numbered pins on the real screenshot,
+   each tied to a caption below. Hovering or focusing either half highlights
+   the other, so the pairing survives on touch and by keyboard.
+
+   <figure class="anno">
+     <div class="anno__stage">
+       <div class="crop crop--16x10"><img ...></div>
+       <button class="anno__pin" style="--x:62%;--y:38%" data-anno="1"
+               aria-label="Detail 1">1</button>
+     </div>
+     <ol class="anno__key">
+       <li data-anno="1"><b>1</b><span>Caption.</span></li>
+     </ol>
+   </figure>
+   ========================================================================== */
+.anno { display: grid; gap: var(--s-6); margin: 0; }
+@media (min-width: 981px) {
+  .anno--side { grid-template-columns: 1.55fr 1fr; gap: var(--s-10); align-items: center; }
+}
+.anno__stage { position: relative; }
+.anno__stage .panel, .anno__stage .crop { width: 100%; }
+
+.anno__pin {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; line-height: 1;
+  color: #fff; background: var(--accent);
+  border: 2px solid rgba(255,255,255,.92);
+  box-shadow: 0 2px 6px rgba(12,16,28,.35);
+  cursor: pointer; z-index: 3;
+  transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+/* a soft halo so a pin stays findable against busy UI without a pulsing animation */
+.anno__pin::before {
+  content: ''; position: absolute; inset: -7px; border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 26%, transparent);
+  opacity: 0; transition: opacity var(--t-fast) var(--e-out);
+}
+.anno__pin:hover, .anno__pin:focus-visible, .anno__pin.is-on {
+  transform: translate(-50%, -50%) scale(1.18);
+  box-shadow: 0 4px 12px rgba(12,16,28,.45);
+}
+.anno__pin:hover::before, .anno__pin:focus-visible::before, .anno__pin.is-on::before { opacity: 1; }
+
+.anno__key { display: grid; gap: var(--s-3); }
+.anno__key li {
+  display: grid; grid-template-columns: 26px 1fr; gap: var(--s-3);
+  align-items: start; padding: var(--s-3);
+  border-radius: var(--r-md); border: 1px solid transparent;
+  font-size: var(--t-sm); color: var(--ink-2); letter-spacing: .006em;
+  transition: background var(--t-fast) var(--e-out), border-color var(--t-fast) var(--e-out);
+}
+.anno__key li b {
+  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  background: var(--surface-2); color: var(--ink-2);
+  border: 1px solid var(--hairline);
+  transition: background var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out);
+}
+.anno__key li.is-on {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 24%, transparent);
+  color: var(--ink);
+}
+.anno__key li.is-on b { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* On a phone the pins would land on top of illegible UI, so drop to the key
+   alone and let the screenshot be atmosphere rather than reference. */
+@media (max-width: 640px) {
+  .anno__pin { width: 22px; height: 22px; font-size: 11px; }
+}
