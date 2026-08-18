@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JobFairX Employer Homepage — Three Concepts</title>
+<title>JobFairX Employer Homepage — Four Concepts</title>
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <style>
@@ -25,8 +25,9 @@
   h1{font-size:clamp(2rem,1.4rem+2.6vw,3rem);font-weight:500;letter-spacing:-.038em;line-height:1.04;margin:16px 0 0;max-width:20ch}
   .lead{font-size:1.125rem;color:var(--ink-2);max-width:64ch;margin-top:20px;letter-spacing:-.01em}
 
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
-  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px}
+  @media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
   .card{border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#fff;
         transition:border-color .2s cubic-bezier(.4,0,.2,1),transform .2s cubic-bezier(.16,1,.3,1)}
   .card:hover{border-color:var(--ink);transform:translateY(-3px)}
@@ -38,6 +39,8 @@
   .s2 b{background:#faf9f7;padding:4px 14px}
   .s3{background:linear-gradient(180deg,#0b0d12 0%,#0b0d12 38%,#6f6f72 62%,#fbfaf8 100%);color:#f4f6fa}
   .s3 b{text-shadow:0 1px 12px rgba(0,0,0,.6)}
+  .s4{background:linear-gradient(285deg,#eaf7f2 4%,#dbe9fd 52%,#eeecfd 99%);color:#171449}
+  .badge--new{background:#5b3fd6}
   .card__body{padding:20px}
   .card h2{font-size:1.0625rem;font-weight:550;letter-spacing:-.02em}
   .card p{font-size:.875rem;color:var(--ink-2);margin-top:8px}
@@ -64,11 +67,10 @@
 <body>
 <div class="wrap">
   <p class="mono">JobFairX · Employer marketing site</p>
-  <h1>Three homepage concepts.</h1>
+  <h1>Four homepage concepts.</h1>
   <p class="lead">
-    Same story, same real product screenshots, same seven-step journey — three different
-    design languages. Open each one and scroll it; the motion is the point, and it doesn't
-    survive a static comparison.
+    Same story, same real product screenshots — four different design languages. Open each
+    one and scroll it; the motion is the point, and it doesn't survive a static comparison.
   </p>
 
   <div class="grid">
@@ -109,6 +111,20 @@
           <li>Cinematic hero with two floating UI fragments</li>
           <li>Nav inverts with the section beneath it</li>
           <li>Sticky-scroll journey, tabbed interview formats</li>
+        </ul>
+        <span class="open">Open concept →</span>
+      </div>
+    </a>
+
+    <a class="card" href="concept-4-vid.html">
+      <div class="card__swatch s4"><span class="badge badge--new">New</span><b>Vid</b></div>
+      <div class="card__body">
+        <h2>Concept 4 — Daylight platform</h2>
+        <p>An airy gradient wash, violet product cards, and one diagram that moves.</p>
+        <ul>
+          <li>Exploded hero composition over the live event lobby</li>
+          <li>Deep-violet feature cards carrying real screenshots</li>
+          <li>Travelling interview requests land on your schedule</li>
         </ul>
         <span class="open">Open concept →</span>
       </div>

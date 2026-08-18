@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Employer FAQ — JobFairX</title>
+<meta name="description" content="How JobFairX hiring events work: matching, local candidates, interview locations, volume and what happens after the event.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
+<style>
+/* ==========================================================================
+   VID — EMPLOYER FAQ
+   The FAQ, in concept 4's design language. Chrome (palette block, announce,
+   nav, drawer, .vhead, .vcta, footer) is cloned from vid-events.html; only
+   the middle is new.
+
+   Content and behaviour are PORTED from page-faq.html — the same twelve
+   questions in the same four groups, in the same order, with the same words,
+   the same three {{NEW — confirm wording}} placeholders, the same accessible
+   accordion and the same sticky category rail. Nothing about the copy
+   changed; only its dress.
+
+   Concept rules (from concept-4-vid.html, do not silently revisit):
+   · gradient wash INSIDE a section, hard cuts at every boundary
+   · display weight 600, navy ink, JobFairX blue for brand/CTA
+   · green ONLY where the product genuinely shows a completed state —
+     nothing on this page qualifies, so nothing on this page is green
+   · no stock photography, no invented data
+   · the accordion is the page's one interaction; motion elsewhere stays low
+   ========================================================================== */
+
+/* ---------- concept palette (identical to concept-4-vid.html) ---------- */
+.vid {
+  --wash: linear-gradient(285deg, #eaf7f2 4%, #dbe9fd 52%, #eeecfd 99%);
+  --wash-soft: linear-gradient(180deg, #f4f2fb 0%, #fbfaf8 100%);
+  --violet-card: linear-gradient(137deg, #4c2fb8 0%, #3b2596 58%, #2a3aa8 100%);
+  --lav: #efedfb;
+  --lav-line: #ded9f6;
+  --ok: #17994a;
+  --ok-soft: #e7f6ec;
+  --ink-navy: #171449;
+}
+.vid .t-display, .vid .t-h1, .vid .t-h2 { font-weight: 600; }
+.vid .t-h2 { letter-spacing: -.034em; }
+
+/* ---------- announcement + nav ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+/* pinned to the wash — see concept-4-vid.html for why this must outrank [data-on] */
+.vid .nav[data-on] {
+  --ink:#171449; --ink-2:#4a4d6b;
+  --hairline:rgba(23,20,73,.10); --hairline-strong:rgba(23,20,73,.18);
+  color:#171449;
+}
+.vid .nav[data-on].is-stuck { background: #e6effa; border-bottom-color: rgba(23,20,73,.10); }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after { content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px; background: var(--accent); }
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: #08090c; padding: var(--s-16) var(--gutter);   /* hard-coded: --void resolves LIGHT inside the light wrapper */
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto; color: #f4f6fa;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; color: #f4f6fa; }
+}
+
+/* ---------- shared vid section chrome ---------- */
+.vsec { background: #fff; }
+.vsec--soft { background: var(--wash-soft); }
+.vhead { max-width: 64ch; }
+.vhead--mid { margin-inline: auto; text-align: center; }
+.vhead .t-eyebrow { color: #5b3fd6; }
+.vhead h2 { color: var(--ink-navy); margin-top: var(--s-3); }
+.vhead p { color: #4a4d6b; margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; }
+
+/* ==========================================================================
+   HERO — the wash, the question count, and the 20-mile moment
+   ========================================================================== */
+.vhero { background: var(--wash); padding-block: clamp(48px, 6vh, 80px) clamp(56px, 7vh, 88px); }
+.vhero h1 { color: var(--ink-navy); max-width: 16ch; margin-top: var(--s-4); }
+.vhero__sub { color: #43466a; max-width: 62ch; margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; }
+.vhero .t-eyebrow { color: #5b3fd6; }
+
+/* ---------- the 20-mile headline moment ----------
+   Pulled out of FAQ Q3, exactly as page-faq.html pulls it out: it is the
+   strongest in-person argument the company owns and it is otherwise buried
+   nine answers down. Same device as vid-events' .locnote — a white card
+   floated on the wash — sized up so the figure carries. */
+.mile {
+  margin-top: var(--s-10); max-width: 88ch;
+  display: grid; grid-template-columns: 172px minmax(0, 1fr); gap: var(--s-8);
+  align-items: center;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(23,20,73,.08);
+  border-radius: var(--r-xl);
+  padding: var(--s-8);
+  box-shadow: var(--sh-sm);
+}
+.mile__fig { text-align: center; border-right: 1px solid rgba(23,20,73,.10); padding-right: var(--s-8); }
+.mile__n {
+  display: block; font-size: clamp(2.75rem, 1.9rem + 3.4vw, 4rem); font-weight: 600;
+  line-height: .9; letter-spacing: -.05em; color: var(--ink-navy);
+}
+.mile__u { display: block; margin-top: var(--s-3); font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #6b6f8c; }
+.mile__tag { display: inline-flex; align-items: center; gap: var(--s-2); font-size: var(--t-xs); font-weight: 600; color: #43466a; }
+.mile__tag b {
+  background: var(--accent); color: #fff; font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: var(--r-pill);
+}
+.mile__quote {
+  margin-top: var(--s-4);
+  font-size: clamp(1.0625rem, 1rem + .55vw, 1.4375rem); font-weight: 500;
+  line-height: 1.4; letter-spacing: -.022em; color: var(--ink-navy);
+}
+.mile__note { margin-top: var(--s-4); font-size: var(--t-sm); color: #43466a; max-width: 60ch; letter-spacing: .006em; }
+.mile__link {
+  display: inline-block; margin-top: var(--s-5);
+  font-size: var(--t-sm); font-weight: 500; color: var(--accent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  transition: border-color var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout);
+}
+.mile__link:hover { color: var(--accent-press); border-bottom-color: var(--accent); }
+@media (max-width: 780px) {
+  .mile { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); padding: var(--s-6); margin-top: var(--s-8); }
+  .mile__fig {
+    text-align: left; border-right: 0; padding-right: 0;
+    border-bottom: 1px solid rgba(23,20,73,.10); padding-bottom: var(--s-4);
+    display: flex; align-items: baseline; gap: var(--s-3);
+  }
+  .mile__u { margin-top: 0; }
+}
+
+/* the question count, in the vid proof-strip form */
+.vhero__counts {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-8);
+  margin-top: var(--s-8); padding-top: var(--s-6);
+  border-top: 1px solid rgba(23,20,73,.10);
+  font-size: var(--t-xs); color: #4a4d6b;
+}
+.vhero__counts b { color: var(--ink-navy); font-weight: 600; font-size: var(--t-sm); }
+
+/* ==========================================================================
+   LAYOUT — sticky category rail + the questions
+   ========================================================================== */
+.faq-layout { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: var(--s-16); align-items: start; }
+
+/* The nav is sticky only inside the hero wrapper and has scrolled away by the
+   time this section is on screen (a concept-4 decision), so the rail needs no
+   64px nav offset — it parks near the top of the viewport instead. */
+.catnav { position: sticky; top: var(--s-6); min-width: 0; }
+.catnav__label { color: #5b3fd6; margin-bottom: var(--s-4); }
+.catnav ol { display: grid; gap: 2px; }
+.catnav a {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: 9px var(--s-4); border-radius: var(--r-md);
+  border-left: 2px solid transparent;
+  font-size: var(--t-sm); color: #6b6f8c; letter-spacing: .006em;
+  transition: color var(--t-micro) var(--e-inout), background var(--t-micro) var(--e-inout), border-color var(--t-micro) var(--e-inout);
+}
+.catnav a:hover { color: var(--ink-navy); background: var(--lav); }
+.catnav a.is-active { color: var(--ink-navy); border-left-color: var(--accent); background: var(--lav); }
+.catnav .n { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: #6b6f8c; }
+
+/* Mobile is a different component, not a squashed rail: a sticky,
+   horizontally scrollable chip strip parked at the top of the viewport. */
+@media (max-width: 900px) {
+  /* min-width:0 on BOTH the grid item and the flex scroller. Grid and flex
+     children default to min-width:auto, which refuses to shrink below their
+     content — so the chip strip once pushed the whole document 231px wide
+     instead of scrolling inside itself. This is the fix, not overflow-x
+     alone. Do not remove either half. */
+  .faq-layout { grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+  .catnav {
+    top: 0; z-index: 40; min-width: 0;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 10px var(--gutter);
+    background: #fff;                      /* solid, never frosted — system rule */
+    border-bottom: 1px solid #eceaf4;
+  }
+  .catnav__label { display: none; }
+  .catnav ol { display: flex; gap: var(--s-2); min-width: 0; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .catnav ol::-webkit-scrollbar { display: none; }
+  .catnav a {
+    white-space: nowrap; border: 1px solid #ded9f6; border-left-width: 1px;
+    border-radius: var(--r-pill); padding: 8px 14px;
+  }
+  .catnav a.is-active { border-color: var(--accent); background: var(--lav); }
+  .catnav .n { display: none; }
+}
+
+.faq-group { scroll-margin-top: var(--s-8); }
+.faq-group + .faq-group { margin-top: var(--s-16); }
+.faq-group__head {
+  display: flex; align-items: baseline; gap: var(--s-4);
+  padding-bottom: var(--s-4); border-bottom: 1px solid #eceaf4;
+}
+.faq-group__head h2 { font-size: 1.375rem; font-weight: 600; letter-spacing: -.028em; line-height: 1.15; color: var(--ink-navy); }
+.faq-group__head span { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: #6b6f8c; letter-spacing: .04em; }
+@media (max-width: 900px) { .faq-group { scroll-margin-top: 84px; } }
+
+/* ---------- accordion ----------
+   Real buttons, real aria, and the open/close animates grid-template-rows so
+   the panel measures itself — no max-height guess to outgrow. */
+.faq-list { display: grid; gap: var(--s-3); margin-top: var(--s-6); }
+.faq-item {
+  background: #fff; border: 1px solid #eceaf4;
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+  scroll-margin-top: var(--s-8);
+  transition: border-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.faq-item:hover { border-color: #ded9f6; }
+.faq-item.is-open { border-color: #ded9f6; box-shadow: var(--sh-md); }
+.faq-item h3 { font-size: inherit; font-weight: inherit; letter-spacing: inherit; }
+@media (max-width: 900px) { .faq-item { scroll-margin-top: 84px; } }
+
+.faq-btn {
+  display: flex; width: 100%; align-items: flex-start; gap: var(--s-5);
+  text-align: left; padding: var(--s-5) var(--s-6); min-height: 60px;
+  font-size: 1.0625rem; font-weight: 600; line-height: 1.35; letter-spacing: -.018em;
+  color: var(--ink-navy); border-radius: var(--r-lg);
+}
+.faq-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.faq-btn__ic {
+  flex: none; margin-left: auto; margin-top: 2px;
+  width: 22px; height: 22px; display: grid; place-items: center; color: #b9b6cf;
+  transition: transform var(--t-base) var(--e-out), color var(--t-base) var(--e-out);
+}
+.faq-item:hover .faq-btn__ic { color: #6b6f8c; }
+.faq-item.is-open .faq-btn__ic { transform: rotate(180deg); color: var(--accent); }
+/* With the accordion script absent every answer is already open, so the
+   chevron would promise a toggle that cannot happen and would point the wrong
+   way at open content. No script, no affordance: the page reads as a plain
+   question-and-answer document. */
+html:not(.faq-js) .faq-btn__ic { display: none; }
+html:not(.faq-js) .faq-btn { cursor: default; }
+@media (max-width: 560px) { .faq-btn { padding: var(--s-4) var(--s-5); gap: var(--s-4); } }
+
+.faq-panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--t-base) var(--e-out); }
+/* Collapse only once the accordion script is running — a blocked script leaves
+   every answer readable instead of leaving twelve empty cards. */
+.faq-js .faq-item:not(.is-open) .faq-panel { grid-template-rows: 0fr; }
+.faq-panel__inner { overflow: hidden; }
+.faq-a { padding: 0 var(--s-6) var(--s-6); max-width: 68ch; }
+.faq-a p { font-size: .9375rem; line-height: 1.65; color: #4a4d6b; letter-spacing: .006em; }
+.faq-a p + p { margin-top: var(--s-4); }
+.faq-a a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.faq-a a:hover { border-bottom-color: var(--accent); }
+@media (max-width: 560px) { .faq-a { padding: 0 var(--s-5) var(--s-5); } }
+
+/* the NEW, unconfirmed questions wear their status in the question line */
+.newtag {
+  display: inline-block; margin-left: var(--s-2); vertical-align: 2px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: #fdf3e3; border: 1px solid #ecd6ae;
+  color: #8a5416; white-space: nowrap;
+}
+
+/* supporting product view inside the interview-location group */
+.faq-shot { margin-top: var(--s-6); }
+.faq-shot__plate {
+  border-radius: var(--r-xl); overflow: hidden; background: #fff;
+  border: 1px solid rgba(23,20,73,.07);
+  box-shadow: 0 2px 6px rgba(23,20,73,.08), 0 24px 48px -12px rgba(23,20,73,.18);
+}
+.faq-shot .crop { aspect-ratio: 5/4; }
+.faq-shot figcaption { margin-top: var(--s-4); font-size: var(--t-sm); color: #6b6f8c; letter-spacing: .006em; }
+@media (max-width: 780px) { .faq-shot .crop { aspect-ratio: 4/3; } }
+
+/* ---------- closing CTA ---------- */
+.vcta { background: var(--wash); text-align: center; padding-block: clamp(72px, 9vh, 120px); }
+.vcta h2 { color: var(--ink-navy); max-width: 20ch; margin-inline: auto; }
+.vcta p { color: #43466a; margin-top: var(--s-5); font-size: var(--t-lead); max-width: 52ch; margin-inline: auto; }
+.vcta__row { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-8); }
+/* the three verified contact facts, carried over from page-faq's help band */
+.vcta__facts {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-6) var(--s-16);
+  margin-top: var(--s-10); padding-top: var(--s-8);
+  border-top: 1px solid rgba(23,20,73,.10);
+}
+.vcta__facts li { display: grid; gap: 4px; }
+.vcta__facts .t-eyebrow { color: #6b6f8c; }
+.vcta__facts a, .vcta__facts strong { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.02em; color: var(--ink-navy); }
+.vcta__facts a:hover { color: var(--accent); }
+
+/* ---------- footer ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* Utility guard: several components (calendar rows, the empty state, Load More,
+   accordion panels) rely on the `hidden` attribute. Without this, a rule with
+   any specificity beats it and "hidden" elements stay on screen. */
+[hidden] { display: none !important; }
+
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body class="vid">
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="#c-locations">See how it&nbsp;works&nbsp;→</a>
+  </div>
+</div>
+
+<div data-theme="light" style="background:#e6effa">
+  <header class="nav" data-nav data-on="wash">
+    <div class="u-container nav__inner">
+      <a href="concept-4-vid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="vid-events.html">Upcoming Hiring Events</a>
+        <a href="vid-pricing.html">Pricing</a>
+        <a href="vid-faq.html" class="is-current" aria-current="page">FAQ</a>
+        <a href="vid-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+    <a href="vid-events.html">Upcoming Hiring Events</a>
+    <a href="vid-pricing.html">Pricing</a>
+    <a href="vid-faq.html">FAQ</a>
+    <a href="vid-contact.html">Contact Us</a>
+    <a href="#">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+  </div>
+
+  
+  <section class="vhero">
+    <div class="u-container">
+      <p class="t-eyebrow">Employer FAQ</p>
+      <h1 class="t-h1 t-balance">Frequently asked questions</h1>
+      <p class="vhero__sub">
+        Everything you need to know about our hiring events — how candidates are matched
+        to your roles, how they reach you, and how you decide where the interviews
+        actually happen.
+      </p>
+
+      
+      <aside class="mile" aria-labelledby="mile-h">
+        <div class="mile__fig">
+          <span class="mile__n">~20</span>
+          <span class="mile__u">miles</span>
+        </div>
+        <div>
+          <span class="mile__tag"><b>Verified</b> <span id="mile-h">The answer most employers scroll past</span></span>
+          <p class="mile__quote">
+            “Candidates are verified to be within approximately 20 miles of the event
+            city, so you’re connecting with local, relevant talent.”
+          </p>
+          <p class="mile__note">
+            That is what makes in-person interviews workable. The people requesting time
+            with you are already in your city — before you ask anyone to travel anywhere.
+          </p>
+          <a href="#q-local" class="mile__link">Read the full answer →</a>
+        </div>
+      </aside>
+
+      <ul class="vhero__counts">
+        <li><b>12</b> questions</li>
+        <li><b>4</b> categories</li>
+        <li><b>3</b> new answers flagged for confirmation</li>
+        <li><b>Five</b> event types</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<div data-theme="light" style="background:#fff">
+  <section class="u-section vsec" id="questions" style="padding-block:var(--s-16) var(--s-24)">
+    <div class="u-container">
+      <div class="faq-layout">
+
+        
+        <aside class="catnav" data-catnav aria-label="FAQ categories">
+          <p class="t-eyebrow catnav__label">Jump to</p>
+          <ol>
+            <li><a href="#c-how">How it works <span class="n">3</span></a></li>
+            <li><a href="#c-candidates">Your candidates <span class="n">3</span></a></li>
+            <li><a href="#c-locations">Events &amp; interview locations <span class="n">4</span></a></li>
+            <li><a href="#c-after">Volume &amp; after the event <span class="n">2</span></a></li>
+          </ol>
+        </aside>
+
+        <div class="faq-body">
+
+          
+          <section class="faq-group" id="c-how" data-reveal>
+            <div class="faq-group__head">
+              <h2>How it works</h2>
+              <span>01</span>
+            </div>
+
+            <div class="faq-list">
+
+              
+              <article class="faq-item is-open" id="q-how" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-how-btn" data-faq-btn aria-expanded="true" aria-controls="q-how-panel">
+                    <span>How do JobFairX hiring events work?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-how-panel" role="region" aria-labelledby="q-how-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      <p>
+                        Employers post their open jobs and candidates request interviews through
+                        the platform. You review candidate profiles, confirm interviews before the
+                        event begins, and interview on JobFairX, by phone, in person, or on your
+                        own link — you set the interview location for each event you join.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="faq-item" id="q-matching" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-matching-btn" data-faq-btn aria-expanded="false" aria-controls="q-matching-panel">
+                    <span>How does candidate matching and interviewing work?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-matching-panel" role="region" aria-labelledby="q-matching-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        Once you post your open jobs, candidate matching activates immediately and
+                        you will start receiving interview requests within a few hours. Job seekers
+                        whose background and interests align with your roles are invited to request
+                        interviews. You’ll receive a notification for each request and a summary
+                        email every morning at 9:00 AM. You can review candidate résumés before
+                        accepting or declining. You can also enable automatic interview scheduling
+                        to accept requests automatically and save time.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="faq-item" id="q-register" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-register-btn" data-faq-btn aria-expanded="false" aria-controls="q-register-panel">
+                    <span>How do I register, and when should I sign up?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-register-panel" role="region" aria-labelledby="q-register-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        Visit the JobFairX employer calendar, select an upcoming event, and reserve
+                        your spot. We recommend registering at least one week in advance, so
+                        candidate matching can begin, and interview requests can start coming in.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+          
+          <section class="faq-group" id="c-candidates" data-reveal>
+            <div class="faq-group__head">
+              <h2>Your candidates</h2>
+              <span>02</span>
+            </div>
+
+            <div class="faq-list">
+
+              <article class="faq-item" id="q-local" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-local-btn" data-faq-btn aria-expanded="false" aria-controls="q-local-panel">
+                    <span>Are candidates local to the city where the event is held?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-local-panel" role="region" aria-labelledby="q-local-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        Yes, candidates are verified to be within approximately 20 miles of the
+                        event city, so you’re connecting with local, relevant talent.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="faq-item" id="q-sourced" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-sourced-btn" data-faq-btn aria-expanded="false" aria-controls="q-sourced-panel">
+                    <span>How are candidates sourced?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-sourced-panel" role="region" aria-labelledby="q-sourced-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        JobFairX maintains a database of over 3+ million job seekers actively
+                        looking for new opportunities. Candidates are sourced and continually added
+                        through targeted digital marketing, social media advertising, job
+                        distribution across major platforms, email campaigns, and organic search.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="faq-item" id="q-prepared" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-prepared-btn" data-faq-btn aria-expanded="false" aria-controls="q-prepared-panel">
+                    <span>How are candidates prepared for interviews?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-prepared-panel" role="region" aria-labelledby="q-prepared-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        Candidates receive pre-event preparation materials, including interview
+                        tips, technical requirements, and platform tutorials, along with guidance
+                        on presenting themselves professionally. They also receive automated emails
+                        and SMS leading up to their scheduled interview to ensure high attendance
+                        rates.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+          
+          <section class="faq-group" id="c-locations" data-reveal>
+            <div class="faq-group__head">
+              <h2>Events and interview locations</h2>
+              <span>03</span>
+            </div>
+
+            
+            <figure class="faq-shot">
+              <div class="faq-shot__plate">
+                <div class="crop">
+                  <img src="assets/product/dashboard-events.png"
+                       alt="The employer events dashboard. One company has four upcoming events, each with a different interview location: JobFairX video call, You call each candidate, an in-person street address at 1201 Peachtree St NE, Suite 300, Atlanta, GA, and Microsoft Teams."
+                       width="3200" height="2000"
+                       style="--z:2.6; --l:-25%; --t:-27.2%; --zm:3.4; --lm:-41%; --tm:-27%">
+                </div>
+              </div>
+              <figcaption>
+                Real product view — the INTERVIEW LOCATION column. One employer, four events,
+                a different interview location set on each.
+              </figcaption>
+            </figure>
+
+            <div class="faq-list">
+
+              
+              <article class="faq-item" id="q-types" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-types-btn" data-faq-btn aria-expanded="false" aria-controls="q-types-panel">
+                    <span>What types of targeted hiring events do you host?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-types-panel" role="region" aria-labelledby="q-types-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        JobFairX hosts targeted hiring events designed to connect employers with
+                        specific candidate audiences, including Technology, Healthcare,
+                        Entry-level, Diversity, and Veteran hiring events. Browse upcoming events
+                        on our employer calendar to find the right fit for your open roles.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              
+              <article class="faq-item" id="q-inperson" data-faq-item data-placeholder>
+                <h3>
+                  <button class="faq-btn" id="q-inperson-btn" data-faq-btn aria-expanded="false" aria-controls="q-inperson-panel">
+                    <span>Can I run an event in person?<span class="newtag">{{NEW — confirm wording}}</span></span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-inperson-panel" role="region" aria-labelledby="q-inperson-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      <p>
+                        You can interview in person at any event — but the setting sits on you, not
+                        on the event. An event is a market moment: the Dallas Healthcare Hiring
+                        Event on a given date, at a given time. Every employer joins that same
+                        event.
+                      </p>
+                      <p>
+                        What you choose independently is your interview location: JobFairX video,
+                        phone, in person at your own address, or your own Zoom, Teams or Meet link.
+                        Same event, your choice of room.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              
+              <article class="faq-item" id="q-venue" data-faq-item data-placeholder>
+                <h3>
+                  <button class="faq-btn" id="q-venue-btn" data-faq-btn aria-expanded="false" aria-controls="q-venue-panel">
+                    <span>Who provides the venue for in-person interviews?<span class="newtag">{{NEW — confirm wording}}</span></span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-venue-panel" role="region" aria-labelledby="q-venue-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      <p>
+                        You do. When you set your interview location to in person, you enter the
+                        address where you want to meet candidates — your office, a branch, or a
+                        space you have booked — and it appears on the confirmation and every
+                        reminder your matched candidates receive.
+                      </p>
+                      <p>
+                        Candidates are already verified within approximately 20 miles of the event
+                        city, so you are inviting local people to a local address.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              
+              <article class="faq-item" id="q-mix" data-faq-item data-placeholder>
+                <h3>
+                  <button class="faq-btn" id="q-mix-btn" data-faq-btn aria-expanded="false" aria-controls="q-mix-panel">
+                    <span>Can I use different interview locations across events?<span class="newtag">{{NEW — confirm wording}}</span></span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-mix-panel" role="region" aria-labelledby="q-mix-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      <p>
+                        Yes. Interview location is set per event, so you can run JobFairX video at
+                        one event, phone at the next, and in-person interviews at a third — and
+                        change your mind before setup is complete.
+                      </p>
+                      <p>
+                        It is also independent of everyone else registered: two employers at the
+                        same Dallas Healthcare event can interview completely differently.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+          
+          <section class="faq-group" id="c-after" data-reveal>
+            <div class="faq-group__head">
+              <h2>Volume and after the event</h2>
+              <span>04</span>
+            </div>
+
+            <div class="faq-list">
+
+              <article class="faq-item" id="q-volume" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-volume-btn" data-faq-btn aria-expanded="false" aria-controls="q-volume-panel">
+                    <span>How many interviews can I expect?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-volume-panel" role="region" aria-labelledby="q-volume-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        It depends on your plan. Starter employers (1 job per event) average around
+                        20 interviews. Growth employers (up to 3 jobs) average around 60. Pro
+                        employers (up to 6 jobs) typically see 100+.
+                        <a href="vid-pricing.html">View packages</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="faq-item" id="q-after" data-faq-item>
+                <h3>
+                  <button class="faq-btn" id="q-after-btn" data-faq-btn aria-expanded="false" aria-controls="q-after-panel">
+                    <span>What happens after the hiring event?</span>
+                    <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </button>
+                </h3>
+                <div class="faq-panel" id="q-after-panel" role="region" aria-labelledby="q-after-btn" data-faq-panel>
+                  <div class="faq-panel__inner">
+                    <div class="faq-a">
+                      
+                      <p>
+                        You receive a post-event report with recruiter notes, interview records,
+                        and résumés. Your access doesn’t expire, you can continue scheduling
+                        follow-up interviews and communicating with candidates through the platform
+                        for as long as you need.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="vcta" id="contact">
+    <div class="u-container">
+      <h2 class="t-h2 t-balance">Still have questions?</h2>
+      <p>
+        Ask us about events in your market, how matching works for your roles, or
+        setting your interview location. Every package includes dedicated human support.
+      </p>
+      <div class="vcta__row">
+        <a href="vid-contact.html" class="btn btn--primary btn--lg">Contact us</a>
+        <a href="page-demo.html" class="btn btn--secondary btn--lg">Book a demo</a>
+      </div>
+      <ul class="vcta__facts">
+        <li>
+          <span class="t-eyebrow">Email</span>
+          <a href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+        </li>
+        <li>
+          <span class="t-eyebrow">Phone</span>
+          <a href="tel:+17022690808">(702) 269-0808</a>
+        </li>
+        <li>
+          <span class="t-eyebrow">Hours</span>
+          <strong>Mon–Fri, 5:00 AM – 5:00 PM PST</strong>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-4-vid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="vid-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="vid-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><span aria-current="page">FAQ</span></li>
+          <li><a href="vid-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page-specific: accordion + category rail. Ported from page-faq.html.
+   Vanilla, no dependencies. The collapse rule in CSS is gated on the
+   `faq-js` class this script adds, so if the script never runs every answer
+   stays open and readable rather than sealed shut.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var root  = document.documentElement;
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-faq-item]'));
+  if (!items.length) return;
+  root.classList.add('faq-js');
+
+  var btns = items.map(function (it) { return it.querySelector('[data-faq-btn]'); });
+
+  function setOpen(item, open) {
+    var btn   = item.querySelector('[data-faq-btn]');
+    var panel = item.querySelector('[data-faq-panel]');
+    item.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    /* a collapsed panel must leave the tab order too — one answer has a link inside it */
+    if (open) panel.removeAttribute('inert');
+    else      panel.setAttribute('inert', '');
+  }
+
+  items.forEach(function (item, i) {
+    setOpen(item, item.classList.contains('is-open'));   /* first item ships open */
+
+    btns[i].addEventListener('click', function () {
+      setOpen(item, !item.classList.contains('is-open'));
+    });
+
+    /* Enter and Space come free with <button>; this adds the roving movement
+       the WAI accordion pattern expects. */
+    btns[i].addEventListener('keydown', function (e) {
+      var n = -1;
+      if (e.key === 'ArrowDown')    n = (i + 1) % btns.length;
+      else if (e.key === 'ArrowUp') n = (i - 1 + btns.length) % btns.length;
+      else if (e.key === 'Home')    n = 0;
+      else if (e.key === 'End')     n = btns.length - 1;
+      else return;
+      e.preventDefault();
+      btns[n].focus();
+    });
+  });
+
+  /* deep links — vid-faq.html#q-local opens that answer, which is what the
+     hero's "Read the full answer" relies on */
+  function openFromHash() {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (!el || !el.hasAttribute('data-faq-item')) return;
+    setOpen(el, true);
+    el.querySelector('[data-faq-btn]').focus({ preventScroll: true });
+  }
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
+
+  /* ---------- category rail ---------- */
+  var nav = document.querySelector('[data-catnav]');
+  if (!nav || !('IntersectionObserver' in window)) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var list  = nav.querySelector('ol');
+  var map   = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+
+  function mark(a) {
+    links.forEach(function (l) { l.classList.toggle('is-active', l === a); });
+    /* on mobile the rail is a scroller — keep the active chip in view */
+    if (list.scrollWidth > list.clientWidth + 4) {
+      list.scrollTo({ left: Math.max(0, a.offsetLeft - 16), behavior: 'smooth' });
+    }
+  }
+
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var a = map[e.target.id];
+      if (a) mark(a);
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+
+  Object.keys(map).forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (sec) spy.observe(sec);
+  });
+})();
+</script>
+</body>
+</html>

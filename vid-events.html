@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upcoming Hiring Events — JobFairX</title>
+<meta name="description" content="Find a hiring event in your city, register, and post your jobs. Candidate matching starts immediately, and you choose where your own interviews happen.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
+<style>
+/* ==========================================================================
+   VID — UPCOMING HIRING EVENTS
+   The calendar, in concept 4's design language. This file is the REFERENCE
+   for the vid inner-page template: vid-event-detail, vid-pricing, vid-faq and
+   vid-contact clone the chrome below (palette block, nav, .vhead, .vsec,
+   footer) verbatim and change only their middle.
+
+   Content and behaviour are PORTED from page-events.html — same 14 rows, same
+   verified/placeholder split, same keyboard-accessible listbox, search, filter
+   and Load More. Nothing about the data changed; only its dress.
+
+   Concept rules (from concept-4-vid.html, do not silently revisit):
+   · gradient wash INSIDE a section, hard cuts at every boundary
+   · display weight 600, navy ink, JobFairX blue for brand/CTA
+   · green ONLY where the product genuinely shows a completed state
+   · no stock photography, no invented data
+   ========================================================================== */
+
+/* ---------- concept palette (identical to concept-4-vid.html) ---------- */
+.vid {
+  --wash: linear-gradient(285deg, #eaf7f2 4%, #dbe9fd 52%, #eeecfd 99%);
+  --wash-soft: linear-gradient(180deg, #f4f2fb 0%, #fbfaf8 100%);
+  --violet-card: linear-gradient(137deg, #4c2fb8 0%, #3b2596 58%, #2a3aa8 100%);
+  --lav: #efedfb;
+  --lav-line: #ded9f6;
+  --ok: #17994a;          /* swatch/rule green only */
+  --ok-ink: #0e6e34;      /* green TEXT — #17994a on --ok-soft is 3.3:1, fails AA */
+  --ok-soft: #e7f6ec;
+  --ink-navy: #171449;
+}
+.vid .t-display, .vid .t-h1, .vid .t-h2 { font-weight: 600; }
+.vid .t-h2 { letter-spacing: -.034em; }
+
+/* ---------- announcement + nav ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+/* pinned to the wash — see concept-4-vid.html for why this must outrank [data-on] */
+.vid .nav[data-on] {
+  --ink:#171449; --ink-2:#4a4d6b;
+  --hairline:rgba(23,20,73,.10); --hairline-strong:rgba(23,20,73,.18);
+  color:#171449;
+}
+.vid .nav[data-on].is-stuck { background: #e6effa; border-bottom-color: rgba(23,20,73,.10); }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after { content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px; background: var(--accent); }
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: #08090c; padding: var(--s-16) var(--gutter);   /* hard-coded: --void resolves LIGHT inside the light wrapper */
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto; color: #f4f6fa;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; color: #f4f6fa; }
+}
+
+/* ---------- shared vid section chrome ---------- */
+.vsec { background: #fff; }
+.vsec--soft { background: var(--wash-soft); }
+.vhead { max-width: 64ch; }
+.vhead--mid { margin-inline: auto; text-align: center; }
+.vhead .t-eyebrow { color: #5b3fd6; }
+.vhead h2 { color: var(--ink-navy); margin-top: var(--s-3); }
+.vhead p { color: #4a4d6b; margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; }
+
+/* ==========================================================================
+   HERO — the wash, with the calendar's promise
+   ========================================================================== */
+.vhero { background: var(--wash); padding-block: clamp(48px, 6vh, 80px) clamp(56px, 7vh, 88px); }
+.vhero h1 { color: var(--ink-navy); max-width: 16ch; margin-top: var(--s-4); }
+.vhero__sub { color: #43466a; max-width: 54ch; margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; }
+.vhero .t-eyebrow { color: #5b3fd6; }
+
+/* the interview-location correction, as a card on the wash */
+.locnote {
+  margin-top: var(--s-10); max-width: 78ch;
+  background: rgba(255,255,255,.72); border: 1px solid rgba(23,20,73,.08);
+  border-radius: var(--r-xl); padding: var(--s-6);
+  box-shadow: var(--sh-sm);
+}
+.locnote__tag {
+  display: inline-flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-3);
+  font-size: var(--t-xs); font-weight: 600; color: #43466a;
+}
+.locnote__tag b {
+  background: var(--accent); color: #fff; font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: var(--r-pill);
+}
+.locnote p { font-size: var(--t-sm); color: #43466a; letter-spacing: .006em; }
+.locnote strong { color: var(--ink-navy); font-weight: 600; }
+
+.vhero__trust {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6);
+  margin-top: var(--s-8); padding-top: var(--s-6);
+  border-top: 1px solid rgba(23,20,73,.10);
+  font-size: var(--t-xs); color: #4a4d6b;
+}
+
+/* ==========================================================================
+   FILTER BAR — sticky under the nav
+   ========================================================================== */
+.filters {
+  position: sticky; top: 64px; z-index: 40;
+  background: #fff;                      /* solid, never frosted — system rule */
+  border-bottom: 1px solid #eceaf4;
+  padding-block: var(--s-4);
+}
+.filters__row { display: flex; gap: var(--s-3); align-items: center; }
+.search { position: relative; flex: 1; min-width: 0; }
+.search__ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #8b909b; pointer-events: none; }
+.search input {
+  width: 100%; height: 44px; padding: 0 40px 0 40px;
+  border: 1px solid #ded9f6; border-radius: var(--r-md);
+  background: #fff; color: var(--ink-navy); font-size: var(--t-sm);
+  transition: border-color var(--t-fast) var(--e-inout), box-shadow var(--t-fast) var(--e-inout);
+}
+.search input::placeholder { color: #9a9ab5; }
+.search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); }
+.search__clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #8b909b; padding: 4px; }
+.search__clear:hover { color: var(--ink-navy); }
+
+.sel { position: relative; flex: none; width: 220px; }
+.sel__btn {
+  width: 100%; height: 44px; padding: 0 var(--s-4);
+  display: flex; align-items: center; gap: var(--s-2);
+  border: 1px solid #ded9f6; border-radius: var(--r-md); background: #fff;
+  font-size: var(--t-sm); color: var(--ink-navy); text-align: left;
+}
+.sel__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sel__btn svg { margin-left: auto; color: #8b909b; transition: transform var(--t-fast) var(--e-out); }
+.sel.is-open .sel__btn svg { transform: rotate(180deg); }
+.sel__list {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 50;
+  background: #fff; border: 1px solid #ded9f6; border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg); padding: 6px; max-height: 320px; overflow-y: auto;
+}
+.sel__list:focus { outline: none; }
+.sel__opt {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: 9px var(--s-3); border-radius: var(--r-sm);
+  font-size: var(--t-sm); color: var(--ink-navy); cursor: pointer;
+}
+.sel__opt.is-active { background: var(--lav); }
+.sel__opt[aria-selected="true"] { font-weight: 600; }
+
+/* product-canonical type colours */
+.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.ty-all        { color: #8b909b; }
+.ty-diversity  { color: #e07b39; }
+.ty-technology { color: #2f5cff; }
+.ty-healthcare { color: #12897f; }
+.ty-veterans   { color: #d1454b; }
+.ty-entry      { color: #3aa0e6; }
+
+.filters__note { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); align-items: baseline; margin-top: var(--s-3); }
+.filters__note p { font-size: var(--t-xs); color: #6b6f8c; max-width: 78ch; }
+.filters__note b { color: var(--ink-navy); font-weight: 600; }
+.filters__count { margin-left: auto; font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; color: #6b6f8c; white-space: nowrap; }
+@media (max-width: 760px) {
+  .filters { top: 0; }
+  .filters__row { flex-wrap: wrap; }
+  .sel { width: 100%; }
+  .filters__count { margin-left: 0; }
+}
+
+/* ==========================================================================
+   THE LIST
+   ========================================================================== */
+.feed-note {
+  position: relative; display: inline-block; padding-top: 10px;
+  font-size: var(--t-xs); color: #6b6f8c; margin-bottom: var(--s-6); max-width: 84ch;
+}
+.ev-head {
+  display: grid; grid-template-columns: 110px minmax(0,1fr) 150px 170px 24px;
+  gap: var(--s-4); padding: 0 var(--s-5) var(--s-3);
+  font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #6b6f8c;
+}
+.ev {
+  display: grid; grid-template-columns: 110px minmax(0,1fr) 150px 170px 24px;
+  gap: var(--s-4); align-items: center;
+  padding: var(--s-5); border-radius: var(--r-lg);
+  background: #fff; border: 1px solid #eceaf4;
+  box-shadow: var(--sh-sm);
+  transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out), border-color var(--t-fast) var(--e-out);
+}
+.ev + .ev { margin-top: var(--s-3); }
+/* the type colour rides the left edge — inset, so hover never shifts layout */
+.ev { box-shadow: var(--sh-sm), inset 3px 0 0 0 currentColor; }
+.ev:hover { transform: translateX(2px); box-shadow: var(--sh-md), inset 3px 0 0 0 currentColor; border-color: #ded9f6; }
+.ev:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ev__date { display: grid; gap: 1px; color: var(--ink-navy); }
+.ev__date i { font-style: normal; font-size: 11px; color: #6b6f8c; }
+.ev__date b { font-size: var(--t-sm); font-weight: 600; letter-spacing: -.015em; }
+.ev__name { display: grid; gap: 4px; min-width: 0; }
+.ev__name b { font-size: var(--t-body); font-weight: 600; letter-spacing: -.018em; color: var(--ink-navy); }
+.ev__chip {
+  justify-self: start; font-style: normal;
+  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: var(--r-pill);
+  background: #fdf3e3; color: #8a5c14; border: 1px solid #f0dfc0;
+}
+.ev__type { display: flex; align-items: center; gap: var(--s-2); font-size: var(--t-sm); color: #4a4d6b; }
+.ev__status { display: flex; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+/* Green here is earned: "Matching live" is a state the platform is actually in. */
+.pill--live  { background: var(--ok-soft); color: var(--ok-ink); }
+.pill--soon  { background: #eef1fd; color: #3a51c4; }
+.pill--early { background: #f3eefe; color: #6b3fd6; }
+.ev__chev { color: #b9b6cf; }
+.ev:hover .ev__chev { color: var(--accent); }
+@media (max-width: 900px) {
+  .ev-head { display: none; }
+  .ev { grid-template-columns: 92px minmax(0,1fr); grid-template-areas: 'date name' 'date type' 'date status'; row-gap: 6px; }
+  .ev__date { grid-area: date; } .ev__name { grid-area: name; }
+  .ev__type { grid-area: type; } .ev__status { grid-area: status; }
+  .ev__chev { display: none; }
+}
+
+.ev-empty { text-align: center; padding: var(--s-20) var(--s-6); }
+.ev-empty h2 { font-size: var(--t-h3); font-weight: 600; color: var(--ink-navy); }
+.ev-empty p { margin-top: var(--s-3); color: #4a4d6b; }
+.ev-more { display: flex; justify-content: center; margin-top: var(--s-10); }
+
+/* ==========================================================================
+   INTERVIEW LOCATION — the correction, with the real dashboard
+   ========================================================================== */
+.loc-split { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.15fr); gap: var(--s-16); align-items: center; }
+@media (max-width: 980px) { .loc-split { grid-template-columns: minmax(0,1fr); gap: var(--s-10); } }
+.loc-list { display: grid; gap: var(--s-3); margin-top: var(--s-8); }
+.loc-row {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  padding: var(--s-4) var(--s-5); border-radius: var(--r-lg);
+  background: #fff; border: 1px solid #eceaf4; box-shadow: var(--sh-sm);
+}
+.loc-row b { font-size: var(--t-sm); font-weight: 600; color: var(--ink-navy); min-width: 120px; }
+.loc-row span { font-size: var(--t-sm); color: #4a4d6b; }
+.loc-shot { border-radius: var(--r-xl); overflow: hidden; background: #fff; border: 1px solid rgba(23,20,73,.07);
+  box-shadow: 0 2px 6px rgba(23,20,73,.08), 0 24px 48px -12px rgba(23,20,73,.18); }
+
+/* ---------- closing CTA ---------- */
+.vcta { background: var(--wash); text-align: center; padding-block: clamp(72px, 9vh, 120px); }
+.vcta h2 { color: var(--ink-navy); max-width: 20ch; margin-inline: auto; }
+.vcta p { color: #43466a; margin-top: var(--s-5); font-size: var(--t-lead); max-width: 52ch; margin-inline: auto; }
+.vcta__row { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-8); }
+
+/* ---------- footer ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+.u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Utility guard: several components (calendar rows, the empty state, Load More,
+   accordion panels) rely on the `hidden` attribute. Without this, a rule with
+   any specificity beats it and "hidden" elements stay on screen. */
+[hidden] { display: none !important; }
+
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+</style>
+</head>
+<body class="vid">
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="#location">See how it&nbsp;works&nbsp;→</a>
+  </div>
+</div>
+
+<div data-theme="light" style="background:#e6effa">
+  <header class="nav" data-nav data-on="wash">
+    <div class="u-container nav__inner">
+      <a href="concept-4-vid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="vid-events.html" class="is-current" aria-current="page">Upcoming Hiring Events</a>
+        <a href="vid-pricing.html">Pricing</a>
+        <a href="vid-faq.html">FAQ</a>
+        <a href="vid-contact.html">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+    <a href="vid-events.html">Upcoming Hiring Events</a>
+    <a href="vid-pricing.html">Pricing</a>
+    <a href="vid-faq.html">FAQ</a>
+    <a href="vid-contact.html">Contact Us</a>
+    <a href="#">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+  </div>
+
+  
+  <section class="vhero">
+    <div class="u-container">
+      <p class="t-eyebrow">Upcoming hiring events</p>
+      <h1 class="t-h1 t-balance">2026 hiring events</h1>
+      <p class="vhero__sub">
+        Find a hiring event, register, and post your jobs. Candidate matching starts
+        immediately.
+      </p>
+
+      
+      <div class="locnote">
+        <span class="locnote__tag"><b>New</b> Interview location</span>
+        <p>
+          Every event below is one event — one city, one date, one audience — and every
+          employer joins the same one. What's new is that <strong>you choose where your own
+          interviews happen</strong>: JobFairX video, phone, in person at your address, or
+          your own Zoom, Teams or Meet link. Two employers at the same event can interview
+          completely differently.
+        </p>
+      </div>
+
+      <ul class="vhero__trust">
+        <li>300+ cities nationwide</li>
+        <li>Five event types</li>
+        <li>Candidates verified within ~20 miles of the event city</li>
+        <li>Interview requests within a few hours of registering</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<div data-theme="light" style="background:#fff">
+
+  <div class="filters">
+    <div class="u-container">
+      <div class="filters__row">
+        <div class="search">
+          <span class="search__ic" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <label for="city" class="u-sr">Search events by city</label>
+          <input id="city" type="search" autocomplete="off" placeholder="Search by city or state — try “Dallas”" data-city-input>
+          <button class="search__clear" type="button" data-city-clear hidden aria-label="Clear city search">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <div class="sel" data-select>
+          <span id="type-label" class="u-sr">Filter by event type</span>
+          <button class="sel__btn" type="button" data-select-btn
+                  aria-haspopup="listbox" aria-expanded="false"
+                  aria-labelledby="type-label type-value" id="type-btn">
+            <span class="dot ty-all" data-select-dot aria-hidden="true"></span>
+            <span id="type-value" data-select-value>All Types</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="sel__list" role="listbox" tabindex="-1" aria-labelledby="type-label" id="type-list" hidden>
+            <li class="sel__opt" role="option" id="type-o0" data-value="all"        aria-selected="true"><span class="dot ty-all" aria-hidden="true"></span>All Types</li>
+            <li class="sel__opt" role="option" id="type-o1" data-value="diversity"  aria-selected="false"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</li>
+            <li class="sel__opt" role="option" id="type-o2" data-value="veterans"   aria-selected="false"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</li>
+            <li class="sel__opt" role="option" id="type-o3" data-value="healthcare" aria-selected="false"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</li>
+            <li class="sel__opt" role="option" id="type-o4" data-value="entry"      aria-selected="false"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</li>
+            <li class="sel__opt" role="option" id="type-o5" data-value="technology" aria-selected="false"><span class="dot ty-technology" aria-hidden="true"></span>Technology</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="filters__note">
+        <p>
+          <b>You pick your interview location when you register</b> — JobFairX video, phone,
+          in person at your address, or your own link. It's your setting, not the event's.
+        </p>
+        <span class="filters__count" data-count-out role="status" aria-live="polite"></span>
+      </div>
+    </div>
+  </div>
+
+  <section class="u-section" style="padding-block:var(--s-10) var(--s-24)">
+    <div class="u-container">
+
+      
+      <p class="feed-note">
+        <span data-placeholder>{{LIVE_EVENT_FEED}}</span> — sample rows built from the real
+        market list and the five real event types. Dallas · Aug 25 and Pearland · Sep 22 are
+        verified against the live site; every other date is feed-rendered in production, not
+        a sourced fact.
+      </p>
+
+      <div class="ev-head" aria-hidden="true">
+        <span>Date</span><span>Event</span><span>Type</span><span>Status</span><span></span>
+      </div>
+
+      
+      <div data-ev-list>
+
+        <a class="ev ty-healthcare" href="vid-event-detail.html" data-type="healthcare" data-search="dallas tx texas">
+          <span class="ev__date"><i>Tuesday</i><b>Aug 25</b></span>
+          <span class="ev__name"><b>Dallas, TX Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-entry" href="vid-event-detail.html" data-type="entry" data-search="nashville tn tennessee">
+          <span class="ev__date"><i>Thursday</i><b>Aug 27</b></span>
+          <span class="ev__name"><b>Nashville, TN Entry Level Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-veterans" href="vid-event-detail.html" data-type="veterans" data-search="norfolk va virginia">
+          <span class="ev__date"><i>Friday</i><b>Aug 28</b></span>
+          <span class="ev__name"><b>Norfolk, VA Veterans Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-diversity" href="vid-event-detail.html" data-type="diversity" data-search="chicago il illinois">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 1</b></span>
+          <span class="ev__name"><b>Chicago, IL Diversity Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-healthcare" href="vid-event-detail.html" data-type="healthcare" data-search="miami fl florida">
+          <span class="ev__date"><i>Thursday</i><b>Sep 3</b></span>
+          <span class="ev__name"><b>Miami, FL Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-technology" href="vid-event-detail.html" data-type="technology" data-search="seattle wa washington">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 8</b></span>
+          <span class="ev__name"><b>Seattle, WA Technology Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-entry" href="vid-event-detail.html" data-type="entry" data-search="denver co colorado">
+          <span class="ev__date"><i>Thursday</i><b>Sep 10</b></span>
+          <span class="ev__name"><b>Denver, CO Entry Level Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-healthcare" href="vid-event-detail.html" data-type="healthcare" data-search="boston ma massachusetts">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 15</b></span>
+          <span class="ev__name"><b>Boston, MA Healthcare Hiring Event</b></span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-technology" href="vid-event-detail.html" data-type="technology" data-search="austin tx texas">
+          <span class="ev__date"><i>Thursday</i><b>Sep 17</b></span>
+          <span class="ev__name">
+            <b>Austin, TX Technology Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-diversity" href="vid-event-detail.html" data-type="diversity" data-search="cincinnati oh ohio">
+          <span class="ev__date"><i>Friday</i><b>Sep 18</b></span>
+          <span class="ev__name">
+            <b>Cincinnati, OH Diversity Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-veterans" href="vid-event-detail.html" data-type="veterans" data-search="pearland tx texas houston">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 22</b></span>
+          <span class="ev__name">
+            <b>Pearland, TX Veterans Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-entry" href="vid-event-detail.html" data-type="entry" data-search="new york ny nyc">
+          <span class="ev__date"><i>Thursday</i><b>Sep 24</b></span>
+          <span class="ev__name">
+            <b>New York, NY Entry Level Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-healthcare" href="vid-event-detail.html" data-type="healthcare" data-search="portland or oregon">
+          <span class="ev__date"><i>Tuesday</i><b>Sep 29</b></span>
+          <span class="ev__name">
+            <b>Portland, OR Healthcare Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <a class="ev ty-technology" href="vid-event-detail.html" data-type="technology" data-search="manchester nh new hampshire">
+          <span class="ev__date"><i>Wednesday</i><b>Sep 30</b></span>
+          <span class="ev__name">
+            <b>Manchester, NH Technology Hiring Event</b>
+            <i class="ev__chip">Early registration · save $100</i>
+          </span>
+          <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
+          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
+          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+      </div>
+
+      <div class="ev-empty" data-ev-empty hidden>
+        <h2>No events found</h2>
+        <p>Try adjusting your search or filter criteria.</p>
+        <button class="btn btn--secondary" type="button" data-ev-reset style="margin-top:var(--s-6)">Clear filters</button>
+      </div>
+
+      <div class="ev-more">
+        <button class="btn btn--secondary btn--lg" type="button" data-ev-more>Load More Events</button>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="u-section vsec--soft" id="location">
+    <div class="u-container">
+      <div class="loc-split">
+        <div>
+          <div class="vhead">
+            <p class="t-eyebrow">Four ways to interview</p>
+            <h2 class="t-h2 t-balance">Same event. Your choice of room.</h2>
+            <p>
+              You set the interview location for each event you join, and candidates see
+              exactly what to expect before they ever request a time.
+            </p>
+          </div>
+          <div class="loc-list">
+            <div class="loc-row"><b>JobFairX video</b><span>“JobFairX video call” — runs inside the platform.</span></div>
+            <div class="loc-row"><b>Phone</b><span>“You call each candidate”, at the time you accepted.</span></div>
+            <div class="loc-row"><b>In person</b><span>1201 Peachtree St NE, Suite 300 · Atlanta, GA</span></div>
+            <div class="loc-row"><b>Your own link</b><span>“Microsoft Teams” — or Zoom, or Meet.</span></div>
+          </div>
+        </div>
+
+        <figure>
+          <div class="loc-shot">
+            <div class="crop crop--16x10">
+              <img src="assets/product/dashboard-events.png"
+                   alt="The employer events dashboard INTERVIEW LOCATION column: one employer across four events, set to JobFairX video call, You call each candidate, In person at 1201 Peachtree St NE Suite 300 in Atlanta, and Microsoft Teams."
+                   width="3200" height="2000" style="--z:1.5; --l:-20%; --t:-28%; --zm:2.8; --lm:-24%; --tm:-30%">
+            </div>
+          </div>
+          <figcaption class="t-sm" style="margin-top:var(--s-4);color:#6b6f8c">
+            Real product view — the INTERVIEW LOCATION column. One employer, four events, a
+            different interview location set on each.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="vcta">
+    <div class="u-container">
+      <h2 class="t-h2 t-balance">Pick your city. Matching starts the same day.</h2>
+      <p>Register for an event, post your open jobs, and the first interview requests arrive within a few hours.</p>
+      <div class="vcta__row">
+        <a href="#" class="btn btn--primary btn--lg">Register for an Event</a>
+        <a href="vid-pricing.html" class="btn btn--secondary btn--lg">See pricing</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-4-vid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><span aria-current="page">Upcoming hiring events</span></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="vid-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="vid-faq.html">FAQ</a></li>
+          <li><a href="vid-contact.html">Contact</a></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Calendar behaviour — vanilla, no dependencies.
+   1. A real, keyboard-accessible listbox (not a styled <select>).
+   2. City search + type filter, both actually filtering the list.
+   3. Progressive disclosure via Load More.
+   Everything degrades: with JS off, all 14 rows render with their status.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var PAGE = 8;   // rows visible before the first "Load More Events"
+
+  /* ---------- 1. custom listbox -----------------------------------------
+     WAI-ARIA listbox pattern: focus moves to the list when it opens and the
+     active option is tracked with aria-activedescendant, so a screen reader
+     announces each option as the arrow keys move through them. */
+  function initSelect(root, onChange) {
+    var btn   = root.querySelector('[data-select-btn]');
+    var list  = root.querySelector('[role="listbox"]');
+    var opts  = Array.prototype.slice.call(list.querySelectorAll('[role="option"]'));
+    var valEl = root.querySelector('[data-select-value]');
+    var dotEl = root.querySelector('[data-select-dot]');
+    var selected = 0, active = 0, open = false, typed = '', typedAt = 0;
+
+    opts.forEach(function (o, i) { if (o.getAttribute('aria-selected') === 'true') selected = i; });
+
+    function setActive(i) {
+      active = (i + opts.length) % opts.length;
+      opts.forEach(function (o, k) { o.classList.toggle('is-active', k === active); });
+      list.setAttribute('aria-activedescendant', opts[active].id);
+      if (opts[active].scrollIntoView) opts[active].scrollIntoView({ block: 'nearest' });
+    }
+
+    function openList() {
+      if (open) return;
+      open = true;
+      root.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      list.hidden = false;
+      setActive(selected);
+      list.focus();
+    }
+
+    function closeList(returnFocus) {
+      if (!open) return;
+      open = false;
+      root.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      list.hidden = true;
+      if (returnFocus) btn.focus();
+    }
+
+    function choose(i) {
+      selected = i;
+      opts.forEach(function (o, k) { o.setAttribute('aria-selected', String(k === i)); });
+      var o = opts[i];
+      valEl.textContent = o.textContent.trim();
+      // mirror the option's colour dot onto the closed button
+      dotEl.className = 'dot ' + (o.querySelector('.dot').className.replace('dot', '').trim());
+      closeList(true);
+      onChange(o.getAttribute('data-value'));
+    }
+
+    btn.addEventListener('click', function () { open ? closeList(true) : openList(); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault(); openList();
+      }
+    });
+
+    list.addEventListener('keydown', function (e) {
+      switch (e.key) {
+        case 'ArrowDown': e.preventDefault(); setActive(active + 1); break;
+        case 'ArrowUp':   e.preventDefault(); setActive(active - 1); break;
+        case 'Home':      e.preventDefault(); setActive(0); break;
+        case 'End':       e.preventDefault(); setActive(opts.length - 1); break;
+        case 'Enter': case ' ': case 'Spacebar': e.preventDefault(); choose(active); break;
+        case 'Escape': e.preventDefault(); closeList(true); break;
+        case 'Tab': closeList(false); break;
+        default:
+          if (e.key.length !== 1) return;
+          // typeahead: consecutive keystrokes inside 700ms build one string
+          var now = Date.now();
+          typed = (now - typedAt < 700 ? typed : '') + e.key.toLowerCase();
+          typedAt = now;
+          for (var i = 0; i < opts.length; i++) {
+            if (opts[i].textContent.trim().toLowerCase().indexOf(typed) === 0) { setActive(i); break; }
+          }
+      }
+    });
+
+    opts.forEach(function (o, i) {
+      o.addEventListener('click', function () { choose(i); });
+      o.addEventListener('mousemove', function () { if (active !== i) setActive(i); });
+    });
+
+    document.addEventListener('pointerdown', function (e) {
+      if (open && !root.contains(e.target)) closeList(false);
+    });
+
+    return {
+      reset: function () { choose(0); },
+      // Programmatic selection for deep links. Goes through choose() so the
+      // button label, the colour dot, aria-selected and the filter all update
+      // together — a synthetic click on the option does not reach this.
+      selectByValue: function (v) {
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i].getAttribute('data-value') === v) { choose(i); return true; }
+        }
+        return false;
+      }
+    };
+  }
+
+  /* ---------- 2. the list ------------------------------------------------- */
+  var listRoot = document.querySelector('[data-ev-list]');
+  if (!listRoot) return;
+
+  var rows    = Array.prototype.slice.call(listRoot.querySelectorAll('.ev'));
+  var headRow = document.querySelector('.ev-head');
+  var empty   = document.querySelector('[data-ev-empty]');
+  var moreWrap= document.querySelector('.ev-more');
+  var moreBtn = document.querySelector('[data-ev-more]');
+  var resetBtn= document.querySelector('[data-ev-reset]');
+  var input   = document.querySelector('[data-city-input]');
+  var clear   = document.querySelector('[data-city-clear]');
+  var countEl = document.querySelector('[data-count-out]');
+
+  var type = 'all', shown = PAGE;
+
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var matches = rows.filter(function (r) {
+      var okType = type === 'all' || r.getAttribute('data-type') === type;
+      var okCity = !q || r.getAttribute('data-search').indexOf(q) > -1;
+      return okType && okCity;
+    });
+
+    rows.forEach(function (r) { r.hidden = true; });
+    var visible = matches.slice(0, shown);
+    visible.forEach(function (r) { r.hidden = false; });
+
+    var none = matches.length === 0;
+    empty.hidden = !none;
+    if (headRow) headRow.hidden = none;
+    moreWrap.hidden = none || matches.length <= shown;
+    clear.hidden = !q;
+
+    countEl.textContent = none
+      ? 'No events'
+      : 'Showing ' + visible.length + ' of ' + matches.length + (matches.length === 1 ? ' event' : ' events');
+
+    return visible;
+  }
+
+  function refilter() { shown = PAGE; apply(); }
+
+  var typeSelect = initSelect(document.querySelector('[data-select]'), function (v) {
+    type = v; refilter();
+  });
+
+  input.addEventListener('input', refilter);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && input.value) { input.value = ''; refilter(); }
+  });
+  clear.addEventListener('click', function () { input.value = ''; refilter(); input.focus(); });
+
+  moreBtn.addEventListener('click', function () {
+    var before = shown;
+    shown += 6;
+    var visible = apply();
+    // Send focus to the first newly revealed row, otherwise a keyboard user is
+    // left on a button that may have just disappeared.
+    if (visible[before]) visible[before].focus();
+  });
+
+  resetBtn.addEventListener('click', function () {
+    input.value = '';
+    typeSelect.reset();          // reset() calls onChange → refilter()
+    input.focus();
+  });
+
+  apply();
+
+  /* ---------- deep link: page-events.html?type=healthcare -----------------
+     The solution pages link here pre-filtered. Vocabulary differs between the
+     two surfaces (solutions say "entry-level" and "veteran", the filter uses
+     "entry" and "veterans"), so normalise rather than assuming they match. */
+  (function deepLink() {
+    var q = new URLSearchParams(window.location.search).get('type');
+    if (!q || !typeSelect || !typeSelect.selectByValue) return;
+    var MAP = { 'entry-level': 'entry', 'entrylevel': 'entry',
+                'veteran': 'veterans', 'vets': 'veterans' };
+    var want = MAP[q.toLowerCase()] || q.toLowerCase();
+    typeSelect.selectByValue(want);
+  })();
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact JobFairX — Talk to us</title>
+<meta name="description" content="Questions about hiring events, pricing, or where your interviews happen? Email, call, or send the JobFairX team a message.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
+<style>
+/* ==========================================================================
+   VID — CONTACT
+   page-contact.html in concept 4's design language. The chrome (palette block,
+   announce, nav, drawer, .vsec/.vhead, .vcta, footer) is cloned from
+   vid-events.html; only the middle is this page's own.
+
+   PORTED, unchanged, from page-contact.html:
+   · every contact fact — info@jobfairx.com, (702) 269-0808, JobFairX, LLC,
+     209 S Stephanie St. STE B #144, Henderson, Nevada 89012, and support
+     hours Mon–Fri 5:00 AM – 5:00 PM PST (HANDOFF §3);
+   · the whole form — same fields in the same order, same real `required` /
+     `aria-required` / `aria-describedby` wiring, same inline messages, same
+     focus-taking error summary, same success state, same validation script.
+     The LIVE site carries ZERO `required` attributes (LIVE-SITE-SCOPE §6);
+     fixing that is a deliberate improvement — do not regress it;
+   · the {{OPTION_LISTS}} placeholder on the three dropdowns.
+
+   Deliberately NOT here: a map. We have no map data, and a drawn one would be
+   an invented artifact. The address block carries the address instead.
+
+   Concept rules (from concept-4-vid.html / vid-events.html):
+   · gradient wash INSIDE a section, hard cuts at every boundary
+   · display weight 600, navy ink, JobFairX blue for brand/CTA
+   · green ONLY where the product genuinely shows a completed state — nothing
+     on this page qualifies, so there is NO green anywhere on it
+   · body copy #43466a / #4a4d6b, muted #6b6f8c (never #6b6f8c for real text)
+   ========================================================================== */
+
+/* ---------- concept palette (identical to concept-4-vid.html) ---------- */
+.vid {
+  --wash: linear-gradient(285deg, #eaf7f2 4%, #dbe9fd 52%, #eeecfd 99%);
+  --wash-soft: linear-gradient(180deg, #f4f2fb 0%, #fbfaf8 100%);
+  --violet-card: linear-gradient(137deg, #4c2fb8 0%, #3b2596 58%, #2a3aa8 100%);
+  --lav: #efedfb;
+  --lav-line: #ded9f6;
+  --ok: #17994a;
+  --ok-soft: #e7f6ec;
+  --ink-navy: #171449;
+}
+.vid .t-display, .vid .t-h1, .vid .t-h2 { font-weight: 600; }
+.vid .t-h2 { letter-spacing: -.034em; }
+
+/* ---------- announcement + nav ---------- */
+.announce {
+  background: var(--void); color: var(--ink-2);
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce a { color: var(--ink); border-bottom: 1px solid var(--hairline-strong); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); color: var(--accent-hover); }
+
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  transition: background var(--t-base) var(--e-inout), border-color var(--t-base) var(--e-inout);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck { background: var(--canvas); border-bottom-color: var(--hairline); }
+.nav[data-on="dark"]  { --canvas:#0b0d12; --ink:#f4f6fa; --ink-2:#a8b0be; --hairline:rgba(255,255,255,.09); --hairline-strong:rgba(255,255,255,.16); color:#f4f6fa; }
+.nav[data-on="light"] { --canvas:#fbfaf8; --ink:#14161a; --ink-2:#565b66; --hairline:#e6e3dd; --hairline-strong:#d6d2c9; color:#14161a; }
+/* pinned to the wash — see concept-4-vid.html for why this must outrank [data-on] */
+.vid .nav[data-on] {
+  --ink:#171449; --ink-2:#4a4d6b;
+  --hairline:rgba(23,20,73,.10); --hairline-strong:rgba(23,20,73,.18);
+  color:#171449;
+}
+.vid .nav[data-on].is-stuck { background: #e6effa; border-bottom-color: rgba(23,20,73,.10); }
+
+.nav__inner { display: flex; align-items: center; gap: var(--s-8); height: 64px; }
+.nav__links { display: flex; gap: var(--s-6); margin-inline: auto; }
+.nav__links a { font-size: var(--t-sm); font-weight: 500; color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a.is-current { color: var(--ink); position: relative; }
+.nav__links a.is-current::after { content: ''; position: absolute; left: 0; right: 0; bottom: -21px; height: 2px; background: var(--accent); }
+.nav__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--ink); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+
+.drawer { display: none; }
+@media (max-width: 900px) {
+  .nav__links, .nav__actions .btn--secondary { display: none; }
+  .nav__toggle { display: grid; }
+  .nav__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: #08090c; padding: var(--s-16) var(--gutter);   /* hard-coded: --void resolves LIGHT inside the light wrapper */
+    transform: translateY(-100%); transition: transform var(--t-base) var(--e-out);
+    overflow-y: auto; color: #f4f6fa;
+  }
+  .drawer.is-open { transform: none; }
+  .drawer a { display: block; font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; padding: var(--s-4) 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; color: #f4f6fa; }
+}
+
+/* ---------- shared vid section chrome ---------- */
+.vsec { background: #fff; }
+.vsec--soft { background: var(--wash-soft); }
+.vhead { max-width: 64ch; }
+.vhead--mid { margin-inline: auto; text-align: center; }
+.vhead .t-eyebrow { color: #5b3fd6; }
+.vhead h2 { color: var(--ink-navy); margin-top: var(--s-3); }
+.vhead p { color: #4a4d6b; margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; }
+
+/* ==========================================================================
+   HERO — the wash, with the invitation
+   ========================================================================== */
+.vhero { background: var(--wash); padding-block: clamp(48px, 6vh, 80px) clamp(56px, 7vh, 88px); }
+.vhero h1 { color: var(--ink-navy); max-width: 14ch; margin-top: var(--s-4); }
+.vhero__sub { color: #43466a; max-width: 56ch; margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; }
+.vhero .t-eyebrow { color: #5b3fd6; }
+.vhero__trust {
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6);
+  margin-top: var(--s-8); padding-top: var(--s-6);
+  border-top: 1px solid rgba(23,20,73,.10);
+  font-size: var(--t-xs); color: #4a4d6b;
+}
+.vhero__trust b { color: var(--ink-navy); font-weight: 600; font-size: var(--t-sm); }
+
+/* ==========================================================================
+   THE WORKING SURFACE — form on white beside the contact rail
+   ========================================================================== */
+.formzone { --err: #b3261e; --err-soft: #fdf2f1; }
+.formwrap {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: var(--s-16); align-items: start;
+}
+/* Not sticky: this rail runs taller than a laptop viewport (four contact
+   facts, the next-steps list and three links), and a sticky element taller
+   than the viewport pins its top and hides its own tail. */
+@media (max-width: 1000px) { .formwrap { grid-template-columns: minmax(0, 1fr); gap: var(--s-12); } }
+
+/* ---------- contact rail ---------- */
+.crail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); margin-top: var(--s-8); }
+.ctile {
+  display: grid; gap: var(--s-4); align-content: start;
+  background: var(--lav); border: 1px solid var(--lav-line); border-radius: var(--r-xl);
+  padding: var(--s-5);
+  transition: transform var(--t-fast) var(--e-out), background var(--t-fast) var(--e-inout);
+}
+.ctile:hover { transform: translateY(-2px); background: #e9e5fa; }
+.ctile--wide { grid-column: 1 / -1; }
+.ctile__ic {
+  width: 38px; height: 38px; border-radius: var(--r-md); display: grid; place-items: center;
+  background: #fff; color: #5b3fd6; box-shadow: var(--sh-sm); flex: none;
+}
+.ctile h3 { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #6b6f8c; margin-bottom: 6px; }
+.ctile__v {
+  display: block; font-size: 1rem; font-weight: 600; letter-spacing: -.012em;
+  color: var(--ink-navy); line-height: 1.45; overflow-wrap: anywhere;
+  transition: color var(--t-micro) var(--e-inout);
+}
+a.ctile__v:hover { color: var(--accent); }
+.ctile__m { font-size: var(--t-xs); color: #6b6f8c; margin-top: 6px; letter-spacing: .006em; }
+/* address + support hours — one block, two stacked rows.
+   Side by side at this column width put "209 S Stephanie St." on three lines;
+   an address is the one thing on the page that must never be guessed at. */
+.cwide { display: grid; gap: var(--s-5); }
+.cwide__row { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: var(--s-4); align-items: start; }
+.cwide__row + .cwide__row { padding-top: var(--s-5); border-top: 1px solid var(--lav-line); }
+@media (max-width: 620px) { .crail { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) {
+  /* Re-laid-out, not shrunk: at 390px an icon stacked over two lines of text is
+     a lot of scroll for four facts, so the icon moves beside the text. */
+  .ctile { grid-template-columns: 38px minmax(0, 1fr); align-items: start; }
+  .ctile--wide { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- what happens next ---------- */
+.cnext {
+  margin-top: var(--s-8); padding-top: var(--s-6);
+  border-top: 1px solid #eceaf4;
+}
+.cnext h3 { font-size: var(--t-body); font-weight: 600; letter-spacing: -.015em; color: var(--ink-navy); }
+.cnext ol { display: grid; gap: var(--s-3); margin-top: var(--s-4); counter-reset: step; }
+/* The row is a grid of exactly two cells: the counter and ONE wrapper span.
+   Leaving the copy as bare children puts every <b> in its own grid track. */
+.cnext li {
+  display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: var(--s-3); align-items: start;
+  font-size: var(--t-sm); color: #4a4d6b; letter-spacing: .006em;
+}
+.cnext li::before {
+  counter-increment: step; content: counter(step);
+  width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  background: #fff; border: 1px solid var(--lav-line); color: #5b3fd6;
+}
+.cnext b { color: var(--ink-navy); font-weight: 600; }
+/* Its own line, and a FULL-WIDTH box. Two reasons for the width: the
+   PLACEHOLDER badge hangs off the top-right of whatever carries the attribute,
+   so a shrink-to-fit box would put the badge on top of its own text — and hung
+   off a narrow inline-block the badge has zero available width and renders as
+   a one-letter sliver. Full width parks it past the end of the copy at every
+   breakpoint. */
+.ph-inline {
+  display: block; margin-top: var(--s-4);
+  padding: 3px 9px; border: 1px dashed #d9b784; border-radius: var(--r-sm);
+  background: #fdf7ee; color: #7a5a24; font-size: var(--t-xs);
+}
+
+/* ---------- rail links ---------- */
+.crlinks { display: grid; margin-top: var(--s-8); }
+.crlinks a {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-4);
+  padding: var(--s-4) 0; border-top: 1px solid #eceaf4;
+  font-size: var(--t-sm); font-weight: 600; color: var(--ink-navy); letter-spacing: .004em;
+  transition: color var(--t-micro) var(--e-inout);
+}
+.crlinks a:last-child { border-bottom: 1px solid #eceaf4; }
+.crlinks a:hover { color: var(--accent); }
+.crlinks svg { flex: none; color: #6b6f8c; transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.crlinks a:hover svg { transform: translateX(3px); color: var(--accent); }
+
+/* ---------- the form card ---------- */
+.form-card {
+  background: #fff; border: 1px solid #eceaf4; border-radius: var(--r-xl);
+  box-shadow: var(--sh-md); padding: var(--s-8);
+}
+.form-legend { font-size: var(--t-xs); color: #6b6f8c; letter-spacing: .006em; margin-bottom: var(--s-6); }
+
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5); }
+.field { display: grid; gap: 6px; position: relative; min-width: 0; }
+.field--full { grid-column: 1 / -1; }
+.field label { font-size: var(--t-sm); font-weight: 600; color: var(--ink-navy); letter-spacing: .006em; }
+.field label .opt { font-weight: 400; color: #6b6f8c; }
+.req { color: var(--accent); }
+
+.field input, .field select, .field textarea {
+  width: 100%; border-radius: var(--r-md);
+  border: 1px solid var(--lav-line);
+  background-color: #fff; color: var(--ink-navy);
+  font-size: var(--t-body); letter-spacing: .004em;
+  transition: border-color var(--t-micro) var(--e-inout);
+}
+.field input, .field select { height: 46px; padding-inline: var(--s-4); }
+.field textarea { min-height: 132px; padding: var(--s-3) var(--s-4); line-height: 1.55; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: #6b6f8c; }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: #b9b0e6; }
+
+/* Native select chrome varies wildly between platforms and ignores the type
+   ramp, so it is replaced by a chevron drawn into the background. */
+.field select {
+  appearance: none; -webkit-appearance: none; padding-right: 42px; cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5 6 6.5l5-5' stroke='%236b6f8c' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat; background-position: right var(--s-4) center;
+}
+/* An unchosen select should read as placeholder text, not as an answer. Driven
+   by a data attribute rather than :invalid, so a select showing a validation
+   error doesn't also grey out its own text. */
+.field select[data-empty="true"] { color: #6b6f8c; }
+
+/* One visible focus ring for everything interactive on the page. A real
+   `outline` rather than a box-shadow, so it survives forced-colors mode. */
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible,
+.btn:focus-visible, a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm);
+}
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  border-color: var(--accent); border-radius: var(--r-md);
+}
+[data-theme="dark"] a:focus-visible, [data-theme="dark"] button:focus-visible { outline-color: #7f9dff; }
+
+.field.has-error input, .field.has-error select, .field.has-error textarea {
+  border-color: var(--err); background-color: var(--err-soft);
+}
+.field__err { display: flex; gap: 6px; font-size: var(--t-xs); color: var(--err); letter-spacing: .006em; }
+.field__err svg { flex: none; margin-top: 3px; }
+
+/* error summary — takes focus on a failed submit, links straight to each field */
+.form-alert {
+  margin-bottom: var(--s-6); padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--err); border-left-width: 3px; border-radius: var(--r-md);
+  background: var(--err-soft);
+}
+.form-alert__t { font-size: var(--t-sm); font-weight: 600; color: var(--err); letter-spacing: .006em; }
+.form-alert ul { margin-top: var(--s-2); display: grid; gap: 2px; }
+.form-alert li a { font-size: var(--t-sm); color: var(--err); text-decoration: underline; text-underline-offset: 2px; }
+
+.form-foot { display: flex; align-items: center; gap: var(--s-5); flex-wrap: wrap; margin-top: var(--s-8); }
+.form-foot .btn { min-width: 200px; }
+.form-note { font-size: var(--t-xs); color: #6b6f8c; letter-spacing: .006em; max-width: 34ch; }
+
+/* success state — the form is replaced, not covered */
+.success {
+  background: #fff; border: 1px solid #eceaf4; border-radius: var(--r-xl);
+  box-shadow: var(--sh-md); padding: var(--s-10) var(--s-8); text-align: center;
+}
+.success__ic {
+  width: 52px; height: 52px; border-radius: 50%; margin: 0 auto var(--s-6);
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--accent);
+}
+.success h2 { color: var(--ink-navy); }
+.success p { color: #4a4d6b; max-width: 46ch; margin: var(--s-4) auto 0; }
+.success__proto {
+  margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid #eceaf4;
+  font-size: var(--t-xs); color: #6b6f8c;
+}
+
+@media (max-width: 560px) {
+  /* At 390px two columns of 46px inputs guarantees a zoom-on-focus. One column,
+     a full-bleed submit, and the card sheds a third of its padding so the
+     inputs keep their width instead of the chrome keeping it. */
+  .form-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .form-card { padding: var(--s-5); }
+  .form-foot { gap: var(--s-4); }
+  .form-foot .btn { width: 100%; min-width: 0; }
+  .form-note { max-width: none; }
+  .success { padding: var(--s-8) var(--s-5); }
+}
+
+/* ---------- closing CTA ---------- */
+.vcta { background: var(--wash); text-align: center; padding-block: clamp(72px, 9vh, 120px); }
+.vcta h2 { color: var(--ink-navy); max-width: 20ch; margin-inline: auto; }
+.vcta p { color: #43466a; margin-top: var(--s-5); font-size: var(--t-lead); max-width: 52ch; margin-inline: auto; }
+.vcta__row { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-8); }
+
+/* ---------- footer ---------- */
+.foot { padding-block: var(--s-20) var(--s-10); }
+.foot__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot h4 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s-4); }
+.foot li { margin-bottom: var(--s-3); }
+.foot li a { font-size: var(--t-sm); color: var(--ink-2); transition: color var(--t-micro) var(--e-inout); }
+.foot li a:hover { color: var(--ink); }
+.foot__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(168,176,190,.40);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.36);
+}
+.foot__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+  font-size: var(--t-xs); color: var(--ink-3); }
+@media (max-width: 1100px) { .foot__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot__cols { grid-template-columns: 1fr; } }
+
+/* ---------- utilities ---------- */
+/* An author `display` beats the UA's `[hidden] { display:none }`, and several
+   things here are both hidden and grid/flex. Restore the attribute's meaning
+   once, globally, rather than writing a [hidden] guard per component. */
+[hidden] { display: none !important; }
+.u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+[data-placeholder]::after {
+  content: 'PLACEHOLDER'; position: absolute; top: -7px; right: -7px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none; z-index: 5;
+}
+.ph-note {
+  grid-column: 1 / -1;
+  padding: var(--s-4); border: 1px dashed #d9b784; border-radius: var(--r-md);
+  background: #fdf7ee; font-size: var(--t-xs); color: #7a5a24; letter-spacing: .006em;
+}
+</style>
+</head>
+<body class="vid">
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <div class="announce">
+    <strong style="color:var(--ink)">New</strong> — in-person interviews are live.
+    Choose where your interviews happen at any event.
+    <a href="concept-4-vid.html#locations">See how it&nbsp;works&nbsp;→</a>
+  </div>
+</div>
+
+<div data-theme="light" style="background:#e6effa">
+  <header class="nav" data-nav data-on="wash">
+    <div class="u-container nav__inner">
+      <a href="concept-4-vid.html" class="wordmark">Job<b>Fair</b>X</a>
+      <nav class="nav__links">
+        <a href="vid-events.html">Upcoming Hiring Events</a>
+        <a href="vid-pricing.html">Pricing</a>
+        <a href="vid-faq.html">FAQ</a>
+        <a href="vid-contact.html" class="is-current" aria-current="page">Contact Us</a>
+      </nav>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">Sign In</a>
+        <a href="#" class="btn btn--primary">Register for an Event</a>
+        <button class="nav__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" data-nav-drawer>
+    <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+    <a href="vid-events.html">Upcoming Hiring Events</a>
+    <a href="vid-pricing.html">Pricing</a>
+    <a href="vid-faq.html">FAQ</a>
+    <a href="vid-contact.html">Contact Us</a>
+    <a href="#">Sign In</a>
+    <a href="#" style="color:var(--accent)">Register for an Event →</a>
+  </div>
+
+  
+  <section class="vhero">
+    <div class="u-container">
+      <p class="t-eyebrow">Contact</p>
+      
+      <h1 class="t-h1 t-balance">Talk to us.</h1>
+      <p class="vhero__sub">
+        Questions about hiring events, pricing, or where your interviews actually happen?
+        Send us a message, or call during support hours and talk to a person.
+      </p>
+
+      <ul class="vhero__trust">
+        <li><b>info@jobfairx.com</b></li>
+        <li><b>(702) 269-0808</b></li>
+        <li>Support hours Mon–Fri, 5:00 AM – 5:00 PM PST</li>
+        <li>Henderson, Nevada</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<div data-theme="light" style="background:#fff">
+
+  <section class="u-section vsec formzone" id="contact-form">
+    <div class="u-container">
+      <div class="formwrap">
+
+        
+        <div>
+          <div class="vhead">
+            <p class="t-eyebrow">Send a message</p>
+            <h2 class="t-h2 t-balance">Tell us what you're hiring for.</h2>
+            <p>
+              Roles, market, and roughly how many people you need. We'll tell you which
+              upcoming event fits, what a seat costs, and how to set the interview
+              location for your own interviews — JobFairX video, phone, in person at
+              your address, or your own Zoom, Teams or Meet link.
+            </p>
+          </div>
+
+          <h2 class="u-sr">How to reach us</h2>
+          <div class="crail">
+            <div class="ctile">
+              <span class="ctile__ic" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+                  <rect x="1.5" y="3" width="13" height="10" rx="1.6"/><path d="m2 4.5 6 4.2 6-4.2"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Email</h3>
+                <a class="ctile__v" href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+                <p class="ctile__m">For anything you'd rather put in writing.</p>
+              </div>
+            </div>
+
+            <div class="ctile">
+              <span class="ctile__ic" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M3.6 1.6c.5-.5 1.3-.5 1.8 0l1.5 1.6c.4.5.4 1.2 0 1.7L5.7 6.1c.7 1.7 2.1 3.1 3.8 3.8l1.2-1.2c.5-.4 1.2-.4 1.7 0l1.6 1.5c.5.5.5 1.3 0 1.8l-.8.8c-.7.7-1.8.9-2.7.5C7 11.8 4 8.8 2.3 5c-.4-.9-.2-2 .5-2.7l.8-.7Z"/>
+                </svg>
+              </span>
+              <div>
+                <h3>Phone</h3>
+                <a class="ctile__v" href="tel:+17022690808">(702) 269-0808</a>
+                <p class="ctile__m">Talk to a person during support hours.</p>
+              </div>
+            </div>
+
+            
+            <div class="ctile ctile--wide">
+              <div class="cwide">
+                <div class="cwide__row">
+                  <span class="ctile__ic" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8 1.5A4.5 4.5 0 0 0 3.5 6c0 3.2 3.7 7.7 4.1 8.2.2.2.6.2.8 0C8.8 13.7 12.5 9.2 12.5 6A4.5 4.5 0 0 0 8 1.5Zm0 6.2A1.7 1.7 0 1 1 8 4.3a1.7 1.7 0 0 1 0 3.4Z"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Office</h3>
+                    <address class="ctile__v" style="font-style:normal">
+                      JobFairX, LLC<br>209 S Stephanie St.<br>STE B #144<br>Henderson, Nevada 89012
+                    </address>
+                    
+                    <p class="ctile__m">Mailing address. Not an interview location.</p>
+                  </div>
+                </div>
+
+                <div class="cwide__row">
+                  <span class="ctile__ic" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+                      <circle cx="8" cy="8" r="6.3"/><path d="M8 4.4V8l2.6 1.6" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Support hours</h3>
+                    <p class="ctile__v">Mon–Fri<br>5:00 AM – 5:00 PM PST</p>
+                    <p class="ctile__m">Outside the window, use the form.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="crlinks">
+            <a href="vid-events.html">Browse upcoming events
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="vid-pricing.html">See pricing and bundles
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="vid-faq.html">Read the FAQ
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        
+        <div>
+          <form class="form-card" id="contact-form-el" novalidate>
+
+            <div class="form-alert" id="form-error-summary" role="alert" tabindex="-1" hidden>
+              <p class="form-alert__t" id="form-error-count">There's a problem with this form.</p>
+              <ul id="form-error-list"></ul>
+            </div>
+
+            <p class="form-legend">Fields marked <span class="req" aria-hidden="true">*</span> are required.</p>
+
+            
+            <div class="form-grid">
+              <div class="field">
+                <label for="first-name">First name <span class="req" aria-hidden="true">*</span></label>
+                <input id="first-name" name="firstName" type="text" autocomplete="given-name"
+                       required aria-required="true" aria-describedby="err-first-name"
+                       data-validate data-label="First name" data-msg="Enter your first name.">
+                <p class="field__err" id="err-first-name" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="last-name">Last name <span class="req" aria-hidden="true">*</span></label>
+                <input id="last-name" name="lastName" type="text" autocomplete="family-name"
+                       required aria-required="true" aria-describedby="err-last-name"
+                       data-validate data-label="Last name" data-msg="Enter your last name.">
+                <p class="field__err" id="err-last-name" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="phone">Phone number <span class="req" aria-hidden="true">*</span></label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                       required aria-required="true" aria-describedby="err-phone"
+                       data-validate data-type="tel" data-label="Phone number"
+                       data-msg="Enter a phone number we can reach you on."
+                       data-msg-format="Enter a phone number including the area code.">
+                <p class="field__err" id="err-phone" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="email">Business email <span class="req" aria-hidden="true">*</span></label>
+                <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                       spellcheck="false" required aria-required="true" aria-describedby="err-email"
+                       data-validate data-type="email" data-label="Business email"
+                       data-msg="Enter your business email address."
+                       data-msg-format="Enter an email address in the format name@company.com.">
+                <p class="field__err" id="err-email" role="alert" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="company">Company name <span class="req" aria-hidden="true">*</span></label>
+                <input id="company" name="company" type="text" autocomplete="organization"
+                       required aria-required="true" aria-describedby="err-company"
+                       data-validate data-label="Company name" data-msg="Enter your company name.">
+                <p class="field__err" id="err-company" role="alert" hidden></p>
+              </div>
+
+              <div class="field" data-placeholder>
+                <label for="company-size">Company size <span class="req" aria-hidden="true">*</span></label>
+                <select id="company-size" name="companySize" required aria-required="true"
+                        aria-describedby="err-company-size"
+                        data-validate data-label="Company size" data-msg="Choose a company size.">
+                  <option value="">Select…</option>
+                  <option>1–10 employees</option>
+                  <option>11–50 employees</option>
+                  <option>51–200 employees</option>
+                  <option>201–500 employees</option>
+                  <option>501–1,000 employees</option>
+                  <option>1,001–5,000 employees</option>
+                  <option>5,000+ employees</option>
+                </select>
+                <p class="field__err" id="err-company-size" role="alert" hidden></p>
+              </div>
+
+              <div class="field" data-placeholder>
+                <label for="job-title">Job title <span class="req" aria-hidden="true">*</span></label>
+                <select id="job-title" name="jobTitle" autocomplete="organization-title"
+                        required aria-required="true" aria-describedby="err-job-title"
+                        data-validate data-label="Job title" data-msg="Choose the closest job title.">
+                  <option value="">Select…</option>
+                  <option>Recruiter / Talent acquisition</option>
+                  <option>Hiring manager</option>
+                  <option>HR manager or director</option>
+                  <option>VP / Head of people</option>
+                  <option>Founder or owner</option>
+                  <option>Operations</option>
+                  <option>Other</option>
+                </select>
+                <p class="field__err" id="err-job-title" role="alert" hidden></p>
+              </div>
+
+              <div class="field" data-placeholder>
+                <label for="subject">Subject <span class="req" aria-hidden="true">*</span></label>
+                <select id="subject" name="subject" required aria-required="true"
+                        aria-describedby="err-subject"
+                        data-validate data-label="Subject" data-msg="Choose what this is about.">
+                  <option value="">Select…</option>
+                  <option>Hiring events</option>
+                  
+                  <option>In-person interviews</option>
+                  <option>Pricing and bundles</option>
+                  <option>Product demo</option>
+                  <option>Job postings</option>
+                  <option>Hosting an event</option>
+                  <option>Nonprofit pricing</option>
+                  <option>Existing account or support</option>
+                  <option>Something else</option>
+                </select>
+                <p class="field__err" id="err-subject" role="alert" hidden></p>
+              </div>
+
+              <p class="ph-note" data-placeholder>
+                <strong>{{OPTION_LISTS}}</strong> — the live form's Company Size, Job
+                Title and Subject values were not captured in LIVE-SITE-SCOPE.md, which
+                records only that all three are dropdowns. The Subject options above are
+                derived from the real site map (events, pricing and bundles, demo, job
+                postings, host an event, nonprofit); Company Size and Job Title are
+                stand-ins. Replace all three lists with the production values before
+                publishing.
+              </p>
+
+              <div class="field field--full">
+                <label for="message">Message <span class="opt">(optional)</span></label>
+                <textarea id="message" name="message" rows="5"
+                          placeholder="Roles you're hiring for, the city, and how many people you need."></textarea>
+              </div>
+            </div>
+
+            <div class="form-foot">
+              <button type="submit" class="btn btn--primary btn--lg">Send message</button>
+              <p class="form-note">Prototype — this form validates but posts nowhere. Nothing is sent or stored.</p>
+            </div>
+          </form>
+
+          
+          <div class="success" id="form-success" role="status" tabindex="-1" hidden>
+            <div class="success__ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+            </div>
+            <h2 class="t-h3">Thanks<span id="success-name"></span> — we've got your message.</h2>
+            <p>
+              A reply goes to <b id="success-email">the address you entered</b> during
+              support hours, Mon–Fri, 5:00 AM – 5:00 PM PST. In a hurry, call
+              <a href="tel:+17022690808" style="color:var(--accent)">(702) 269-0808</a>.
+            </p>
+            <div style="margin-top:var(--s-8);display:flex;gap:var(--s-3);justify-content:center;flex-wrap:wrap">
+              <a href="vid-events.html" class="btn btn--primary">Browse events</a>
+              <button type="button" class="btn btn--secondary" id="send-another">Send another message</button>
+            </div>
+            <p class="success__proto">
+              Prototype — no message was actually sent. This state exists to show the
+              confirmation, not to confirm anything.
+            </p>
+          </div>
+
+          
+          <div class="cnext">
+            <h3>What happens next</h3>
+            <ol>
+              <li><span>A reply goes to the <b>business email</b> you enter — no account, no login.</span></li>
+              <li><span>Replies go out during support hours, <b>Mon–Fri, 5:00 AM – 5:00 PM PST</b>.
+                <span class="ph-inline" data-placeholder>Typical reply time: {{RESPONSE_TIME}}</span></span></li>
+              <li><span>You get the upcoming event that fits, what a seat costs, and how to set
+                your interview location. In a hurry, call <b>(702) 269-0808</b>.</span></li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="vcta">
+    <div class="u-container">
+      <h2 class="t-h2 t-balance">Or just look around first.</h2>
+      <p>Every upcoming event, every market, and exactly what a seat costs — all of it is public. No call required.</p>
+      <div class="vcta__row">
+        <a href="vid-events.html" class="btn btn--primary btn--lg">Browse events</a>
+        <a href="vid-pricing.html" class="btn btn--secondary btn--lg">View pricing</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-theme="dark" style="background:var(--canvas)">
+  <footer class="u-section foot">
+    <div class="u-container">
+      <div class="foot__cols">
+        <div>
+          <a href="concept-4-vid.html" class="wordmark">Job<b>Fair</b>X</a>
+          <p class="t-sm" style="margin-top:var(--s-4);max-width:34ch">
+            AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+          </p>
+        </div>
+        <div><h4>Platform</h4><ul>
+          <li><a href="page-platform.html">Platform overview</a></li>
+          <li><a href="page-platform-events-dashboard.html">Events dashboard</a></li>
+          <li><a href="page-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+          <li><a href="page-platform-interview-scheduling.html">Interview scheduling</a></li>
+          <li><a href="page-platform-event-day.html">Event day</a></li>
+          <li><a href="page-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+          <li><a href="page-platform-analytics.html">Analytics</a></li>
+        </ul></div>
+        <div><h4>Solutions</h4><ul>
+          <li><a href="page-solutions.html">All solutions</a></li>
+          <li><a href="page-solutions-healthcare.html">Healthcare</a></li>
+          <li><a href="page-solutions-diversity.html">Diversity</a></li>
+          <li><a href="page-solutions-veteran.html">Veteran</a></li>
+          <li><a href="page-solutions-technology.html">Technology</a></li>
+          <li><a href="page-solutions-entry-level.html">Entry-level</a></li>
+        </ul></div>
+        <div><h4>Events</h4><ul>
+          <li><a href="vid-events.html">Upcoming hiring events</a></li>
+          <li><a href="page-interview-locations.html">Interview locations</a></li>
+          <li><a href="page-in-person-interviews.html">In-person interviews</a></li>
+          <li><a href="vid-pricing.html">Pricing</a></li>
+        </ul></div>
+        <div><h4>Company</h4><ul>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-resources.html">Resources</a></li>
+          <li><a href="vid-faq.html">FAQ</a></li>
+          <li><span aria-current="page">Contact</span></li>
+          <li><a href="page-demo.html">Book a demo</a></li>
+        </ul></div>
+        <div><h4>Legal</h4><ul>
+          <li><a href="page-privacy-policy.html">Privacy</a></li>
+          <li><a href="page-terms.html">Terms</a></li>
+          <li><a href="page-security.html">Security</a></li>
+          <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+        </ul></div>
+      </div>
+
+      <div class="foot__mark" aria-hidden="true">JobFairX</div>
+
+      <div class="foot__base">
+        <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+        <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Contact form validation — ported verbatim from page-contact.html.
+   Vanilla, no dependencies. Four rules it follows:
+
+   1. Submit always preventDefault()s. This is a prototype; it posts nowhere.
+   2. A field is validated on blur only AFTER it has been touched, then live on
+      input once it is already showing an error. Validating on the first
+      keystroke tells people they are wrong before they have finished being right.
+   3. On a failed submit the ERROR SUMMARY is the single announcement, and it
+      takes focus. The inline messages keep their role="alert" in the markup —
+      that is what makes a lone blur-triggered error speak — but the role is
+      lifted for the instant the bulk messages are written, because one submit
+      firing eight live regions at once buries the summary in noise.
+   4. Nothing is announced twice: the inline message and its summary row carry
+      exactly the same string.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var form    = document.getElementById('contact-form-el');
+  var success = document.getElementById('form-success');
+  if (!form || !success) return;
+
+  var summary  = document.getElementById('form-error-summary');
+  var sumCount = document.getElementById('form-error-count');
+  var sumList  = document.getElementById('form-error-list');
+  var fields   = Array.prototype.slice.call(form.querySelectorAll('[data-validate]'));
+
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var WARN  = '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">' +
+              '<path d="M8 1.3 15.2 14H.8L8 1.3Zm-.8 4.4v4h1.6v-4H7.2Zm0 5.2v1.6h1.6v-1.6H7.2Z"/></svg>';
+
+  function wrap(el)   { return el.closest('.field'); }
+  function errBox(el) { return document.getElementById('err-' + el.id); }
+
+  /* returns an error string, or '' when the field is fine */
+  function problem(el) {
+    var v = (el.value || '').trim();
+    if (!v) return el.getAttribute('data-msg');
+    if (el.getAttribute('data-type') === 'email' && !EMAIL.test(v)) {
+      return el.getAttribute('data-msg-format');
+    }
+    if (el.getAttribute('data-type') === 'tel') {
+      // 10 digits covers a US number with its area code; 15 is the E.164
+      // ceiling, so an international number with a country code still passes.
+      var digits = v.replace(/\D/g, '').length;
+      if (digits < 10 || digits > 15) return el.getAttribute('data-msg-format');
+    }
+    return '';
+  }
+
+  function showError(el, msg, quiet) {
+    var box = errBox(el);
+    wrap(el).classList.add('has-error');
+    el.setAttribute('aria-invalid', 'true');
+
+    if (quiet) box.removeAttribute('role');        // see rule 3 above
+    box.innerHTML = WARN;                          // authored icon markup only
+    var span = document.createElement('span');
+    span.textContent = msg;                        // message via textContent
+    box.appendChild(span);
+    box.hidden = false;
+    if (quiet) {
+      // restored once the summary's announcement window has passed, so the next
+      // single-field error still speaks on its own
+      setTimeout(function () { box.setAttribute('role', 'alert'); }, 600);
+    }
+  }
+
+  function clearError(el) {
+    var box = errBox(el);
+    wrap(el).classList.remove('has-error');
+    el.removeAttribute('aria-invalid');
+    box.hidden = true;
+    box.textContent = '';
+  }
+
+  function check(el, quiet) {
+    var msg = problem(el);
+    if (msg) { showError(el, msg, quiet); return false; }
+    clearError(el);
+    return true;
+  }
+
+  /* an unchosen select paints as placeholder text rather than as an answer */
+  function paintSelect(el) {
+    if (el.tagName === 'SELECT') el.setAttribute('data-empty', String(el.value === ''));
+  }
+
+  fields.forEach(function (el) {
+    paintSelect(el);
+    var touched = false;
+    el.addEventListener('blur', function () { touched = true; check(el); });
+    el.addEventListener('change', function () {
+      paintSelect(el);
+      if (touched || el.tagName === 'SELECT') check(el);
+    });
+    el.addEventListener('input', function () {
+      // only re-validate live once a message is already on screen
+      if (wrap(el).classList.contains('has-error')) check(el);
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();                       // prototype: posts nowhere, ever
+
+    var bad = fields.filter(function (el) { return !check(el, true); });
+
+    if (bad.length) {
+      sumCount.textContent = bad.length === 1
+        ? 'There is 1 field that needs your attention.'
+        : 'There are ' + bad.length + ' fields that need your attention.';
+      sumList.textContent = '';
+      bad.forEach(function (el) {
+        var li = document.createElement('li');
+        var a  = document.createElement('a');
+        a.href = '#' + el.id;
+        a.textContent = el.getAttribute('data-label') + ' — ' + problem(el);
+        a.addEventListener('click', function (ev) { ev.preventDefault(); el.focus(); });
+        li.appendChild(a);
+        sumList.appendChild(li);
+      });
+      summary.hidden = false;
+      summary.focus();
+      return;
+    }
+
+    summary.hidden = true;
+
+    var first = document.getElementById('first-name').value.trim();
+    document.getElementById('success-name').textContent = first ? ', ' + first : '';
+    document.getElementById('success-email').textContent = document.getElementById('email').value.trim();
+
+    form.hidden = true;
+    success.hidden = false;
+    success.focus();
+  });
+
+  document.getElementById('send-another').addEventListener('click', function () {
+    form.reset();
+    fields.forEach(function (el) { clearError(el); paintSelect(el); });
+    summary.hidden = true;
+    success.hidden = true;
+    form.hidden = false;
+    document.getElementById('first-name').focus();
+  });
+})();
+</script>
+</body>
+</html>
