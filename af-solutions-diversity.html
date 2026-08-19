@@ -1,0 +1,1716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diversity Hiring Events — JobFairX</title>
+<meta name="description" content="Diversity is one of the five JobFairX event types. Candidates register for the event in their city, are verified within approximately 20 miles of it, and are matched against the jobs you posted — then they request the interview. You choose where it happens.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
+<style>
+/* ==========================================================================
+   CONCEPT 5 — "AI FLOW"
+   A fifth homepage candidate beside dark / light / hybrid / vid. Scott's
+   brief: wisq.com's calm editorial layout — huge centered statements, one
+   enormous rounded panel per section, cream/navy palette, big images, easy
+   reading — with careerflow.ai's navigation quality: a Features mega-dropdown
+   (icon tile + name + one-line description) and a Solutions dropdown, on top
+   of our normal four-item nav.
+
+   Decisions taken for this concept (surface to Scott, do not silently
+   revisit):
+   1. PRIMARY CTAs are deep-navy pills (the reference's grammar). JobFairX
+      blue remains the wordmark, links and accents. This deliberately differs
+      from the vid concept's blue-CTA rule — it is what makes the dress.
+   2. The reference leans on licensed photography of people. We own none and
+      ship none — panels carry real product compositions instead. If the page
+      reads "missing" next to wisq.com, that is the gap, and it stays honest.
+   3. No awards exist, so no award badge — the hero eyebrow carries a verified
+      stat instead. No logo wall (no rights); a quiet stat strip instead.
+   4. Pricing cards, when this concept grows a pricing page, are EQUAL SIZE —
+      Scott explicitly dislikes the lifted featured card.
+   5. A serif (system Georgia stack) appears ONLY in the editorial resources
+      block — masthead AND article-card titles, the reference's magazine
+      moment. Nowhere else on the concept.
+   6. The featured resources are the four evergreen metric guides. The three
+      articles flagged "Needs update" on page-resources.html are factually
+      stale since the in-person launch and must not be promoted.
+
+   Everything else obeys the locked system: hard cuts, one depth mechanism
+   per element, no 3D tilt, no springs, no frosted nav, transform/opacity
+   motion only, one moving element per screenful, authored frame complete
+   with JS off and under reduced motion.
+   ========================================================================== */
+
+/* ---------- concept palette ---------- */
+.aiflow {
+  --canvas-af: #fdfcf9;      /* warm near-white, never pure white */
+  --cream: #f6f1e9;          /* the reference's panel ground */
+  --cream-line: #e9e2d5;
+  --navy: #101c3f;           /* ink + primary pills */
+  --navy-2: #3d4460;         /* body copy on light */
+  --muted-af: #6a7086;       /* muted on white */
+  --muted-cream: #5f6580;    /* muted on cream (AA there) */
+  --band-ink: #cdd4ea;       /* body copy on the navy band */
+  --grad: linear-gradient(112deg, #bfe6dc 0%, #9fd6e6 55%, #7cc3e8 100%);
+}
+.aiflow { background: var(--canvas-af); color: var(--navy-2);
+  /* bridge the shared base.css tokens onto this palette so vg-* components
+     and any base primitive resolve correctly without a data-theme wrapper */
+  --canvas: var(--canvas-af); --surface: #fff; --surface-2: var(--cream);
+  --ink: var(--navy); --ink-2: var(--navy-2); --ink-3: var(--muted-af);
+  --hairline: var(--cream-line); --hairline-strong: #d9d0bf;
+}
+.aiflow .t-display, .aiflow .t-h1, .aiflow .t-h2 { font-weight: 600; color: var(--navy); }
+.aiflow .t-h2 { letter-spacing: -.034em; }
+
+/* the reference's grammar: everything important is centered */
+.af-head { max-width: 62ch; margin-inline: auto; text-align: center; }
+.af-head .t-eyebrow { color: var(--muted-af); }
+.af-head h2 { margin-top: var(--s-3); }
+.af-head p { color: var(--navy-2); margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; max-width: 56ch; margin-inline: auto; }
+
+/* navy pill = primary; cream pill = secondary (concept decision 1) */
+.af-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 22px; border-radius: var(--r-pill);
+  font-size: var(--t-sm); font-weight: 550; letter-spacing: -.008em;
+  transition: transform var(--t-fast) var(--e-out), background var(--t-fast) var(--e-inout);
+}
+.af-btn--navy { background: var(--navy); color: #fff; }
+.af-btn--navy:hover { background: #1a2a58; transform: translateY(-1px); }
+.af-btn--cream { background: #fff; color: var(--navy); border: 1px solid var(--cream-line); }
+.af-btn--cream:hover { border-color: #d5cdbd; transform: translateY(-1px); }
+.af-link { font-size: var(--t-sm); font-weight: 550; color: var(--accent); }
+.af-link:hover { color: var(--accent-hover); }
+
+[hidden] { display: none !important; }
+
+/* ---------- announce (chrome, same as every concept) ---------- */
+.announce {
+  background: #0b0d12; color: #a8b0be;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce strong { color: #f4f6fa; }
+.announce a { color: #f4f6fa; border-bottom: 1px solid rgba(255,255,255,.16); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); }
+
+/* ==========================================================================
+   NAV — careerflow's quality on wisq's calm bar
+   Solid when stuck (system rule: no frosted glass). Two disclosure dropdowns:
+   click toggles, Escape and outside-click close, hover opens for pointer
+   users with a close delay. Mobile: everything folds into the flat drawer.
+   ========================================================================== */
+.nav-af {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--canvas-af);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t-base) var(--e-inout), box-shadow var(--t-base) var(--e-inout);
+}
+.nav-af.is-stuck { border-bottom-color: var(--cream-line); box-shadow: 0 1px 0 rgba(16,28,63,.03); }
+.nav-af__inner { display: flex; align-items: center; gap: var(--s-6); height: 68px; }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+.nav-af__links { display: flex; align-items: center; gap: var(--s-1); margin-inline: auto; }
+.nav-af__links > a, .dd > button {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-radius: var(--r-pill);
+  font-size: var(--t-sm); font-weight: 500; color: var(--navy-2);
+  transition: background var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout);
+}
+.nav-af__links > a:hover, .dd > button:hover, .dd.is-open > button { background: var(--cream); color: var(--navy); }
+.dd > button svg { transition: transform var(--t-fast) var(--e-out); color: var(--muted-af); }
+.dd.is-open > button svg { transform: rotate(180deg); }
+.nav-af__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav-af__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); color: var(--navy); }
+
+/* the mega-panel: icon tile + bold name + one-line description */
+.dd { position: relative; }
+.dd__panel {
+  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  width: min(720px, calc(100vw - 48px));
+  background: #fff; border: 1px solid var(--cream-line); border-radius: var(--r-xl);
+  box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 60px -16px rgba(16,28,63,.18);
+  padding: var(--s-4);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.dd__panel--narrow { width: min(560px, calc(100vw - 48px)); }
+.dd__item {
+  display: flex; gap: var(--s-4); align-items: flex-start;
+  padding: var(--s-4); border-radius: var(--r-lg);
+  transition: background var(--t-micro) var(--e-inout);
+}
+.dd__item:hover { background: var(--cream); }
+.dd__item:hover .dd__d { color: var(--muted-cream); }
+/* Careerflow's icon treatment (they ship Phosphor fill glyphs in one bright
+   saturated blue, no tile box). Ours: Phosphor fill (MIT) in OUR bright blue;
+   the Solutions menu uses the five product-canonical type colours. */
+.dd__ic {
+  flex: none; width: 32px; height: 32px; margin-top: 2px;
+  color: var(--accent);
+  display: grid; place-items: center;
+}
+.dd__t { display: flex; align-items: center; gap: 8px; font-size: var(--t-sm); font-weight: 600; color: var(--navy); letter-spacing: -.014em; }
+.dd__tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: var(--r-pill);
+  background: var(--accent); color: #fff;
+}
+.dd__d { margin-top: 3px; font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; line-height: 1.45; }
+.dd__all {
+  grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 2px; padding: var(--s-3);
+  border-top: 1px solid var(--cream-line);
+  font-size: var(--t-sm); font-weight: 550; color: var(--navy);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.dd__all:hover { color: var(--accent); }
+
+.drawer { display: none; }
+@media (max-width: 1020px) {
+  .nav-af__links, .nav-af__actions .af-btn--cream { display: none; }
+  .nav-af__toggle { display: grid; }
+  .nav-af__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: #08090c; color: #f4f6fa;
+    padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); visibility: hidden;
+    transition: transform var(--t-base) var(--e-out), visibility 0s var(--t-base);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; visibility: visible; transition-delay: 0s, 0s; }
+  .drawer a { display: block; font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .drawer small { display: block; margin-top: var(--s-8); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: #a8b0be; }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; color: #f4f6fa; }
+}
+
+/* ==========================================================================
+   HERO — centered statement, then one enormous rounded panel
+   ========================================================================== */
+.af-hero { padding-block: clamp(56px, 8vh, 96px) 0; }
+.af-hero__badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: var(--r-pill);
+  background: #fff; border: 1px solid var(--cream-line);
+  font-size: var(--t-xs); font-weight: 550; color: var(--navy-2);
+  box-shadow: var(--sh-sm);
+}
+.af-hero__badge b { color: var(--accent); font-weight: 600; }
+.af-hero h1 { max-width: 17ch; margin: var(--s-6) auto 0; }
+.af-hero__sub { max-width: 52ch; margin: var(--s-6) auto 0; font-size: var(--t-lead); line-height: 1.55; color: var(--navy-2); }
+.af-hero__cta { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: var(--s-5); margin-top: var(--s-8); }
+
+.af-stage {
+  position: relative; margin-top: clamp(40px, 6vh, 64px);
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid var(--cream-line);
+  box-shadow: 0 2px 6px rgba(16,28,63,.05), 0 40px 80px -24px rgba(16,28,63,.16);
+  background: #fff;
+}
+.af-stage .crop { border-radius: 0; }
+/* floating product cards over the stage — sharp DOM, never a baked PNG */
+.af-float {
+  position: absolute; z-index: 5; width: var(--fw, 280px);
+  background: #fff; color: #14161a;
+  border: 1px solid rgba(16,28,63,.08); border-radius: var(--r-lg);
+  box-shadow: 0 1px 3px rgba(16,28,63,.08), 0 24px 48px -12px rgba(16,28,63,.22);
+  padding: var(--s-4);
+}
+@media (max-width: 860px) { .af-float { display: none; } }
+
+/* quiet stat strip (the reference's logo-band slot; we own no logo rights) */
+.af-strip {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-3) var(--s-10);
+  padding-block: var(--s-10);
+  font-size: var(--t-sm); color: var(--muted-af);
+}
+.af-strip b { color: var(--navy); font-weight: 600; }
+
+/* ==========================================================================
+   THREE-CARD ROW — before / during / after, on cream cards
+   ========================================================================== */
+.af-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-card {
+  background: var(--cream); border-radius: 20px; padding: var(--s-7);
+  display: flex; flex-direction: column; min-width: 0;
+}
+.af-card h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -.026em; color: var(--navy); }
+.af-card > p { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.55; }
+.af-card__shot {
+  margin-top: auto; padding-top: var(--s-6);
+}
+.af-card__shot .panel { border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.06); box-shadow: 0 1px 3px rgba(16,28,63,.07); }
+@media (max-width: 980px) { .af-cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   TABBED FEATURE SECTION — the reference's auto-advancing tab row
+   One giant panel; three tabs below it swap the crop. The strip advances on
+   a timer with a progress underline; ANY user interaction takes control and
+   stops the auto-advance for good. Reduced motion / no JS: tab 1, static.
+   ========================================================================== */
+.af-tabs__stage { margin-top: var(--s-12); }
+.af-tabstrip {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-8);
+  margin-top: var(--s-8); border-top: 1px solid var(--cream-line);
+}
+.af-tab {
+  position: relative; text-align: left; padding: var(--s-5) 0 0; min-width: 0;
+  color: var(--muted-af);
+}
+.af-tab b { display: block; font-size: var(--t-body); font-weight: 600; letter-spacing: -.018em; color: inherit; }
+.af-tab span { display: block; margin-top: var(--s-2); font-size: var(--t-sm); line-height: 1.5; letter-spacing: .004em; }
+.af-tab[aria-selected="true"] { color: var(--navy); }
+.af-tab[aria-selected="true"] span { color: var(--navy-2); }
+.af-tab::before {
+  content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+  background: var(--cream-line);
+}
+.af-tab__bar {
+  position: absolute; top: -1px; left: 0; height: 2px; width: 100%;
+  background: var(--navy); transform: scaleX(0); transform-origin: left;
+}
+.af-tab[aria-selected="true"] .af-tab__bar { transform: scaleX(1); }
+/* while auto-advancing, the bar FILLS over the dwell time (JS sets --dwell) */
+.js .af-tabs.is-auto .af-tab[aria-selected="true"] .af-tab__bar {
+  animation: af-fill var(--dwell, 7s) linear both;
+}
+@keyframes af-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (max-width: 780px) {
+  .af-tabstrip { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+  .af-tab { padding-top: var(--s-4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .af-tabs.is-auto .af-tab[aria-selected="true"] .af-tab__bar { animation: none; transform: scaleX(1); }
+}
+
+/* ==========================================================================
+   NAVY BAND — every package includes (the reference's security band)
+   ========================================================================== */
+.af-band { background: var(--navy); color: var(--band-ink); }
+.af-band .t-eyebrow { color: #8fa0d0; font-family: var(--font-mono); letter-spacing: .12em; }
+.af-band__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-8); flex-wrap: wrap; }
+/* .aiflow .t-h2 sets navy at higher specificity — this must outrank it or the
+   headline paints navy-on-navy (caught in QA: the band rendered headless) */
+.aiflow .af-band h2 { color: #fff; max-width: 22ch; }
+.af-band__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-10) var(--s-8); margin-top: var(--s-12); }
+.af-band__cell::before { content: ''; display: block; width: 8px; height: 8px; background: var(--accent); margin-bottom: var(--s-4); }
+.af-band__cell h3 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.016em; color: #fff; }
+.af-band__cell p { margin-top: var(--s-3); font-size: var(--t-sm); line-height: 1.55; letter-spacing: .004em; }
+.af-btn--ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.28); }
+.af-btn--ghost:hover { border-color: rgba(255,255,255,.55); transform: translateY(-1px); }
+@media (max-width: 980px) { .af-band__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .af-band__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   INTERVIEW LOCATION — cream panel, list + real dashboard column
+   ========================================================================== */
+.af-loc {
+  background: var(--cream); border-radius: 24px; padding: clamp(24px, 4vw, 56px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--s-12);
+  align-items: center; margin-top: var(--s-12);
+}
+.af-loc h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.af-loc > div > p { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.6; }
+.af-loc__list { display: grid; gap: var(--s-2); margin-top: var(--s-6); }
+.af-loc__row {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  background: #fff; border-radius: 12px; padding: var(--s-3) var(--s-4);
+  border: 1px solid rgba(16,28,63,.05);
+}
+.af-loc__row b { font-size: var(--t-sm); font-weight: 600; color: var(--navy); min-width: 118px; }
+.af-loc__row span { font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; }
+.af-loc__shot .panel { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.07); box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 56px -16px rgba(16,28,63,.16); }
+.af-loc__note { margin-top: var(--s-4); font-size: var(--t-xs); color: var(--muted-cream); }
+@media (max-width: 980px) { .af-loc { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); } }
+
+/* ==========================================================================
+   TESTIMONIALS — giant navy cards in a scroll-snap row (user-driven only)
+   ========================================================================== */
+.af-quotes { display: flex; gap: var(--s-5); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--s-4); margin-top: var(--s-12); scrollbar-width: none; }
+.af-quotes::-webkit-scrollbar { display: none; }
+.af-quote {
+  flex: 0 0 min(760px, 88%); scroll-snap-align: center;
+  background: var(--navy); color: #e7ebf7; border-radius: 24px;
+  padding: clamp(28px, 4vw, 56px);
+  display: flex; flex-direction: column; min-height: 300px;
+}
+.af-quote blockquote { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 500; letter-spacing: -.022em; line-height: 1.4; max-width: 44ch; }
+.af-quote footer { margin-top: auto; padding-top: var(--s-8); }
+.af-quote cite { font-style: normal; display: block; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: #8fa0d0; }
+.af-quote cite b { display: block; letter-spacing: -.01em; text-transform: none; font-size: var(--t-sm); color: #fff; margin-bottom: 3px; }
+.af-qnav { display: flex; justify-content: center; gap: var(--s-3); margin-top: var(--s-5); }
+.af-qnav button {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--cream-line); background: #fff; color: var(--navy);
+  display: grid; place-items: center;
+  transition: border-color var(--t-micro) var(--e-inout), transform var(--t-fast) var(--e-out);
+}
+.af-qnav button:hover { border-color: #d5cdbd; transform: translateY(-1px); }
+
+/* ==========================================================================
+   EDITORIAL RESOURCES — the magazine moment (serif scoped HERE only)
+   ========================================================================== */
+.af-mast { text-align: center; }
+.af-mast .t-eyebrow { color: var(--muted-af); letter-spacing: .18em; }
+.af-mast h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 500; letter-spacing: -.015em;
+  font-size: clamp(2.2rem, 4.6vw, 3.4rem); color: var(--navy);
+  margin-top: var(--s-3);
+}
+.af-mast p { margin-top: var(--s-4); color: var(--navy-2); font-size: var(--t-lead); }
+.af-articles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-article {
+  display: flex; flex-direction: column; min-height: 240px; min-width: 0;
+  background: var(--navy); border-radius: 20px; padding: var(--s-6);
+  transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.af-article:hover { transform: translateY(-3px); box-shadow: 0 24px 48px -16px rgba(16,28,63,.35); }
+.af-article i { font-style: normal; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #8fa0d0; }
+.af-article h3 {
+  font-family: Georgia, 'Times New Roman', serif; font-weight: 500;
+  font-size: 1.375rem; letter-spacing: -.012em; line-height: 1.25; color: #fff;
+  margin-top: var(--s-4); max-width: 16ch;
+}
+.af-article span { margin-top: auto; padding-top: var(--s-6); font-size: var(--t-xs); color: #8fa0d0; display: inline-flex; align-items: center; gap: 6px; }
+.af-article:hover span { color: #fff; }
+@media (max-width: 1080px) { .af-articles { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px)  { .af-articles { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   GRADIENT CLOSE + LIGHT FOOTER
+   ========================================================================== */
+.af-cta {
+  position: relative; border-radius: 24px; overflow: hidden;
+  background: var(--grad); text-align: center;
+  padding: clamp(56px, 9vh, 112px) var(--s-8);
+}
+.af-cta h2 { color: var(--navy); max-width: 22ch; margin-inline: auto; }
+.af-cta p { color: #26365f; margin-top: var(--s-4); font-size: var(--t-lead); max-width: 46ch; margin-inline: auto; }
+.af-cta__row { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-8); }
+
+.foot-af { border-top: 1px solid var(--cream-line); padding-block: var(--s-16) var(--s-10); }
+.foot-af__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot-af h3 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-af); margin-bottom: var(--s-4); }
+.foot-af li { margin-bottom: var(--s-3); }
+.foot-af li a { font-size: var(--t-sm); color: var(--navy-2); transition: color var(--t-micro) var(--e-inout); }
+.foot-af li a:hover { color: var(--navy); }
+.foot-af li span[aria-current] { font-size: var(--t-sm); color: var(--navy); font-weight: 550; }
+.foot-af__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(16,28,63,.18);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot-af__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.28);
+}
+.foot-af__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--cream-line);
+  font-size: var(--t-xs); color: var(--muted-af); }
+@media (max-width: 1100px) { .foot-af__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot-af__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot-af__cols { grid-template-columns: minmax(0, 1fr); } }
+
+.u-skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  padding: 10px 16px; border-radius: 0 0 var(--r-md) 0;
+  background: var(--navy); color: #fff; font-size: var(--t-sm); font-weight: 550;
+}
+.u-skip:focus { left: 0; }
+.u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+[data-placeholder]::after {
+  /* Review scaffolding: an INLINE badge, not an overlay. As an absolutely
+     positioned corner chip it sat on top of the words next to inline
+     {{tokens}} (two reviewers flagged hidden body copy), and pushing it
+     outside the box overflowed the 390px viewport. In flow it can do
+     neither. */
+  content: 'PLACEHOLDER'; display: inline-block; vertical-align: middle;
+  margin-left: 5px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none;
+}
+</style>
+<style>
+/* ==========================================================================
+   PAGE CSS — af-solutions-diversity (content only; chrome is verbatim).
+   Ported from page-solutions-diversity.html and re-expressed in the AI Flow
+   language. The page's two structural truths carry over unchanged:
+
+   1. DIVERSITY HAS NO DATA. No per-type event count, no show rate, no
+      averages, no attributable customer, no verified logo. The three show
+      rates the site publishes — healthcare 91%, veterans 89%, entry-level
+      86% — belong to other audiences and are never borrowed into this
+      page's tiles.
+   2. PROTECTED CHARACTERISTICS. The page says nothing about how candidates
+      are selected beyond what the product visibly does: candidates register
+      for an event, location is verified to approximately 20 miles of the
+      event city, and matching runs against the jobs the employer posted.
+      No EEOC claim, no compliance claim — the .af-legalbox placeholder
+      holds the slot for counsel.
+
+   Motion: S-treatments only (the source page's own rule) — data-reveal
+   entrances and the anno pin intro; no beat vignettes anywhere.
+   ========================================================================== */
+
+/* numerals, chips and bullets (shared page components in the AF dress) */
+.af-num { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-cream); margin-bottom: var(--s-3); }
+.af-cards--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding-left: 0; }
+@media (max-width: 1180px) { .af-cards--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px)  { .af-cards--4 { grid-template-columns: minmax(0, 1fr); } }
+.st-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-5); }
+.st-acts span {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  border: 1px solid var(--cream-line); background: #fff; color: var(--muted-af);
+  white-space: nowrap;
+}
+
+.af-blist { display: grid; gap: var(--s-3); margin-top: var(--s-6); list-style: none; padding-left: 0; }
+.af-blist li { position: relative; padding-left: 22px; font-size: var(--t-sm); line-height: 1.55; letter-spacing: .004em; color: var(--navy-2); }
+.af-blist li::before { content: ''; position: absolute; left: 2px; top: .58em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.af-blist strong { color: var(--navy); font-weight: 600; }
+.af-blist--cols { grid-template-columns: 1fr 1fr; gap: var(--s-4) var(--s-10); margin: var(--s-10) auto 0; max-width: 62rem; }
+@media (max-width: 780px) { .af-blist--cols { grid-template-columns: minmax(0, 1fr); } }
+
+.af-note { margin: var(--s-8) auto 0; max-width: 74ch; text-align: center; font-size: var(--t-sm); color: var(--muted-af); line-height: 1.6; letter-spacing: .004em; }
+
+/* A missing figure is drawn as a missing figure: mono, small, dashed — never
+   a number-shaped thing a screenshot could mistake for a number. */
+.af-ph {
+  display: inline-block; max-width: 100%;
+  font-family: var(--font-mono); font-size: var(--t-xs); font-weight: 400;
+  line-height: 1.5; letter-spacing: .04em; color: var(--muted-cream);
+  padding: var(--s-3) var(--s-4);
+  border: 1px dashed #d9d0bf; border-radius: var(--r-md);
+  background: #fff; overflow-wrap: anywhere;
+}
+
+/* hero: the missing-numbers strip. Four tiles, four placeholders — the
+   healthcare page ships four real numbers in this slot; diversity has none. */
+.af-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); margin-top: clamp(40px, 6vh, 64px); text-align: left; list-style: none; padding-left: 0; }
+.af-metric { background: var(--cream); border-radius: 20px; padding: var(--s-6); min-width: 0; }
+.af-metric__l { margin-top: var(--s-3); font-size: var(--t-sm); font-weight: 600; color: var(--navy); }
+.af-metric__s { margin-top: var(--s-1); font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-cream); }
+@media (max-width: 980px) { .af-metrics { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .af-metrics { grid-template-columns: minmax(0, 1fr); } }
+
+/* logo slots — obviously empty on purpose (PAGE-INVENTORY gap 5) */
+.af-logos { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s-3); margin-top: var(--s-10); list-style: none; padding-left: 0; }
+.af-logos li { min-width: 0; }
+.af-logoslot {
+  display: grid; place-items: center; height: 84px; padding: var(--s-3);
+  border: 1px dashed #d9d0bf; border-radius: var(--r-lg);
+  background: var(--cream);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--muted-cream); text-align: center;
+}
+@media (max-width: 900px) { .af-logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .af-logos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.af-gapnote { margin: var(--s-8) auto 0; max-width: 76ch; padding-left: var(--s-5); border-left: 2px solid color-mix(in srgb, #b06d1f 55%, transparent); }
+.af-gapnote p { font-size: var(--t-sm); color: var(--navy-2); letter-spacing: .006em; line-height: 1.6; }
+.af-gapnote p + p { margin-top: var(--s-3); }
+.af-gapnote strong { color: var(--navy); font-weight: 600; }
+
+/* the annotated centrepiece — full-width stage, key underneath.
+   Crop geometry and pin coordinates are ONE calculation, measured off the
+   pixels of dashboard-events.png (3200x2000) — ported unchanged from the
+   source page, never nudged by eye:
+     row separators sit at y = 1154 and y = 1439 → the Atlanta Diversity
+     Event row is exactly y 1154–1439; the window opens to 1100–1497.
+     aspect 20/3, --z 1.21, --l -15.5%, --t -55%
+     visible x 0.1550 → 0.9814 · visible y 0.5500 → 0.7483
+     pin x = (fx − 0.155) / 0.826446   pin y = (fy − 0.550) / 0.198347
+   Below 780px base.css swaps in --zm/--lm/--tm, so the pins stop lining up:
+   they hide and the key carries the whole explanation. */
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .af-stage { margin-top: 0; }
+.anno--wide .anno__key {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  align-items: start; gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.anno--wide .anno__key li { min-width: 0; }
+.anno__key strong { color: var(--navy); font-weight: 600; }
+
+.crop--evrow { aspect-ratio: 20/3; }
+.crop--cand  { aspect-ratio: 11/4; }
+.crop--form  { aspect-ratio: 3/1; }
+@media (max-width: 780px) {
+  .anno__pin { display: none; }
+  .crop--evrow { aspect-ratio: 5/2; }
+  .crop--cand  { aspect-ratio: 3/2; }
+  .crop--form  { aspect-ratio: 2/1; }
+}
+
+/* the customer sentence this page does not have — dashed slot on the navy
+   band, never a borrowed quote */
+.aiflow .af-band .af-head h2 { color: #fff; margin-inline: auto; }
+.af-quoteph { max-width: 66ch; margin: var(--s-12) auto 0; }
+.af-quoteph blockquote {
+  font-family: var(--font-mono); font-size: var(--t-sm); font-weight: 400;
+  line-height: 1.6; letter-spacing: .04em; color: var(--band-ink);
+  padding: var(--s-10) var(--s-8); text-align: center;
+  border: 1px dashed rgba(255,255,255,.28); border-radius: 20px;
+  background: rgba(255,255,255,.03); overflow-wrap: anywhere;
+}
+.af-bandnote { margin: var(--s-6) auto 0; max-width: 70ch; text-align: center; font-size: var(--t-sm); line-height: 1.6; color: var(--band-ink); letter-spacing: .004em; }
+
+/* full-width strip figures with a centered caption */
+.af-shotwide { margin: var(--s-12) 0 0; }
+.af-shotwide .panel { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.07); box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 56px -16px rgba(16,28,63,.16); }
+.af-shotwide figcaption { margin: var(--s-4) auto 0; max-width: 78ch; text-align: center; font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; line-height: 1.6; }
+.af-shotwide figcaption strong { color: var(--navy); font-weight: 600; }
+
+/* where the compliance statement will go — for counsel, not for marketing */
+.af-legalbox { margin: var(--s-12) auto 0; max-width: 84ch; padding: var(--s-8); border: 1px dashed #d9d0bf; border-radius: 20px; background: var(--cream); }
+.af-legalbox__t { display: inline-block; font-family: var(--font-mono); font-size: var(--t-sm); letter-spacing: .04em; color: var(--muted-cream); overflow-wrap: anywhere; }
+.af-legalbox p { margin-top: var(--s-5); font-size: var(--t-sm); color: var(--navy-2); letter-spacing: .006em; line-height: 1.6; }
+.af-legalbox strong { color: var(--navy); font-weight: 600; }
+.af-legalbox .af-blist { margin-top: var(--s-4); }
+.af-legalbox .af-blist li { color: var(--navy-2); }
+
+/* pricing — three EQUAL cream cards (Scott's rule: no lifted featured card) */
+.af-tier__head { display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
+.af-tier__tag {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--accent); background: #fff;
+}
+.af-tier__p { margin-top: var(--s-4); font-size: 2rem; font-weight: 600; letter-spacing: -.036em; line-height: 1; color: var(--navy); }
+.af-tier__p small { font-size: var(--t-sm); font-weight: 400; letter-spacing: .006em; color: var(--muted-cream); }
+.af-tier__l { display: grid; gap: var(--s-2); margin-top: var(--s-5); list-style: none; padding-left: 0; }
+.af-tier__l li { font-size: var(--t-sm); color: var(--navy-2); letter-spacing: .006em; }
+.af-tier__l strong { color: var(--navy); font-weight: 600; }
+
+.af-ctarow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: var(--s-5); margin-top: var(--s-10); }
+
+/* the calendar band — cream panel, facts on the right */
+.af-evfacts { display: grid; gap: var(--s-5); align-content: center; list-style: none; padding-left: 0; }
+.af-evfacts li { display: grid; gap: 4px; min-width: 0; }
+.af-evfacts .t-eyebrow { color: var(--muted-cream); }
+.af-evfacts strong { font-size: 1.75rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.af-loc .af-btnrow { display: flex; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-6); }
+
+/* ---------- FAQ accordion (AF dress; mechanics from af-faq.html) ----------
+   Real buttons, real aria; open/close animates grid-template-rows so the
+   panel measures itself. Collapse is gated on the `faq-js` class the inline
+   script adds — a blocked script leaves every answer open and readable. */
+.faq-wrap { max-width: 60rem; margin-inline: auto; }
+.faq-list { display: grid; gap: var(--s-3); margin-top: var(--s-10); }
+.faq-item {
+  background: #fff; border: 1px solid var(--cream-line);
+  border-radius: var(--r-lg); box-shadow: var(--sh-sm);
+  scroll-margin-top: 96px;
+  transition: border-color var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.faq-item:hover { border-color: #d9d0bf; }
+.faq-item.is-open { border-color: #d9d0bf; box-shadow: var(--sh-md); }
+.faq-item h3 { font-size: inherit; font-weight: inherit; letter-spacing: inherit; }
+
+.faq-btn {
+  display: flex; width: 100%; align-items: flex-start; gap: var(--s-5);
+  text-align: left; padding: var(--s-5) var(--s-6); min-height: 60px;
+  font-size: 1.0625rem; font-weight: 600; line-height: 1.35; letter-spacing: -.018em;
+  color: var(--navy); border-radius: var(--r-lg);
+}
+.faq-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.faq-btn__ic {
+  flex: none; margin-left: auto; margin-top: 2px;
+  width: 22px; height: 22px; display: grid; place-items: center; color: #b9bccb;
+  transition: transform var(--t-base) var(--e-out), color var(--t-base) var(--e-out);
+}
+.faq-item:hover .faq-btn__ic { color: var(--muted-af); }
+.faq-item.is-open .faq-btn__ic { transform: rotate(180deg); color: var(--accent); }
+/* no script, no affordance: with the accordion absent every answer is open */
+html:not(.faq-js) .faq-btn__ic { display: none; }
+html:not(.faq-js) .faq-btn { cursor: default; }
+@media (max-width: 560px) { .faq-btn { padding: var(--s-4) var(--s-5); gap: var(--s-4); } }
+
+.faq-panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--t-base) var(--e-out); }
+.faq-js .faq-item:not(.is-open) .faq-panel { grid-template-rows: 0fr; }
+.faq-panel__inner { overflow: hidden; }
+.faq-a { padding: 0 var(--s-6) var(--s-6); max-width: 68ch; }
+.faq-a p { font-size: .9375rem; line-height: 1.65; color: var(--navy-2); letter-spacing: .006em; }
+.faq-a p + p { margin-top: var(--s-4); }
+.faq-a strong { color: var(--navy); font-weight: 600; }
+.faq-a a { color: var(--accent); border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.faq-a a:hover { border-bottom-color: var(--accent); }
+.faq-a .ph { display: inline-block; font-family: var(--font-mono); font-size: var(--t-xs); letter-spacing: .04em; color: var(--muted-af); overflow-wrap: anywhere; }
+@media (max-width: 560px) { .faq-a { padding: 0 var(--s-5) var(--s-5); } }
+
+/* an answer we do not have yet wears its status in the question line */
+.newtag {
+  display: inline-block; margin-left: var(--s-2); vertical-align: 2px;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  background: color-mix(in srgb, #b06d1f 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b06d1f 34%, transparent);
+  color: #8a5416; white-space: nowrap;
+}
+
+/* rail cards — the other four audiences */
+.af-capcard { transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out); }
+.af-capcard:hover { transform: translateY(-3px); box-shadow: 0 24px 48px -16px rgba(16,28,63,.14); }
+.af-go { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: var(--s-5); font-size: var(--t-sm); font-weight: 550; color: var(--accent); }
+.af-go svg { transition: transform var(--t-fast) var(--e-out); }
+.af-capcard:hover .af-go svg { transform: translateX(3px); }
+</style>
+</head>
+<body class="aiflow">
+
+<a class="u-skip" href="#content">Skip to content</a>
+
+<div class="announce">
+  <strong>New</strong> — in-person interviews are live.
+  Choose where your interviews happen at any event.
+  <a href="#location">See how it&nbsp;works&nbsp;→</a>
+</div>
+
+<header class="nav-af" data-nav>
+  <div class="u-container nav-af__inner">
+    <a href="concept-5-aiflow.html" class="wordmark">Job<b>Fair</b>X</a>
+
+    <nav class="nav-af__links" aria-label="Main">
+      <a href="af-events.html">Upcoming Hiring Events</a>
+
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" aria-controls="dd-features">
+          Features
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dd__panel" id="dd-features" hidden>
+          <a class="dd__item" href="af-platform-events-dashboard.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,48H48V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24Z"/></svg></span>
+            <span><span class="dd__t">Events dashboard</span><span class="dd__d">Every event you've registered for, with the interview location you set on each.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-candidate-pipeline.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM117.66,149.66l-32,32a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,11.32-11.32L80,164.69l26.34-26.35a8,8,0,0,1,11.32,11.32Zm0-64-32,32a8,8,0,0,1-11.32,0l-16-16A8,8,0,0,1,69.66,90.34L80,100.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM192,168H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Zm0-64H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Candidate pipeline</span><span class="dd__d">Requested, scheduled, interviewed — every candidate in one list.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-interview-scheduling.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm56,112H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Interview scheduling</span><span class="dd__d">Accepting a request is what schedules it. There is no second step.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-event-day.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M192,72V184a16,16,0,0,1-16,16H32a16,16,0,0,1-16-16V72A16,16,0,0,1,32,56H176A16,16,0,0,1,192,72Zm58,.25a8.23,8.23,0,0,0-6.63,1.22L209.78,95.86A4,4,0,0,0,208,99.19v57.62a4,4,0,0,0,1.78,3.33l33.78,22.52a8,8,0,0,0,8.58.19,8.33,8.33,0,0,0,3.86-7.17V80A8,8,0,0,0,250,72.25Z"/></svg></span>
+            <span><span class="dd__t">Event day</span><span class="dd__d">The lobby: who is waiting, who is in a room, who you are due to see next.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-messaging-automations.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Messaging &amp; automations</span><span class="dd__d">Message candidates directly, or let the presets send on their own.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-analytics.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V136a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8v64H96V88a8,8,0,0,1,8-8h32a8,8,0,0,1,8,8V200h16V40a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z"/></svg></span>
+            <span><span class="dd__t">Analytics &amp; reporting</span><span class="dd__d">Dispositions, notes, and the post-event report with downloadable data.</span></span>
+          </a>
+          <a class="dd__item" href="af-in-person-interviews.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z"/></svg></span>
+            <span><span class="dd__t">In-person interviews <span class="dd__tag">New</span></span><span class="dd__d">Set your street address as the interview location for any event you join.</span></span>
+          </a>
+          <a class="dd__all" href="af-platform.html">All features
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" aria-controls="dd-solutions">
+          Solutions
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dd__panel dd__panel--narrow" id="dd-solutions" hidden>
+          <a class="dd__item" href="af-solutions-healthcare.html">
+            <span class="dd__ic" style="color:#12897f"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,108v40a16,16,0,0,1-16,16H164v52a16,16,0,0,1-16,16H108a16,16,0,0,1-16-16V164H40a16,16,0,0,1-16-16V108A16,16,0,0,1,40,92H92V40a16,16,0,0,1,16-16h40a16,16,0,0,1,16,16V92h52A16,16,0,0,1,232,108Z"/></svg></span>
+            <span><span class="dd__t">Healthcare</span><span class="dd__d">Nurses, techs, allied health and clinical support.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-diversity.html">
+            <span class="dd__ic" style="color:#e07b39"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.28,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.28,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.19,182.07Z"/></svg></span>
+            <span><span class="dd__t">Diversity</span><span class="dd__d">Events built to widen the top of your funnel.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-veteran.html">
+            <span class="dd__ic" style="color:#d1454b"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96Zm16,0a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg></span>
+            <span><span class="dd__t">Veteran</span><span class="dd__d">Interview reliable, well-trained veterans matched to your roles.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-technology.html">
+            <span class="dd__ic" style="color:#2f5cff"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM92.8,145.6a8,8,0,1,1-9.6,12.8l-32-24a8,8,0,0,1,0-12.8l32-24a8,8,0,0,1,9.6,12.8L69.33,128Zm58.89-71.4-32,112a8,8,0,1,1-15.38-4.4l32-112a8,8,0,0,1,15.38,4.4Zm53.11,60.2-32,24a8,8,0,0,1-9.6-12.8L186.67,128,163.2,110.4a8,8,0,1,1,9.6-12.8l32,24a8,8,0,0,1,0,12.8Z"/></svg></span>
+            <span><span class="dd__t">Technology</span><span class="dd__d">Engineering, data, product and IT roles.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-entry-level.html">
+            <span class="dd__ic" style="color:#3aa0e6"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"/></svg></span>
+            <span><span class="dd__t">Entry-level</span><span class="dd__d">High-volume hiring for roles that move fast.</span></span>
+          </a>
+          <a class="dd__all" href="af-solutions.html">All solutions
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <a href="af-pricing.html">Pricing</a>
+      <a href="af-faq.html">FAQ</a>
+      <a href="af-contact.html">Contact Us</a>
+    </nav>
+
+    <div class="nav-af__actions">
+      <a href="#" class="af-btn af-btn--cream">Sign In</a>
+      <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+      <button class="nav-af__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" data-nav-drawer>
+  <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+  <a href="af-events.html">Upcoming Hiring Events</a>
+  <a href="af-pricing.html">Pricing</a>
+  <a href="af-faq.html">FAQ</a>
+  <a href="af-contact.html">Contact Us</a>
+  <small>Features</small>
+  <a href="af-platform-events-dashboard.html">Events dashboard</a>
+  <a href="af-platform-candidate-pipeline.html">Candidate pipeline</a>
+  <a href="af-platform-interview-scheduling.html">Interview scheduling</a>
+  <a href="af-platform-event-day.html">Event day</a>
+  <a href="af-platform-messaging-automations.html">Messaging &amp; automations</a>
+  <a href="af-platform-analytics.html">Analytics &amp; reporting</a>
+  <a href="af-in-person-interviews.html">In-person interviews — New</a>
+  <small>Solutions</small>
+  <a href="af-solutions-healthcare.html">Healthcare</a>
+  <a href="af-solutions-diversity.html">Diversity</a>
+  <a href="af-solutions-veteran.html">Veteran</a>
+  <a href="af-solutions-technology.html">Technology</a>
+  <a href="af-solutions-entry-level.html">Entry-level</a>
+  <a href="#">Sign In</a>
+  <a href="#" style="color:#96b0ff">Register for an Event →</a>
+</div>
+
+<main id="content" tabindex="-1">
+
+<section class="af-hero">
+  <div class="u-container" style="text-align:center">
+    <p class="t-eyebrow" style="color:var(--muted-af)">Solutions &mdash; Diversity</p>
+    <h1 class="t-h1 t-balance">For employers building diverse teams, one market at a time.</h1>
+    <p class="af-hero__sub">
+      Diversity is one of the five JobFairX event types &mdash; one city, one date, one
+      four-hour window, and every employer joins the same one. Candidates registered for
+      it are verified within approximately 20 miles of the event city, matched against
+      the jobs you posted, and request time with you. Accepting a request is what
+      schedules the interview.
+    </p>
+    <div class="af-hero__cta">
+      <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+      <a href="af-events.html?type=diversity" class="af-link">Browse diversity events &rarr;</a>
+    </div>
+
+        <ul class="af-metrics" data-reveal aria-label="Diversity metrics — none published">
+      <li class="af-metric" style="--i:0">
+        <p class="af-ph" data-placeholder>{{DIVERSITY EVENTS IN 2025}}</p>
+        <p class="af-metric__l">Diversity hiring events</p>
+        <p class="af-metric__s">Not published</p>
+      </li>
+      <li class="af-metric" style="--i:1">
+        <p class="af-ph" data-placeholder>{{DIVERSITY SHOW RATE}}</p>
+        <p class="af-metric__l">Interview show rate</p>
+        <p class="af-metric__s">Not published</p>
+      </li>
+      <li class="af-metric" style="--i:2">
+        <p class="af-ph" data-placeholder>{{AVG INTERVIEWS PER EMPLOYER &mdash; DIVERSITY}}</p>
+        <p class="af-metric__l">Avg. interviews per employer</p>
+        <p class="af-metric__s">Not published</p>
+      </li>
+      <li class="af-metric" style="--i:3">
+        <p class="af-ph" data-placeholder>{{AVG HIRES PER EVENT &mdash; DIVERSITY}}</p>
+        <p class="af-metric__l">Avg. hires per event</p>
+        <p class="af-metric__s">Not published</p>
+      </li>
+    </ul>
+
+    <p class="af-note">
+      Every tile above is empty on purpose. We hold no diversity-specific figure we can
+      stand behind. The three show rates the site does publish belong to other
+      audiences &mdash; healthcare 91%, veterans 89%, entry-level 86% &mdash; and none of
+      them is this page's number. The platform-wide figures that are real sit at the
+      foot of this page.
+    </p>
+  </div>
+</section>
+
+<section class="u-section" id="employers" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Employers</p>
+      <h2 class="t-h2 t-balance">Six slots, deliberately empty.</h2>
+      <p>
+        A logo wall is an attendance claim about somebody else's brand. Ours is not
+        signed off, so nothing goes in these slots until it is.
+      </p>
+    </div>
+
+        <ul class="af-logos" aria-label="Diversity employer logo slots, currently unfilled">
+      <li data-reveal style="--i:0"><span class="af-logoslot" data-placeholder>{{LOGO 01}}</span></li>
+      <li data-reveal style="--i:1"><span class="af-logoslot" data-placeholder>{{LOGO 02}}</span></li>
+      <li data-reveal style="--i:2"><span class="af-logoslot" data-placeholder>{{LOGO 03}}</span></li>
+      <li data-reveal style="--i:3"><span class="af-logoslot" data-placeholder>{{LOGO 04}}</span></li>
+      <li data-reveal style="--i:4"><span class="af-logoslot" data-placeholder>{{LOGO 05}}</span></li>
+      <li data-reveal style="--i:5"><span class="af-logoslot" data-placeholder>{{LOGO 06}}</span></li>
+    </ul>
+
+    <div class="af-gapnote" data-reveal>
+      <p>
+        <strong>Why this is empty.</strong> The page audit records the logo wall on the
+        live diversity page as fabricated. A wall that names a company which never
+        attended is a legal problem, not a design gap, so none of those names carries
+        over.
+      </p>
+      <p>
+        Three customers are attributable anywhere on this site, and not one of them is
+        attributable to a diversity event. 4,000+ employers have run events on JobFairX;
+        we would rather name six of them accurately than seven of them quickly. A slot
+        gets filled against <span data-placeholder>{{Written confirmation per company}}</span>,
+        one company at a time.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="model">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">The model</p>
+      <h2 class="t-h2 t-balance">What a diversity hiring event is, precisely.</h2>
+      <p>
+        It is an audience and a market. The type tells you which event you are joining
+        and who registered for it. It does not change how the product works, what you
+        pay, or where your interviews happen.
+      </p>
+    </div>
+
+    <ol class="af-cards af-cards--4">
+      <li class="af-card" data-reveal style="--i:0">
+        <span class="af-num">01</span>
+        <h3>The event</h3>
+        <p>One city, one date, one window. Diversity is one of five types in the events calendar, beside healthcare, veterans, technology and entry-level.</p>
+        <div class="st-acts"><span>City</span><span>Date</span><span>One window</span></div>
+      </li>
+      <li class="af-card" data-reveal style="--i:1">
+        <span class="af-num">02</span>
+        <h3>The audience</h3>
+        <p>Candidates who registered for that event in that market. Location is verified: approximately 20 miles of the event city.</p>
+        <div class="st-acts"><span>Registered</span><span>~20 miles</span></div>
+      </li>
+      <li class="af-card" data-reveal style="--i:2">
+        <span class="af-num">03</span>
+        <h3>The match</h3>
+        <p>Your posted jobs. Matching activates the moment the jobs go up, and the first interview requests arrive within a few hours.</p>
+        <div class="st-acts"><span>Job title</span><span>Job location</span></div>
+      </li>
+      <li class="af-card" data-reveal style="--i:3">
+        <span class="af-num">04</span>
+        <h3>The room</h3>
+        <p>Your interview location, set per event. Two employers at the same event can run it completely differently.</p>
+        <div class="st-acts"><span>JobFairX video</span><span>Phone</span><span>In person</span><span>Your own link</span></div>
+      </li>
+    </ol>
+
+    <p class="af-note" data-reveal>
+      <strong style="color:var(--navy);font-weight:600">What this page does not claim.</strong>
+      How a diversity audience is assembled, beyond registering for that event and the
+      location check above, is not documented anywhere we can cite &mdash;
+      <span data-placeholder>{{HOW THE DIVERSITY AUDIENCE IS ASSEMBLED}}</span>.
+      Nothing on this page describes matching running on anything other than the jobs
+      you post. That is the only input to it we can evidence, and it is the one shown
+      on screen below.
+    </p>
+  </div>
+</section>
+
+<section class="u-section" id="location" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">The real screen</p>
+      <h2 class="t-h2 t-balance">One diversity event, on the employer dashboard.</h2>
+      <p>
+        A real row, unretouched: an Atlanta diversity event where this employer chose to
+        interview in person, at their own address. Hover a pin &mdash; or a caption &mdash;
+        to see which part of the row it belongs to.
+      </p>
+    </div>
+
+    <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
+      <div class="anno__stage">
+        <div class="af-stage">
+          <div class="crop crop--evrow">
+            <img src="assets/product/dashboard-events.png"
+                 alt="One row of the JobFairX events dashboard. It reads Atlanta Diversity Event, April 5 2026, 11:00 AM to 3:00 PM ET, with a Complete setup button and a Setup badge in the actions column. The interview location column shows an In person chip above the address 1201 Peachtree St NE, Suite 300, Atlanta, GA and a Go to lobby link. Interview setup reads Incomplete, 1 of 1 seat. Job titles reads Incomplete, 0 of 1 jobs, with an Add a job link. The candidates column reads 0 pending, 0 upcoming."
+                 width="3200" height="2000"
+                 style="--z:1.21; --l:-15.5%; --t:-55%; --zm:3.8; --lm:-15.5%; --tm:-56.4%">
+          </div>
+        </div>
+
+                <button class="anno__pin" style="--x:25.9%;--y:32.0%;--i:0" data-anno="1" aria-label="Detail 1: the event and its window">1</button>
+        <button class="anno__pin" style="--x:43.6%;--y:32.0%;--i:1" data-anno="2" aria-label="Detail 2: the interview location chip">2</button>
+        <button class="anno__pin" style="--x:58.0%;--y:44.9%;--i:2" data-anno="3" aria-label="Detail 3: the employer's own address">3</button>
+        <button class="anno__pin" style="--x:78.0%;--y:58.0%;--i:3" data-anno="4" aria-label="Detail 4: the jobs posted on this event">4</button>
+        <button class="anno__pin" style="--x:95.4%;--y:38.3%;--i:4" data-anno="5" aria-label="Detail 5: pending and upcoming candidates">5</button>
+      </div>
+
+      <ol class="anno__key">
+        <li data-anno="1"><b>1</b><span><strong>The event.</strong> Atlanta Diversity Event&nbsp;&middot;&nbsp;Apr&nbsp;5,&nbsp;2026&nbsp;&middot;&nbsp;11:00&nbsp;AM&ndash;3:00&nbsp;PM&nbsp;ET. The type is part of the event, not a setting on your account, and every employer registered for it is at this same one.</span></li>
+        <li data-anno="2"><b>2</b><span><strong>In person.</strong> This employer's interview location for this event. The chip is one of four &mdash; Video, Phone, In person, or their own link &mdash; and the employer in the row above chose differently.</span></li>
+        <li data-anno="3"><b>3</b><span><strong>Their own address.</strong> 1201 Peachtree St NE, Suite&nbsp;300&nbsp;&middot;&nbsp;Atlanta,&nbsp;GA, shown to candidates on the confirmation and every reminder. Candidates are verified within approximately 20 miles of the event city.</span></li>
+        <li data-anno="4"><b>4</b><span><strong>0 of 1 jobs.</strong> Job titles reads Incomplete: nothing is posted yet. The job titles column is what candidates match against, so until a job exists there is nothing to match.</span></li>
+        <li data-anno="5"><b>5</b><span><strong>0 pending &middot; 0 upcoming.</strong> Pending are requests waiting on you; upcoming are the ones you accepted, which means they are already scheduled. Both stay at zero until a job is posted.</span></li>
+      </ol>
+    </figure>
+
+    <p class="af-note">
+      This row is mid-setup, which is exactly why it is worth showing: the counts are
+      zero because nothing has been posted, not because nobody is there. The Atlanta
+      address is the interview location this employer chose for themselves &mdash; the
+      event did not impose it, and it is not what makes the event a diversity event.
+    </p>
+  </div>
+</section>
+
+<section class="u-section af-band" id="proof">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Customer</p>
+      <h2 class="t-h2 t-balance">The sentence this page refuses to borrow.</h2>
+    </div>
+
+    <figure class="af-quoteph" data-reveal style="--i:1">
+      <blockquote data-placeholder>{{DIVERSITY CUSTOMER SENTENCE}}</blockquote>
+    </figure>
+
+    <p class="af-bandnote" data-reveal style="--i:2">
+      Three customers are attributable across this entire site &mdash; Target, Tesla and
+      Western Regional Medical Center &mdash; and none of them is quoted about a
+      diversity event. Moving one of their sentences onto this page would misattribute
+      it, so the slot stays empty until a diversity customer agrees, in writing, to be
+      named.
+    </p>
+  </div>
+</section>
+
+<section class="u-section" id="how">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">End to end</p>
+      <h2 class="t-h2 t-balance">How a diversity event runs.</h2>
+      <p>
+        The same four beats as every other type. What changes is which event you
+        registered for &mdash; and, if you want it to, where your interviews happen.
+      </p>
+    </div>
+
+    <ol class="af-cards af-cards--4">
+      <li class="af-card" data-reveal style="--i:0">
+        <span class="af-num">01 &mdash; Register</span>
+        <h3>Pick the event</h3>
+        <p>
+          Choose the diversity event in your city and a package, then post your jobs.
+          Registering 31 or more days out takes a flat $100 off any tier.
+        </p>
+      </li>
+      <li class="af-card" data-reveal style="--i:1">
+        <span class="af-num">02 &mdash; Set up</span>
+        <h3>Set your interview location</h3>
+        <p>
+          JobFairX video, phone, in person at your address, or your own link. It is a
+          column on your events dashboard and it is yours alone &mdash; the employer in
+          the next row of the same event can choose differently.
+        </p>
+      </li>
+      <li class="af-card" data-reveal style="--i:2">
+        <span class="af-num">03 &mdash; Match</span>
+        <h3>Requests start arriving</h3>
+        <p>
+          Matching activates the moment your jobs are posted and the first interview
+          requests land within a few hours. Auto-accept them, or review each one &mdash;
+          both are in every package.
+        </p>
+      </li>
+      <li class="af-card" data-reveal style="--i:3">
+        <span class="af-num">04 &mdash; Interview</span>
+        <h3>Accept, and it is booked</h3>
+        <p>
+          The request already carries a time, so accepting is the scheduling step.
+          Unlimited interviews before, during and after the event are included at every
+          tier.
+        </p>
+      </li>
+    </ol>
+
+    <figure class="af-shotwide" data-reveal>
+      <div class="panel">
+        <div class="crop crop--form">
+                    <img src="assets/product/setup-flow.png"
+               alt="The Create a job post screen in the JobFairX employer dashboard. A required Job title field with an empty text box sits above a required Job location type field, which is set to In person."
+               width="3200" height="2000"
+               style="--z:1.94; --l:-31.1%; --t:-40%; --zm:2.9; --lm:-32.5%; --tm:-40.5%">
+        </div>
+      </div>
+      <figcaption>
+        What matching runs against is what you type here: the job title, and where the
+        job itself is. <strong>Job location type</strong> describes the work &mdash; it
+        is not the interview location, which is the separate per-event setting shown on
+        the dashboard row above.
+      </figcaption>
+    </figure>
+
+    <ul class="af-blist af-blist--cols" data-reveal>
+      <li><strong>Job titles are the column candidates match against</strong>, which is why the posted title needs to be the title you are actually hiring for.</li>
+      <li><strong>How many you can post is a package line:</strong> 1 job on Starter, up to 3 on Growth, up to 6 on Pro.</li>
+      <li><strong>Auto-accept or review each request</strong> &mdash; both are in every package, at every tier. Reviewing means you read the r&eacute;sum&eacute; before anything is booked.</li>
+      <li>R&eacute;sum&eacute;s and contact information for every matched candidate are included, along with a post-event report with downloadable data.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="u-section" id="row" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">What you see</p>
+      <h2 class="t-h2 t-balance">What a candidate row tells you.</h2>
+      <p>
+        The columns are Name, Desired job, Desired location, Time and Actions. A row
+        carries the job they want, where they want to work, the slot they asked for, and
+        your three buttons. That is the whole record you act on.
+      </p>
+    </div>
+
+    <figure class="af-shotwide" data-reveal style="--i:1">
+      <div class="panel">
+        <div class="crop crop--cand">
+          <img src="assets/product/candidates.png"
+               alt="The right-hand columns of the JobFairX candidate list, cropped away from the candidates' names. Under the headings Desired job, Desired location, Time and Actions, three rows read: Frontend Developer, Remote, Apr 22 at 10:00 AM CT, with Accept, Decline and Reschedule buttons; Registered Nurse, Dallas TX, Apr 22 at 10:00 AM CT, with no buttons; and Web Developer, Remote, Apr 22 at 10:30 AM CT, with Accept and Reschedule buttons."
+               width="3200" height="2000"
+               style="--z:1.63; --l:-36.9%; --t:-30%; --zm:3.7; --lm:-36.9%; --tm:-31%">
+        </div>
+      </div>
+      <figcaption>
+        Desired job, desired location, the time they asked for, and Accept &middot;
+        Decline &middot; Reschedule. The names are cropped out here; in the product they
+        sit in the first column, beside View resume and Message.
+      </figcaption>
+    </figure>
+
+    <ul class="af-blist af-blist--cols" data-reveal>
+      <li><strong>Accept is the scheduling step.</strong> The request already carries a time, so one click books it and the row moves to Scheduled.</li>
+      <li><strong>Desired location is a local answer.</strong> Candidates are verified within approximately 20 miles of the event city.</li>
+      <li><strong>View resume and Message</strong> sit on every row, in every state &mdash; including the ones you declined and the ones who did not show.</li>
+      <li>Which candidates you interview is your decision, taken row by row on this screen.</li>
+    </ul>
+
+        <div class="af-legalbox" data-reveal>
+      <p class="af-legalbox__t" data-placeholder>{{PLACEHOLDER &mdash; legal review required}}</p>
+      <p>
+        <strong>This block is for counsel, not for marketing.</strong> This page makes no
+        claim about equal-opportunity obligations, adverse-impact testing, or how a
+        diversity hiring event sits against EEOC guidance. Our compliance posture is
+        recorded as unconfirmed in the page audit, and
+        <span style="color:var(--navy)">/employer/ai-hiring-compliance</span> does not
+        exist yet. Nothing goes here until legal writes it.
+      </p>
+      <p>What the page asserts today, and all it asserts:</p>
+      <ul class="af-blist">
+        <li>Candidates register for an event in a market.</li>
+        <li>Their location is verified to approximately 20 miles of the event city.</li>
+        <li>Matching runs against the jobs the employer posted.</li>
+        <li>The employer decides who to interview, request by request.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="pricing">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Pricing</p>
+      <h2 class="t-h2 t-balance">Diversity costs what every event costs.</h2>
+      <p>
+        There is no diversity tier and no surcharge. Packages differ on jobs, recruiter
+        seats and interview volume &mdash; nothing else.
+      </p>
+    </div>
+
+        <div class="af-cards">
+      <div class="af-card" data-reveal style="--i:0">
+        <div class="af-tier__head"><h3>Starter</h3></div>
+        <p class="af-tier__p">$495 <small>per event</small></p>
+        <ul class="af-tier__l">
+          <li>Promote <strong>1</strong> job</li>
+          <li><strong>20+</strong> scheduled interviews</li>
+          <li><strong>2</strong> recruiter seats</li>
+        </ul>
+      </div>
+      <div class="af-card" data-reveal style="--i:1">
+        <div class="af-tier__head"><h3>Growth</h3><span class="af-tier__tag">Most popular</span></div>
+        <p class="af-tier__p">$895 <small>per event</small></p>
+        <ul class="af-tier__l">
+          <li>Up to <strong>3</strong> jobs</li>
+          <li><strong>60+</strong> scheduled interviews</li>
+          <li>Up to <strong>5</strong> recruiter seats</li>
+        </ul>
+      </div>
+      <div class="af-card" data-reveal style="--i:2">
+        <div class="af-tier__head"><h3>Pro</h3></div>
+        <p class="af-tier__p">$1,495 <small>per event</small></p>
+        <ul class="af-tier__l">
+          <li>Up to <strong>6</strong> jobs</li>
+          <li><strong>100+</strong> scheduled interviews</li>
+          <li><strong>Unlimited</strong> recruiter seats</li>
+        </ul>
+      </div>
+    </div>
+
+    <ul class="af-blist af-blist--cols" data-reveal>
+      <li><strong>Register early.</strong> A flat $100 comes off every tier at 31 or more days before the event &mdash; $395, $795, $1,395.</li>
+      <li><strong>Hiring across several markets.</strong> Bundles run from 5 to 100 events, taking the per-event price from $470 down to $297. Credits never expire and work across any event type.</li>
+    </ul>
+
+    <div class="af-ctarow">
+      <a href="af-pricing.html" class="af-btn af-btn--navy">Compare packages</a>
+      <a href="af-faq.html" class="af-link">Read the employer FAQ &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="events" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Upcoming</p>
+      <h2 class="t-h2 t-balance">Find the diversity event in your market.</h2>
+    </div>
+
+    <div class="af-loc" data-reveal>
+      <div>
+        <h3>A few weeks out, in 300+ cities</h3>
+        <p>
+          Diversity is one of the five filters on the events calendar. Registration
+          closes between one and two days before an event, so the market you want is
+          usually only a few weeks out.
+        </p>
+        <div class="af-btnrow">
+          <a href="af-events.html?type=diversity" class="af-btn af-btn--navy">Browse diversity events</a>
+          <a href="af-event-detail.html" class="af-btn af-btn--cream">See an event page</a>
+        </div>
+      </div>
+      <ul class="af-evfacts">
+        <li>
+          <span class="t-eyebrow">Cities with JobFairX events</span>
+          <strong>300+</strong>
+        </li>
+        <li>
+          <span class="t-eyebrow">Open for registration now</span>
+          <span class="af-ph" data-placeholder>{{N upcoming diversity events}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="faq">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Diversity FAQ</p>
+      <h2 class="t-h2 t-balance">What recruiters ask about this type first.</h2>
+    </div>
+
+    <div class="faq-wrap">
+      <div class="faq-list">
+
+        <article class="faq-item is-open" id="q-what" data-faq-item data-reveal style="--i:0">
+          <h3>
+            <button class="faq-btn" id="q-what-btn" data-faq-btn aria-expanded="true" aria-controls="q-what-panel">
+              <span>What makes an event a diversity event?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-what-panel" role="region" aria-labelledby="q-what-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  The type it is listed under. Diversity is one of five types in the events
+                  calendar &mdash; beside healthcare, veterans, technology and entry-level &mdash;
+                  and candidates register for the diversity event in their city.
+                </p>
+                <p>
+                  Everything downstream of that is identical to every other type: you post
+                  jobs, matching runs against them, candidates <strong>request</strong> an
+                  interview and accepting the request is what schedules it. The type is an
+                  audience, never a format.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-selection" data-faq-item data-placeholder data-reveal style="--i:1">
+          <h3>
+            <button class="faq-btn" id="q-selection-btn" data-faq-btn aria-expanded="false" aria-controls="q-selection-panel">
+              <span>Do you select or match candidates on race, gender or any other protected characteristic? <span class="newtag">LEGAL REVIEW</span></span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-selection-panel" role="region" aria-labelledby="q-selection-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  <span class="ph">{{PLACEHOLDER &mdash; legal review required: protected characteristics}}</span>
+                </p>
+                <p>
+                  This is the first question a recruiter asks on this page and the last one
+                  marketing should answer. It needs counsel and a confirmed product
+                  description, not copy.
+                </p>
+                <p>
+                  What is documented, and what the screens above show: matching runs against
+                  the jobs you post, the job titles column is what candidates match against,
+                  and a candidate row carries a desired job, a desired location, an
+                  interview time and your Accept, Decline and Reschedule buttons.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-where" data-faq-item data-reveal style="--i:2">
+          <h3>
+            <button class="faq-btn" id="q-where-btn" data-faq-btn aria-expanded="false" aria-controls="q-where-panel">
+              <span>Where do the interviews happen?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-where-panel" role="region" aria-labelledby="q-where-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  You choose. Each event you join has an interview location that you set:
+                  JobFairX video, phone, in person at your own address, or your own link.
+                  Enter an address and candidates see it on their confirmation and every
+                  reminder.
+                </p>
+                <p>
+                  In person is not a kind of event. Every employer joins the same
+                  <strong>Atlanta Diversity Event</strong>; two of you at that one event can
+                  interview completely differently.
+                  <a href="page-interview-locations.html">How interview locations work &rarr;</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-request" data-faq-item data-reveal style="--i:3">
+          <h3>
+            <button class="faq-btn" id="q-request-btn" data-faq-btn aria-expanded="false" aria-controls="q-request-panel">
+              <span>Do candidates respond to our postings first?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-request-panel" role="region" aria-labelledby="q-request-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  No. Matched candidates <strong>request</strong> an interview with you, and
+                  accepting the request is what schedules it &mdash; the request already carries
+                  the slot they asked for. Matching activates the moment your jobs are
+                  posted and the first requests arrive within a few hours.
+                </p>
+                <p>
+                  You still get r&eacute;sum&eacute;s and contact information for every matched candidate.
+                  You just get them ahead of the interview rather than instead of one.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-volume" data-faq-item data-reveal style="--i:4">
+          <h3>
+            <button class="faq-btn" id="q-volume-btn" data-faq-btn aria-expanded="false" aria-controls="q-volume-panel">
+              <span>How many interviews will we actually run?</span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-volume-panel" role="region" aria-labelledby="q-volume-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  Scheduled interview volume follows the package: 20+ on Starter, 60+ on
+                  Growth, 100+ on Pro. Unlimited interviews before, during and after the
+                  event are included at every tier, so the package number is a floor on what
+                  gets scheduled, not a cap on what you can run.
+                </p>
+                <p>
+                  Averages per employer and per event are published for other audiences, not
+                  for this one &mdash; which is why the tiles at the top of this page are empty
+                  rather than filled with somebody else's number. Each event page carries
+                  its own live figures for that market, updated daily.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="faq-item" id="q-reporting" data-faq-item data-placeholder data-reveal style="--i:5">
+          <h3>
+            <button class="faq-btn" id="q-reporting-btn" data-faq-btn aria-expanded="false" aria-controls="q-reporting-panel">
+              <span>Can you give us EEO or adverse-impact reporting for an event? <span class="newtag">LEGAL REVIEW</span></span>
+              <span class="faq-btn__ic" aria-hidden="true"><svg width="13" height="8" viewBox="0 0 13 8" fill="none"><path d="M1 1.2 6.5 6.6 12 1.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+          </h3>
+          <div class="faq-panel" id="q-reporting-panel" role="region" aria-labelledby="q-reporting-btn" data-faq-panel>
+            <div class="faq-panel__inner">
+              <div class="faq-a">
+                <p>
+                  <span class="ph">{{PLACEHOLDER &mdash; legal review required: EEO reporting}}</span>
+                </p>
+                <p>
+                  What exists in the product is a post-event report with downloadable data,
+                  plus dispositions, notes and analytics in the employer dashboard. Whether
+                  any of that meets a reporting obligation is not something this page can
+                  answer, and Wave 3's compliance page has not been built.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="more">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">The other four audiences</p>
+      <h2 class="t-h2 t-balance">Same platform, different room.</h2>
+    </div>
+
+    <div class="af-cards af-cards--4">
+      <a class="af-card af-capcard" href="af-solutions-healthcare.html" data-reveal style="--i:0">
+        <h3>Healthcare</h3>
+        <p>The only event type with a complete data set, including a 91% interview show rate.</p>
+        <span class="af-go">Open
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="af-card af-capcard" href="af-solutions-veteran.html" data-reveal style="--i:1">
+        <h3>Veterans</h3>
+        <p>89% of scheduled interviews at veteran events are kept.</p>
+        <span class="af-go">Open
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="af-card af-capcard" href="af-solutions-technology.html" data-reveal style="--i:2">
+        <h3>Technology</h3>
+        <p>Promote up to six job titles on one event, with unlimited recruiter seats on Pro.</p>
+        <span class="af-go">Open
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="af-card af-capcard" href="af-solutions-entry-level.html" data-reveal style="--i:3">
+        <h3>Entry-level</h3>
+        <p>86% show rate, and candidates verified within about 20 miles of the event city.</p>
+        <span class="af-go">Open
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <p style="margin-top:var(--s-8);text-align:center">
+      <a href="af-solutions.html" class="af-link">All five event types &rarr;</a>
+    </p>
+  </div>
+</section>
+
+<div class="u-container">
+  <p class="af-strip">
+    <span><b>4,000+</b> employers</span>
+    <span><b>500,000+</b> interviews conducted</span>
+    <span><b>87%</b> of employers return &middot; based on 2025 platform data</span>
+  </p>
+</div>
+
+<section class="u-section">
+  <div class="u-container">
+        <div class="af-cta grain">
+      <h2 class="t-h2 t-balance">Register for the diversity event in your city.</h2>
+      <p>
+        Post your jobs and matching starts the same day. The first interview requests
+        land within a few hours, each one carrying the slot the candidate asked for.
+      </p>
+      <div class="af-cta__row">
+        <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+        <a href="af-events.html?type=diversity" class="af-btn af-btn--cream">Browse diversity events</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot-af">
+  <div class="u-container">
+    <div class="foot-af__cols">
+      <div>
+        <a href="concept-5-aiflow.html" class="wordmark">Job<b>Fair</b>X</a>
+        <p style="margin-top:var(--s-4);max-width:34ch;font-size:var(--t-sm);color:var(--navy-2)">
+          AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+        </p>
+      </div>
+      <div><h3>Platform</h3><ul>
+        <li><a href="af-platform.html">Platform overview</a></li>
+        <li><a href="af-platform-events-dashboard.html">Events dashboard</a></li>
+        <li><a href="af-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+        <li><a href="af-platform-interview-scheduling.html">Interview scheduling</a></li>
+        <li><a href="af-platform-event-day.html">Event day</a></li>
+        <li><a href="af-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+        <li><a href="af-platform-analytics.html">Analytics</a></li>
+      </ul></div>
+      <div><h3>Solutions</h3><ul>
+        <li><a href="af-solutions.html">All solutions</a></li>
+        <li><a href="af-solutions-healthcare.html">Healthcare</a></li>
+        <li><span aria-current="page">Diversity</span></li>
+        <li><a href="af-solutions-veteran.html">Veteran</a></li>
+        <li><a href="af-solutions-technology.html">Technology</a></li>
+        <li><a href="af-solutions-entry-level.html">Entry-level</a></li>
+      </ul></div>
+      <div><h3>Events</h3><ul>
+        <li><a href="af-events.html">Upcoming hiring events</a></li>
+        <li><a href="page-interview-locations.html">Interview locations</a></li>
+        <li><a href="af-in-person-interviews.html">In-person interviews</a></li>
+        <li><a href="af-pricing.html">Pricing</a></li>
+      </ul></div>
+      <div><h3>Company</h3><ul>
+        <li><a href="page-about.html">About</a></li>
+        <li><a href="page-resources.html">Resources</a></li>
+        <li><a href="af-faq.html">FAQ</a></li>
+        <li><a href="af-contact.html">Contact</a></li>
+        <li><a href="page-demo.html">Book a demo</a></li>
+      </ul></div>
+      <div><h3>Legal</h3><ul>
+        <li><a href="page-privacy-policy.html">Privacy</a></li>
+        <li><a href="page-terms.html">Terms</a></li>
+        <li><a href="page-security.html">Security</a></li>
+        <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+      </ul></div>
+    </div>
+
+    <div class="foot-af__mark" aria-hidden="true">JobFairX</div>
+
+    <div class="foot-af__base">
+      <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+      <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page behaviour — vanilla, page-scoped, all inside one IIFE.
+   1. Disclosure dropdowns (click + Escape + outside click; hover-open with a
+      close delay for pointer users).
+   2. Auto-advancing feature tabs with a progress underline. Any interaction
+      hands control to the user permanently. Reduced motion: no auto-advance.
+   3. Quote arrows scroll the snap row (the row itself is natively
+      scrollable; the arrows are a convenience, not the mechanism).
+   ========================================================================== */
+(function () {
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1. dropdowns ---------- */
+  var dds = Array.prototype.slice.call(document.querySelectorAll('[data-dd]'));
+  function closeAll(except) {
+    dds.forEach(function (dd) {
+      if (dd === except) return;
+      dd.classList.remove('is-open');
+      dd.querySelector('button').setAttribute('aria-expanded', 'false');
+      dd.querySelector('.dd__panel').hidden = true;
+    });
+  }
+  dds.forEach(function (dd) {
+    var btn = dd.querySelector('button');
+    var panel = dd.querySelector('.dd__panel');
+    var closeT = null;
+    function open() {
+      clearTimeout(closeT);
+      closeAll(dd);
+      dd.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+    }
+    function close() {
+      dd.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    }
+    btn.addEventListener('click', function () {
+      dd.classList.contains('is-open') ? close() : open();
+    });
+    dd.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'mouse') open();
+    });
+    dd.addEventListener('pointerleave', function (e) {
+      if (e.pointerType === 'mouse') closeT = setTimeout(close, 160);
+    });
+    dd.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(); btn.focus(); }
+    });
+    dd.addEventListener('focusout', function (e) {
+      if (!dd.contains(e.relatedTarget)) close();
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-dd]')) closeAll(null);
+  });
+
+  /* ---------- 2. auto tabs ---------- */
+  var root = document.querySelector('[data-autotabs]');
+  if (root) {
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-aftab]'));
+    var panes = Array.prototype.slice.call(root.querySelectorAll('[data-afpane]'));
+    var DWELL = 7000, timer = null, current = 0;
+    root.style.setProperty('--dwell', DWELL + 'ms');
+
+    function select(i, focus) {
+      current = i;
+      tabs.forEach(function (t, k) {
+        var on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) {
+          /* restart the fill animation for the new tab */
+          var bar = t.querySelector('.af-tab__bar');
+          bar.style.animation = 'none';
+          void bar.offsetWidth;
+          bar.style.animation = '';
+        }
+      });
+      panes.forEach(function (p, k) { p.hidden = k !== i; });
+      if (focus) tabs[i].focus();
+    }
+    function stopAuto() {
+      if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-auto'); }
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { stopAuto(); select(i); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault(); stopAuto();
+        select((i + d + tabs.length) % tabs.length, true);
+      });
+    });
+    if (!reduced && 'IntersectionObserver' in window) {
+      /* start the loop only once the section is actually on screen */
+      var io = new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting && !timer && !root.classList.contains('was-auto')) {
+          root.classList.add('is-auto', 'was-auto');
+          select(current);
+          timer = setInterval(function () { select((current + 1) % tabs.length); }, DWELL);
+        } else if (!e[0].isIntersecting) {
+          stopAuto();
+        }
+      }, { threshold: 0.4 });
+      io.observe(root);
+      root.addEventListener('pointerenter', stopAuto, { once: false });
+      root.addEventListener('focusin', stopAuto);
+    }
+  }
+
+  /* ---------- 3. quote arrows ---------- */
+  var row = document.querySelector('[data-afquotes]');
+  if (row) {
+    function step(dir) {
+      var card = row.querySelector('.af-quote');
+      if (!card) return;
+      row.scrollBy({ left: dir * (card.getBoundingClientRect().width + 20), behavior: reduced ? 'auto' : 'smooth' });
+    }
+    document.querySelector('[data-qprev]').addEventListener('click', function () { step(-1); });
+    document.querySelector('[data-qnext]').addEventListener('click', function () { step(1); });
+  }
+})();
+</script>
+<script>
+/* ==========================================================================
+   Page-specific: the FAQ accordion. Lifted from page-solutions-diversity.html
+   (itself from page-solutions-healthcare.html). The collapse rule in CSS is
+   gated on the `faq-js` class this script adds, so a blocked script leaves
+   every answer open and readable rather than sealed shut.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var root  = document.documentElement;
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-faq-item]'));
+  if (!items.length) return;
+  root.classList.add('faq-js');
+
+  var btns = items.map(function (it) { return it.querySelector('[data-faq-btn]'); });
+
+  function setOpen(item, open) {
+    var btn   = item.querySelector('[data-faq-btn]');
+    var panel = item.querySelector('[data-faq-panel]');
+    item.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    /* a collapsed panel must leave the tab order too — one answer holds a link */
+    if (open) panel.removeAttribute('inert');
+    else      panel.setAttribute('inert', '');
+  }
+
+  items.forEach(function (item, i) {
+    setOpen(item, item.classList.contains('is-open'));   /* first item ships open */
+
+    btns[i].addEventListener('click', function () {
+      setOpen(item, !item.classList.contains('is-open'));
+    });
+
+    /* Enter and Space come free with <button>; this adds the roving movement
+       the WAI accordion pattern expects. */
+    btns[i].addEventListener('keydown', function (e) {
+      var n = -1;
+      if (e.key === 'ArrowDown')    n = (i + 1) % btns.length;
+      else if (e.key === 'ArrowUp') n = (i - 1 + btns.length) % btns.length;
+      else if (e.key === 'Home')    n = 0;
+      else if (e.key === 'End')     n = btns.length - 1;
+      else return;
+      e.preventDefault();
+      btns[n].focus();
+    });
+  });
+
+  /* deep links — af-solutions-diversity.html#q-selection opens that answer */
+  function openFromHash() {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (!el || !el.hasAttribute('data-faq-item')) return;
+    setOpen(el, true);
+    el.querySelector('[data-faq-btn]').focus({ preventScroll: true });
+  }
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
+})();
+</script>
+</body>
+</html>

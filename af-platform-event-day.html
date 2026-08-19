@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Day — JobFairX</title>
+<meta name="description" content="Event day is a queue you work down. The live lobby shows who is waiting and for how long, who is in a room, and who you are due to see next — whatever interview location you set.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
+<style>
+/* ==========================================================================
+   CONCEPT 5 — "AI FLOW"
+   A fifth homepage candidate beside dark / light / hybrid / vid. Scott's
+   brief: wisq.com's calm editorial layout — huge centered statements, one
+   enormous rounded panel per section, cream/navy palette, big images, easy
+   reading — with careerflow.ai's navigation quality: a Features mega-dropdown
+   (icon tile + name + one-line description) and a Solutions dropdown, on top
+   of our normal four-item nav.
+
+   Decisions taken for this concept (surface to Scott, do not silently
+   revisit):
+   1. PRIMARY CTAs are deep-navy pills (the reference's grammar). JobFairX
+      blue remains the wordmark, links and accents. This deliberately differs
+      from the vid concept's blue-CTA rule — it is what makes the dress.
+   2. The reference leans on licensed photography of people. We own none and
+      ship none — panels carry real product compositions instead. If the page
+      reads "missing" next to wisq.com, that is the gap, and it stays honest.
+   3. No awards exist, so no award badge — the hero eyebrow carries a verified
+      stat instead. No logo wall (no rights); a quiet stat strip instead.
+   4. Pricing cards, when this concept grows a pricing page, are EQUAL SIZE —
+      Scott explicitly dislikes the lifted featured card.
+   5. A serif (system Georgia stack) appears ONLY in the editorial resources
+      block — masthead AND article-card titles, the reference's magazine
+      moment. Nowhere else on the concept.
+   6. The featured resources are the four evergreen metric guides. The three
+      articles flagged "Needs update" on page-resources.html are factually
+      stale since the in-person launch and must not be promoted.
+
+   Everything else obeys the locked system: hard cuts, one depth mechanism
+   per element, no 3D tilt, no springs, no frosted nav, transform/opacity
+   motion only, one moving element per screenful, authored frame complete
+   with JS off and under reduced motion.
+   ========================================================================== */
+
+/* ---------- concept palette ---------- */
+.aiflow {
+  --canvas-af: #fdfcf9;      /* warm near-white, never pure white */
+  --cream: #f6f1e9;          /* the reference's panel ground */
+  --cream-line: #e9e2d5;
+  --navy: #101c3f;           /* ink + primary pills */
+  --navy-2: #3d4460;         /* body copy on light */
+  --muted-af: #6a7086;       /* muted on white */
+  --muted-cream: #5f6580;    /* muted on cream (AA there) */
+  --band-ink: #cdd4ea;       /* body copy on the navy band */
+  --grad: linear-gradient(112deg, #bfe6dc 0%, #9fd6e6 55%, #7cc3e8 100%);
+}
+.aiflow { background: var(--canvas-af); color: var(--navy-2);
+  /* bridge the shared base.css tokens onto this palette so vg-* components
+     and any base primitive resolve correctly without a data-theme wrapper */
+  --canvas: var(--canvas-af); --surface: #fff; --surface-2: var(--cream);
+  --ink: var(--navy); --ink-2: var(--navy-2); --ink-3: var(--muted-af);
+  --hairline: var(--cream-line); --hairline-strong: #d9d0bf;
+}
+.aiflow .t-display, .aiflow .t-h1, .aiflow .t-h2 { font-weight: 600; color: var(--navy); }
+.aiflow .t-h2 { letter-spacing: -.034em; }
+
+/* the reference's grammar: everything important is centered */
+.af-head { max-width: 62ch; margin-inline: auto; text-align: center; }
+.af-head .t-eyebrow { color: var(--muted-af); }
+.af-head h2 { margin-top: var(--s-3); }
+.af-head p { color: var(--navy-2); margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; max-width: 56ch; margin-inline: auto; }
+
+/* navy pill = primary; cream pill = secondary (concept decision 1) */
+.af-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 22px; border-radius: var(--r-pill);
+  font-size: var(--t-sm); font-weight: 550; letter-spacing: -.008em;
+  transition: transform var(--t-fast) var(--e-out), background var(--t-fast) var(--e-inout);
+}
+.af-btn--navy { background: var(--navy); color: #fff; }
+.af-btn--navy:hover { background: #1a2a58; transform: translateY(-1px); }
+.af-btn--cream { background: #fff; color: var(--navy); border: 1px solid var(--cream-line); }
+.af-btn--cream:hover { border-color: #d5cdbd; transform: translateY(-1px); }
+.af-link { font-size: var(--t-sm); font-weight: 550; color: var(--accent); }
+.af-link:hover { color: var(--accent-hover); }
+
+[hidden] { display: none !important; }
+
+/* ---------- announce (chrome, same as every concept) ---------- */
+.announce {
+  background: #0b0d12; color: #a8b0be;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce strong { color: #f4f6fa; }
+.announce a { color: #f4f6fa; border-bottom: 1px solid rgba(255,255,255,.16); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); }
+
+/* ==========================================================================
+   NAV — careerflow's quality on wisq's calm bar
+   Solid when stuck (system rule: no frosted glass). Two disclosure dropdowns:
+   click toggles, Escape and outside-click close, hover opens for pointer
+   users with a close delay. Mobile: everything folds into the flat drawer.
+   ========================================================================== */
+.nav-af {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--canvas-af);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t-base) var(--e-inout), box-shadow var(--t-base) var(--e-inout);
+}
+.nav-af.is-stuck { border-bottom-color: var(--cream-line); box-shadow: 0 1px 0 rgba(16,28,63,.03); }
+.nav-af__inner { display: flex; align-items: center; gap: var(--s-6); height: 68px; }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+.nav-af__links { display: flex; align-items: center; gap: var(--s-1); margin-inline: auto; }
+.nav-af__links > a, .dd > button {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-radius: var(--r-pill);
+  font-size: var(--t-sm); font-weight: 500; color: var(--navy-2);
+  transition: background var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout);
+}
+.nav-af__links > a:hover, .dd > button:hover, .dd.is-open > button { background: var(--cream); color: var(--navy); }
+.dd > button svg { transition: transform var(--t-fast) var(--e-out); color: var(--muted-af); }
+.dd.is-open > button svg { transform: rotate(180deg); }
+.nav-af__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav-af__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); color: var(--navy); }
+
+/* the mega-panel: icon tile + bold name + one-line description */
+.dd { position: relative; }
+.dd__panel {
+  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  width: min(720px, calc(100vw - 48px));
+  background: #fff; border: 1px solid var(--cream-line); border-radius: var(--r-xl);
+  box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 60px -16px rgba(16,28,63,.18);
+  padding: var(--s-4);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.dd__panel--narrow { width: min(560px, calc(100vw - 48px)); }
+.dd__item {
+  display: flex; gap: var(--s-4); align-items: flex-start;
+  padding: var(--s-4); border-radius: var(--r-lg);
+  transition: background var(--t-micro) var(--e-inout);
+}
+.dd__item:hover { background: var(--cream); }
+.dd__item:hover .dd__d { color: var(--muted-cream); }
+/* Careerflow's icon treatment (they ship Phosphor fill glyphs in one bright
+   saturated blue, no tile box). Ours: Phosphor fill (MIT) in OUR bright blue;
+   the Solutions menu uses the five product-canonical type colours. */
+.dd__ic {
+  flex: none; width: 32px; height: 32px; margin-top: 2px;
+  color: var(--accent);
+  display: grid; place-items: center;
+}
+.dd__t { display: flex; align-items: center; gap: 8px; font-size: var(--t-sm); font-weight: 600; color: var(--navy); letter-spacing: -.014em; }
+.dd__tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: var(--r-pill);
+  background: var(--accent); color: #fff;
+}
+.dd__d { margin-top: 3px; font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; line-height: 1.45; }
+.dd__all {
+  grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 2px; padding: var(--s-3);
+  border-top: 1px solid var(--cream-line);
+  font-size: var(--t-sm); font-weight: 550; color: var(--navy);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.dd__all:hover { color: var(--accent); }
+
+.drawer { display: none; }
+@media (max-width: 1020px) {
+  .nav-af__links, .nav-af__actions .af-btn--cream { display: none; }
+  .nav-af__toggle { display: grid; }
+  .nav-af__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: #08090c; color: #f4f6fa;
+    padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); visibility: hidden;
+    transition: transform var(--t-base) var(--e-out), visibility 0s var(--t-base);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; visibility: visible; transition-delay: 0s, 0s; }
+  .drawer a { display: block; font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .drawer small { display: block; margin-top: var(--s-8); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: #a8b0be; }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; color: #f4f6fa; }
+}
+
+/* ==========================================================================
+   HERO — centered statement, then one enormous rounded panel
+   ========================================================================== */
+.af-hero { padding-block: clamp(56px, 8vh, 96px) 0; }
+.af-hero__badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: var(--r-pill);
+  background: #fff; border: 1px solid var(--cream-line);
+  font-size: var(--t-xs); font-weight: 550; color: var(--navy-2);
+  box-shadow: var(--sh-sm);
+}
+.af-hero__badge b { color: var(--accent); font-weight: 600; }
+.af-hero h1 { max-width: 17ch; margin: var(--s-6) auto 0; }
+.af-hero__sub { max-width: 52ch; margin: var(--s-6) auto 0; font-size: var(--t-lead); line-height: 1.55; color: var(--navy-2); }
+.af-hero__cta { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: var(--s-5); margin-top: var(--s-8); }
+
+.af-stage {
+  position: relative; margin-top: clamp(40px, 6vh, 64px);
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid var(--cream-line);
+  box-shadow: 0 2px 6px rgba(16,28,63,.05), 0 40px 80px -24px rgba(16,28,63,.16);
+  background: #fff;
+}
+.af-stage .crop { border-radius: 0; }
+/* floating product cards over the stage — sharp DOM, never a baked PNG */
+.af-float {
+  position: absolute; z-index: 5; width: var(--fw, 280px);
+  background: #fff; color: #14161a;
+  border: 1px solid rgba(16,28,63,.08); border-radius: var(--r-lg);
+  box-shadow: 0 1px 3px rgba(16,28,63,.08), 0 24px 48px -12px rgba(16,28,63,.22);
+  padding: var(--s-4);
+}
+@media (max-width: 860px) { .af-float { display: none; } }
+
+/* quiet stat strip (the reference's logo-band slot; we own no logo rights) */
+.af-strip {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-3) var(--s-10);
+  padding-block: var(--s-10);
+  font-size: var(--t-sm); color: var(--muted-af);
+}
+.af-strip b { color: var(--navy); font-weight: 600; }
+
+/* ==========================================================================
+   THREE-CARD ROW — before / during / after, on cream cards
+   ========================================================================== */
+.af-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-card {
+  background: var(--cream); border-radius: 20px; padding: var(--s-7);
+  display: flex; flex-direction: column; min-width: 0;
+}
+.af-card h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -.026em; color: var(--navy); }
+.af-card > p { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.55; }
+.af-card__shot {
+  margin-top: auto; padding-top: var(--s-6);
+}
+.af-card__shot .panel { border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.06); box-shadow: 0 1px 3px rgba(16,28,63,.07); }
+@media (max-width: 980px) { .af-cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   TABBED FEATURE SECTION — the reference's auto-advancing tab row
+   One giant panel; three tabs below it swap the crop. The strip advances on
+   a timer with a progress underline; ANY user interaction takes control and
+   stops the auto-advance for good. Reduced motion / no JS: tab 1, static.
+   ========================================================================== */
+.af-tabs__stage { margin-top: var(--s-12); }
+.af-tabstrip {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-8);
+  margin-top: var(--s-8); border-top: 1px solid var(--cream-line);
+}
+.af-tab {
+  position: relative; text-align: left; padding: var(--s-5) 0 0; min-width: 0;
+  color: var(--muted-af);
+}
+.af-tab b { display: block; font-size: var(--t-body); font-weight: 600; letter-spacing: -.018em; color: inherit; }
+.af-tab span { display: block; margin-top: var(--s-2); font-size: var(--t-sm); line-height: 1.5; letter-spacing: .004em; }
+.af-tab[aria-selected="true"] { color: var(--navy); }
+.af-tab[aria-selected="true"] span { color: var(--navy-2); }
+.af-tab::before {
+  content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+  background: var(--cream-line);
+}
+.af-tab__bar {
+  position: absolute; top: -1px; left: 0; height: 2px; width: 100%;
+  background: var(--navy); transform: scaleX(0); transform-origin: left;
+}
+.af-tab[aria-selected="true"] .af-tab__bar { transform: scaleX(1); }
+/* while auto-advancing, the bar FILLS over the dwell time (JS sets --dwell) */
+.js .af-tabs.is-auto .af-tab[aria-selected="true"] .af-tab__bar {
+  animation: af-fill var(--dwell, 7s) linear both;
+}
+@keyframes af-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (max-width: 780px) {
+  .af-tabstrip { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+  .af-tab { padding-top: var(--s-4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .af-tabs.is-auto .af-tab[aria-selected="true"] .af-tab__bar { animation: none; transform: scaleX(1); }
+}
+
+/* ==========================================================================
+   NAVY BAND — every package includes (the reference's security band)
+   ========================================================================== */
+.af-band { background: var(--navy); color: var(--band-ink); }
+.af-band .t-eyebrow { color: #8fa0d0; font-family: var(--font-mono); letter-spacing: .12em; }
+.af-band__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-8); flex-wrap: wrap; }
+/* .aiflow .t-h2 sets navy at higher specificity — this must outrank it or the
+   headline paints navy-on-navy (caught in QA: the band rendered headless) */
+.aiflow .af-band h2 { color: #fff; max-width: 22ch; }
+.af-band__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-10) var(--s-8); margin-top: var(--s-12); }
+.af-band__cell::before { content: ''; display: block; width: 8px; height: 8px; background: var(--accent); margin-bottom: var(--s-4); }
+.af-band__cell h3 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.016em; color: #fff; }
+.af-band__cell p { margin-top: var(--s-3); font-size: var(--t-sm); line-height: 1.55; letter-spacing: .004em; }
+.af-btn--ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.28); }
+.af-btn--ghost:hover { border-color: rgba(255,255,255,.55); transform: translateY(-1px); }
+@media (max-width: 980px) { .af-band__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .af-band__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   INTERVIEW LOCATION — cream panel, list + real dashboard column
+   ========================================================================== */
+.af-loc {
+  background: var(--cream); border-radius: 24px; padding: clamp(24px, 4vw, 56px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--s-12);
+  align-items: center; margin-top: var(--s-12);
+}
+.af-loc h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.af-loc > div > p { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.6; }
+.af-loc__list { display: grid; gap: var(--s-2); margin-top: var(--s-6); }
+.af-loc__row {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  background: #fff; border-radius: 12px; padding: var(--s-3) var(--s-4);
+  border: 1px solid rgba(16,28,63,.05);
+}
+.af-loc__row b { font-size: var(--t-sm); font-weight: 600; color: var(--navy); min-width: 118px; }
+.af-loc__row span { font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; }
+.af-loc__shot .panel { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.07); box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 56px -16px rgba(16,28,63,.16); }
+.af-loc__note { margin-top: var(--s-4); font-size: var(--t-xs); color: var(--muted-cream); }
+@media (max-width: 980px) { .af-loc { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); } }
+
+/* ==========================================================================
+   TESTIMONIALS — giant navy cards in a scroll-snap row (user-driven only)
+   ========================================================================== */
+.af-quotes { display: flex; gap: var(--s-5); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--s-4); margin-top: var(--s-12); scrollbar-width: none; }
+.af-quotes::-webkit-scrollbar { display: none; }
+.af-quote {
+  flex: 0 0 min(760px, 88%); scroll-snap-align: center;
+  background: var(--navy); color: #e7ebf7; border-radius: 24px;
+  padding: clamp(28px, 4vw, 56px);
+  display: flex; flex-direction: column; min-height: 300px;
+}
+.af-quote blockquote { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 500; letter-spacing: -.022em; line-height: 1.4; max-width: 44ch; }
+.af-quote footer { margin-top: auto; padding-top: var(--s-8); }
+.af-quote cite { font-style: normal; display: block; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: #8fa0d0; }
+.af-quote cite b { display: block; letter-spacing: -.01em; text-transform: none; font-size: var(--t-sm); color: #fff; margin-bottom: 3px; }
+.af-qnav { display: flex; justify-content: center; gap: var(--s-3); margin-top: var(--s-5); }
+.af-qnav button {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--cream-line); background: #fff; color: var(--navy);
+  display: grid; place-items: center;
+  transition: border-color var(--t-micro) var(--e-inout), transform var(--t-fast) var(--e-out);
+}
+.af-qnav button:hover { border-color: #d5cdbd; transform: translateY(-1px); }
+
+/* ==========================================================================
+   EDITORIAL RESOURCES — the magazine moment (serif scoped HERE only)
+   ========================================================================== */
+.af-mast { text-align: center; }
+.af-mast .t-eyebrow { color: var(--muted-af); letter-spacing: .18em; }
+.af-mast h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 500; letter-spacing: -.015em;
+  font-size: clamp(2.2rem, 4.6vw, 3.4rem); color: var(--navy);
+  margin-top: var(--s-3);
+}
+.af-mast p { margin-top: var(--s-4); color: var(--navy-2); font-size: var(--t-lead); }
+.af-articles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-article {
+  display: flex; flex-direction: column; min-height: 240px; min-width: 0;
+  background: var(--navy); border-radius: 20px; padding: var(--s-6);
+  transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.af-article:hover { transform: translateY(-3px); box-shadow: 0 24px 48px -16px rgba(16,28,63,.35); }
+.af-article i { font-style: normal; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #8fa0d0; }
+.af-article h3 {
+  font-family: Georgia, 'Times New Roman', serif; font-weight: 500;
+  font-size: 1.375rem; letter-spacing: -.012em; line-height: 1.25; color: #fff;
+  margin-top: var(--s-4); max-width: 16ch;
+}
+.af-article span { margin-top: auto; padding-top: var(--s-6); font-size: var(--t-xs); color: #8fa0d0; display: inline-flex; align-items: center; gap: 6px; }
+.af-article:hover span { color: #fff; }
+@media (max-width: 1080px) { .af-articles { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px)  { .af-articles { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   GRADIENT CLOSE + LIGHT FOOTER
+   ========================================================================== */
+.af-cta {
+  position: relative; border-radius: 24px; overflow: hidden;
+  background: var(--grad); text-align: center;
+  padding: clamp(56px, 9vh, 112px) var(--s-8);
+}
+.af-cta h2 { color: var(--navy); max-width: 22ch; margin-inline: auto; }
+.af-cta p { color: #26365f; margin-top: var(--s-4); font-size: var(--t-lead); max-width: 46ch; margin-inline: auto; }
+.af-cta__row { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-8); }
+
+.foot-af { border-top: 1px solid var(--cream-line); padding-block: var(--s-16) var(--s-10); }
+.foot-af__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot-af h3 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-af); margin-bottom: var(--s-4); }
+.foot-af li { margin-bottom: var(--s-3); }
+.foot-af li a { font-size: var(--t-sm); color: var(--navy-2); transition: color var(--t-micro) var(--e-inout); }
+.foot-af li a:hover { color: var(--navy); }
+.foot-af li span[aria-current] { font-size: var(--t-sm); color: var(--navy); font-weight: 550; }
+.foot-af__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(16,28,63,.18);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot-af__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.28);
+}
+.foot-af__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--cream-line);
+  font-size: var(--t-xs); color: var(--muted-af); }
+@media (max-width: 1100px) { .foot-af__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot-af__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot-af__cols { grid-template-columns: minmax(0, 1fr); } }
+
+.u-skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  padding: 10px 16px; border-radius: 0 0 var(--r-md) 0;
+  background: var(--navy); color: #fff; font-size: var(--t-sm); font-weight: 550;
+}
+.u-skip:focus { left: 0; }
+.u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+[data-placeholder]::after {
+  /* Review scaffolding: an INLINE badge, not an overlay. As an absolutely
+     positioned corner chip it sat on top of the words next to inline
+     {{tokens}} (two reviewers flagged hidden body copy), and pushing it
+     outside the box overflowed the 390px viewport. In flow it can do
+     neither. */
+  content: 'PLACEHOLDER'; display: inline-block; vertical-align: middle;
+  margin-left: 5px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none;
+}
+</style>
+<style>
+/* ==========================================================================
+   PAGE — AF / PLATFORM / EVENT DAY
+   Page-scoped styles only; the concept chrome block above is untouched.
+   Muted text: #6a7086 (--muted-af) on white, #5f6580 (--muted-cream) on cream.
+   ========================================================================== */
+
+/* hero: statement + the three-step strip. No stage here — the annotated
+   lobby one section down is this page's enormous panel, and repeating the
+   same screenshot twice at full width would say nothing new. */
+.af-hero--cap { padding-bottom: clamp(48px, 7vh, 80px); }
+.af-flow3 {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5);
+  margin-top: clamp(40px, 6vh, 56px); text-align: left;
+}
+.af-flow3 > li {
+  background: #fff; border: 1px solid var(--cream-line); border-radius: 20px;
+  padding: var(--s-7); min-width: 0; box-shadow: var(--sh-sm);
+}
+.af-n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-af); }
+.af-flow3 .af-t { margin-top: var(--s-3); font-size: 1.25rem; font-weight: 600; letter-spacing: -.026em; line-height: 1.2; color: var(--navy); }
+.af-flow3 .af-d { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--muted-af); line-height: 1.55; }
+@media (max-width: 900px) { .af-flow3 { grid-template-columns: minmax(0, 1fr); } }
+
+/* annotated screenshot — crop geometry and pin coordinates are ONE
+   calculation, ported unchanged from page-platform-event-day.html:
+   lobby-live.png (3200x2000), visible x 0.012→0.988 (--z 1.025, --l -1.2%),
+   visible y 0.028→0.965 (--t -2.8%, aspect 5/3);
+   pin x = (fx − 0.012)/0.97561, pin y = (fy − 0.028)/0.93659.
+   Pins sit against .anno__stage; .panel here carries no padding, so stage
+   box == crop box and the mapping is exact. Do not nudge pins by eye. */
+.anno--wide { margin-top: var(--s-12); }
+.anno--wide .anno__key { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: var(--s-2); margin-top: var(--s-2); }
+.anno--wide .anno__key li { min-width: 0; }
+.anno .panel { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.07); box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 56px -16px rgba(16,28,63,.16); }
+.anno__note { margin-top: var(--s-5); max-width: 70ch; font-size: var(--t-sm); color: var(--muted-af); letter-spacing: .006em; }
+.crop--anno  { aspect-ratio: 5/3; }
+.crop--band  { aspect-ratio: 3/1; }
+.crop--ended { aspect-ratio: 12/5; }
+/* The queue figure keeps its own ratio: its overhang card is 302px tall, and
+   against a 3/1 plate (182px at container width) the card swallowed the whole
+   picture. 2/1 is the same ratio the phone already used, so one aspect now
+   serves both and the --zm/--lm/--tm below stays valid. */
+.crop--queue { aspect-ratio: 2/1; }
+@media (max-width: 900px) { .anno--wide .anno__key { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 780px) {
+  /* base.css swaps in the --zm/--lm/--tm crop below 780px, so the pins no
+     longer line up with anything — hide them and let the key carry it */
+  .anno__pin { display: none; }
+  .crop--anno  { aspect-ratio: 5/4; }
+  .crop--band  { aspect-ratio: 2/1; }
+  .crop--ended { aspect-ratio: 4/3; }
+}
+@media (max-width: 560px) { .anno--wide .anno__key { grid-template-columns: minmax(0, 1fr); } }
+
+/* one enormous cream panel; white cards inside */
+.af-panel { background: var(--cream); border-radius: 24px; padding: clamp(24px, 4vw, 56px); margin-top: var(--s-12); }
+.af-states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); }
+.af-state {
+  background: #fff; border: 1px solid rgba(16,28,63,.05); border-radius: 16px;
+  padding: var(--s-6); display: grid; align-content: start; gap: var(--s-3); min-width: 0;
+}
+.af-state__t { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; color: var(--navy); }
+.af-state__d { font-size: var(--t-sm); color: var(--muted-af); line-height: 1.55; }
+.af-state__acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-1); }
+.af-state__acts > span {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+  padding: 3px 7px; border-radius: var(--r-xs);
+  border: 1px solid var(--cream-line); background: var(--cream); color: var(--muted-cream); white-space: nowrap;
+}
+.af-panel__note { margin-top: var(--s-6); font-size: var(--t-sm); color: var(--muted-cream); max-width: 70ch; letter-spacing: .006em; }
+@media (max-width: 1080px) { .af-states { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px)  { .af-states { grid-template-columns: minmax(0, 1fr); } }
+
+/* navy band extras: lead line, screenshot plate, quiet customer credit */
+.af-band__lead { margin-top: var(--s-5); max-width: 60ch; font-size: var(--t-lead); line-height: 1.55; }
+.af-band__shot { margin: var(--s-12) 0 0; }
+.af-band__shot .panel { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 24px 48px -12px rgba(4,6,14,.5); }
+.af-band__shot figcaption { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--band-ink); letter-spacing: .006em; }
+.af-credit { margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid rgba(255,255,255,.14); display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-4); }
+.af-credit p { font-size: 1.0625rem; letter-spacing: -.018em; color: #fff; }
+.af-credit cite { font-style: normal; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: #8fa0d0; }
+
+/* a missing asset is drawn as a missing asset, never faked */
+.shotgap {
+  display: grid; place-items: center; text-align: center; gap: var(--s-3);
+  aspect-ratio: 3/2; padding: var(--s-8);
+  border: 1px dashed #d5cdbd; border-radius: 16px; background: rgba(255,255,255,.55);
+}
+.shotgap__t { font-family: var(--font-mono); font-size: var(--t-sm); color: var(--navy-2); letter-spacing: .04em; }
+.shotgap p { font-size: var(--t-xs); color: var(--muted-cream); max-width: 40ch; letter-spacing: .006em; }
+
+/* ended-lobby stage caption + the four facts under it */
+.af-cap { margin-top: var(--s-4); text-align: center; font-size: var(--t-sm); color: var(--muted-af); letter-spacing: .006em; }
+.af-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-8) var(--s-5); margin-top: var(--s-12); }
+.af-fact h3 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.016em; color: var(--navy); }
+.af-fact p { margin-top: var(--s-2); font-size: var(--t-sm); color: var(--muted-af); line-height: 1.55; }
+@media (max-width: 980px) { .af-facts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .af-facts { grid-template-columns: minmax(0, 1fr); } }
+
+/* sibling capabilities — cream cards */
+.af-rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-rail > a {
+  background: var(--cream); border-radius: 20px; padding: var(--s-6);
+  display: flex; flex-direction: column; gap: var(--s-3); min-width: 0;
+  transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.af-rail > a:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -18px rgba(16,28,63,.28); }
+.af-rail__t { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-3); font-size: 1.0625rem; font-weight: 600; letter-spacing: -.02em; color: var(--navy); }
+.af-rail__t > span { color: var(--muted-cream); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.af-rail > a:hover .af-rail__t > span { color: var(--accent); transform: translateX(3px); }
+.af-rail__d { font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.55; }
+@media (max-width: 900px) { .af-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .af-rail { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body class="aiflow">
+
+<a class="u-skip" href="#content">Skip to content</a>
+
+<div class="announce">
+  <strong>New</strong> — in-person interviews are live.
+  Choose where your interviews happen at any event.
+  <a href="#location">See how it&nbsp;works&nbsp;→</a>
+</div>
+
+<header class="nav-af" data-nav>
+  <div class="u-container nav-af__inner">
+    <a href="concept-5-aiflow.html" class="wordmark">Job<b>Fair</b>X</a>
+
+    <nav class="nav-af__links" aria-label="Main">
+      <a href="af-events.html">Upcoming Hiring Events</a>
+
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" aria-controls="dd-features">
+          Features
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dd__panel" id="dd-features" hidden>
+          <a class="dd__item" href="af-platform-events-dashboard.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,48H48V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24Z"/></svg></span>
+            <span><span class="dd__t">Events dashboard</span><span class="dd__d">Every event you've registered for, with the interview location you set on each.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-candidate-pipeline.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM117.66,149.66l-32,32a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,11.32-11.32L80,164.69l26.34-26.35a8,8,0,0,1,11.32,11.32Zm0-64-32,32a8,8,0,0,1-11.32,0l-16-16A8,8,0,0,1,69.66,90.34L80,100.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM192,168H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Zm0-64H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Candidate pipeline</span><span class="dd__d">Requested, scheduled, interviewed — every candidate in one list.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-interview-scheduling.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm56,112H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Interview scheduling</span><span class="dd__d">Accepting a request is what schedules it. There is no second step.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-event-day.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M192,72V184a16,16,0,0,1-16,16H32a16,16,0,0,1-16-16V72A16,16,0,0,1,32,56H176A16,16,0,0,1,192,72Zm58,.25a8.23,8.23,0,0,0-6.63,1.22L209.78,95.86A4,4,0,0,0,208,99.19v57.62a4,4,0,0,0,1.78,3.33l33.78,22.52a8,8,0,0,0,8.58.19,8.33,8.33,0,0,0,3.86-7.17V80A8,8,0,0,0,250,72.25Z"/></svg></span>
+            <span><span class="dd__t">Event day</span><span class="dd__d">The lobby: who is waiting, who is in a room, who you are due to see next.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-messaging-automations.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Messaging &amp; automations</span><span class="dd__d">Message candidates directly, or let the presets send on their own.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-analytics.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V136a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8v64H96V88a8,8,0,0,1,8-8h32a8,8,0,0,1,8,8V200h16V40a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z"/></svg></span>
+            <span><span class="dd__t">Analytics &amp; reporting</span><span class="dd__d">Dispositions, notes, and the post-event report with downloadable data.</span></span>
+          </a>
+          <a class="dd__item" href="af-in-person-interviews.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z"/></svg></span>
+            <span><span class="dd__t">In-person interviews <span class="dd__tag">New</span></span><span class="dd__d">Set your street address as the interview location for any event you join.</span></span>
+          </a>
+          <a class="dd__all" href="af-platform.html">All features
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" aria-controls="dd-solutions">
+          Solutions
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dd__panel dd__panel--narrow" id="dd-solutions" hidden>
+          <a class="dd__item" href="af-solutions-healthcare.html">
+            <span class="dd__ic" style="color:#12897f"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,108v40a16,16,0,0,1-16,16H164v52a16,16,0,0,1-16,16H108a16,16,0,0,1-16-16V164H40a16,16,0,0,1-16-16V108A16,16,0,0,1,40,92H92V40a16,16,0,0,1,16-16h40a16,16,0,0,1,16,16V92h52A16,16,0,0,1,232,108Z"/></svg></span>
+            <span><span class="dd__t">Healthcare</span><span class="dd__d">Nurses, techs, allied health and clinical support.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-diversity.html">
+            <span class="dd__ic" style="color:#e07b39"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.28,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.28,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.19,182.07Z"/></svg></span>
+            <span><span class="dd__t">Diversity</span><span class="dd__d">Events built to widen the top of your funnel.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-veteran.html">
+            <span class="dd__ic" style="color:#d1454b"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96Zm16,0a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg></span>
+            <span><span class="dd__t">Veteran</span><span class="dd__d">Interview reliable, well-trained veterans matched to your roles.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-technology.html">
+            <span class="dd__ic" style="color:#2f5cff"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM92.8,145.6a8,8,0,1,1-9.6,12.8l-32-24a8,8,0,0,1,0-12.8l32-24a8,8,0,0,1,9.6,12.8L69.33,128Zm58.89-71.4-32,112a8,8,0,1,1-15.38-4.4l32-112a8,8,0,0,1,15.38,4.4Zm53.11,60.2-32,24a8,8,0,0,1-9.6-12.8L186.67,128,163.2,110.4a8,8,0,1,1,9.6-12.8l32,24a8,8,0,0,1,0,12.8Z"/></svg></span>
+            <span><span class="dd__t">Technology</span><span class="dd__d">Engineering, data, product and IT roles.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-entry-level.html">
+            <span class="dd__ic" style="color:#3aa0e6"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"/></svg></span>
+            <span><span class="dd__t">Entry-level</span><span class="dd__d">High-volume hiring for roles that move fast.</span></span>
+          </a>
+          <a class="dd__all" href="af-solutions.html">All solutions
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <a href="af-pricing.html">Pricing</a>
+      <a href="af-faq.html">FAQ</a>
+      <a href="af-contact.html">Contact Us</a>
+    </nav>
+
+    <div class="nav-af__actions">
+      <a href="#" class="af-btn af-btn--cream">Sign In</a>
+      <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+      <button class="nav-af__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" data-nav-drawer>
+  <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+  <a href="af-events.html">Upcoming Hiring Events</a>
+  <a href="af-pricing.html">Pricing</a>
+  <a href="af-faq.html">FAQ</a>
+  <a href="af-contact.html">Contact Us</a>
+  <small>Features</small>
+  <a href="af-platform-events-dashboard.html">Events dashboard</a>
+  <a href="af-platform-candidate-pipeline.html">Candidate pipeline</a>
+  <a href="af-platform-interview-scheduling.html">Interview scheduling</a>
+  <a href="af-platform-event-day.html">Event day</a>
+  <a href="af-platform-messaging-automations.html">Messaging &amp; automations</a>
+  <a href="af-platform-analytics.html">Analytics &amp; reporting</a>
+  <a href="af-in-person-interviews.html">In-person interviews — New</a>
+  <small>Solutions</small>
+  <a href="af-solutions-healthcare.html">Healthcare</a>
+  <a href="af-solutions-diversity.html">Diversity</a>
+  <a href="af-solutions-veteran.html">Veteran</a>
+  <a href="af-solutions-technology.html">Technology</a>
+  <a href="af-solutions-entry-level.html">Entry-level</a>
+  <a href="#">Sign In</a>
+  <a href="#" style="color:#96b0ff">Register for an Event →</a>
+</div>
+
+<main id="content" tabindex="-1">
+
+<section class="af-hero af-hero--cap">
+  <div class="u-container" style="text-align:center">
+    <p class="t-eyebrow">Platform · Event day</p>
+    <h1 class="t-h1 t-balance">Event day is a queue you work down.</h1>
+    <p class="af-hero__sub">
+      The lobby shows who is waiting and for how long, who is in a room, and who
+      you are due to see next — whatever interview location you set. Start
+      interview sits right on the row.
+    </p>
+    <div class="af-hero__cta">
+      <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+      <a href="af-events.html" class="af-link">Browse upcoming events →</a>
+    </div>
+
+    <ol class="af-flow3">
+      <li data-reveal style="--i:0">
+        <p class="af-n">01 — Waiting to interview</p>
+        <p class="af-t">They turn up</p>
+        <p class="af-d">
+          A candidate whose interview you accepted arrives at their slot and lands
+          in the lobby. Their wait time starts counting on the row.
+        </p>
+      </li>
+      <li data-reveal style="--i:1">
+        <p class="af-n">02 — Interviewing</p>
+        <p class="af-t">You start the room</p>
+        <p class="af-d">
+          The row carries the name, the desired job, the desired location and the
+          interview time. Status reads Ready, and Start interview opens the room.
+        </p>
+      </li>
+      <li data-reveal style="--i:2">
+        <p class="af-n">03 — Interviewed</p>
+        <p class="af-t">The count moves</p>
+        <p class="af-d">
+          When the call ends the candidate lands under Interviewed. That tab count
+          is your running total for the day, visible without leaving the lobby.
+        </p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="u-section" id="lobby" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">The real screen</p>
+      <h2 class="t-h2 t-balance">The lobby, live, two hours and forty-two minutes from the end.</h2>
+      <p>
+        This is the event-day lobby, unretouched, mid-event. Hover a pin — or a
+        caption — to see which part of the screen it belongs to.
+      </p>
+    </div>
+
+    <figure class="anno anno--wide vg-intro" data-reveal style="--i:1">
+      <div class="anno__stage">
+        <div class="panel">
+          <div class="crop crop--anno">
+            <img src="assets/product/lobby-live.png"
+                 alt="The JobFairX event-day lobby for the Dallas Healthcare Hiring Event. A status line reads Event is live, Ends in 2h 42m, Apr 22, 2026, 11:00 AM to 3:00 PM CT, with a Video chip beneath it labelled JobFairX video call and a Your status: Available control on the right. Four tabs read Waiting to interview 6, Interviewing 3, Interviewed 5 and Not yet interviewed 26. An Interview rooms table lists Aisha Rahman, James Cooper and Sofia Martinez with their desired job, desired location, interview time, a wait time of 2 minutes, 1 minute and 0 minutes, a Ready status and a blue Start interview button on each row. A Waiting rooms table below lists Derek Washington, Marcus Johnson and Priya Patel with wait times and the statuses Entering interview room and Awaiting available interviewer."
+                 width="3200" height="2000"
+                 style="--z:1.025; --l:-1.2%; --t:-2.8%; --zm:3.2; --lm:-65.2%; --tm:-38%">
+          </div>
+        </div>
+
+                <button class="anno__pin" style="--x:37.5%;--y:11.6%;--i:0" data-anno="1" aria-label="Detail 1: the event is live and the clock is running">1</button>
+        <button class="anno__pin" style="--x:17.2%;--y:15.6%;--i:1" data-anno="2" aria-label="Detail 2: your interview location for this event">2</button>
+        <button class="anno__pin" style="--x:50.0%;--y:24.0%;--i:2" data-anno="3" aria-label="Detail 3: the four queue tabs">3</button>
+        <button class="anno__pin" style="--x:63.5%;--y:45.3%;--i:3" data-anno="4" aria-label="Detail 4: the wait time column">4</button>
+        <button class="anno__pin" style="--x:82.2%;--y:52.5%;--i:4" data-anno="5" aria-label="Detail 5: the Start interview button">5</button>
+        <button class="anno__pin" style="--x:73.1%;--y:82.4%;--i:5" data-anno="6" aria-label="Detail 6: what a waiting room status tells you">6</button>
+      </div>
+
+      <ol class="anno__key">
+        <li data-anno="1"><b>1</b><span><strong>Event is live · Ends in 2h 42m.</strong> The window is fixed — Apr&nbsp;22, 11:00&nbsp;AM–3:00&nbsp;PM&nbsp;CT — and the header counts it down for you.</span></li>
+        <li data-anno="2"><b>2</b><span><strong>Video · JobFairX video call.</strong> Your interview location, on the lobby header. Another employer at this same event reads something else here.</span></li>
+        <li data-anno="3"><b>3</b><span><strong>Four tabs, four counts.</strong> Waiting to interview&nbsp;6, Interviewing&nbsp;3, Interviewed&nbsp;5, Not yet interviewed&nbsp;26. That line is the whole day.</span></li>
+        <li data-anno="4"><b>4</b><span><strong>Wait time, per row.</strong> 2 minutes, 1 minute, 0 minutes. You never have to guess who has been standing there longest.</span></li>
+        <li data-anno="5"><b>5</b><span><strong>Start interview.</strong> One button per ready row, in the Action column. Status reads Ready beside it, so the row tells you before you click.</span></li>
+        <li data-anno="6"><b>6</b><span><strong>Entering interview room · Awaiting available interviewer.</strong> The waiting-room statuses. The second one is the queue telling you every interviewer is busy.</span></li>
+      </ol>
+    </figure>
+
+    <p class="anno__note">
+      The lobby is one screen per event. Candidates are verified to be within
+      approximately 20 miles of the event city, so “desired location” on these rows
+      is a local answer — Dallas, TX or Remote, not a national one.
+    </p>
+  </div>
+</section>
+
+<section class="u-section" id="states">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Four tabs, four counts</p>
+      <h2 class="t-h2 t-balance">Every candidate is on exactly one of them.</h2>
+      <p>
+        The counts across the top are the state of your event, and they move on
+        their own as the day runs. You work the first tab; the other three are the
+        score.
+      </p>
+    </div>
+
+    <div class="af-panel" data-reveal>
+      <ol class="af-states">
+        <li class="af-state">
+          <span class="af-n">6 on this screen</span>
+          <span class="af-state__t">Waiting to interview</span>
+          <span class="af-state__d">Here now, wait time running. This tab splits into Interview rooms — ready to start — and Waiting rooms.</span>
+          <span class="af-state__acts"><span>Ready</span><span>Entering interview room</span><span>Awaiting available interviewer</span></span>
+        </li>
+        <li class="af-state">
+          <span class="af-n">3 on this screen</span>
+          <span class="af-state__t">Interviewing</span>
+          <span class="af-state__d">In session right now — three interviews running at the same time, across your recruiter seats.</span>
+        </li>
+        <li class="af-state">
+          <span class="af-n">5 on this screen</span>
+          <span class="af-state__t">Interviewed</span>
+          <span class="af-state__d">Finished. The count is your running total for the day, and it is the number the post-event report is built from.</span>
+        </li>
+        <li class="af-state">
+          <span class="af-n">26 on this screen</span>
+          <span class="af-state__t">Not yet interviewed</span>
+          <span class="af-state__d">Everyone else on your list for this event who has not been through a room yet.</span>
+        </li>
+      </ol>
+
+      <p class="af-panel__note" data-placeholder>
+        {{ROW ACTIONS ON THE INTERVIEWING, INTERVIEWED AND NOT-YET-INTERVIEWED TABS}} —
+        the captured screenshot sits on the Waiting-to-interview tab, so the statuses and
+        row controls shown above are the only ones verified. Capture the other three tabs
+        before this page ships rather than describing them from memory.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="rooms" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">The waiting tab</p>
+      <h2 class="t-h2 t-balance">Rooms run in parallel. Your seats decide how many.</h2>
+      <p>
+        The waiting tab is two tables, not one. Interview rooms holds the candidates
+        a free interviewer can take right now; Waiting rooms holds the rest.
+      </p>
+    </div>
+
+    <div class="af-loc" data-reveal>
+      <div>
+        <h3>Two kinds of waiting</h3>
+        <p>
+          The status on each waiting row tells you which kind it is — and two of
+          these three are waiting on a person, not on a process. The wait time is
+          on the same line.
+        </p>
+        <div class="af-loc__list">
+          <div class="af-loc__row"><b>Entering interview room</b><span>Moving through. Nothing for you to do.</span></div>
+          <div class="af-loc__row"><b>Awaiting available interviewer</b><span>Every seat is busy — the status that costs you a candidate, and the wait time beside it is how much it has cost so far.</span></div>
+          <div class="af-loc__row"><b>Seats by tier</b><span>2 recruiter seats on Starter, up to 5 on Growth, unlimited recruiters on Pro.</span></div>
+          <div class="af-loc__row"><b>Your status: Available</b><span>In the lobby header — each recruiter says when they are free rather than being assumed to be.</span></div>
+        </div>
+      </div>
+      <figure class="af-loc__shot">
+                <div class="vg-stage">
+          <div class="panel">
+            <div class="crop crop--queue">
+              <img src="assets/product/lobby-live.png"
+                   alt="Close crop of the Wait time and Status columns of the Waiting rooms table: both column headings, and three rows reading 3 minutes, 1 minute and 0 minutes beside grey status chips reading Entering interview room, Awaiting available interviewer and Awaiting available interviewer."
+                   width="3200" height="2000"
+                   style="--z:2.86; --l:-63.75%; --t:-70%; --zm:3; --lm:-64.375%; --tm:-69.75%">
+            </div>
+          </div>
+          <aside class="vg-over vg-card vg-fade" data-vignette="queue" data-beats="3"
+                 data-hold-ms="4200" aria-hidden="true"
+                 style="--oxr:-44px; --oyb:-6px; --ow:180px">
+            <div class="vg-eyebrow">Lobby — waiting</div>
+            <div class="vg-queue">
+              <div class="vg-queue__chip vg-queue__chip--next vg-row">
+                <div class="vg-avatar">AR</div>
+                <div>
+                  <div class="vg-name">Aisha Rahman</div>
+                  <div class="vg-meta">Registered Nurse</div>
+                </div>
+              </div>
+              <div class="vg-queue__chip vg-row">
+                <div class="vg-avatar">JC</div>
+                <div>
+                  <div class="vg-name">James Cooper</div>
+                  <div class="vg-meta">Physical Therapist</div>
+                </div>
+              </div>
+              <div class="vg-queue__chip vg-row">
+                <div class="vg-avatar">SM</div>
+                <div>
+                  <div class="vg-name">Sofia Martinez</div>
+                  <div class="vg-meta">Medical Assistant</div>
+                </div>
+              </div>
+            </div>
+            <div data-at="2" style="height:1px;background:rgba(20,22,26,.08);margin:var(--s-3) 0"></div>
+            <div class="vg-row" data-at="2">
+              <span class="vg-live-dot"></span>
+              <div>
+                <div class="vg-name">Aisha Rahman</div>
+                <div class="vg-meta">Interview in progress</div>
+              </div>
+            </div>
+            <div class="vg-note" data-at="3">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+              The queue shows who is next
+            </div>
+          </aside>
+        </div>
+        <figcaption class="af-loc__note">
+          The queue shows who is next — and the moment an interview starts, the row
+          becomes a live dot.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="u-section af-band" id="room">
+  <div class="u-container">
+    <div class="af-band__head" data-reveal>
+      <div>
+        <p class="t-eyebrow">Inside the room</p>
+        <h2 class="t-h2 t-balance" style="margin-top:var(--s-3)">Notes, résumé and chat sit beside the call.</h2>
+        <p class="af-band__lead">
+          The candidate's name and the job they want are on screen, a timer runs
+          from the moment the room opens, and the tools you need during the
+          conversation share the bar with mute and End. No second tab, no second app.
+        </p>
+      </div>
+      <a href="af-platform-interview-scheduling.html" class="af-btn af-btn--ghost">Interview scheduling →</a>
+    </div>
+
+    <div class="af-band__grid">
+      <div class="af-band__cell" data-reveal style="--i:0">
+        <h3>Notes</h3>
+        <p>Written in the room — and they come back out in the post-event report with your recruiter notes and interview records.</p>
+      </div>
+      <div class="af-band__cell" data-reveal style="--i:1">
+        <h3>Resume</h3>
+        <p>The same résumé that sits on the candidate's row, one click from the call.</p>
+      </div>
+      <div class="af-band__cell" data-reveal style="--i:2">
+        <h3>Chat</h3>
+        <p>In the room, with the person you are talking to.</p>
+      </div>
+      <div class="af-band__cell" data-reveal style="--i:3">
+        <h3>Background</h3>
+        <p>Background, mic and video controls fill the rest of the bar. This is the JobFairX video interview room — nothing for the candidate to download or install.</p>
+      </div>
+    </div>
+
+    <figure class="af-band__shot" data-reveal>
+      <div class="panel">
+        <div class="crop crop--band">
+          <img src="assets/product/interview-screen.png"
+               alt="Close crop of the bottom of a JobFairX interview room: the recruiter's own small video tile labelled You, a mute and video control pair, a red End button, and four labelled tools along the right of the bar reading Notes, Resume, Chat and Background."
+               width="3200" height="2000"
+               style="--z:1.75; --l:-42.5%; --t:-69%; --zm:3.2; --lm:-68%; --tm:-74%">
+        </div>
+      </div>
+      <figcaption>Notes · Resume · Chat · Background — on the control bar, not behind a menu.</figcaption>
+    </figure>
+
+        <div class="af-credit" data-reveal>
+      <p>Target interviewed over 90 candidates in one day.</p>
+      <cite>Target</cite>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="location" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Interview locations</p>
+      <h2 class="t-h2 t-balance">Phone or in person? Same queue.</h2>
+      <p>
+        The event is a market moment — Dallas Healthcare Hiring Event, Apr 22,
+        11:00 AM – 3:00 PM CT — and every employer joins that same one. What you set
+        is where your own interviews happen, and the lobby header carries it.
+      </p>
+    </div>
+
+    <div class="af-loc" data-reveal>
+      <div>
+        <h3>The queue does not change shape</h3>
+        <p>
+          On this screen the header reads Video · JobFairX video call. Another
+          employer at this same Dallas event reads something else — and the four
+          tabs, the two tables, the wait times and the statuses are the same screen
+          either way.
+        </p>
+        <div class="af-loc__list">
+          <div class="af-loc__row"><b>JobFairX video</b><span>“JobFairX video call” — runs inside the platform.</span></div>
+          <div class="af-loc__row"><b>Phone</b><span>“You call each candidate”, at the time you accepted.</span></div>
+          <div class="af-loc__row"><b>In person</b><span>1201 Peachtree St NE, Suite 300 · Atlanta, GA</span></div>
+          <div class="af-loc__row"><b>Your own link</b><span>“Microsoft Teams” — or Zoom, or Meet.</span></div>
+        </div>
+        <p class="af-loc__note">
+          Candidates are verified to be within approximately 20 miles of the event
+          city, so asking them to come to you is a local ask, not a national one.
+        </p>
+      </div>
+      <div class="af-loc__shot">
+                <div class="shotgap" data-placeholder>
+          <p class="shotgap__t">{{LOBBY WITH A NON-VIDEO INTERVIEW LOCATION — SCREENSHOT NEEDED}}</p>
+          <p>
+            Every captured lobby and interview shot reads “Video · JobFairX video call”.
+            Nothing shows what the header, the Action column or the room controls do
+            when the location is phone, in person or your own link. Capture one before
+            this page ships; do not substitute a mock.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="ended">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">When the countdown ends</p>
+      <h2 class="t-h2 t-balance">At 3:00 the screen changes job.</h2>
+      <p>
+        When the countdown runs out the header reads Ended, the tabs become Summary,
+        Interviewed and Not interviewed — the page stops being a queue and starts
+        being a handover.
+      </p>
+    </div>
+
+    <figure data-reveal style="--i:1">
+      <div class="af-stage" style="box-shadow: 0 2px 6px rgba(16,28,63,.05), 0 32px 64px -20px rgba(16,28,63,.14)">
+        <div class="crop crop--ended">
+          <img src="assets/product/lobby-ended.png"
+               alt="The same event lobby after the event has finished. The status line reads Ended, the tabs read Summary, Interviewed 12 and Not interviewed 85, a card headed Interviewing has ended explains that follow-up interviews, feedback and notes are available in the completed event report, and a second card reads Follow up with 12 candidates you interviewed above a View Interview Summary link."
+               width="3200" height="2000"
+               style="--z:1.0204; --l:-1%; --t:-2%; --zm:2.4; --lm:-2%; --tm:-30%">
+        </div>
+      </div>
+      <figcaption class="af-cap">Interviewed 12, Not interviewed 85 — the same event, four hours later.</figcaption>
+    </figure>
+
+    <div class="af-facts">
+      <div class="af-fact" data-reveal style="--i:0">
+        <h3>Interviewing has ended</h3>
+        <p>“You can schedule follow-up interviews, review feedback, and update notes in your completed event report.”</p>
+      </div>
+      <div class="af-fact" data-reveal style="--i:1">
+        <h3>Follow up with 12 candidates</h3>
+        <p>“Follow up with 12 candidates you interviewed”, with a View Interview Summary link straight to the feedback and notes.</p>
+      </div>
+      <div class="af-fact" data-reveal style="--i:2">
+        <h3>Unlimited interviews</h3>
+        <p>Before, during and after the event, in every package, Starter through Pro — the day ending is not the hiring ending.</p>
+      </div>
+      <div class="af-fact" data-reveal style="--i:3">
+        <h3>The results stay yours</h3>
+        <p>Résumés and contact info for every matched candidate stay with you, and follow-up interviews and messaging after the event are on the same included list.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="u-section" id="more" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">The rest of the platform</p>
+      <h2 class="t-h2 t-balance">What fills the queue before the day starts.</h2>
+    </div>
+
+    <div class="af-rail">
+      <a href="af-platform-events-dashboard.html" data-reveal style="--i:0">
+        <span class="af-rail__t">Events dashboard <span aria-hidden="true">→</span></span>
+        <span class="af-rail__d">Every event you have registered for, with the interview location you set on each one.</span>
+      </a>
+      <a href="af-platform-candidate-pipeline.html" data-reveal style="--i:1">
+        <span class="af-rail__t">Candidate pipeline <span aria-hidden="true">→</span></span>
+        <span class="af-rail__d">Matched candidates request interviews with you. Accepting a request is what schedules it.</span>
+      </a>
+      <a href="af-platform-interview-scheduling.html" data-reveal style="--i:2">
+        <span class="af-rail__t">Interview scheduling <span aria-hidden="true">→</span></span>
+        <span class="af-rail__d">Accepted requests land on one schedule, whichever interview location they belong to.</span>
+      </a>
+      <a href="af-platform-messaging-automations.html" data-reveal style="--i:3">
+        <span class="af-rail__t">Messaging &amp; automations <span aria-hidden="true">→</span></span>
+        <span class="af-rail__d">Message candidates directly, or let the presets send on their own.</span>
+      </a>
+      <a href="af-platform-analytics.html" data-reveal style="--i:4">
+        <span class="af-rail__t">Analytics &amp; reporting <span aria-hidden="true">→</span></span>
+        <span class="af-rail__d">Dispositions, notes, and the post-event report with downloadable data.</span>
+      </a>
+      <a href="af-platform.html" data-reveal style="--i:5">
+        <span class="af-rail__t">All features <span aria-hidden="true">→</span></span>
+        <span class="af-rail__d">All six capabilities on one page, in the order a hiring event actually runs.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="u-section">
+  <div class="u-container">
+    <p class="af-strip" data-reveal>
+      <span><b>500,000+</b> interviews conducted</span>
+      <span><b>91%</b> show rate at healthcare events (2025 platform data)</span>
+      <span><b>87%</b> of employers return</span>
+    </p>
+
+        <div class="af-cta grain">
+      <h2 class="t-h2 t-balance">Open the lobby. Start at the top.</h2>
+      <p>Register for an event in your city, post your open jobs, and set where your interviews happen. By the time the event goes live, the queue is already there.</p>
+      <div class="af-cta__row">
+        <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+        <a href="af-events.html" class="af-btn af-btn--cream">Browse upcoming events</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot-af">
+  <div class="u-container">
+    <div class="foot-af__cols">
+      <div>
+        <a href="concept-5-aiflow.html" class="wordmark">Job<b>Fair</b>X</a>
+        <p style="margin-top:var(--s-4);max-width:34ch;font-size:var(--t-sm);color:var(--navy-2)">
+          AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+        </p>
+      </div>
+      <div><h3>Platform</h3><ul>
+        <li><a href="af-platform.html">Platform overview</a></li>
+        <li><a href="af-platform-events-dashboard.html">Events dashboard</a></li>
+        <li><a href="af-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+        <li><a href="af-platform-interview-scheduling.html">Interview scheduling</a></li>
+        <li><span aria-current="page">Event day</span></li>
+        <li><a href="af-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+        <li><a href="af-platform-analytics.html">Analytics</a></li>
+      </ul></div>
+      <div><h3>Solutions</h3><ul>
+        <li><a href="af-solutions.html">All solutions</a></li>
+        <li><a href="af-solutions-healthcare.html">Healthcare</a></li>
+        <li><a href="af-solutions-diversity.html">Diversity</a></li>
+        <li><a href="af-solutions-veteran.html">Veteran</a></li>
+        <li><a href="af-solutions-technology.html">Technology</a></li>
+        <li><a href="af-solutions-entry-level.html">Entry-level</a></li>
+      </ul></div>
+      <div><h3>Events</h3><ul>
+        <li><a href="af-events.html">Upcoming hiring events</a></li>
+        <li><a href="page-interview-locations.html">Interview locations</a></li>
+        <li><a href="af-in-person-interviews.html">In-person interviews</a></li>
+        <li><a href="af-pricing.html">Pricing</a></li>
+      </ul></div>
+      <div><h3>Company</h3><ul>
+        <li><a href="page-about.html">About</a></li>
+        <li><a href="page-resources.html">Resources</a></li>
+        <li><a href="af-faq.html">FAQ</a></li>
+        <li><a href="af-contact.html">Contact</a></li>
+        <li><a href="page-demo.html">Book a demo</a></li>
+      </ul></div>
+      <div><h3>Legal</h3><ul>
+        <li><a href="page-privacy-policy.html">Privacy</a></li>
+        <li><a href="page-terms.html">Terms</a></li>
+        <li><a href="page-security.html">Security</a></li>
+        <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+      </ul></div>
+    </div>
+
+    <div class="foot-af__mark" aria-hidden="true">JobFairX</div>
+
+    <div class="foot-af__base">
+      <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+      <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page behaviour — vanilla, page-scoped, all inside one IIFE.
+   1. Disclosure dropdowns (click + Escape + outside click; hover-open with a
+      close delay for pointer users).
+   2. Auto-advancing feature tabs with a progress underline. Any interaction
+      hands control to the user permanently. Reduced motion: no auto-advance.
+   3. Quote arrows scroll the snap row (the row itself is natively
+      scrollable; the arrows are a convenience, not the mechanism).
+   ========================================================================== */
+(function () {
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1. dropdowns ---------- */
+  var dds = Array.prototype.slice.call(document.querySelectorAll('[data-dd]'));
+  function closeAll(except) {
+    dds.forEach(function (dd) {
+      if (dd === except) return;
+      dd.classList.remove('is-open');
+      dd.querySelector('button').setAttribute('aria-expanded', 'false');
+      dd.querySelector('.dd__panel').hidden = true;
+    });
+  }
+  dds.forEach(function (dd) {
+    var btn = dd.querySelector('button');
+    var panel = dd.querySelector('.dd__panel');
+    var closeT = null;
+    function open() {
+      clearTimeout(closeT);
+      closeAll(dd);
+      dd.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+    }
+    function close() {
+      dd.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    }
+    btn.addEventListener('click', function () {
+      dd.classList.contains('is-open') ? close() : open();
+    });
+    dd.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'mouse') open();
+    });
+    dd.addEventListener('pointerleave', function (e) {
+      if (e.pointerType === 'mouse') closeT = setTimeout(close, 160);
+    });
+    dd.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(); btn.focus(); }
+    });
+    dd.addEventListener('focusout', function (e) {
+      if (!dd.contains(e.relatedTarget)) close();
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-dd]')) closeAll(null);
+  });
+
+  /* ---------- 2. auto tabs ---------- */
+  var root = document.querySelector('[data-autotabs]');
+  if (root) {
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-aftab]'));
+    var panes = Array.prototype.slice.call(root.querySelectorAll('[data-afpane]'));
+    var DWELL = 7000, timer = null, current = 0;
+    root.style.setProperty('--dwell', DWELL + 'ms');
+
+    function select(i, focus) {
+      current = i;
+      tabs.forEach(function (t, k) {
+        var on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) {
+          /* restart the fill animation for the new tab */
+          var bar = t.querySelector('.af-tab__bar');
+          bar.style.animation = 'none';
+          void bar.offsetWidth;
+          bar.style.animation = '';
+        }
+      });
+      panes.forEach(function (p, k) { p.hidden = k !== i; });
+      if (focus) tabs[i].focus();
+    }
+    function stopAuto() {
+      if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-auto'); }
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { stopAuto(); select(i); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault(); stopAuto();
+        select((i + d + tabs.length) % tabs.length, true);
+      });
+    });
+    if (!reduced && 'IntersectionObserver' in window) {
+      /* start the loop only once the section is actually on screen */
+      var io = new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting && !timer && !root.classList.contains('was-auto')) {
+          root.classList.add('is-auto', 'was-auto');
+          select(current);
+          timer = setInterval(function () { select((current + 1) % tabs.length); }, DWELL);
+        } else if (!e[0].isIntersecting) {
+          stopAuto();
+        }
+      }, { threshold: 0.4 });
+      io.observe(root);
+      root.addEventListener('pointerenter', stopAuto, { once: false });
+      root.addEventListener('focusin', stopAuto);
+    }
+  }
+
+  /* ---------- 3. quote arrows ---------- */
+  var row = document.querySelector('[data-afquotes]');
+  if (row) {
+    function step(dir) {
+      var card = row.querySelector('.af-quote');
+      if (!card) return;
+      row.scrollBy({ left: dir * (card.getBoundingClientRect().width + 20), behavior: reduced ? 'auto' : 'smooth' });
+    }
+    document.querySelector('[data-qprev]').addEventListener('click', function () { step(-1); });
+    document.querySelector('[data-qnext]').addEventListener('click', function () { step(1); });
+  }
+})();
+</script>
+</body>
+</html>

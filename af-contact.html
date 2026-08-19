@@ -1,0 +1,1376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact JobFairX — Talk to us</title>
+<meta name="description" content="Questions about hiring events, pricing, or where your interviews happen? Email, call, or send the JobFairX team a message.">
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/vignettes.css">
+<style>
+/* ==========================================================================
+   CONCEPT 5 — "AI FLOW"
+   A fifth homepage candidate beside dark / light / hybrid / vid. Scott's
+   brief: wisq.com's calm editorial layout — huge centered statements, one
+   enormous rounded panel per section, cream/navy palette, big images, easy
+   reading — with careerflow.ai's navigation quality: a Features mega-dropdown
+   (icon tile + name + one-line description) and a Solutions dropdown, on top
+   of our normal four-item nav.
+
+   Decisions taken for this concept (surface to Scott, do not silently
+   revisit):
+   1. PRIMARY CTAs are deep-navy pills (the reference's grammar). JobFairX
+      blue remains the wordmark, links and accents. This deliberately differs
+      from the vid concept's blue-CTA rule — it is what makes the dress.
+   2. The reference leans on licensed photography of people. We own none and
+      ship none — panels carry real product compositions instead. If the page
+      reads "missing" next to wisq.com, that is the gap, and it stays honest.
+   3. No awards exist, so no award badge — the hero eyebrow carries a verified
+      stat instead. No logo wall (no rights); a quiet stat strip instead.
+   4. Pricing cards, when this concept grows a pricing page, are EQUAL SIZE —
+      Scott explicitly dislikes the lifted featured card.
+   5. A serif (system Georgia stack) appears ONLY in the editorial resources
+      block — masthead AND article-card titles, the reference's magazine
+      moment. Nowhere else on the concept.
+   6. The featured resources are the four evergreen metric guides. The three
+      articles flagged "Needs update" on page-resources.html are factually
+      stale since the in-person launch and must not be promoted.
+
+   Everything else obeys the locked system: hard cuts, one depth mechanism
+   per element, no 3D tilt, no springs, no frosted nav, transform/opacity
+   motion only, one moving element per screenful, authored frame complete
+   with JS off and under reduced motion.
+   ========================================================================== */
+
+/* ---------- concept palette ---------- */
+.aiflow {
+  --canvas-af: #fdfcf9;      /* warm near-white, never pure white */
+  --cream: #f6f1e9;          /* the reference's panel ground */
+  --cream-line: #e9e2d5;
+  --navy: #101c3f;           /* ink + primary pills */
+  --navy-2: #3d4460;         /* body copy on light */
+  --muted-af: #6a7086;       /* muted on white */
+  --muted-cream: #5f6580;    /* muted on cream (AA there) */
+  --band-ink: #cdd4ea;       /* body copy on the navy band */
+  --grad: linear-gradient(112deg, #bfe6dc 0%, #9fd6e6 55%, #7cc3e8 100%);
+}
+.aiflow { background: var(--canvas-af); color: var(--navy-2);
+  /* bridge the shared base.css tokens onto this palette so vg-* components
+     and any base primitive resolve correctly without a data-theme wrapper */
+  --canvas: var(--canvas-af); --surface: #fff; --surface-2: var(--cream);
+  --ink: var(--navy); --ink-2: var(--navy-2); --ink-3: var(--muted-af);
+  --hairline: var(--cream-line); --hairline-strong: #d9d0bf;
+}
+.aiflow .t-display, .aiflow .t-h1, .aiflow .t-h2 { font-weight: 600; color: var(--navy); }
+.aiflow .t-h2 { letter-spacing: -.034em; }
+
+/* the reference's grammar: everything important is centered */
+.af-head { max-width: 62ch; margin-inline: auto; text-align: center; }
+.af-head .t-eyebrow { color: var(--muted-af); }
+.af-head h2 { margin-top: var(--s-3); }
+.af-head p { color: var(--navy-2); margin-top: var(--s-5); font-size: var(--t-lead); line-height: 1.5; max-width: 56ch; margin-inline: auto; }
+
+/* navy pill = primary; cream pill = secondary (concept decision 1) */
+.af-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 22px; border-radius: var(--r-pill);
+  font-size: var(--t-sm); font-weight: 550; letter-spacing: -.008em;
+  transition: transform var(--t-fast) var(--e-out), background var(--t-fast) var(--e-inout);
+}
+.af-btn--navy { background: var(--navy); color: #fff; }
+.af-btn--navy:hover { background: #1a2a58; transform: translateY(-1px); }
+.af-btn--cream { background: #fff; color: var(--navy); border: 1px solid var(--cream-line); }
+.af-btn--cream:hover { border-color: #d5cdbd; transform: translateY(-1px); }
+.af-link { font-size: var(--t-sm); font-weight: 550; color: var(--accent); }
+.af-link:hover { color: var(--accent-hover); }
+
+[hidden] { display: none !important; }
+
+/* ---------- announce (chrome, same as every concept) ---------- */
+.announce {
+  background: #0b0d12; color: #a8b0be;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  font-size: var(--t-xs); text-align: center; padding: 10px var(--gutter);
+}
+.announce strong { color: #f4f6fa; }
+.announce a { color: #f4f6fa; border-bottom: 1px solid rgba(255,255,255,.16); padding-bottom: 1px; }
+.announce a:hover { border-color: var(--accent); }
+
+/* ==========================================================================
+   NAV — careerflow's quality on wisq's calm bar
+   Solid when stuck (system rule: no frosted glass). Two disclosure dropdowns:
+   click toggles, Escape and outside-click close, hover opens for pointer
+   users with a close delay. Mobile: everything folds into the flat drawer.
+   ========================================================================== */
+.nav-af {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--canvas-af);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t-base) var(--e-inout), box-shadow var(--t-base) var(--e-inout);
+}
+.nav-af.is-stuck { border-bottom-color: var(--cream-line); box-shadow: 0 1px 0 rgba(16,28,63,.03); }
+.nav-af__inner { display: flex; align-items: center; gap: var(--s-6); height: 68px; }
+.wordmark { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.wordmark b { color: var(--accent); font-weight: 600; }
+.nav-af__links { display: flex; align-items: center; gap: var(--s-1); margin-inline: auto; }
+.nav-af__links > a, .dd > button {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-radius: var(--r-pill);
+  font-size: var(--t-sm); font-weight: 500; color: var(--navy-2);
+  transition: background var(--t-micro) var(--e-inout), color var(--t-micro) var(--e-inout);
+}
+.nav-af__links > a:hover, .dd > button:hover, .dd.is-open > button { background: var(--cream); color: var(--navy); }
+.dd > button svg { transition: transform var(--t-fast) var(--e-out); color: var(--muted-af); }
+.dd.is-open > button svg { transform: rotate(180deg); }
+.nav-af__actions { display: flex; align-items: center; gap: var(--s-3); }
+.nav-af__toggle { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-md); color: var(--navy); }
+
+/* the mega-panel: icon tile + bold name + one-line description */
+.dd { position: relative; }
+.dd__panel {
+  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  width: min(720px, calc(100vw - 48px));
+  background: #fff; border: 1px solid var(--cream-line); border-radius: var(--r-xl);
+  box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 60px -16px rgba(16,28,63,.18);
+  padding: var(--s-4);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.dd__panel--narrow { width: min(560px, calc(100vw - 48px)); }
+.dd__item {
+  display: flex; gap: var(--s-4); align-items: flex-start;
+  padding: var(--s-4); border-radius: var(--r-lg);
+  transition: background var(--t-micro) var(--e-inout);
+}
+.dd__item:hover { background: var(--cream); }
+.dd__item:hover .dd__d { color: var(--muted-cream); }
+/* Careerflow's icon treatment (they ship Phosphor fill glyphs in one bright
+   saturated blue, no tile box). Ours: Phosphor fill (MIT) in OUR bright blue;
+   the Solutions menu uses the five product-canonical type colours. */
+.dd__ic {
+  flex: none; width: 32px; height: 32px; margin-top: 2px;
+  color: var(--accent);
+  display: grid; place-items: center;
+}
+.dd__t { display: flex; align-items: center; gap: 8px; font-size: var(--t-sm); font-weight: 600; color: var(--navy); letter-spacing: -.014em; }
+.dd__tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: var(--r-pill);
+  background: var(--accent); color: #fff;
+}
+.dd__d { margin-top: 3px; font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; line-height: 1.45; }
+.dd__all {
+  grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 2px; padding: var(--s-3);
+  border-top: 1px solid var(--cream-line);
+  font-size: var(--t-sm); font-weight: 550; color: var(--navy);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.dd__all:hover { color: var(--accent); }
+
+.drawer { display: none; }
+@media (max-width: 1020px) {
+  .nav-af__links, .nav-af__actions .af-btn--cream { display: none; }
+  .nav-af__toggle { display: grid; }
+  .nav-af__inner { justify-content: space-between; }
+  .drawer {
+    display: block; position: fixed; inset: 0; z-index: 70;
+    background: #08090c; color: #f4f6fa;
+    padding: var(--s-16) var(--gutter);
+    transform: translateY(-100%); visibility: hidden;
+    transition: transform var(--t-base) var(--e-out), visibility 0s var(--t-base);
+    overflow-y: auto;
+  }
+  .drawer.is-open { transform: none; visibility: visible; transition-delay: 0s, 0s; }
+  .drawer a { display: block; font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .drawer small { display: block; margin-top: var(--s-8); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: #a8b0be; }
+  .drawer__close { position: absolute; top: var(--s-5); right: var(--gutter); font-size: 2rem; line-height: 1; color: #f4f6fa; }
+}
+
+/* ==========================================================================
+   HERO — centered statement, then one enormous rounded panel
+   ========================================================================== */
+.af-hero { padding-block: clamp(56px, 8vh, 96px) 0; }
+.af-hero__badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: var(--r-pill);
+  background: #fff; border: 1px solid var(--cream-line);
+  font-size: var(--t-xs); font-weight: 550; color: var(--navy-2);
+  box-shadow: var(--sh-sm);
+}
+.af-hero__badge b { color: var(--accent); font-weight: 600; }
+.af-hero h1 { max-width: 17ch; margin: var(--s-6) auto 0; }
+.af-hero__sub { max-width: 52ch; margin: var(--s-6) auto 0; font-size: var(--t-lead); line-height: 1.55; color: var(--navy-2); }
+.af-hero__cta { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: var(--s-5); margin-top: var(--s-8); }
+
+.af-stage {
+  position: relative; margin-top: clamp(40px, 6vh, 64px);
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid var(--cream-line);
+  box-shadow: 0 2px 6px rgba(16,28,63,.05), 0 40px 80px -24px rgba(16,28,63,.16);
+  background: #fff;
+}
+.af-stage .crop { border-radius: 0; }
+/* floating product cards over the stage — sharp DOM, never a baked PNG */
+.af-float {
+  position: absolute; z-index: 5; width: var(--fw, 280px);
+  background: #fff; color: #14161a;
+  border: 1px solid rgba(16,28,63,.08); border-radius: var(--r-lg);
+  box-shadow: 0 1px 3px rgba(16,28,63,.08), 0 24px 48px -12px rgba(16,28,63,.22);
+  padding: var(--s-4);
+}
+@media (max-width: 860px) { .af-float { display: none; } }
+
+/* quiet stat strip (the reference's logo-band slot; we own no logo rights) */
+.af-strip {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-3) var(--s-10);
+  padding-block: var(--s-10);
+  font-size: var(--t-sm); color: var(--muted-af);
+}
+.af-strip b { color: var(--navy); font-weight: 600; }
+
+/* ==========================================================================
+   THREE-CARD ROW — before / during / after, on cream cards
+   ========================================================================== */
+.af-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-card {
+  background: var(--cream); border-radius: 20px; padding: var(--s-7);
+  display: flex; flex-direction: column; min-width: 0;
+}
+.af-card h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -.026em; color: var(--navy); }
+.af-card > p { margin-top: var(--s-3); font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.55; }
+.af-card__shot {
+  margin-top: auto; padding-top: var(--s-6);
+}
+.af-card__shot .panel { border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.06); box-shadow: 0 1px 3px rgba(16,28,63,.07); }
+@media (max-width: 980px) { .af-cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   TABBED FEATURE SECTION — the reference's auto-advancing tab row
+   One giant panel; three tabs below it swap the crop. The strip advances on
+   a timer with a progress underline; ANY user interaction takes control and
+   stops the auto-advance for good. Reduced motion / no JS: tab 1, static.
+   ========================================================================== */
+.af-tabs__stage { margin-top: var(--s-12); }
+.af-tabstrip {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-8);
+  margin-top: var(--s-8); border-top: 1px solid var(--cream-line);
+}
+.af-tab {
+  position: relative; text-align: left; padding: var(--s-5) 0 0; min-width: 0;
+  color: var(--muted-af);
+}
+.af-tab b { display: block; font-size: var(--t-body); font-weight: 600; letter-spacing: -.018em; color: inherit; }
+.af-tab span { display: block; margin-top: var(--s-2); font-size: var(--t-sm); line-height: 1.5; letter-spacing: .004em; }
+.af-tab[aria-selected="true"] { color: var(--navy); }
+.af-tab[aria-selected="true"] span { color: var(--navy-2); }
+.af-tab::before {
+  content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+  background: var(--cream-line);
+}
+.af-tab__bar {
+  position: absolute; top: -1px; left: 0; height: 2px; width: 100%;
+  background: var(--navy); transform: scaleX(0); transform-origin: left;
+}
+.af-tab[aria-selected="true"] .af-tab__bar { transform: scaleX(1); }
+/* while auto-advancing, the bar FILLS over the dwell time (JS sets --dwell) */
+.js .af-tabs.is-auto .af-tab[aria-selected="true"] .af-tab__bar {
+  animation: af-fill var(--dwell, 7s) linear both;
+}
+@keyframes af-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (max-width: 780px) {
+  .af-tabstrip { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); }
+  .af-tab { padding-top: var(--s-4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .af-tabs.is-auto .af-tab[aria-selected="true"] .af-tab__bar { animation: none; transform: scaleX(1); }
+}
+
+/* ==========================================================================
+   NAVY BAND — every package includes (the reference's security band)
+   ========================================================================== */
+.af-band { background: var(--navy); color: var(--band-ink); }
+.af-band .t-eyebrow { color: #8fa0d0; font-family: var(--font-mono); letter-spacing: .12em; }
+.af-band__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-8); flex-wrap: wrap; }
+/* .aiflow .t-h2 sets navy at higher specificity — this must outrank it or the
+   headline paints navy-on-navy (caught in QA: the band rendered headless) */
+.aiflow .af-band h2 { color: #fff; max-width: 22ch; }
+.af-band__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-10) var(--s-8); margin-top: var(--s-12); }
+.af-band__cell::before { content: ''; display: block; width: 8px; height: 8px; background: var(--accent); margin-bottom: var(--s-4); }
+.af-band__cell h3 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.016em; color: #fff; }
+.af-band__cell p { margin-top: var(--s-3); font-size: var(--t-sm); line-height: 1.55; letter-spacing: .004em; }
+.af-btn--ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.28); }
+.af-btn--ghost:hover { border-color: rgba(255,255,255,.55); transform: translateY(-1px); }
+@media (max-width: 980px) { .af-band__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .af-band__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   INTERVIEW LOCATION — cream panel, list + real dashboard column
+   ========================================================================== */
+.af-loc {
+  background: var(--cream); border-radius: 24px; padding: clamp(24px, 4vw, 56px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--s-12);
+  align-items: center; margin-top: var(--s-12);
+}
+.af-loc h3 { font-size: 1.5rem; font-weight: 600; letter-spacing: -.03em; color: var(--navy); }
+.af-loc > div > p { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--muted-cream); line-height: 1.6; }
+.af-loc__list { display: grid; gap: var(--s-2); margin-top: var(--s-6); }
+.af-loc__row {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  background: #fff; border-radius: 12px; padding: var(--s-3) var(--s-4);
+  border: 1px solid rgba(16,28,63,.05);
+}
+.af-loc__row b { font-size: var(--t-sm); font-weight: 600; color: var(--navy); min-width: 118px; }
+.af-loc__row span { font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .004em; }
+.af-loc__shot .panel { border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid rgba(16,28,63,.07); box-shadow: 0 2px 6px rgba(16,28,63,.06), 0 28px 56px -16px rgba(16,28,63,.16); }
+.af-loc__note { margin-top: var(--s-4); font-size: var(--t-xs); color: var(--muted-cream); }
+@media (max-width: 980px) { .af-loc { grid-template-columns: minmax(0, 1fr); gap: var(--s-8); } }
+
+/* ==========================================================================
+   TESTIMONIALS — giant navy cards in a scroll-snap row (user-driven only)
+   ========================================================================== */
+.af-quotes { display: flex; gap: var(--s-5); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--s-4); margin-top: var(--s-12); scrollbar-width: none; }
+.af-quotes::-webkit-scrollbar { display: none; }
+.af-quote {
+  flex: 0 0 min(760px, 88%); scroll-snap-align: center;
+  background: var(--navy); color: #e7ebf7; border-radius: 24px;
+  padding: clamp(28px, 4vw, 56px);
+  display: flex; flex-direction: column; min-height: 300px;
+}
+.af-quote blockquote { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 500; letter-spacing: -.022em; line-height: 1.4; max-width: 44ch; }
+.af-quote footer { margin-top: auto; padding-top: var(--s-8); }
+.af-quote cite { font-style: normal; display: block; font-size: var(--t-xs); letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: #8fa0d0; }
+.af-quote cite b { display: block; letter-spacing: -.01em; text-transform: none; font-size: var(--t-sm); color: #fff; margin-bottom: 3px; }
+.af-qnav { display: flex; justify-content: center; gap: var(--s-3); margin-top: var(--s-5); }
+.af-qnav button {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--cream-line); background: #fff; color: var(--navy);
+  display: grid; place-items: center;
+  transition: border-color var(--t-micro) var(--e-inout), transform var(--t-fast) var(--e-out);
+}
+.af-qnav button:hover { border-color: #d5cdbd; transform: translateY(-1px); }
+
+/* ==========================================================================
+   EDITORIAL RESOURCES — the magazine moment (serif scoped HERE only)
+   ========================================================================== */
+.af-mast { text-align: center; }
+.af-mast .t-eyebrow { color: var(--muted-af); letter-spacing: .18em; }
+.af-mast h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 500; letter-spacing: -.015em;
+  font-size: clamp(2.2rem, 4.6vw, 3.4rem); color: var(--navy);
+  margin-top: var(--s-3);
+}
+.af-mast p { margin-top: var(--s-4); color: var(--navy-2); font-size: var(--t-lead); }
+.af-articles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-5); margin-top: var(--s-12); }
+.af-article {
+  display: flex; flex-direction: column; min-height: 240px; min-width: 0;
+  background: var(--navy); border-radius: 20px; padding: var(--s-6);
+  transition: transform var(--t-fast) var(--e-out), box-shadow var(--t-fast) var(--e-out);
+}
+.af-article:hover { transform: translateY(-3px); box-shadow: 0 24px 48px -16px rgba(16,28,63,.35); }
+.af-article i { font-style: normal; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #8fa0d0; }
+.af-article h3 {
+  font-family: Georgia, 'Times New Roman', serif; font-weight: 500;
+  font-size: 1.375rem; letter-spacing: -.012em; line-height: 1.25; color: #fff;
+  margin-top: var(--s-4); max-width: 16ch;
+}
+.af-article span { margin-top: auto; padding-top: var(--s-6); font-size: var(--t-xs); color: #8fa0d0; display: inline-flex; align-items: center; gap: 6px; }
+.af-article:hover span { color: #fff; }
+@media (max-width: 1080px) { .af-articles { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px)  { .af-articles { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   GRADIENT CLOSE + LIGHT FOOTER
+   ========================================================================== */
+.af-cta {
+  position: relative; border-radius: 24px; overflow: hidden;
+  background: var(--grad); text-align: center;
+  padding: clamp(56px, 9vh, 112px) var(--s-8);
+}
+.af-cta h2 { color: var(--navy); max-width: 22ch; margin-inline: auto; }
+.af-cta p { color: #26365f; margin-top: var(--s-4); font-size: var(--t-lead); max-width: 46ch; margin-inline: auto; }
+.af-cta__row { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-4); margin-top: var(--s-8); }
+
+.foot-af { border-top: 1px solid var(--cream-line); padding-block: var(--s-16) var(--s-10); }
+.foot-af__cols { display: grid; grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr)); gap: var(--s-8) var(--s-6); }
+.foot-af h3 { font-size: var(--t-xs); font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-af); margin-bottom: var(--s-4); }
+.foot-af li { margin-bottom: var(--s-3); }
+.foot-af li a { font-size: var(--t-sm); color: var(--navy-2); transition: color var(--t-micro) var(--e-inout); }
+.foot-af li a:hover { color: var(--navy); }
+.foot-af li span[aria-current] { font-size: var(--t-sm); color: var(--navy); font-weight: 550; }
+.foot-af__mark {
+  position: relative; margin-top: var(--s-20);
+  font-size: clamp(3.5rem, 13vw, 11rem); font-weight: 600;
+  letter-spacing: -.055em; line-height: .82;
+  color: transparent; -webkit-text-stroke: 1px rgba(16,28,63,.18);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+  mask-image: linear-gradient(0deg, transparent 2%, #000 90%);
+}
+.foot-af__mark::after {
+  content: 'JobFairX'; position: absolute; left: 2px; top: 2px;
+  color: transparent; -webkit-text-stroke: 1px rgba(47,92,255,.28);
+}
+.foot-af__base { display: flex; justify-content: space-between; gap: var(--s-6); flex-wrap: wrap;
+  margin-top: var(--s-10); padding-top: var(--s-6); border-top: 1px solid var(--cream-line);
+  font-size: var(--t-xs); color: var(--muted-af); }
+@media (max-width: 1100px) { .foot-af__cols { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px)  { .foot-af__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px)  { .foot-af__cols { grid-template-columns: minmax(0, 1fr); } }
+
+.u-skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  padding: 10px 16px; border-radius: 0 0 var(--r-md) 0;
+  background: var(--navy); color: #fff; font-size: var(--t-sm); font-weight: 550;
+}
+.u-skip:focus { left: 0; }
+.u-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+[data-placeholder]::after {
+  /* Review scaffolding: an INLINE badge, not an overlay. As an absolutely
+     positioned corner chip it sat on top of the words next to inline
+     {{tokens}} (two reviewers flagged hidden body copy), and pushing it
+     outside the box overflowed the 390px viewport. In flow it can do
+     neither. */
+  content: 'PLACEHOLDER'; display: inline-block; vertical-align: middle;
+  margin-left: 5px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em;
+  padding: 2px 5px; border-radius: 3px; background: #b06d1f; color: #fff;
+  opacity: .82; pointer-events: none;
+}
+</style>
+<style>
+/* ==========================================================================
+   AF — CONTACT (page-specific; the block above is the verbatim concept-5
+   chrome and stays untouched).
+
+   PORTED, unchanged, from vid-contact.html (originally page-contact.html):
+   · every contact fact — info@jobfairx.com, (702) 269-0808, JobFairX, LLC,
+     209 S Stephanie St. STE B #144, Henderson, Nevada 89012, and support
+     hours Mon–Fri 5:00 AM – 5:00 PM PST (HANDOFF §3);
+   · the whole form — same fields in the same order, same real `required` /
+     `aria-required` / `aria-describedby` wiring, same inline messages, same
+     focus-taking error summary, same success state, same validation script.
+     The LIVE site carries ZERO `required` attributes (LIVE-SITE-SCOPE §6);
+     fixing that is a deliberate improvement — do not regress it;
+   · the {{OPTION_LISTS}} placeholder on the three dropdowns and the
+     {{RESPONSE_TIME}} placeholder in the what-happens-next band.
+
+   Re-dressed in the AI Flow language: centered .af-head grammar, the whole
+   working surface as one enormous cream panel (white form card + white
+   contact rows inside it), a navy what-happens-next band, the grainy
+   gradient close. Deliberately NOT here: a map (no map data — a drawn one
+   would be an invented artifact). Nothing on this page shows a completed
+   product state, so nothing on this page is green — the success icon is
+   brand blue, exactly as the source built it.
+   ========================================================================== */
+
+/* current-page marker (AF-BRIEF chrome contract) */
+.nav-af__links > a[aria-current="page"] { background: var(--cream); color: var(--navy); }
+
+/* ==========================================================================
+   THE WORKING SURFACE — one enormous cream panel: contact rail + form
+   ========================================================================== */
+.formzone { --err: #b3261e; --err-soft: #fdf2f1; }
+.af-work {
+  background: var(--cream); border-radius: 24px;
+  padding: clamp(24px, 4vw, 56px);
+  margin-top: var(--s-12);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: clamp(24px, 4vw, 56px); align-items: start;
+}
+/* Not sticky: the rail runs taller than a laptop viewport (four contact
+   facts and three links), and a sticky element taller than the viewport
+   pins its top and hides its own tail. */
+@media (max-width: 1000px) { .af-work { grid-template-columns: minmax(0, 1fr); gap: var(--s-10); } }
+
+/* ---------- contact rail: white rows in the cream panel ---------- */
+.af-reach > h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -.026em; color: var(--navy); }
+.af-reach__list { display: grid; gap: var(--s-2); margin-top: var(--s-5); }
+.af-crow {
+  background: #fff; border-radius: 12px; padding: var(--s-4) var(--s-5);
+  border: 1px solid rgba(16,28,63,.05);
+}
+.af-crow > h4 { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-af); margin-bottom: 6px; }
+.af-crow__v {
+  display: block; font-size: 1rem; font-weight: 600; letter-spacing: -.012em;
+  color: var(--navy); line-height: 1.45; overflow-wrap: anywhere;
+  transition: color var(--t-micro) var(--e-inout);
+}
+a.af-crow__v:hover { color: var(--accent); }
+.af-crow__m { font-size: var(--t-xs); color: var(--muted-af); margin-top: 6px; letter-spacing: .006em; }
+
+/* ---------- rail links ---------- */
+.af-rlinks { display: grid; margin-top: var(--s-6); }
+.af-rlinks a {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-4);
+  padding: var(--s-4) 0; border-top: 1px solid var(--cream-line);
+  font-size: var(--t-sm); font-weight: 600; color: var(--navy); letter-spacing: .004em;
+  transition: color var(--t-micro) var(--e-inout);
+}
+.af-rlinks a:last-child { border-bottom: 1px solid var(--cream-line); }
+.af-rlinks a:hover { color: var(--accent); }
+.af-rlinks svg { flex: none; color: var(--muted-cream); transition: transform var(--t-fast) var(--e-out), color var(--t-fast) var(--e-out); }
+.af-rlinks a:hover svg { transform: translateX(3px); color: var(--accent); }
+
+/* ---------- the form card: white plate in the cream panel ---------- */
+.form-card {
+  background: #fff; border: 1px solid rgba(16,28,63,.06); border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(16,28,63,.07), 0 16px 40px -16px rgba(16,28,63,.12);
+  padding: var(--s-8);
+}
+.form-legend { font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .006em; margin-bottom: var(--s-6); }
+
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5); }
+.field { display: grid; gap: 6px; position: relative; min-width: 0; }
+.field--full { grid-column: 1 / -1; }
+.field label { font-size: var(--t-sm); font-weight: 600; color: var(--navy); letter-spacing: .006em; }
+.field label .opt { font-weight: 400; color: var(--muted-af); }
+.req { color: var(--accent); }
+
+.field input, .field select, .field textarea {
+  width: 100%; border-radius: var(--r-md);
+  border: 1px solid var(--cream-line);
+  background-color: #fff; color: var(--navy);
+  font-size: var(--t-body); letter-spacing: .004em;
+  transition: border-color var(--t-micro) var(--e-inout);
+}
+.field input, .field select { height: 46px; padding-inline: var(--s-4); }
+.field textarea { min-height: 132px; padding: var(--s-3) var(--s-4); line-height: 1.55; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted-af); }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: #d5cdbd; }
+
+/* Native select chrome varies wildly between platforms and ignores the type
+   ramp, so it is replaced by a chevron drawn into the background. */
+.field select {
+  appearance: none; -webkit-appearance: none; padding-right: 42px; cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1.5 6 6.5l5-5' stroke='%236a7086' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat; background-position: right var(--s-4) center;
+}
+/* An unchosen select should read as placeholder text, not as an answer. Driven
+   by a data attribute rather than :invalid, so a select showing a validation
+   error doesn't also grey out its own text. */
+.field select[data-empty="true"] { color: var(--muted-af); }
+
+/* focus ring — a real outline, so it survives forced-colors mode */
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent);
+}
+
+.field.has-error input, .field.has-error select, .field.has-error textarea {
+  border-color: var(--err); background-color: var(--err-soft);
+}
+.field__err { display: flex; gap: 6px; font-size: var(--t-xs); color: var(--err); letter-spacing: .006em; }
+.field__err svg { flex: none; margin-top: 3px; }
+
+/* error summary — takes focus on a failed submit, links straight to each field */
+.form-alert {
+  margin-bottom: var(--s-6); padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--err); border-left-width: 3px; border-radius: var(--r-md);
+  background: var(--err-soft);
+}
+.form-alert__t { font-size: var(--t-sm); font-weight: 600; color: var(--err); letter-spacing: .006em; }
+.form-alert ul { margin-top: var(--s-2); display: grid; gap: 2px; }
+.form-alert li a { font-size: var(--t-sm); color: var(--err); text-decoration: underline; text-underline-offset: 2px; }
+
+.form-foot { display: flex; align-items: center; gap: var(--s-5); flex-wrap: wrap; margin-top: var(--s-8); }
+.form-foot .af-btn { min-width: 200px; height: 48px; justify-content: center; }
+.form-note { font-size: var(--t-xs); color: var(--muted-af); letter-spacing: .006em; max-width: 34ch; }
+
+/* success state — the form is replaced, not covered */
+.success {
+  background: #fff; border: 1px solid rgba(16,28,63,.06); border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(16,28,63,.07), 0 16px 40px -16px rgba(16,28,63,.12);
+  padding: var(--s-10) var(--s-8); text-align: center;
+}
+.success__ic {
+  width: 52px; height: 52px; border-radius: 50%; margin: 0 auto var(--s-6);
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--accent);
+}
+.success h2 { color: var(--navy); }
+.success p { color: var(--navy-2); max-width: 46ch; margin: var(--s-4) auto 0; }
+.success__proto {
+  margin-top: var(--s-8); padding-top: var(--s-5); border-top: 1px solid var(--cream-line);
+  font-size: var(--t-xs); color: var(--muted-af);
+}
+
+@media (max-width: 560px) {
+  /* At 390px two columns of 46px inputs guarantees a zoom-on-focus. One column,
+     a full-bleed submit, and the card sheds a third of its padding so the
+     inputs keep their width instead of the chrome keeping it. */
+  .form-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .form-card { padding: var(--s-5); }
+  .form-foot { gap: var(--s-4); }
+  .form-foot .af-btn { width: 100%; min-width: 0; }
+  .form-note { max-width: none; }
+  .success { padding: var(--s-8) var(--s-5); }
+}
+
+/* ---------- placeholder call-outs (ported) ---------- */
+.ph-note {
+  grid-column: 1 / -1;
+  padding: var(--s-4); border: 1px dashed #d9b784; border-radius: var(--r-md);
+  background: #fdf7ee; font-size: var(--t-xs); color: #7a5a24; letter-spacing: .006em;
+}
+/* Its own line, and a FULL-WIDTH box: the PLACEHOLDER badge hangs off the
+   top-right of whatever carries the attribute, so a shrink-to-fit box would
+   put the badge on top of its own text. */
+.ph-inline {
+  display: block; margin-top: var(--s-4);
+  padding: 3px 9px; border: 1px dashed #d9b784; border-radius: var(--r-sm);
+  background: #fdf7ee; color: #7a5a24; font-size: var(--t-xs);
+}
+
+/* ---------- navy what-happens-next band: three cells, not four ---------- */
+.af-band__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 980px) { .af-band__grid--3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .af-band__grid--3 { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body class="aiflow">
+
+<a class="u-skip" href="#content">Skip to content</a>
+
+<div class="announce">
+  <strong>New</strong> — in-person interviews are live.
+  Choose where your interviews happen at any event.
+  <a href="concept-5-aiflow.html#location">See how it&nbsp;works&nbsp;→</a>
+</div>
+
+<header class="nav-af" data-nav>
+  <div class="u-container nav-af__inner">
+    <a href="concept-5-aiflow.html" class="wordmark">Job<b>Fair</b>X</a>
+
+    <nav class="nav-af__links" aria-label="Main">
+      <a href="af-events.html">Upcoming Hiring Events</a>
+
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" aria-controls="dd-features">
+          Features
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dd__panel" id="dd-features" hidden>
+          <a class="dd__item" href="af-platform-events-dashboard.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,48H48V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24Z"/></svg></span>
+            <span><span class="dd__t">Events dashboard</span><span class="dd__d">Every event you've registered for, with the interview location you set on each.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-candidate-pipeline.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM117.66,149.66l-32,32a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,11.32-11.32L80,164.69l26.34-26.35a8,8,0,0,1,11.32,11.32Zm0-64-32,32a8,8,0,0,1-11.32,0l-16-16A8,8,0,0,1,69.66,90.34L80,100.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM192,168H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Zm0-64H144a8,8,0,0,1,0-16h48a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Candidate pipeline</span><span class="dd__d">Requested, scheduled, interviewed — every candidate in one list.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-interview-scheduling.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm56,112H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Interview scheduling</span><span class="dd__d">Accepting a request is what schedules it. There is no second step.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-event-day.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M192,72V184a16,16,0,0,1-16,16H32a16,16,0,0,1-16-16V72A16,16,0,0,1,32,56H176A16,16,0,0,1,192,72Zm58,.25a8.23,8.23,0,0,0-6.63,1.22L209.78,95.86A4,4,0,0,0,208,99.19v57.62a4,4,0,0,0,1.78,3.33l33.78,22.52a8,8,0,0,0,8.58.19,8.33,8.33,0,0,0,3.86-7.17V80A8,8,0,0,0,250,72.25Z"/></svg></span>
+            <span><span class="dd__t">Event day</span><span class="dd__d">The lobby: who is waiting, who is in a room, who you are due to see next.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-messaging-automations.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm32,128H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Z"/></svg></span>
+            <span><span class="dd__t">Messaging &amp; automations</span><span class="dd__d">Message candidates directly, or let the presets send on their own.</span></span>
+          </a>
+          <a class="dd__item" href="af-platform-analytics.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V136a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8v64H96V88a8,8,0,0,1,8-8h32a8,8,0,0,1,8,8V200h16V40a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z"/></svg></span>
+            <span><span class="dd__t">Analytics &amp; reporting</span><span class="dd__d">Dispositions, notes, and the post-event report with downloadable data.</span></span>
+          </a>
+          <a class="dd__item" href="af-in-person-interviews.html">
+            <span class="dd__ic"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z"/></svg></span>
+            <span><span class="dd__t">In-person interviews <span class="dd__tag">New</span></span><span class="dd__d">Set your street address as the interview location for any event you join.</span></span>
+          </a>
+          <a class="dd__all" href="af-platform.html">All features
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="dd" data-dd>
+        <button type="button" aria-expanded="false" aria-controls="dd-solutions">
+          Solutions
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5 9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dd__panel dd__panel--narrow" id="dd-solutions" hidden>
+          <a class="dd__item" href="af-solutions-healthcare.html">
+            <span class="dd__ic" style="color:#12897f"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,108v40a16,16,0,0,1-16,16H164v52a16,16,0,0,1-16,16H108a16,16,0,0,1-16-16V164H40a16,16,0,0,1-16-16V108A16,16,0,0,1,40,92H92V40a16,16,0,0,1,16-16h40a16,16,0,0,1,16,16V92h52A16,16,0,0,1,232,108Z"/></svg></span>
+            <span><span class="dd__t">Healthcare</span><span class="dd__d">Nurses, techs, allied health and clinical support.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-diversity.html">
+            <span class="dd__ic" style="color:#e07b39"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M64.12,147.8a4,4,0,0,1-4,4.2H16a8,8,0,0,1-7.8-6.17,8.35,8.35,0,0,1,1.62-6.93A67.79,67.79,0,0,1,37,117.51a40,40,0,1,1,66.46-35.8,3.94,3.94,0,0,1-2.27,4.18A64.08,64.08,0,0,0,64,144C64,145.28,64,146.54,64.12,147.8Zm182-8.91A67.76,67.76,0,0,0,219,117.51a40,40,0,1,0-66.46-35.8,3.94,3.94,0,0,0,2.27,4.18A64.08,64.08,0,0,1,192,144c0,1.28,0,2.54-.12,3.8a4,4,0,0,0,4,4.2H240a8,8,0,0,0,7.8-6.17A8.33,8.33,0,0,0,246.17,138.89Zm-89,43.18a48,48,0,1,0-58.37,0A72.13,72.13,0,0,0,65.07,212,8,8,0,0,0,72,224H184a8,8,0,0,0,6.93-12A72.15,72.15,0,0,0,157.19,182.07Z"/></svg></span>
+            <span><span class="dd__t">Diversity</span><span class="dd__d">Events built to widen the top of your funnel.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-veteran.html">
+            <span class="dd__ic" style="color:#d1454b"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96Zm16,0a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg></span>
+            <span><span class="dd__t">Veteran</span><span class="dd__d">Interview reliable, well-trained veterans matched to your roles.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-technology.html">
+            <span class="dd__ic" style="color:#2f5cff"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM92.8,145.6a8,8,0,1,1-9.6,12.8l-32-24a8,8,0,0,1,0-12.8l32-24a8,8,0,0,1,9.6,12.8L69.33,128Zm58.89-71.4-32,112a8,8,0,1,1-15.38-4.4l32-112a8,8,0,0,1,15.38,4.4Zm53.11,60.2-32,24a8,8,0,0,1-9.6-12.8L186.67,128,163.2,110.4a8,8,0,1,1,9.6-12.8l32,24a8,8,0,0,1,0,12.8Z"/></svg></span>
+            <span><span class="dd__t">Technology</span><span class="dd__d">Engineering, data, product and IT roles.</span></span>
+          </a>
+          <a class="dd__item" href="af-solutions-entry-level.html">
+            <span class="dd__ic" style="color:#3aa0e6"><svg width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M176,207.24a119,119,0,0,0,16-7.73V240a8,8,0,0,1-16,0Zm11.76-88.43-56-29.87a8,8,0,0,0-7.52,14.12L171,128l17-9.06Zm64-29.87-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V130.67L171,128l-43,22.93L43.83,106l0,0L25,96,128,41.07,231,96l-18.78,10-.06,0L188,118.94a8,8,0,0,1,4,6.93v73.64a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12Z"/></svg></span>
+            <span><span class="dd__t">Entry-level</span><span class="dd__d">High-volume hiring for roles that move fast.</span></span>
+          </a>
+          <a class="dd__all" href="af-solutions.html">All solutions
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <a href="af-pricing.html">Pricing</a>
+      <a href="af-faq.html">FAQ</a>
+      <a href="af-contact.html" aria-current="page">Contact Us</a>
+    </nav>
+
+    <div class="nav-af__actions">
+      <a href="#" class="af-btn af-btn--cream">Sign In</a>
+      <a href="#" class="af-btn af-btn--navy">Register for an Event</a>
+      <button class="nav-af__toggle" data-nav-toggle aria-expanded="false" aria-label="Open menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true"><path d="M0 1h18M0 6h18M0 11h18" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" data-nav-drawer>
+  <button class="drawer__close" data-nav-toggle aria-label="Close menu">×</button>
+  <a href="af-events.html">Upcoming Hiring Events</a>
+  <a href="af-pricing.html">Pricing</a>
+  <a href="af-faq.html">FAQ</a>
+  <a href="af-contact.html">Contact Us</a>
+  <small>Features</small>
+  <a href="af-platform-events-dashboard.html">Events dashboard</a>
+  <a href="af-platform-candidate-pipeline.html">Candidate pipeline</a>
+  <a href="af-platform-interview-scheduling.html">Interview scheduling</a>
+  <a href="af-platform-event-day.html">Event day</a>
+  <a href="af-platform-messaging-automations.html">Messaging &amp; automations</a>
+  <a href="af-platform-analytics.html">Analytics &amp; reporting</a>
+  <a href="af-in-person-interviews.html">In-person interviews — New</a>
+  <small>Solutions</small>
+  <a href="af-solutions-healthcare.html">Healthcare</a>
+  <a href="af-solutions-diversity.html">Diversity</a>
+  <a href="af-solutions-veteran.html">Veteran</a>
+  <a href="af-solutions-technology.html">Technology</a>
+  <a href="af-solutions-entry-level.html">Entry-level</a>
+  <a href="#">Sign In</a>
+  <a href="#" style="color:#96b0ff">Register for an Event →</a>
+</div>
+
+<main id="content" tabindex="-1">
+
+<section class="af-hero">
+  <div class="u-container" style="text-align:center">
+    <p class="t-eyebrow">Contact</p>
+    <h1 class="t-h1 t-balance">Talk to us.</h1>
+    <p class="af-hero__sub">
+      Questions about hiring events, pricing, or where your interviews actually happen?
+      Send us a message, or call during support hours and talk to a person.
+    </p>
+  </div>
+</section>
+
+<div class="u-container">
+  <p class="af-strip">
+    <span><b>info@jobfairx.com</b></span>
+    <span><b>(702) 269-0808</b></span>
+    <span>Support hours <b>Mon–Fri, 5:00 AM – 5:00 PM PST</b></span>
+    <span>Henderson, Nevada</span>
+  </p>
+</div>
+
+<section class="u-section formzone" id="contact-form" style="background:#fff">
+  <div class="u-container">
+    <div class="af-head" data-reveal>
+      <p class="t-eyebrow">Send a message</p>
+      <h2 class="t-h2 t-balance">Tell us what you're hiring for.</h2>
+      <p>
+        Roles, market, and roughly how many people you need. We'll tell you which
+        upcoming event fits, what a seat costs, and how to set the interview location
+        for your own interviews — JobFairX video, phone, in person at your address, or
+        your own Zoom, Teams or Meet link.
+      </p>
+    </div>
+
+    <div class="af-work" data-reveal>
+
+            <div class="af-reach">
+        <h3>How to reach us</h3>
+        <div class="af-reach__list">
+          <div class="af-crow">
+            <h4>Email</h4>
+            <a class="af-crow__v" href="mailto:info@jobfairx.com">info@jobfairx.com</a>
+            <p class="af-crow__m">For anything you'd rather put in writing.</p>
+          </div>
+
+          <div class="af-crow">
+            <h4>Phone</h4>
+            <a class="af-crow__v" href="tel:+17022690808">(702) 269-0808</a>
+            <p class="af-crow__m">Talk to a person during support hours.</p>
+          </div>
+
+                    <div class="af-crow">
+            <h4>Office</h4>
+            <address class="af-crow__v" style="font-style:normal">
+              JobFairX, LLC<br>209 S Stephanie St.<br>STE B #144<br>Henderson, Nevada 89012
+            </address>
+                        <p class="af-crow__m">Mailing address. Not an interview location.</p>
+          </div>
+
+          <div class="af-crow">
+            <h4>Support hours</h4>
+            <p class="af-crow__v">Mon–Fri, 5:00 AM – 5:00 PM PST</p>
+            <p class="af-crow__m">Outside the window, use the form.</p>
+          </div>
+        </div>
+
+        <div class="af-rlinks">
+          <a href="af-events.html">Browse upcoming events
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="af-pricing.html">See pricing and bundles
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="af-faq.html">Read the FAQ
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+            <div>
+        <form class="form-card" id="contact-form-el" novalidate>
+
+          <div class="form-alert" id="form-error-summary" role="alert" tabindex="-1" hidden>
+            <p class="form-alert__t" id="form-error-count">There's a problem with this form.</p>
+            <ul id="form-error-list"></ul>
+          </div>
+
+          <p class="form-legend">Fields marked <span class="req" aria-hidden="true">*</span> are required.</p>
+
+                    <div class="form-grid">
+            <div class="field">
+              <label for="first-name">First name <span class="req" aria-hidden="true">*</span></label>
+              <input id="first-name" name="firstName" type="text" autocomplete="given-name"
+                     required aria-required="true" aria-describedby="err-first-name"
+                     data-validate data-label="First name" data-msg="Enter your first name.">
+              <p class="field__err" id="err-first-name" role="alert" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="last-name">Last name <span class="req" aria-hidden="true">*</span></label>
+              <input id="last-name" name="lastName" type="text" autocomplete="family-name"
+                     required aria-required="true" aria-describedby="err-last-name"
+                     data-validate data-label="Last name" data-msg="Enter your last name.">
+              <p class="field__err" id="err-last-name" role="alert" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone number <span class="req" aria-hidden="true">*</span></label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                     required aria-required="true" aria-describedby="err-phone"
+                     data-validate data-type="tel" data-label="Phone number"
+                     data-msg="Enter a phone number we can reach you on."
+                     data-msg-format="Enter a phone number including the area code.">
+              <p class="field__err" id="err-phone" role="alert" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="email">Business email <span class="req" aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                     spellcheck="false" required aria-required="true" aria-describedby="err-email"
+                     data-validate data-type="email" data-label="Business email"
+                     data-msg="Enter your business email address."
+                     data-msg-format="Enter an email address in the format name@company.com.">
+              <p class="field__err" id="err-email" role="alert" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="company">Company name <span class="req" aria-hidden="true">*</span></label>
+              <input id="company" name="company" type="text" autocomplete="organization"
+                     required aria-required="true" aria-describedby="err-company"
+                     data-validate data-label="Company name" data-msg="Enter your company name.">
+              <p class="field__err" id="err-company" role="alert" hidden></p>
+            </div>
+
+            <div class="field" data-placeholder>
+              <label for="company-size">Company size <span class="req" aria-hidden="true">*</span></label>
+              <select id="company-size" name="companySize" required aria-required="true"
+                      aria-describedby="err-company-size"
+                      data-validate data-label="Company size" data-msg="Choose a company size.">
+                <option value="">Select…</option>
+                <option>1–10 employees</option>
+                <option>11–50 employees</option>
+                <option>51–200 employees</option>
+                <option>201–500 employees</option>
+                <option>501–1,000 employees</option>
+                <option>1,001–5,000 employees</option>
+                <option>5,000+ employees</option>
+              </select>
+              <p class="field__err" id="err-company-size" role="alert" hidden></p>
+            </div>
+
+            <div class="field" data-placeholder>
+              <label for="job-title">Job title <span class="req" aria-hidden="true">*</span></label>
+              <select id="job-title" name="jobTitle" autocomplete="organization-title"
+                      required aria-required="true" aria-describedby="err-job-title"
+                      data-validate data-label="Job title" data-msg="Choose the closest job title.">
+                <option value="">Select…</option>
+                <option>Recruiter / Talent acquisition</option>
+                <option>Hiring manager</option>
+                <option>HR manager or director</option>
+                <option>VP / Head of people</option>
+                <option>Founder or owner</option>
+                <option>Operations</option>
+                <option>Other</option>
+              </select>
+              <p class="field__err" id="err-job-title" role="alert" hidden></p>
+            </div>
+
+            <div class="field" data-placeholder>
+              <label for="subject">Subject <span class="req" aria-hidden="true">*</span></label>
+              <select id="subject" name="subject" required aria-required="true"
+                      aria-describedby="err-subject"
+                      data-validate data-label="Subject" data-msg="Choose what this is about.">
+                <option value="">Select…</option>
+                <option>Hiring events</option>
+                                <option>In-person interviews</option>
+                <option>Pricing and bundles</option>
+                <option>Product demo</option>
+                <option>Job postings</option>
+                <option>Hosting an event</option>
+                <option>Nonprofit pricing</option>
+                <option>Existing account or support</option>
+                <option>Something else</option>
+              </select>
+              <p class="field__err" id="err-subject" role="alert" hidden></p>
+            </div>
+
+            <p class="ph-note" data-placeholder>
+              <strong>{{OPTION_LISTS}}</strong> — the live form's Company Size, Job
+              Title and Subject values were not captured in LIVE-SITE-SCOPE.md, which
+              records only that all three are dropdowns. The Subject options above are
+              derived from the real site map (events, pricing and bundles, demo, job
+              postings, host an event, nonprofit); Company Size and Job Title are
+              stand-ins. Replace all three lists with the production values before
+              publishing.
+            </p>
+
+            <div class="field field--full">
+              <label for="message">Message <span class="opt">(optional)</span></label>
+              <textarea id="message" name="message" rows="5"
+                        placeholder="Roles you're hiring for, the city, and how many people you need."></textarea>
+            </div>
+          </div>
+
+          <div class="form-foot">
+            <button type="submit" class="af-btn af-btn--navy">Send message</button>
+            <p class="form-note">Prototype — this form validates but posts nowhere. Nothing is sent or stored.</p>
+          </div>
+        </form>
+
+                <div class="success" id="form-success" role="status" tabindex="-1" hidden>
+          <div class="success__ic" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg>
+          </div>
+          <h2 class="t-h3">Thanks<span id="success-name"></span> — we've got your message.</h2>
+          <p>
+            A reply goes to <b id="success-email">the address you entered</b> during
+            support hours, Mon–Fri, 5:00 AM – 5:00 PM PST. In a hurry, call
+            <a href="tel:+17022690808" style="color:var(--accent)">(702) 269-0808</a>.
+          </p>
+          <div style="margin-top:var(--s-8);display:flex;gap:var(--s-3);justify-content:center;flex-wrap:wrap">
+            <a href="af-events.html" class="af-btn af-btn--navy">Browse events</a>
+            <button type="button" class="af-btn af-btn--cream" id="send-another">Send another message</button>
+          </div>
+          <p class="success__proto">
+            Prototype — no message was actually sent. This state exists to show the
+            confirmation, not to confirm anything.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="u-section af-band">
+  <div class="u-container">
+    <div class="af-band__head" data-reveal>
+      <div>
+        <p class="t-eyebrow">After you hit send</p>
+        <h2 class="t-h2 t-balance" style="margin-top:var(--s-3)">What happens next.</h2>
+      </div>
+      <a href="tel:+17022690808" class="af-btn af-btn--ghost">In a hurry? Call (702) 269-0808</a>
+    </div>
+
+    <div class="af-band__grid af-band__grid--3">
+      <div class="af-band__cell" data-reveal style="--i:0">
+        <h3>A reply to your business email</h3>
+        <p>A reply goes to the business email you enter — no account, no login.</p>
+      </div>
+      <div class="af-band__cell" data-reveal style="--i:1">
+        <h3>During support hours</h3>
+        <p>Replies go out Mon–Fri, 5:00 AM – 5:00 PM PST.</p>
+        <p class="ph-inline" data-placeholder>Typical reply time: {{RESPONSE_TIME}}</p>
+      </div>
+      <div class="af-band__cell" data-reveal style="--i:2">
+        <h3>An answer you can act on</h3>
+        <p>The upcoming event that fits, what a seat costs, and how to set your interview location.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="u-section">
+  <div class="u-container">
+        <div class="af-cta grain">
+      <h2 class="t-h2 t-balance">Or just look around first.</h2>
+      <p>Every upcoming event, every market, and exactly what a seat costs — all of it is public. No call required.</p>
+      <div class="af-cta__row">
+        <a href="af-events.html" class="af-btn af-btn--navy">Browse events</a>
+        <a href="af-pricing.html" class="af-btn af-btn--cream">View pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot-af">
+  <div class="u-container">
+    <div class="foot-af__cols">
+      <div>
+        <a href="concept-5-aiflow.html" class="wordmark">Job<b>Fair</b>X</a>
+        <p style="margin-top:var(--s-4);max-width:34ch;font-size:var(--t-sm);color:var(--navy-2)">
+          AI-matched hiring events for teams that would rather interview than search. You choose where your interviews happen &mdash; JobFairX video, phone, in person, or your own link.
+        </p>
+      </div>
+      <div><h3>Platform</h3><ul>
+        <li><a href="af-platform.html">Platform overview</a></li>
+        <li><a href="af-platform-events-dashboard.html">Events dashboard</a></li>
+        <li><a href="af-platform-candidate-pipeline.html">Candidate pipeline</a></li>
+        <li><a href="af-platform-interview-scheduling.html">Interview scheduling</a></li>
+        <li><a href="af-platform-event-day.html">Event day</a></li>
+        <li><a href="af-platform-messaging-automations.html">Messaging &amp; automations</a></li>
+        <li><a href="af-platform-analytics.html">Analytics</a></li>
+      </ul></div>
+      <div><h3>Solutions</h3><ul>
+        <li><a href="af-solutions.html">All solutions</a></li>
+        <li><a href="af-solutions-healthcare.html">Healthcare</a></li>
+        <li><a href="af-solutions-diversity.html">Diversity</a></li>
+        <li><a href="af-solutions-veteran.html">Veteran</a></li>
+        <li><a href="af-solutions-technology.html">Technology</a></li>
+        <li><a href="af-solutions-entry-level.html">Entry-level</a></li>
+      </ul></div>
+      <div><h3>Events</h3><ul>
+        <li><a href="af-events.html">Upcoming hiring events</a></li>
+        <li><a href="page-interview-locations.html">Interview locations</a></li>
+        <li><a href="af-in-person-interviews.html">In-person interviews</a></li>
+        <li><a href="af-pricing.html">Pricing</a></li>
+      </ul></div>
+      <div><h3>Company</h3><ul>
+        <li><a href="page-about.html">About</a></li>
+        <li><a href="page-resources.html">Resources</a></li>
+        <li><a href="af-faq.html">FAQ</a></li>
+        <li><span aria-current="page">Contact</span></li>
+        <li><a href="page-demo.html">Book a demo</a></li>
+      </ul></div>
+      <div><h3>Legal</h3><ul>
+        <li><a href="page-privacy-policy.html">Privacy</a></li>
+        <li><a href="page-terms.html">Terms</a></li>
+        <li><a href="page-security.html">Security</a></li>
+        <li><a href="#" data-placeholder>{{Compliance}}</a></li>
+      </ul></div>
+    </div>
+
+    <div class="foot-af__mark" aria-hidden="true">JobFairX</div>
+
+    <div class="foot-af__base">
+      <span>&copy; 2026 JobFairX, LLC. All rights reserved.</span>
+      <span data-placeholder>{{SOC 2}} &middot; {{EEOC}} &middot; {{Data handling}}</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared/motion.js"></script>
+<script>
+/* ==========================================================================
+   Page behaviour — vanilla, page-scoped, all inside one IIFE.
+   1. Disclosure dropdowns (click + Escape + outside click; hover-open with a
+      close delay for pointer users).
+   2. Auto-advancing feature tabs with a progress underline. Any interaction
+      hands control to the user permanently. Reduced motion: no auto-advance.
+   3. Quote arrows scroll the snap row (the row itself is natively
+      scrollable; the arrows are a convenience, not the mechanism).
+   ========================================================================== */
+(function () {
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1. dropdowns ---------- */
+  var dds = Array.prototype.slice.call(document.querySelectorAll('[data-dd]'));
+  function closeAll(except) {
+    dds.forEach(function (dd) {
+      if (dd === except) return;
+      dd.classList.remove('is-open');
+      dd.querySelector('button').setAttribute('aria-expanded', 'false');
+      dd.querySelector('.dd__panel').hidden = true;
+    });
+  }
+  dds.forEach(function (dd) {
+    var btn = dd.querySelector('button');
+    var panel = dd.querySelector('.dd__panel');
+    var closeT = null;
+    function open() {
+      clearTimeout(closeT);
+      closeAll(dd);
+      dd.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+    }
+    function close() {
+      dd.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    }
+    btn.addEventListener('click', function () {
+      dd.classList.contains('is-open') ? close() : open();
+    });
+    dd.addEventListener('pointerenter', function (e) {
+      if (e.pointerType === 'mouse') open();
+    });
+    dd.addEventListener('pointerleave', function (e) {
+      if (e.pointerType === 'mouse') closeT = setTimeout(close, 160);
+    });
+    dd.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(); btn.focus(); }
+    });
+    dd.addEventListener('focusout', function (e) {
+      if (!dd.contains(e.relatedTarget)) close();
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-dd]')) closeAll(null);
+  });
+
+  /* ---------- 2. auto tabs ---------- */
+  var root = document.querySelector('[data-autotabs]');
+  if (root) {
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-aftab]'));
+    var panes = Array.prototype.slice.call(root.querySelectorAll('[data-afpane]'));
+    var DWELL = 7000, timer = null, current = 0;
+    root.style.setProperty('--dwell', DWELL + 'ms');
+
+    function select(i, focus) {
+      current = i;
+      tabs.forEach(function (t, k) {
+        var on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) {
+          /* restart the fill animation for the new tab */
+          var bar = t.querySelector('.af-tab__bar');
+          bar.style.animation = 'none';
+          void bar.offsetWidth;
+          bar.style.animation = '';
+        }
+      });
+      panes.forEach(function (p, k) { p.hidden = k !== i; });
+      if (focus) tabs[i].focus();
+    }
+    function stopAuto() {
+      if (timer) { clearInterval(timer); timer = null; root.classList.remove('is-auto'); }
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { stopAuto(); select(i); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault(); stopAuto();
+        select((i + d + tabs.length) % tabs.length, true);
+      });
+    });
+    if (!reduced && 'IntersectionObserver' in window) {
+      /* start the loop only once the section is actually on screen */
+      var io = new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting && !timer && !root.classList.contains('was-auto')) {
+          root.classList.add('is-auto', 'was-auto');
+          select(current);
+          timer = setInterval(function () { select((current + 1) % tabs.length); }, DWELL);
+        } else if (!e[0].isIntersecting) {
+          stopAuto();
+        }
+      }, { threshold: 0.4 });
+      io.observe(root);
+      root.addEventListener('pointerenter', stopAuto, { once: false });
+      root.addEventListener('focusin', stopAuto);
+    }
+  }
+
+  /* ---------- 3. quote arrows ---------- */
+  var row = document.querySelector('[data-afquotes]');
+  if (row) {
+    function step(dir) {
+      var card = row.querySelector('.af-quote');
+      if (!card) return;
+      row.scrollBy({ left: dir * (card.getBoundingClientRect().width + 20), behavior: reduced ? 'auto' : 'smooth' });
+    }
+    document.querySelector('[data-qprev]').addEventListener('click', function () { step(-1); });
+    document.querySelector('[data-qnext]').addEventListener('click', function () { step(1); });
+  }
+})();
+</script>
+<script>
+/* ==========================================================================
+   Contact form validation — ported verbatim from vid-contact.html
+   (originally page-contact.html). Vanilla, no dependencies. Four rules:
+
+   1. Submit always preventDefault()s. This is a prototype; it posts nowhere.
+   2. A field is validated on blur only AFTER it has been touched, then live on
+      input once it is already showing an error. Validating on the first
+      keystroke tells people they are wrong before they have finished being right.
+   3. On a failed submit the ERROR SUMMARY is the single announcement, and it
+      takes focus. The inline messages keep their role="alert" in the markup —
+      that is what makes a lone blur-triggered error speak — but the role is
+      lifted for the instant the bulk messages are written, because one submit
+      firing eight live regions at once buries the summary in noise.
+   4. Nothing is announced twice: the inline message and its summary row carry
+      exactly the same string.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var form    = document.getElementById('contact-form-el');
+  var success = document.getElementById('form-success');
+  if (!form || !success) return;
+
+  var summary  = document.getElementById('form-error-summary');
+  var sumCount = document.getElementById('form-error-count');
+  var sumList  = document.getElementById('form-error-list');
+  var fields   = Array.prototype.slice.call(form.querySelectorAll('[data-validate]'));
+
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var WARN  = '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">' +
+              '<path d="M8 1.3 15.2 14H.8L8 1.3Zm-.8 4.4v4h1.6v-4H7.2Zm0 5.2v1.6h1.6v-1.6H7.2Z"/></svg>';
+
+  function wrap(el)   { return el.closest('.field'); }
+  function errBox(el) { return document.getElementById('err-' + el.id); }
+
+  /* returns an error string, or '' when the field is fine */
+  function problem(el) {
+    var v = (el.value || '').trim();
+    if (!v) return el.getAttribute('data-msg');
+    if (el.getAttribute('data-type') === 'email' && !EMAIL.test(v)) {
+      return el.getAttribute('data-msg-format');
+    }
+    if (el.getAttribute('data-type') === 'tel') {
+      // 10 digits covers a US number with its area code; 15 is the E.164
+      // ceiling, so an international number with a country code still passes.
+      var digits = v.replace(/\D/g, '').length;
+      if (digits < 10 || digits > 15) return el.getAttribute('data-msg-format');
+    }
+    return '';
+  }
+
+  function showError(el, msg, quiet) {
+    var box = errBox(el);
+    wrap(el).classList.add('has-error');
+    el.setAttribute('aria-invalid', 'true');
+
+    if (quiet) box.removeAttribute('role');        // see rule 3 above
+    box.innerHTML = WARN;                          // authored icon markup only
+    var span = document.createElement('span');
+    span.textContent = msg;                        // message via textContent
+    box.appendChild(span);
+    box.hidden = false;
+    if (quiet) {
+      // restored once the summary's announcement window has passed, so the next
+      // single-field error still speaks on its own
+      setTimeout(function () { box.setAttribute('role', 'alert'); }, 600);
+    }
+  }
+
+  function clearError(el) {
+    var box = errBox(el);
+    wrap(el).classList.remove('has-error');
+    el.removeAttribute('aria-invalid');
+    box.hidden = true;
+    box.textContent = '';
+  }
+
+  function check(el, quiet) {
+    var msg = problem(el);
+    if (msg) { showError(el, msg, quiet); return false; }
+    clearError(el);
+    return true;
+  }
+
+  /* an unchosen select paints as placeholder text rather than as an answer */
+  function paintSelect(el) {
+    if (el.tagName === 'SELECT') el.setAttribute('data-empty', String(el.value === ''));
+  }
+
+  fields.forEach(function (el) {
+    paintSelect(el);
+    var touched = false;
+    el.addEventListener('blur', function () { touched = true; check(el); });
+    el.addEventListener('change', function () {
+      paintSelect(el);
+      if (touched || el.tagName === 'SELECT') check(el);
+    });
+    el.addEventListener('input', function () {
+      // only re-validate live once a message is already on screen
+      if (wrap(el).classList.contains('has-error')) check(el);
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();                       // prototype: posts nowhere, ever
+
+    var bad = fields.filter(function (el) { return !check(el, true); });
+
+    if (bad.length) {
+      sumCount.textContent = bad.length === 1
+        ? 'There is 1 field that needs your attention.'
+        : 'There are ' + bad.length + ' fields that need your attention.';
+      sumList.textContent = '';
+      bad.forEach(function (el) {
+        var li = document.createElement('li');
+        var a  = document.createElement('a');
+        a.href = '#' + el.id;
+        a.textContent = el.getAttribute('data-label') + ' — ' + problem(el);
+        a.addEventListener('click', function (ev) { ev.preventDefault(); el.focus(); });
+        li.appendChild(a);
+        sumList.appendChild(li);
+      });
+      summary.hidden = false;
+      summary.focus();
+      return;
+    }
+
+    summary.hidden = true;
+
+    var first = document.getElementById('first-name').value.trim();
+    document.getElementById('success-name').textContent = first ? ', ' + first : '';
+    document.getElementById('success-email').textContent = document.getElementById('email').value.trim();
+
+    form.hidden = true;
+    success.hidden = false;
+    success.focus();
+  });
+
+  document.getElementById('send-another').addEventListener('click', function () {
+    form.reset();
+    fields.forEach(function (el) { clearError(el); paintSelect(el); });
+    summary.hidden = true;
+    success.hidden = true;
+    form.hidden = false;
+    document.getElementById('first-name').focus();
+  });
+})();
+</script>
+</body>
+</html>
