@@ -99,21 +99,24 @@
       sections.forEach(function (s) { band.observe(s); });
     }
 
-    // mobile drawer
-    var toggle = document.querySelector('[data-nav-toggle]');
+    // mobile drawer — bind EVERY toggle: the hamburger opens it, and the ×
+    // inside the drawer is a second [data-nav-toggle] that was silently dead
+    // for as long as only the first match got a listener.
+    var toggles = Array.prototype.slice.call(document.querySelectorAll('[data-nav-toggle]'));
     var drawer = document.querySelector('[data-nav-drawer]');
-    if (toggle && drawer) {
-      toggle.addEventListener('click', function () {
-        var open = drawer.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(open));
+    if (toggles.length && drawer) {
+      function setDrawer(open) {
+        drawer.classList.toggle('is-open', open);
+        toggles.forEach(function (t) { t.setAttribute('aria-expanded', String(open)); });
         document.body.style.overflow = open ? 'hidden' : '';
+      }
+      toggles.forEach(function (t) {
+        t.addEventListener('click', function () {
+          setDrawer(!drawer.classList.contains('is-open'));
+        });
       });
       drawer.addEventListener('click', function (e) {
-        if (e.target.tagName === 'A') {
-          drawer.classList.remove('is-open');
-          toggle.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
-        }
+        if (e.target.closest('a')) setDrawer(false);
       });
     }
   }
