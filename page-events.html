@@ -313,8 +313,8 @@
   padding: 5px 11px; border-radius: var(--r-pill);
   font-size: var(--t-xs); font-weight: 550; letter-spacing: .006em; white-space: nowrap;
 }
-.pill--early { background: #fdf3e3; color: #8a5c14; }
-.pill--early .dot { --c: #b06d1f; }
+.pill--later { background: #f0efec; color: #5f5e5a; }
+.pill--later .dot { --c: #8b8a84; }
 .pill--soon  { background: color-mix(in srgb, var(--accent) 10%, transparent); color: #1f45d6; }
 .pill--soon  .dot { --c: #2f5cff; }
 .pill--live  { background: #e7f5ec; color: #146c43; }
@@ -843,7 +843,7 @@
       </p>
 
       <div class="ev-head" aria-hidden="true">
-        <span>Date</span><span>City</span><span>Type</span><span>Status</span><span></span>
+        <span>Date</span><span>City</span><span>Type</span><span>Candidate matching</span><span></span>
       </div>
 
             <div data-ev-list>
@@ -852,7 +852,7 @@
           <span class="ev__date"><i>Tuesday</i><b>Aug 25</b></span>
           <span class="ev__city"><b>Dallas, TX</b></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
-          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -860,7 +860,7 @@
           <span class="ev__date"><i>Thursday</i><b>Aug 27</b></span>
           <span class="ev__city"><b>Nashville, TN</b></span>
           <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
-          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -868,7 +868,7 @@
           <span class="ev__date"><i>Friday</i><b>Aug 28</b></span>
           <span class="ev__city"><b>Norfolk, VA</b></span>
           <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
-          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Matching live</span></span>
+          <span class="ev__status"><span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -876,7 +876,7 @@
           <span class="ev__date"><i>Tuesday</i><b>Sep 1</b></span>
           <span class="ev__city"><b>Chicago, IL</b></span>
           <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
-          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Starts soon</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -884,7 +884,7 @@
           <span class="ev__date"><i>Thursday</i><b>Sep 3</b></span>
           <span class="ev__city"><b>Miami, FL</b></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
-          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Starts soon</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -892,7 +892,7 @@
           <span class="ev__date"><i>Tuesday</i><b>Sep 8</b></span>
           <span class="ev__city"><b>Seattle, WA</b></span>
           <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
-          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Starts soon</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -900,7 +900,7 @@
           <span class="ev__date"><i>Thursday</i><b>Sep 10</b></span>
           <span class="ev__city"><b>Denver, CO</b></span>
           <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
-          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Starts soon</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
@@ -908,74 +908,62 @@
           <span class="ev__date"><i>Tuesday</i><b>Sep 15</b></span>
           <span class="ev__city"><b>Boston, MA</b></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
-          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Matching soon</span></span>
+          <span class="ev__status"><span class="pill pill--soon"><span class="dot" aria-hidden="true"></span>Starts soon</span></span>
           <span class="ev__cta">View Event Details</span>
         </a>
 
         <a class="ev ty-technology" href="page-event-detail.html" data-type="technology" data-search="austin tx texas">
           <span class="ev__date"><i>Thursday</i><b>Sep 17</b></span>
-          <span class="ev__name">
-            <b>Austin, TX Technology Hiring Event</b>
-            <i class="ev__chip">Early registration · save $100</i>
-          </span>
+          <span class="ev__city"><b>Austin, TX</b>
+          <i class="ev__chip">Save $100</i></span>
           <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
-          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
-          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="ev__status"><span class="pill pill--later"><span class="dot" aria-hidden="true"></span>Starts 30 days out</span></span>
+          <span class="ev__cta">View Event Details</span>
         </a>
 
         <a class="ev ty-diversity" href="page-event-detail.html" data-type="diversity" data-search="cincinnati oh ohio">
           <span class="ev__date"><i>Friday</i><b>Sep 18</b></span>
-          <span class="ev__name">
-            <b>Cincinnati, OH Diversity Hiring Event</b>
-            <i class="ev__chip">Early registration · save $100</i>
-          </span>
+          <span class="ev__city"><b>Cincinnati, OH</b>
+          <i class="ev__chip">Save $100</i></span>
           <span class="ev__type"><span class="dot ty-diversity" aria-hidden="true"></span>Diversity</span>
-          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
-          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="ev__status"><span class="pill pill--later"><span class="dot" aria-hidden="true"></span>Starts 30 days out</span></span>
+          <span class="ev__cta">View Event Details</span>
         </a>
 
                 <a class="ev ty-veterans" href="page-event-detail.html" data-type="veterans" data-search="pearland tx texas houston">
           <span class="ev__date"><i>Tuesday</i><b>Sep 22</b></span>
-          <span class="ev__name">
-            <b>Pearland, TX Veterans Hiring Event</b>
-            <i class="ev__chip">Early registration · save $100</i>
-          </span>
+          <span class="ev__city"><b>Pearland, TX</b>
+          <i class="ev__chip">Save $100</i></span>
           <span class="ev__type"><span class="dot ty-veterans" aria-hidden="true"></span>Veterans</span>
-          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
-          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="ev__status"><span class="pill pill--later"><span class="dot" aria-hidden="true"></span>Starts 30 days out</span></span>
+          <span class="ev__cta">View Event Details</span>
         </a>
 
         <a class="ev ty-entry" href="page-event-detail.html" data-type="entry" data-search="new york ny nyc">
           <span class="ev__date"><i>Thursday</i><b>Sep 24</b></span>
-          <span class="ev__name">
-            <b>New York, NY Entry Level Hiring Event</b>
-            <i class="ev__chip">Early registration · save $100</i>
-          </span>
+          <span class="ev__city"><b>New York, NY</b>
+          <i class="ev__chip">Save $100</i></span>
           <span class="ev__type"><span class="dot ty-entry" aria-hidden="true"></span>Entry Level</span>
-          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
-          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="ev__status"><span class="pill pill--later"><span class="dot" aria-hidden="true"></span>Starts 30 days out</span></span>
+          <span class="ev__cta">View Event Details</span>
         </a>
 
         <a class="ev ty-healthcare" href="page-event-detail.html" data-type="healthcare" data-search="portland or oregon">
           <span class="ev__date"><i>Tuesday</i><b>Sep 29</b></span>
-          <span class="ev__name">
-            <b>Portland, OR Healthcare Hiring Event</b>
-            <i class="ev__chip">Early registration · save $100</i>
-          </span>
+          <span class="ev__city"><b>Portland, OR</b>
+          <i class="ev__chip">Save $100</i></span>
           <span class="ev__type"><span class="dot ty-healthcare" aria-hidden="true"></span>Healthcare</span>
-          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
-          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="ev__status"><span class="pill pill--later"><span class="dot" aria-hidden="true"></span>Starts 30 days out</span></span>
+          <span class="ev__cta">View Event Details</span>
         </a>
 
         <a class="ev ty-technology" href="page-event-detail.html" data-type="technology" data-search="manchester nh new hampshire">
           <span class="ev__date"><i>Wednesday</i><b>Sep 30</b></span>
-          <span class="ev__name">
-            <b>Manchester, NH Technology Hiring Event</b>
-            <i class="ev__chip">Early registration · save $100</i>
-          </span>
+          <span class="ev__city"><b>Manchester, NH</b>
+          <i class="ev__chip">Save $100</i></span>
           <span class="ev__type"><span class="dot ty-technology" aria-hidden="true"></span>Technology</span>
-          <span class="ev__status"><span class="pill pill--early"><span class="dot" aria-hidden="true"></span>Early registration</span></span>
-          <svg class="ev__chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="ev__status"><span class="pill pill--later"><span class="dot" aria-hidden="true"></span>Starts 30 days out</span></span>
+          <span class="ev__cta">View Event Details</span>
         </a>
       </div>
 
@@ -1155,7 +1143,12 @@
 (function () {
   'use strict';
 
-  var PAGE = 8;   // rows visible before the first "Load More Events"
+  /* Sample-data note: the list is date-sorted, so the early-registration
+     events (furthest out) sit at the BOTTOM. At PAGE = 8 every one of them
+     hid behind Load More and the Save $100 state was invisible. The
+     prototype shows the full set so all three matching states are on
+     screen; production paginates. */
+  var PAGE = 14;  // rows visible before the first "Load More Events"
 
   /* ---------- 1. custom listbox -----------------------------------------
      WAI-ARIA listbox pattern: focus moves to the list when it opens and the
