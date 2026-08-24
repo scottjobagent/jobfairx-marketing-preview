@@ -254,7 +254,7 @@
    with a chevron on mobile. */
 .ev-head {
   display: grid;
-  grid-template-columns: 116px minmax(160px, 300px) 168px 188px minmax(16px, 1fr) 164px;
+  grid-template-columns: minmax(96px, .7fr) minmax(150px, 1.3fr) minmax(126px, 1fr) minmax(140px, 1.05fr) 168px;
   column-gap: var(--s-5);
   padding: 0 var(--s-3) var(--s-3);
   border-bottom: 1px solid var(--hairline-strong);
@@ -264,8 +264,8 @@
 .ev {
   position: relative;
   display: grid;
-  grid-template-columns: 116px minmax(160px, 300px) 168px 188px minmax(16px, 1fr) 164px;
-  grid-template-areas: "date name type status . chev";
+  grid-template-columns: minmax(96px, .7fr) minmax(150px, 1.3fr) minmax(126px, 1fr) minmax(140px, 1.05fr) 168px;
+  grid-template-areas: "date name type status chev";
   align-items: center;
   column-gap: var(--s-5);
   padding: var(--s-5) var(--s-3);
@@ -332,7 +332,7 @@
    while three narrow columns sit half empty. */
 @media (min-width: 821px) and (max-width: 1080px) {
   .ev, .ev-head {
-    grid-template-columns: 104px minmax(140px, 250px) 146px 172px minmax(12px, 1fr) 150px;
+    grid-template-columns: minmax(88px, .7fr) minmax(130px, 1.3fr) minmax(112px, 1fr) minmax(126px, 1.05fr) 150px;
     column-gap: var(--s-4);
   }
 }
