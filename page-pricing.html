@@ -330,7 +330,12 @@
 .ph-block p { font-size: var(--t-sm); color: var(--ink-2); margin-top: var(--s-3); letter-spacing: .006em; }
 
 /* ---------- all packages include ---------- */
-.incl { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); margin-top: var(--s-12); }
+/* One item carries a second line: interview locations is the newest thing we
+   sell and the one that raises a pricing question ("does in person cost
+   more?"), so the answer sits with it instead of further down the page. */
+.incl--lead b { display: block; font-weight: 600; color: var(--ink); }
+.incl--lead i { display: block; margin-top: 4px; font-style: normal; font-size: var(--t-xs); color: var(--ink-2); letter-spacing: .006em; }
+.incl { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-12); }
 .incl li {
   display: flex; gap: var(--s-3); padding: var(--s-5);
   border-radius: var(--r-lg); border: 1px solid var(--hairline); background: var(--surface);
@@ -470,11 +475,11 @@
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="opacity:.5"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
 
-      <h1 class="t-display t-balance">20, 60 or 100+ scheduled interviews.</h1>
+      <h1 class="t-display t-balance">Flexible Hiring Event Packages</h1>
 
       <p class="t-lead hero__sub">
-        That's what a package is. Find a hiring event, register, and post your jobs.
-        Candidate matching starts immediately.
+        Register for a hiring event, post your jobs, and select in-person or video
+        interviews. AI Candidate Matching starts immediately.
       </p>
 
       <div class="hero__cta">
@@ -485,7 +490,6 @@
       <ul class="hero__trust">
         <li>Credits never expire</li>
         <li>Use across any event type</li>
-        <li>All four interview locations included</li>
       </ul>
     </div>
 
@@ -539,7 +543,7 @@
             <ul class="tier__list">
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote 1 job</li>
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> 2 recruiter seats</li>
-              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four interview locations</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> In-person or video interviews</li>
             </ul>
             <button type="button" class="btn btn--secondary tier__pick" data-select="starter">Choose Starter</button>
 
@@ -595,7 +599,7 @@
             <ul class="tier__list">
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote up to 3 jobs</li>
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Up to 5 recruiter seats</li>
-              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four interview locations</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> In-person or video interviews</li>
             </ul>
             <button type="button" class="btn btn--primary tier__pick" data-select="growth">Choose Growth</button>
 
@@ -650,7 +654,7 @@
             <ul class="tier__list">
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Promote up to 6 jobs</li>
               <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited recruiters</li>
-              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> All four interview locations</li>
+              <li><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> In-person or video interviews</li>
             </ul>
             <button type="button" class="btn btn--secondary tier__pick" data-select="pro">Choose Pro</button>
 
@@ -832,11 +836,12 @@
         <li data-reveal style="--i:0"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> AI matching and job promotion</li>
         <li data-reveal style="--i:1"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Resumes and contact info for every matched candidate</li>
         <li data-reveal style="--i:2"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Unlimited interviews before, during and after</li>
-        <li data-reveal style="--i:3"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Auto-accept or review each request</li>
-        <li data-reveal style="--i:4"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Employer dashboard with dispositions, notes, analytics</li>
-        <li data-reveal style="--i:5"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Post-event report with downloadable data</li>
-        <li data-reveal style="--i:6"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Follow-up interviews and messaging after the event</li>
-        <li data-reveal style="--i:7"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Dedicated human support</li>
+        <li class="incl--lead" data-reveal style="--i:3"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> <span><b>In-person or video interviews</b><i>Set your interview location per event. It never changes the price.</i></span></li>
+        <li data-reveal style="--i:4"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Auto-accept or review each request</li>
+        <li data-reveal style="--i:5"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Employer dashboard with dispositions, notes, analytics</li>
+        <li data-reveal style="--i:6"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Post-event report with downloadable data</li>
+        <li data-reveal style="--i:7"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Follow-up interviews and messaging after the event</li>
+        <li data-reveal style="--i:8"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M6.2 11.6 2.9 8.3l1.2-1.2 2.1 2.1 5.7-5.7 1.2 1.2z"/></svg> Dedicated human support</li>
       </ul>
 
       <div style="margin-top:var(--s-12)" data-reveal>
