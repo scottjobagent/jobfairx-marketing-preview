@@ -88,9 +88,9 @@
             <div class="text-sm text-slate-600">candidates registered so far</div>
           </div>
 
-          <div class="flex flex-col justify-center rounded-lg border border-slate-200 bg-slate-50 px-4 py-3" data-state-show="a">
-            <div class="text-2xl font-bold text-slate-900 leading-tight">Save $100</div>
-            <div class="text-sm text-slate-600">on every package through August 31</div>
+          <div class="flex flex-col justify-center rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+            <div class="text-2xl font-bold text-slate-900 jfx-num leading-tight">91%</div>
+            <div class="text-sm text-slate-600">of booked interviews show up</div>
           </div>
         </div>
 
@@ -112,17 +112,23 @@
           <p class="text-sm text-slate-600 jfx-num mb-5">September 30, 2026<br>11:00 AM &ndash; 3:00 PM CDT</p>
 
           <div class="border-t border-slate-200 pt-5 mb-5">
-            <div class="flex items-baseline gap-2 mb-1">
-              <span class="text-sm text-slate-500">Packages from</span>
-              <span class="text-[28px] font-bold text-slate-900 jfx-num" id="jfx-rail-price">$395</span>
-            </div>
-            <p class="text-sm text-slate-600" id="jfx-rail-note">Early registration saves $100 on every package through August 31.</p>
+            <p class="text-xs font-bold uppercase tracking-[0.12em] text-slate-500 mb-3">What you get</p>
+            <ul class="list-none pl-0 space-y-2.5">
+              <li class="flex items-start gap-2.5"><span class="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0" style="margin-top:3px;"><svg class="w-2.5 h-2.5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></span><span class="text-[14px] text-slate-700 leading-snug">A full day of interviews, already on your calendar</span></li>
+              <li class="flex items-start gap-2.5"><span class="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0" style="margin-top:3px;"><svg class="w-2.5 h-2.5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></span><span class="text-[14px] text-slate-700 leading-snug">Candidates verified within about 20 miles of Austin</span></li>
+              <li class="flex items-start gap-2.5"><span class="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0" style="margin-top:3px;"><svg class="w-2.5 h-2.5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></span><span class="text-[14px] text-slate-700 leading-snug">Resumes and contact details for every match</span></li>
+              <li class="flex items-start gap-2.5"><span class="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0" style="margin-top:3px;"><svg class="w-2.5 h-2.5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></span><span class="text-[14px] text-slate-700 leading-snug">Your report the moment the event ends</span></li>
+            </ul>
           </div>
 
           <a href="/employer/cart?eventId=642761563807154215&amp;returnTo=%2Femployer%2Fjob-fairs%2Ftexas%2Faustin%2F642761563807154215%23packages" class="button-bar button-primary mb-3" data-cta>Register for This Event</a>
-          <p class="text-[13px] text-slate-500 text-center">
+          <p class="text-[13px] text-slate-500 text-center mb-2">
             <span class="jfx-num">446</span> candidates registered so far &middot; updated daily
           </p>
+          <p class="text-center">
+            <a href="#packages" class="text-[13px] font-semibold text-brand hover:underline">Packages from <span class="jfx-num" id="jfx-rail-price">$395</span> per event &rarr;</a>
+          </p>
+          <p class="text-[12px] text-slate-500 text-center mt-1" id="jfx-rail-note">Early registration saves $100 through August 31.</p>
         </div>
       </div>
 
@@ -693,9 +699,9 @@
     document.getElementById('jfx-rail-price').textContent = s.early ? '$395' : '$495';
     document.getElementById('jfx-rail-note').textContent = s.open
       ? (s.early
-          ? 'Early registration saves $100 on every package through ' + EVENT.earlyEnds + '.'
-          : 'Standard pricing. Register and your roles go into matching straight away.')
-      : 'Registration for this event has closed. Pricing is the same at the next ' + EVENT.citySrt + ' healthcare event.';
+          ? 'Early registration saves $100 through ' + EVENT.earlyEnds + '.'
+          : 'Standard pricing. Same at every event type.')
+      : 'Registration closed. Same pricing at the next ' + EVENT.citySrt + ' event.';
     document.getElementById('jfx-pkg-note').textContent = s.open
       ? (s.early
           ? 'Flat rate for the event, with $100 off every package until ' + EVENT.earlyEnds + '.'
