@@ -21,19 +21,20 @@
 <body>
 <div class="wrap">
   <div class="bar" id="nav"></div>
-  <div class="phone"><div class="screen"><iframe id="frame" src="employer-home.html" title="Mobile preview"></iframe></div></div>
+  <div class="phone"><div class="screen"><iframe id="frame" src="employer-home-mobile.html" title="Mobile preview"></iframe></div></div>
   <div class="hint">390px viewport, scroll inside the phone. On an actual phone, just open the page URL directly.</div>
 </div>
 <script>
 (function(){
   var pages = [
-    ["Home", "employer-home.html"],
+    ["Home mobile", "employer-home-mobile.html"],
+    ["Home desktop", "employer-home.html"],
     ["Pricing", "employer-pricing.html"],
     ["FAQ", "employer-faq.html"],
     ["Event detail", "employer-event-detail.html"]
   ];
   var q = new URLSearchParams(location.search);
-  var cur = q.get("page") || "employer-home.html";
+  var cur = q.get("page") || "employer-home-mobile.html";
   if (!/^[a-z0-9-]+\.html$/.test(cur)) cur = "employer-home.html";
   document.getElementById("frame").src = cur;
   var nav = document.getElementById("nav");
