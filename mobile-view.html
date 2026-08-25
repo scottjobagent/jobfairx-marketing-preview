@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JobFairX mobile preview</title>
+<style>
+  html,body{margin:0;height:100%;background:#10131a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 12px 40px;box-sizing:border-box}
+  .bar{color:#aab3c5;font-size:13px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center}
+  .bar a{color:#8fb3ff;text-decoration:none}
+  .bar a:hover{text-decoration:underline}
+  .bar .on{color:#fff;font-weight:600}
+  .phone{width:390px;height:min(800px,calc(100vh - 130px));background:#000;border-radius:38px;padding:10px;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+  .screen{width:100%;height:100%;border-radius:28px;overflow:hidden;background:#fff}
+  iframe{width:390px;height:100%;border:0;display:block}
+  .hint{color:#5c6577;font-size:12px}
+  @media (max-width:430px){.phone{width:100%;border-radius:0;padding:0;height:calc(100vh - 90px)}.screen{border-radius:0}iframe{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar" id="nav"></div>
+  <div class="phone"><div class="screen"><iframe id="frame" src="employer-home.html" title="Mobile preview"></iframe></div></div>
+  <div class="hint">390px viewport, scroll inside the phone. On an actual phone, just open the page URL directly.</div>
+</div>
+<script>
+(function(){
+  var pages = [
+    ["Home", "employer-home.html"],
+    ["Pricing", "employer-pricing.html"],
+    ["FAQ", "employer-faq.html"],
+    ["Event detail", "employer-event-detail.html"]
+  ];
+  var q = new URLSearchParams(location.search);
+  var cur = q.get("page") || "employer-home.html";
+  if (!/^[a-z0-9-]+\.html$/.test(cur)) cur = "employer-home.html";
+  document.getElementById("frame").src = cur;
+  var nav = document.getElementById("nav");
+  pages.forEach(function(p){
+    var a = document.createElement("a");
+    a.textContent = p[0];
+    a.href = "?page=" + p[1];
+    if (p[1] === cur) a.className = "on";
+    nav.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
