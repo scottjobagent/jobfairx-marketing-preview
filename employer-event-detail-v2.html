@@ -31,11 +31,28 @@
   .jfx-faq.is-open .jfx-faq-a { display: block; }
   .jfx-faq.is-open .jfx-faq-chev { transform: rotate(180deg); }
   .jfx-faq-chev { transition: transform .2s ease; }
+  /* Preview control - review only. */
+  #jfx-preview-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    background: #0f172a; color: #cbd5e1; font-size: 12px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 6px 12px; font-family: Inter, sans-serif;
+  }
+  .jfx-preview-label { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 10px; color: #64748b; }
+  #jfx-preview button {
+    background: #1e293b; color: #e2e8f0; border: 0; border-radius: 4px;
+    padding: 4px 9px; margin-right: 3px; cursor: pointer; font-size: 12px; font-family: Inter, sans-serif;
+  }
+  #jfx-preview button:hover { background: #334155; }
+  #jfx-preview button[aria-pressed="true"] { background: #2563eb; color: #fff; }
+  #jfx-preview-note { color: #94a3b8; }
+  body { padding-top: 34px; }
+  #jfx-banner-wrap { top: 34px !important; }
   @media (prefers-reduced-motion: reduce) { .jfx-faq-chev { transition: none; } }
 </style>
 </head>
 <body>
-<div class="contents"> <div class="w-full h-full"> <div class="sticky top-0 w-full z-[51]"><div id="jfx-banner" class="px-6 py-2.5 text-[14px] font-normal text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 w-full border-b" style="background-color: rgb(254, 244, 224); color: rgb(120, 53, 15); border-color: rgb(252, 211, 77);"><span id="jfx-banner-text">Early registration pricing ends soon. Save $100 and lock in priority candidate matching.</span> <a id="jfx-banner-link" href="#packages" class="underline underline-offset-4 hover:opacity-80 transition-opacity sm:ml-1 text-[14px] font-normal" style="color: inherit;">Register Now &rarr;</a></div></div> <div class="relative w-full z-50 flex flex-col"><header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all duration-300"><div class="max-w-screen-xl mx-auto px-6 lg:px-8 h-16 flex items-center"><a href="/employer" class="block w-[98px] flex-shrink-0 mr-12"><img src="assets/employer-home/jobfairx-logo.png" alt="JobFairX"></a> <nav class="hidden lg:flex items-center gap-12 text-[15px] font-semibold text-slate-600 transition-all duration-300 opacity-100"><a href="/employer/hiring-event-calendar" class="transition-colors hover:text-slate-900">Upcoming Hiring Events</a> <a href="/employer/hiring-event-pricing" class="transition-colors hover:text-slate-900">Pricing</a> <a href="/employer/hiring-event-faq" class="transition-colors hover:text-slate-900">FAQ</a> <a href="/employer/contact" class="transition-colors hover:text-slate-900">Contact Us</a></nav> <div class="hidden lg:flex items-center gap-4 ml-auto"><a href="https://virtual.jobfairx.com/login/#/" class="text-[15px] font-medium text-slate-500 hover:text-slate-900 transition-colors px-3 py-2">Sign In</a> <a href="/employer/cart?eventId=642761563807154215&amp;returnTo=%2Femployer%2Fjob-fairs%2Ftexas%2Faustin%2F642761563807154215" class="button button-primary">Register for an Event</a></div> <div class="lg:hidden ml-auto"><button class="p-2 text-slate-500 hover:text-slate-900 transition-colors"><svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></header></div>  <div class="fixed right-0 w-full bg-white z-50 transform transition-transform duration-300 ease-in-out translate-x-full" style="top: 42px; height: calc(100% - 42px);"><div class="flex items-center justify-between px-[18px] py-3.5 border-b border-[#f0eeea]"><a href="/employer" class="block w-[98px] flex-shrink-0"><img src="assets/employer-home/jobfairx-logo.png" alt="JobFairX"></a> <button class="p-1 text-[#1a1a1a] hover:text-slate-500 transition-colors" aria-label="Close menu"><svg class="w-[22px] h-[22px]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"></path></svg></button></div> <nav class="py-1.5"><a href="/employer/hiring-event-calendar" class="flex items-center justify-between px-[22px] py-4 text-[16px] font-medium border-b border-[#f4f4f4] transition-colors text-[#1a1a1a] hover:text-[#0044B3]">Upcoming Hiring Events
+<div class="contents"> <div class="w-full h-full"> <div id="jfx-banner-wrap" class="sticky top-0 w-full z-[51]"><div id="jfx-banner" class="px-6 py-2.5 text-[14px] font-normal text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 w-full border-b" style="background-color: rgb(254, 244, 224); color: rgb(120, 53, 15); border-color: rgb(252, 211, 77);"><span id="jfx-banner-text">Early registration pricing ends soon. Save $100 and lock in priority candidate matching.</span> <a id="jfx-banner-link" href="#packages" class="underline underline-offset-4 hover:opacity-80 transition-opacity sm:ml-1 text-[14px] font-normal" style="color: inherit;">Register Now &rarr;</a></div></div> <div class="relative w-full z-50 flex flex-col"><header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all duration-300"><div class="max-w-screen-xl mx-auto px-6 lg:px-8 h-16 flex items-center"><a href="/employer" class="block w-[98px] flex-shrink-0 mr-12"><img src="assets/employer-home/jobfairx-logo.png" alt="JobFairX"></a> <nav class="hidden lg:flex items-center gap-12 text-[15px] font-semibold text-slate-600 transition-all duration-300 opacity-100"><a href="/employer/hiring-event-calendar" class="transition-colors hover:text-slate-900">Upcoming Hiring Events</a> <a href="/employer/hiring-event-pricing" class="transition-colors hover:text-slate-900">Pricing</a> <a href="/employer/hiring-event-faq" class="transition-colors hover:text-slate-900">FAQ</a> <a href="/employer/contact" class="transition-colors hover:text-slate-900">Contact Us</a></nav> <div class="hidden lg:flex items-center gap-4 ml-auto"><a href="https://virtual.jobfairx.com/login/#/" class="text-[15px] font-medium text-slate-500 hover:text-slate-900 transition-colors px-3 py-2">Sign In</a> <a href="/employer/cart?eventId=642761563807154215&amp;returnTo=%2Femployer%2Fjob-fairs%2Ftexas%2Faustin%2F642761563807154215" class="button button-primary">Register for an Event</a></div> <div class="lg:hidden ml-auto"><button class="p-2 text-slate-500 hover:text-slate-900 transition-colors"><svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></header></div>  <div class="fixed right-0 w-full bg-white z-50 transform transition-transform duration-300 ease-in-out translate-x-full" style="top: 42px; height: calc(100% - 42px);"><div class="flex items-center justify-between px-[18px] py-3.5 border-b border-[#f0eeea]"><a href="/employer" class="block w-[98px] flex-shrink-0"><img src="assets/employer-home/jobfairx-logo.png" alt="JobFairX"></a> <button class="p-1 text-[#1a1a1a] hover:text-slate-500 transition-colors" aria-label="Close menu"><svg class="w-[22px] h-[22px]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"></path></svg></button></div> <nav class="py-1.5"><a href="/employer/hiring-event-calendar" class="flex items-center justify-between px-[22px] py-4 text-[16px] font-medium border-b border-[#f4f4f4] transition-colors text-[#1a1a1a] hover:text-[#0044B3]">Upcoming Hiring Events
       <svg class="w-5 h-5 text-[#999]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></a> <a href="/employer/hiring-event-pricing" class="flex items-center justify-between px-[22px] py-4 text-[16px] font-medium border-b border-[#f4f4f4] transition-colors text-[#1a1a1a] hover:text-[#0044B3]">Pricing
       <svg class="w-5 h-5 text-[#999]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></a> <a href="/employer/hiring-event-faq" class="flex items-center justify-between px-[22px] py-4 text-[16px] font-medium border-b border-[#f4f4f4] transition-colors text-[#1a1a1a] hover:text-[#0044B3]">FAQs
       <svg class="w-5 h-5 text-[#999]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></a> <a href="/employer/contact" class="flex items-center justify-between px-[22px] py-4 text-[16px] font-medium border-b border-[#f4f4f4] transition-colors text-[#1a1a1a] hover:text-[#0044B3]">Contact Us
@@ -78,7 +95,7 @@
         </div>
 
         <div class="flex flex-wrap gap-3">
-          <a href="/employer/cart?eventId=642761563807154215&amp;returnTo=%2Femployer%2Fjob-fairs%2Ftexas%2Faustin%2F642761563807154215%23hero" class="button button-lg button-primary" data-cta>Register for This Event</a>
+          <a href="/employer/cart?eventId=642761563807154215&amp;returnTo=%2Femployer%2Fjob-fairs%2Ftexas%2Faustin%2F642761563807154215%23hero" id="jfx-hero-cta" class="button button-lg button-primary" data-cta>Register for This Event</a>
           <button type="button" id="jfx-video-open" class="button button-lg button-primary-inverted">
             <span class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0" style="margin-right:2px;">
               <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
@@ -529,6 +546,12 @@
               About Us</a></li> <li><div class="flex items-center gap-1 mt-1"><button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all duration-200 bg-slate-800 text-white border border-slate-700"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 60 42" class="rounded-sm flex-shrink-0"><rect width="60" height="42" fill="#B22234"></rect><path d="M0,0h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.47h60V42H0z" fill="#fff"></path><rect width="24" height="22.62" fill="#3C3B6E"></rect><g fill="#fff"><circle cx="4" cy="3.77" r="1.2"></circle><circle cx="8" cy="3.77" r="1.2"></circle><circle cx="12" cy="3.77" r="1.2"></circle><circle cx="16" cy="3.77" r="1.2"></circle><circle cx="20" cy="3.77" r="1.2"></circle><circle cx="6" cy="7.08" r="1.2"></circle><circle cx="10" cy="7.08" r="1.2"></circle><circle cx="14" cy="7.08" r="1.2"></circle><circle cx="18" cy="7.08" r="1.2"></circle><circle cx="4" cy="10.39" r="1.2"></circle><circle cx="8" cy="10.39" r="1.2"></circle><circle cx="12" cy="10.39" r="1.2"></circle><circle cx="16" cy="10.39" r="1.2"></circle><circle cx="20" cy="10.39" r="1.2"></circle><circle cx="6" cy="13.7" r="1.2"></circle><circle cx="10" cy="13.7" r="1.2"></circle><circle cx="14" cy="13.7" r="1.2"></circle><circle cx="18" cy="13.7" r="1.2"></circle><circle cx="4" cy="17.01" r="1.2"></circle><circle cx="8" cy="17.01" r="1.2"></circle><circle cx="12" cy="17.01" r="1.2"></circle><circle cx="16" cy="17.01" r="1.2"></circle><circle cx="20" cy="17.01" r="1.2"></circle></g></svg>
                 US</button> <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all duration-200 text-slate-500 hover:text-slate-300"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 60 42" class="rounded-sm flex-shrink-0"><rect width="60" height="42" fill="#fff"></rect><rect width="15" height="42" fill="#FF0000"></rect><rect x="45" width="15" height="42" fill="#FF0000"></rect><path d="M30 8l-2 4-4.5-.5 3 3.5-1 4.5L30 17l4.5 2.5-1-4.5 3-3.5-4.5.5z" fill="#FF0000"></path><path d="M30 8l1.5 3h-3z" fill="#FF0000"></path></svg>
                 Canada</button></div></li></ul></div></div> <div class="pt-8 pb-12 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6"><p class="text-slate-500 text-xs font-semibold tracking-wide uppercase text-center md:text-left">COPYRIGHT 2026 JOBFAIRX ALL RIGHTS RESERVED</p> <div class="flex items-center gap-6 text-xs font-semibold tracking-wide uppercase text-slate-500"><a href="/employer/privacy-policy" class="hover:text-blue-400 transition-colors duration-200">PRIVACY POLICY</a> <span class="w-1 h-1 rounded-full bg-slate-700"></span> <a href="/employer/terms-and-conditions" class="hover:text-blue-400 transition-colors duration-200">TERMS AND CONDITIONS</a> <span class="w-1 h-1 rounded-full bg-slate-700"></span> <button type="button" class="uppercase hover:text-blue-400 transition-colors duration-200">Your Privacy Choices</button> </div></div></div></footer>
+<div id="jfx-preview-bar">
+  <span class="jfx-preview-label">Preview lifecycle</span>
+  <span id="jfx-preview"></span>
+  <span id="jfx-preview-note">36 days out - this event today</span>
+</div>
+
 <div id="jfx-video-modal" class="fixed inset-0 z-[80] items-center justify-center px-4" style="display:none;background:rgba(15,23,42,.75);">
   <div class="w-full max-w-[1014px] bg-white rounded-2xl shadow-2xl overflow-hidden relative" role="dialog" aria-modal="true" aria-label="How JobFairX hiring events work">
     <button type="button" id="jfx-video-close" aria-label="Close video"
@@ -595,116 +618,163 @@
   var EVENT = {
     city: 'Austin, TX', citySrt: 'Austin', type: 'Healthcare',
     dateLong: 'September 30, 2026', dateShort: 'Sep 30',
-    earlyEnds: 'August 31', nextEvent: '/employer/job-fairs/texas/austin/next-healthcare'
+    earlyEnds: 'August 31', nextEvent: '/employer/job-fairs/texas/austin/next-healthcare',
+    registered: '446', showRate: '91%'
   };
 
+  /* ---- Lifecycle states -------------------------------------------------
+     CAPTURED EMPIRICALLY on 25 Aug 2026 by rendering real jobfairx event
+     pages at 0,1,2,3,7,10,14,17,21,28,29,30,31,36 and 45 days out and reading
+     the rendered DOM. Strings, inline colours and CTA behaviour below are
+     verbatim from those pages - not from documentation.
+
+     Boundaries proven at the edges:
+       - the Save $100 badge is PRESENT at 31 days out and ABSENT at 30, so the
+         live rule is "31 or more days before the event" (deadline = event-31).
+         Scott has ruled the business rule is 30; the code must move to match.
+       - registration is already CLOSED at 1 day out, not on the day.
+       - at 0 days out there is no banner element at all.
+  ---------------------------------------------------------------------- */
+  var LINK_STD = 'Reserve your spot to meet interview-ready candidates →';
   var STATES = {
-    a: {
-      banner: 'Early registration pricing ends soon. Save $100 and lock in priority candidate matching.',
-      link: 'Register Now \u2192', href: '#packages',
-      colors: ['rgb(254, 244, 224)', 'rgb(120, 53, 15)', 'rgb(252, 211, 77)'],
-      early: true, open: true,
-      railPrice: '$395',
-      railNote: 'Early registration saves $100 on every package through ' + EVENT.earlyEnds + '.',
-      pkgNote: 'Flat rate for the event, with $100 off every package until ' + EVENT.earlyEnds + '.'
-    },
-    b: {
-      banner: 'Candidate matching activates soon.',
-      link: 'Reserve your spot to meet interview-ready candidates \u2192', href: '#packages',
-      colors: ['rgb(219, 234, 254)', 'rgb(30, 58, 138)', 'rgb(191, 219, 254)'],
-      early: false, open: true,
-      railPrice: '$495',
-      railNote: 'Register now and your roles are in the pool the moment matching opens.',
-      pkgNote: 'Flat rate for the event. Every package includes AI matching, unlimited interviews with each candidate, and a post-event report.'
-    },
-    c: {
-      banner: 'Candidate matching is live.',
-      link: 'Reserve your spot to meet interview-ready candidates \u2192', href: '#packages',
-      colors: ['rgb(219, 234, 254)', 'rgb(30, 58, 138)', 'rgb(191, 219, 254)'],
-      early: false, open: true,
-      railPrice: '$495',
-      railNote: 'Matching is live. Post your roles and interview requests start arriving within a few hours.',
-      pkgNote: 'Flat rate for the event. Every package includes AI matching, unlimited interviews with each candidate, and a post-event report.'
-    },
-    d: {
-      banner: 'Employer registration closes tomorrow.',
-      link: 'Reserve your spot now \u2192', href: '#packages',
-      colors: ['rgb(254, 226, 226)', 'rgb(153, 27, 27)', 'rgb(252, 165, 165)'],
-      early: false, open: true,
-      railPrice: '$495',
-      railNote: 'Registration closes tomorrow. Matching has been running for weeks.',
-      pkgNote: 'Flat rate for the event. Registration closes tomorrow.'
-    },
-    e: {
-      banner: 'Employer registration is closed for this event. Next ' + EVENT.citySrt + ' ' + EVENT.type + ' Hiring Event: date to follow.',
-      link: 'View Details \u2192', href: EVENT.nextEvent,
-      colors: ['rgb(241, 245, 249)', 'rgb(51, 65, 85)', 'rgb(203, 213, 225)'],
-      early: false, open: false,
-      railPrice: '$495',
-      railNote: 'Registration for this event has closed. Pricing is the same at the next ' + EVENT.citySrt + ' healthcare event.',
-      pkgNote: 'Registration for ' + EVENT.dateLong + ' is closed. Packages are shown for reference.'
-    }
+    early:  { banner: 'Early registration pricing ends soon. Save $100 and lock in priority candidate matching.',
+              link: 'Register Now →', href: '#packages',
+              bg: 'rgb(254, 244, 224)', fg: 'rgb(120, 53, 15)', bd: 'rgb(252, 211, 77)',
+              early: true, open: true },
+    soon:   { banner: 'Candidate matching activates soon.', link: LINK_STD, href: '#packages',
+              bg: 'rgb(219, 234, 254)', fg: 'rgb(30, 58, 138)', bd: 'rgb(191, 219, 254)',
+              early: false, open: true },
+    week:   { banner: 'Candidate matching activates this week.', link: LINK_STD, href: '#packages',
+              bg: 'rgb(219, 234, 254)', fg: 'rgb(30, 58, 138)', bd: 'rgb(191, 219, 254)',
+              early: false, open: true },
+    live:   { banner: 'Candidate matching is live.', link: LINK_STD, href: '#packages',
+              bg: 'rgb(219, 234, 254)', fg: 'rgb(30, 58, 138)', bd: 'rgb(191, 219, 254)',
+              early: false, open: true },
+    closing:{ banner: 'Employer registration closes in 6 days.', link: LINK_STD, href: '#packages',
+              bg: 'rgb(254, 247, 230)', fg: 'rgb(146, 64, 14)', bd: '',
+              early: false, open: true },
+    tomorrow:{ banner: 'Employer registration closes tomorrow.', link: 'Reserve your spot now →', href: '#packages',
+              bg: 'rgb(254, 226, 226)', fg: 'rgb(153, 27, 27)', bd: '',
+              early: false, open: true },
+    closed: { banner: 'Employer registration is closed for this event. Next ' + EVENT.citySrt + ' Healthcare Hiring Event: {{NEXT_EVENT_DATE}}.',
+              link: 'View Details →', href: EVENT.nextEvent,
+              bg: 'rgb(240, 240, 240)', fg: 'rgb(51, 65, 85)', bd: 'rgb(203, 213, 225)',
+              early: false, open: false },
+    eventday:{ banner: null, link: null, href: null, bg: '', fg: '', bd: '',
+              early: false, open: false }
   };
 
   function setState(key) {
     var s = STATES[key];
     if (!s) return;
 
+    var wrap = document.getElementById('jfx-banner-wrap');
     var bar = document.getElementById('jfx-banner');
-    document.getElementById('jfx-banner-text').textContent = s.banner;
-    var link = document.getElementById('jfx-banner-link');
-    link.textContent = s.link;
-    link.setAttribute('href', s.href);
-    bar.style.backgroundColor = s.colors[0];
-    bar.style.color = s.colors[1];
-    bar.style.borderColor = s.colors[2];
+    if (!s.banner) {
+      wrap.style.display = 'none';            // event day: the live site drops the bar entirely
+    } else {
+      wrap.style.display = '';
+      document.getElementById('jfx-banner-text').textContent = s.banner;
+      var link = document.getElementById('jfx-banner-link');
+      link.textContent = s.link;
+      link.setAttribute('href', s.href);
+      link.style.color = s.fg;
+      bar.style.backgroundColor = s.bg;
+      bar.style.color = s.fg;
+      bar.style.borderColor = s.bd || 'transparent';
+    }
 
     document.querySelectorAll('[data-state-show="a"]').forEach(function (el) {
       el.style.display = s.early ? '' : 'none';
     });
-
     document.querySelectorAll('[data-price]').forEach(function (el) {
       el.textContent = s.early ? el.getAttribute('data-early') : el.getAttribute('data-full');
     });
-
-    document.getElementById('jfx-rail-price').textContent = s.railPrice;
-    document.getElementById('jfx-rail-note').textContent = s.railNote;
-    document.getElementById('jfx-pkg-note').textContent = s.pkgNote;
+    document.getElementById('jfx-rail-price').textContent = s.early ? '$395' : '$495';
+    document.getElementById('jfx-rail-note').textContent = s.open
+      ? (s.early
+          ? 'Early registration saves $100 on every package through ' + EVENT.earlyEnds + '.'
+          : 'Standard pricing. Register and your roles go into matching straight away.')
+      : 'Registration for this event has closed. Pricing is the same at the next ' + EVENT.citySrt + ' healthcare event.';
+    document.getElementById('jfx-pkg-note').textContent = s.open
+      ? (s.early
+          ? 'Flat rate for the event, with $100 off every package until ' + EVENT.earlyEnds + '.'
+          : 'Flat rate for the event. Every package includes AI matching, unlimited interviews with each candidate, and a post-event report.')
+      : 'Registration for ' + EVENT.dateLong + ' is closed. Packages are shown for reference.';
 
     document.querySelectorAll('[data-tier-cta]').forEach(function (el) {
       if (s.open) {
         el.textContent = 'Reserve My Spot';
         el.removeAttribute('aria-disabled');
-        el.style.pointerEvents = '';
-        el.style.opacity = '';
+        el.style.pointerEvents = ''; el.style.opacity = ''; el.style.background = ''; el.style.color = '';
       } else {
         el.textContent = 'Registration Closed';
         el.setAttribute('aria-disabled', 'true');
         el.style.pointerEvents = 'none';
-        el.style.opacity = '.5';
+        el.style.background = '#e2e8f0'; el.style.color = '#94a3b8';
       }
     });
+
+    var heroCta = document.getElementById('jfx-hero-cta');
+    if (heroCta) {
+      heroCta.textContent = s.open ? 'Register for This Event' : 'Registration Closed';
+      heroCta.style.pointerEvents = s.open ? '' : 'none';
+      heroCta.style.background = s.open ? '' : '#e2e8f0';
+      heroCta.style.color = s.open ? '' : '#94a3b8';
+      heroCta.style.borderColor = s.open ? '' : '#e2e8f0';
+    }
 
     var closeH = document.getElementById('jfx-close-h');
     var closeSub = document.getElementById('jfx-close-sub');
     var closeCta = document.getElementById('jfx-close-cta');
     if (s.open) {
       closeH.textContent = 'Reserve your spot at the ' + EVENT.citySrt + ' healthcare hiring event';
-      closeCta.innerHTML = 'Register for This Event <span>\u2192</span>';
+      closeSub.innerHTML = '<span class="jfx-num">' + EVENT.registered + '</span> candidates have registered so far, and healthcare events run a <span class="jfx-num">' + EVENT.showRate + '</span> interview show rate.';
+      closeCta.innerHTML = 'Register for This Event <span>→</span>';
       closeCta.setAttribute('href', closeCta.getAttribute('data-href-open'));
     } else {
       closeH.textContent = 'This ' + EVENT.citySrt + ' event has closed';
       closeSub.textContent = 'Registration for ' + EVENT.dateLong + ' is closed. The next ' + EVENT.citySrt + ' healthcare hiring event is open for registration.';
-      closeCta.innerHTML = 'See the next ' + EVENT.citySrt + ' Healthcare Hiring Event <span>\u2192</span>';
+      closeCta.innerHTML = 'See the next ' + EVENT.citySrt + ' Healthcare Hiring Event <span>→</span>';
       closeCta.setAttribute('href', EVENT.nextEvent);
     }
+  }
 
+  /* ---- Preview control (REVIEW ONLY - delete before production) ---------
+     Pinned above the page's own banner so the thing it changes is always in
+     view. Production renders exactly one of these from the event date. ---- */
+  var PREVIEW = [
+    { d: '45d', k: 'early',    note: '45 days out' },
+    { d: '36d', k: 'early',    note: '36 days out - this event today' },
+    { d: '31d', k: 'early',    note: '31 days out - last day of early registration' },
+    { d: '30d', k: 'soon',     note: '30 days out - discount gone' },
+    { d: '21d', k: 'week',     note: '21 days out' },
+    { d: '14d', k: 'live',     note: '14 days out' },
+    { d: '7d',  k: 'closing',  note: '7 days out' },
+    { d: '2d',  k: 'tomorrow', note: '2 days out' },
+    { d: '1d',  k: 'closed',   note: '1 day out - registration closed' },
+    { d: '0d',  k: 'eventday', note: 'event day - no banner' }
+  ];
+  var pv = document.getElementById('jfx-preview');
+  if (pv) {
+    PREVIEW.forEach(function (o, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = o.d; b.title = o.note;
+      b.addEventListener('click', function () {
+        setState(o.k);
+        document.getElementById('jfx-preview-note').textContent = o.note;
+        pv.querySelectorAll('button').forEach(function (x, n) { x.setAttribute('aria-pressed', String(n === i)); });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      if (i === 1) b.setAttribute('aria-pressed', 'true');
+      pv.appendChild(b);
+    });
   }
 
   var cta = document.getElementById('jfx-close-cta');
   if (cta) cta.setAttribute('data-href-open', cta.getAttribute('href'));
 
-  setState('a');   // this event is 36 days out, so early registration is live
+  setState('early');   // this event is 36 days out
 })();
 </script>
 
