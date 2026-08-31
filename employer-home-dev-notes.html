@@ -104,8 +104,13 @@ a phantom line box and the heading renders on three lines at every size down to 
 naturally at <code>lg:text-[40px]</code> it breaks after &ldquo;and&rdquo;, which is the intended break.
 Verified by counting client rects.</li>
 <li>There is no supporting paragraph by design. The three points say the same thing.</li>
-<li>The section carries <code>border-b border-slate-200</code> because it sits between two white bands
-and would otherwise run into Hiring Event Results.</li>
+<li><strong>The background is brand navy, <code>bg-brand-dark</code> (#00245b)</strong> &mdash; updated
+26 Aug and the only dark band in the body of the page. The reason is structural: everything from this
+section down was white (Reschedule, Hiring Teams, Pricing, closing CTA), so the tonal alternation
+flatlined for the whole bottom half. No border is needed; the tone separates it from both neighbours.</li>
+<li>On the dark band: eyebrow <code>text-blue-400</code>, headline and item titles <code>text-white</code>,
+item copy <code>text-slate-300</code>, check chips <code>bg-blue-500</code> with a white tick. All already
+compiled in app.css &mdash; no new classes and no inline colours.</li>
 <li>The play button, progress bar and &ldquo;1:04&rdquo; are a designed still, not a live player.
 Clicking swaps in a native <code>&lt;video controls autoplay&gt;</code>.</li>
 </ul>
