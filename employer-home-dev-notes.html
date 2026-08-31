@@ -1,153 +1,211 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>employer-home.html — developer notes | JobFairX</title>
+<title>JobFairX — developer handoff</title>
 <style>
- :root{--ink:#0f172a;--soft:#475569;--rule:#e2e8f0;--blue:#2563eb;--bg:#fff}
+ :root{--ink:#0f172a;--soft:#475569;--mut:#64748b;--rule:#e2e8f0;--blue:#2563eb;--amber:#b45309;--amberbg:#fffbeb;--amberbd:#fde68a}
  *{box-sizing:border-box}
- body{margin:0;background:var(--bg);color:var(--ink);
-  font:400 16px/1.65 Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased}
- .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+ body{margin:0;background:#fff;color:var(--ink);
+  font:400 16px/1.65 Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:860px;margin:0 auto;padding:48px 24px 110px}
  .kick{font:700 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:0 0 14px}
- h1{font-size:34px;line-height:1.2;letter-spacing:-.02em;margin:0 0 8px;font-weight:600}
- h2{font-size:22px;line-height:1.3;letter-spacing:-.01em;margin:44px 0 12px;font-weight:600;
-   padding-top:20px;border-top:1px solid var(--rule)}
- h3{font-size:17px;margin:26px 0 8px;font-weight:600}
- p{margin:0 0 14px;color:var(--soft)}
- li{margin:0 0 9px;color:var(--soft)}
- ul{margin:0 0 16px;padding-left:22px}
- code{font:500 13.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
-   background:#f1f5f9;color:var(--ink);padding:1.5px 5px;border-radius:4px}
+ h1{font-size:36px;line-height:1.15;letter-spacing:-.022em;margin:0 0 10px;font-weight:600}
+ .lede{font-size:18px;color:var(--soft);margin:0 0 4px;max-width:68ch}
+ h2{font-size:23px;line-height:1.3;letter-spacing:-.012em;margin:52px 0 14px;font-weight:600;padding-top:22px;border-top:1px solid var(--rule)}
+ h3{font-size:17px;margin:28px 0 8px;font-weight:600}
+ p{margin:0 0 14px;color:var(--soft);max-width:72ch}
+ ul{margin:0 0 16px;padding-left:22px;max-width:72ch}
+ li{margin:0 0 10px;color:var(--soft)}
+ code{font:500 13.5px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;background:#f1f5f9;color:var(--ink);padding:1.5px 5px;border-radius:4px}
  strong{color:var(--ink);font-weight:600}
- .links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px}
- .links a{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;
-   border-radius:8px;padding:11px 18px;font-weight:600;font-size:15px}
+ a{color:var(--blue)}
+ .links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 10px}
+ .links a{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;border-radius:8px;padding:12px 18px;font-weight:600;font-size:15px}
  .links a.alt{background:#fff;color:var(--blue);border:1.5px solid #cbd5e1}
+ .flag{background:var(--amberbg);border:1px solid var(--amberbd);border-radius:8px;padding:16px 18px;margin:0 0 18px;max-width:72ch}
+ .flag p{color:#78350f;margin:0}
+ .flag p+p{margin-top:10px}
+ .flag .lbl{display:block;font:700 10.5px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+ table{border-collapse:collapse;width:100%;font-size:14.5px;margin:0 0 18px}
+ th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--soft)}
+ th{font:600 12px/1.3 Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);white-space:nowrap}
+ td:first-child{white-space:nowrap;color:var(--ink);font-weight:600}
+ .scroll{overflow-x:auto}
+ .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:14px;color:var(--mut)}
 </style></head><body><div class="wrap">
+
 <p class="kick">JobFairX &middot; developer handoff</p>
+<h1>Employer marketing pages</h1>
+<p class="lede">Two prototypes and everything you need to build them: the employer homepage content
+update, and a redesigned hiring event details page. Read the two flagged items below before you start
+&mdash; both look like mistakes and neither is one.</p>
+
 <div class="links">
-  <a href="employer-home.html">Open the prototype</a>
+  <a href="employer-home.html">Employer homepage</a>
+  <a href="employer-event-detail-v2.html">Event details page</a>
   <a class="alt" href="developer-tutorial-reschedule/">Tutorial video handoff</a>
-  <a class="alt" href="developer-tutorial-reschedule/jobfairx-01-reschedule-candidate-1080p.mp4">Watch the 1:04 video</a>
-  <a class="alt" href="employer-event-detail-v2.html">Event details page</a>
+  <a class="alt" href="developer-tutorial-reschedule/jobfairx-01-reschedule-candidate-1080p.mp4">The 1:04 video</a>
 </div>
-<h1>employer-home.html — developer notes</h1>
 
-<p>Final as of 25 Aug 2026. Scott signed off on desktop and mobile. This page is a</p>
-<p>prototype for the content update to jobfairx.com/employer; it is not a redesign</p>
-<p>of the site chrome.</p>
-
-<h2>Header and footer: use the LIVE site&#x27;s current design</h2>
-
-<p>Scott&#x27;s instruction, verbatim intent: the header and footer are already done on</p>
-<p>the live site. Keep the header and footer exactly as they exist on</p>
-<p>jobfairx.com/employer today, desktop and mobile, and apply only the page</p>
-<p>content between them from this prototype. Any header/footer differences you</p>
-<p>spot in the prototype (including the mobile footer&#x27;s hidden column labels) are</p>
-<p>artifacts of the 23 Aug capture. Do not port them; the live chrome wins.</p>
-
-<h2>What changed vs the live page (the actual update)</h2>
-
-<p>Rebuild diffs are all encoded in <code>build-employer-home.py</code> (read its section</p>
-<p>comments top to bottom; every step asserts against the captured DOM). Highlights:</p>
+<h2>Read this first</h2>
 <ul>
-<li>Title/meta/og/twitter: &quot;Virtual&quot; removed (&quot;Hiring Event Platform for Employers&quot;); hero headline &quot;Hire faster with in-person and video interviews&quot;; hero supporting copy updated.</li>
-<li>How It Works: step order and copy per Scott (registration first); Event day step is &quot;Interview in person, video, or phone&quot; with the Interview Settings panel visual; Review &amp; confirm step uses real product screenshots (<code>assets/product/review-confirm.png</code> desktop, <code>review-confirm-mobile.png</code> under lg, both referenced with <code>?v=2</code>).</li>
-<li>Pricing card bullets, All Packages Include reduced to 8 items (dashboard item removed; list now matches the pricing page word for word).</li>
-<li>Final CTA and footer-link copy edits (&quot;Hiring Event Platform&quot;).</li>
+<li><strong>The live site's header and footer win.</strong> Both prototypes carry a capture of the
+current live chrome. Keep the live header and footer exactly as they are, desktop and mobile, and
+apply only the page content between them. Any header or footer oddity you spot in a prototype
+(including the mobile footer's hidden column labels) is an artifact of the capture. Do not port it.</li>
+<li><strong>Never edit the prototype HTML by hand.</strong> Both pages are generated. Edit the
+builder and re-run it. The homepage comes from <code>build-employer-home.py</code>; the event page
+from <code>build-event-healthcare.py</code>.</li>
+<li><strong>Two controls are prototype-only and must be deleted before production.</strong> The
+Desktop / Mobile toggle at the bottom-left of the homepage, and the lifecycle preview bar across
+the top of the event details page. Both are labelled in the markup.</li>
+<li><strong>Numbers are real or they are placeholders.</strong> Nothing on either page is invented.
+Where a figure has to come from the platform it is marked as dynamic below.</li>
 </ul>
 
-<h2>Deliberate, signed-off content (do not &quot;fix&quot;)</h2>
+<div class="flag">
+  <span class="lbl">Looks broken, is not</span>
+  <p>The hero YouTube video reports as unplayable to any script or unauthenticated fetch &mdash;
+  oembed returns 403, and a cookie-less render shows &ldquo;This video is private&rdquo;. <strong>It plays
+  correctly in a real browser.</strong> The video is unlisted, and that is what an anonymous request
+  sees. Check it in a browser, never in a script.</p>
+</div>
 
+<div class="flag">
+  <span class="lbl">Needs a decision before launch</span>
+  <p><strong>Early registration is 30 days or more before the event</strong>, per Scott. The live
+  server currently computes <strong>31</strong> days, so it shows a deadline one day earlier than the
+  approved copy. Verified at the boundary on real events: the Save&nbsp;$100 badge is present at 31 days
+  out and gone at 30. Either the code moves to 30 or the copy moves to 31, but they must match.</p>
+</div>
+
+<h2>Employer homepage</h2>
+<p>A content update to jobfairx.com/employer, not a redesign of the site chrome. The build diffs are
+all in <code>build-employer-home.py</code>; read its section comments top to bottom. Every step
+asserts against the captured DOM, so it fails loudly rather than silently.</p>
+
+<h3>What changed against the live page</h3>
 <ul>
-<li>The Difference section is live-verbatim by Scott&#x27;s explicit decision, including &quot;Interviews auto-scheduled&quot;, &quot;Passive applicants&quot;, &quot;Post and pray&quot;, and the red X marks.</li>
-<li>The Trusted By marquee logos: Scott confirms the developer already has this handled; ship per the live site.</li>
-<li>The results cards&#x27; stat tiles (36/7, 92/19, 51/14) stay as-is per Scott.</li>
-<li>Meta descriptions&#x27; &quot;book interviews&quot; phrasing stays as-is per Scott.</li>
-<li>Testimonial quotes are verbatim and never edited.</li>
-<li>Interview-format phrasing varies on purpose: hero says &quot;in-person and video&quot; (phone deliberately not in the hero), the Event day step and All Packages Include say &quot;in-person, video, or phone&quot;, tier cards say &quot;In-person or video interviews&quot;. Documented decisions, not inconsistencies.</li>
+<li>Titles and meta drop &ldquo;Virtual&rdquo;. The category claim is &ldquo;Hiring Event Platform for
+Employers&rdquo;.</li>
+<li><strong>New hero copy:</strong> &ldquo;Meet interview-ready candidates at hiring events built to
+hire.&rdquo; with &ldquo;Post the roles you need to fill, meet candidates matched to your openings, and
+interview them in person, by video, or by phone.&rdquo;</li>
+<li>How It Works: registration first; the Event day step carries the Interview Settings panel; Review
+and confirm uses real product screenshots that swap at the <code>lg</code> breakpoint.</li>
+<li>All Packages Include reduced to 8 items, matching the pricing page word for word.</li>
+<li><strong>New section: Reschedule and follow-ups</strong>, replacing the live site's scroll-pinned
+Built-in Tools block. Two columns, copy and three points left, the employer tutorial right.</li>
 </ul>
 
-<h2>Wiring the developer must do</h2>
-
+<h3>The reschedule section</h3>
 <ul>
-<li>Mobile hamburger: drawer never opens in the prototype; wire per live site.</li>
-<li>The page now ships exactly ONE inline script, seven lines, at the end of the body. Its only job is the reschedule tutorial: on click it swaps the poster for a <code>&lt;video controls autoplay&gt;</code>. Everything else on the page is still static.</li>
-<li>The three &quot;Reserve My Spot&quot; buttons and the Growth card&#x27;s Events stepper are inert; production behavior should match the live pricing page&#x27;s component (bundle rungs 1-4 then 5/10/15/25/40/50/75/100; cart URL uses bundle=&lt;id&gt; at bundle counts, else pkg+qty).</li>
-<li>Dead anchors: &quot;See how it works&quot; in the Review &amp; confirm step is href=&quot;#&quot;; the four &quot;View Event Details&quot; rows in the step-1 calendar mock are mock content. The calendar mock&#x27;s events/dates are illustrative (late Aug 2026) and should be rendered from the real event feed in production.</li>
-<li>Analytics, JSON-LD, and tracking scripts were stripped at capture; production keeps the live site&#x27;s own.</li>
+<li><strong>The headline must not contain a <code>&lt;br&gt;</code>.</strong> An explicit break creates
+a phantom line box and the heading renders on three lines at every size down to 32px. Left to wrap
+naturally at <code>lg:text-[40px]</code> it breaks after &ldquo;and&rdquo;, which is the intended break.
+Verified by counting client rects.</li>
+<li>There is no supporting paragraph by design. The three points say the same thing.</li>
+<li>The section carries <code>border-b border-slate-200</code> because it sits between two white bands
+and would otherwise run into Hiring Event Results.</li>
+<li>The play button, progress bar and &ldquo;1:04&rdquo; are a designed still, not a live player.
+Clicking swaps in a native <code>&lt;video controls autoplay&gt;</code>.</li>
 </ul>
 
-<h2>Assets and build</h2>
-
+<h3>Wiring you need to do</h3>
 <ul>
-<li>Never edit employer-home.html by hand. Edit <code>build-employer-home.py</code>, rerun. Source of truth: <code>assets/live-capture/employer-live-dom.html</code> (23 Aug 2026).</li>
-<li>Local stylesheets: <code>assets/employer-home/app.css</code> and <code>page.css</code> with <code>?v=2</code> cache-busters (bump CSS_V in the builder on any CSS change).</li>
-<li>Product screenshots: <code>assets/product/review-confirm.png</code> (824x609 css @2x) and <code>review-confirm-mobile.png</code> (584x651 css @2x); the two &lt;img&gt; swap at the lg breakpoint. Regeneration recipe is documented in the session notes if the lobby UI changes.</li>
-<li>Font Awesome Pro 5.10.0 loads from pro.fontawesome.com with an SRI hash (as live). FA Pro is domain-licensed; if the production domain ever changes, self-host it.</li>
-<li>og:image still points at https://jobfairx.com/images/og-image.png; canonical is https://jobfairx.com/employer. Both correct for production.</li>
+<li>Mobile hamburger: the drawer does not open in the prototype. Wire it per the live site.</li>
+<li>The page ships exactly <strong>one</strong> inline script, seven lines, at the end of the body.
+Its only job is the tutorial hand-off. Everything else is static.</li>
+<li>The three Reserve My Spot buttons and the Growth card's stepper are inert. Production behaviour
+should match the live pricing page: rungs 1&ndash;4 then 5/10/15/25/40/50/75/100; cart URL uses
+<code>bundle=&lt;id&gt;</code> at bundle counts, otherwise <code>pkg</code> plus <code>qty</code>.</li>
+<li>Dead anchors: &ldquo;See how it works&rdquo; in the Review and confirm step is <code>href="#"</code>.
+The calendar mock's rows are illustrative and should render from the real event feed.</li>
+<li>Analytics, JSON-LD and tracking were stripped at capture. Production keeps the live site's own.</li>
 </ul>
 
+<h2>Event details page</h2>
+<p>A redesign, not a clone. The live event page repeats the homepage: measured across the built Dallas
+clone, about 79% of its visible copy is identical on every one of the 1,760 event pages the template
+renders, and only about 6% changes per event. This version answers &ldquo;why this event&rdquo; instead.</p>
+<p>Built by <code>build-event-healthcare.py</code>. The real event is
+<strong>Austin, TX Healthcare, 30 September 2026</strong>. The <code>EV</code> dictionary at the top of
+the builder is the single parameterisation point for the other four event types and the city pages.</p>
 
-<h2>Reschedule and follow-ups section (added 26 Aug, Scott-approved)</h2>
-
-<p>Sits between How It Works and Hiring Event Results. It replaces the live site&#x27;s</p>
-<p>scroll-pinned &quot;Built-in Tools / Candidate Messaging and Interview Scheduling&quot;</p>
-<p>block, which was removed from this page on 24 Aug.</p>
-
+<h3>Structure</h3>
 <ul>
-<li>Built by <code>build-employer-home.py</code> section <strong>8g</strong>. Edit the builder, never the output.</li>
-<li>Layout: two columns. Copy and a three-point checklist left, the employer tutorial right. Scott picked this from three rendered options.</li>
-<li><strong>Headline must not contain a <code>&lt;br&gt;</code>.</strong> An explicit break creates a phantom line box and the heading renders on three lines at every size down to 32px. Left to wrap naturally at <code>lg:text-[40px]</code> it breaks after &quot;and&quot;, which is the break Scott marked up. Verified by counting client rects.</li>
-<li>There is no supporting paragraph by design; Scott cut it because the three points say the same thing.</li>
-<li>The section carries <code>border-b border-slate-200</code> because it sits between two white bands and would otherwise run into Hiring Event Results.</li>
+<li>Lifecycle banner, then a hero that leads with what the employer gets, with a registration card that
+sticks down the scroll. Price is deliberately a small link, not the headline.</li>
+<li>The room so far &mdash; live candidate count plus the type's show rate and per-employer averages.</li>
+<li>Who you will meet, with the ~20 mile verification stated for the city.</li>
+<li>How it works in three steps, each with a real product screenshot: the review screen, the live event-day
+lobby, and the post-event report.</li>
+<li>Packages priced by lifecycle state, one type-matched testimonial, an event-scoped FAQ, and the close.</li>
 </ul>
 
-<h3>The video</h3>
+<h3>The eight lifecycle states</h3>
+<p>Captured by rendering fifteen real event pages at 0, 1, 2, 3, 7, 10, 14, 17, 21, 28, 29, 30, 31, 36
+and 45 days out. These strings and colours are verbatim from production. <strong>The preview bar at the
+top of the prototype exists so you can see all eight; delete it, its styles and the
+<code>PREVIEW</code> array before production.</strong> Production renders exactly one state, computed
+from the event date.</p>
+<div class="scroll"><table>
+<thead><tr><th>Days out</th><th>Banner</th><th>Pricing / CTA</th></tr></thead>
+<tbody>
+<tr><td>31+</td><td>Early registration pricing ends soon. Save $100 and lock in priority candidate matching.</td><td>Struck to $395 / $795 / $1,395, badge shown</td></tr>
+<tr><td>22&ndash;30</td><td>Candidate matching activates soon.</td><td>Full price</td></tr>
+<tr><td>15&ndash;21</td><td>Candidate matching activates this week.</td><td>Full price</td></tr>
+<tr><td>8&ndash;14</td><td>Candidate matching is live.</td><td>Full price</td></tr>
+<tr><td>3&ndash;7</td><td>Employer registration closes in N days. (N = days out &minus; 1)</td><td>Full price</td></tr>
+<tr><td>2</td><td>Employer registration closes tomorrow.</td><td>Full price, still purchasable</td></tr>
+<tr><td>1</td><td>Employer registration is closed for this event. Next event: date.</td><td>All CTAs become Registration Closed</td></tr>
+<tr><td>0</td><td>No banner element at all</td><td>All CTAs closed</td></tr>
+</tbody></table></div>
+<p>Two details that surprised us and are worth keeping: registration closes a full day before the event,
+not on it, and on event day the banner element is absent rather than empty.</p>
 
+<h3>Data that must come from the platform</h3>
 <ul>
-<li>Poster <code>developer-tutorial-reschedule/thumbnail.jpg</code> (2560x1440), file <code>developer-tutorial-reschedule/jobfairx-01-reschedule-candidate-1080p.mp4</code> (3.3 MB, 1920x1080, 1:04, captions burned in). Both already live in the preview repo; the page references them by relative path.</li>
-<li>The play button, progress bar and &quot;1:04&quot; are a designed still, not a real player. Clicking swaps in a native <code>&lt;video controls autoplay&gt;</code>.</li>
-<li><strong>To move to YouTube:</strong> upload per <code>developer-tutorial-reschedule/index.html</code> (that page carries the title, description, transcript and the do-not-upload-captions rule), then replace the <code>&lt;video&gt;</code> string in section 8g&#x27;s <code>TUT_SCRIPT</code> with the iframe embed. One line. Do not add a caption track: the captions are burned into the picture.</li>
+<li><strong>Registered candidate count</strong> &mdash; already live per event, with the
+&ldquo;Updated daily&rdquo; stamp. Do not hard-code it; the same template renders 1,760 city pages.</li>
+<li><strong>Companies registered</strong> &mdash; this already exists in the event payload and is
+currently rendered nowhere. It is the strongest event-specific proof on the page. Worth switching on.</li>
+<li><strong>Roles posted at the event</strong> &mdash; if you can feed it, the audience block uses it.
+If not, omit the block rather than estimating.</li>
+<li>Show rate and per-employer averages are type-level, not per-event, and differ by type.</li>
+<li>Every primary CTA carries <code>eventId</code> and a <code>returnTo</code> back to the page.
+On the current live page two imported links drop the <code>eventId</code> and fall back to the generic
+cart; that is a bug worth not reproducing.</li>
 </ul>
 
-<h2>Hero copy (changed 26 Aug)</h2>
+<h3>Screenshots</h3>
+<p>All three product images are real captures from the healthcare prototype, curated in its own DOM
+before shooting, then localised to Austin and 30 September. They are not illustrations. If the product
+UI changes they need re-shooting; the recipe is in the builder comments.</p>
 
-<p>Headline and subcopy are set by section <strong>8h</strong>, from Scott&#x27;s marked-up</p>
-<p>screenshot, verbatim:</p>
-
+<h2>The tutorial video</h2>
 <ul>
-<li>&quot;Meet interview-ready candidates at hiring events built to hire.&quot;</li>
-<li>&quot;Post the roles you need to fill, meet candidates matched to your openings, and interview them in person, by video, or by phone.&quot;</li>
+<li>File: 1:04, 1920&times;1080, H.264, 3.3&nbsp;MB, AAC stereo at &minus;14.9 LUFS. Poster is 2560&times;1440.</li>
+<li><strong>Captions are burned into the picture. Do not upload a caption file</strong> &mdash; a caption
+track on top would show two sets of text to anyone who turns CC on. The transcript goes in the
+description, which is what YouTube indexes.</li>
+<li>The handoff page linked at the top carries the YouTube title, the description to paste as-is, and
+the full transcript.</li>
+<li>To move from the local file to YouTube: upload it, then replace the <code>&lt;video&gt;</code> string
+in the builder's <code>TUT_SCRIPT</code> with the iframe embed. One line.</li>
 </ul>
 
-<p>Line breaks are <code>hidden lg:block</code>, so the phone wraps naturally. Note this</p>
-<p>changes the interview-format ladder documented below: the hero previously said</p>
-<p>&quot;in-person and video&quot; and held phone back until the Event day step. Scott&#x27;s copy</p>
-<p>names all three in the hero.</p>
-
-<h2>Hero video: unauthenticated fetches lie about it</h2>
-
-<p>The hero embed (<code>QuRalPnpPLA</code>) <strong>plays correctly in a real browser</strong> — verified</p>
-<p>26 Aug on the deployed preview. But do not trust automated checks on it:</p>
-
+<h2>Checking your work</h2>
 <ul>
-<li><code>youtube.com/oembed</code> returns <strong>403</strong></li>
-<li>the watch page fetched without cookies contains <code>UNPLAYABLE</code> and <code>LOGIN_REQUIRED</code> and an empty title</li>
-<li>a headless render with no cookies shows &quot;This video is private&quot;</li>
+<li>Both pages must stay clear of horizontal overflow at a true 390px. Headless Chrome clamps its
+window to 500px, so probe inside an iframe or you are certifying the wrong width.</li>
+<li>The prototypes use the live site's <strong>compiled</strong> Tailwind build. There is no runtime,
+so a class the live site never emitted silently does nothing. Anything new belongs in a scoped
+<code>&lt;style&gt;</code> block, which is the pattern every existing mock already follows.</li>
+<li>Product mocks use the product blue <code>#0044B3</code>; page CTAs and eyebrows use the marketing
+blue <code>#2563eb</code>. They are not interchangeable.</li>
 </ul>
 
-<p>That pattern is consistent with an unlisted video plus YouTube&#x27;s consent wall</p>
-<p>for anonymous requests, not with a broken embed. The embed URL itself returns</p>
-<p>200 and the poster, title and Watch-on-YouTube button all render for a signed-in</p>
-<p>user. Same note as the existing &quot;Error 153 only in offline rendering&quot; quirk</p>
-<p>below: check this one in a browser, never in a script.</p>
-
-<h2>Verification</h2>
-
-<ul>
-<li><code>python3 tools/mcheck.py employer-home.html</code> must stay clean (true-390 overflow probe).</li>
-<li>YouTube hero embed (QuRalPnpPLA) verified playing on the deployed preview; an &quot;Error 153&quot; appears only in offline/file:// rendering.</li>
-</ul>
+<p class="foot">Questions go to Scott. Both prototypes are on the preview repo and may be updated;
+re-check this page for changes before a build.</p>
 
 </div></body></html>
