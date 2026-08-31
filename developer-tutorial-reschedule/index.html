@@ -1,0 +1,181 @@
+<title>Reschedule and Follow-Up Interviews Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#f7f7f9; --surface:#fff; --sunken:#eef0f4; --ink:#14161a; 
+  --ink2:#565d6b; --ink3:#858c99; --line:#e1e4ea; --accent:#0044B3; --accent2:#2f5cff;
+  --ok:#1a7f4e; --ok-bg:#e7f4ed; --warn:#a8611b; --warn-bg:#fbf1e2; --danger:#b3261e; --danger-bg:#fbeceb;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0c0e13; --surface:#14181f; --sunken:#1b202a; --ink:#f1f3f7; --ink2:#a2aab8;
+  --ink3:#767e8c; --line:rgba(255,255,255,.10); --accent:#5b8cff; --accent2:#4a72ff;
+  --ok:#3fae76; --ok-bg:rgba(63,174,118,.13); --warn:#d08a3a; --warn-bg:rgba(208,138,58,.13);
+  --danger:#e8695f; --danger-bg:rgba(232,105,95,.13);
+}}
+:root[data-theme="dark"]{
+  --ground:#0c0e13; --surface:#14181f; --sunken:#1b202a; --ink:#f1f3f7; --ink2:#a2aab8;
+  --ink3:#767e8c; --line:rgba(255,255,255,.10); --accent:#5b8cff; --accent2:#4a72ff;
+  --ok:#3fae76; --ok-bg:rgba(63,174,118,.13); --warn:#d08a3a; --warn-bg:rgba(208,138,58,.13);
+  --danger:#e8695f; --danger-bg:rgba(232,105,95,.13);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:56px 24px 96px;display:flex;flex-direction:column;gap:42px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+h1{font-size:clamp(1.85rem,1.4rem+1.9vw,2.5rem);font-weight:600;letter-spacing:-.03em;
+  line-height:1.08;margin:0 0 14px;text-wrap:balance}
+h2{font-size:1.2rem;font-weight:600;letter-spacing:-.02em;margin:0 0 4px}
+h3{font-size:.95rem;font-weight:600;margin:0 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+p:last-child{margin-bottom:0}
+.lead{color:var(--ink2);font-size:1.06rem}
+a{color:var(--accent)}
+.step{display:flex;gap:18px;align-items:flex-start}
+.num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;
+  font-family:var(--mono);font-weight:600;font-size:15px;display:flex;align-items:center;
+  justify-content:center;margin-top:2px}
+.step>div:not(.num){min-width:0;flex:1}   /* :not() so it stops beating .num's flex:none */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:22px 24px}
+video{width:100%;border-radius:11px;display:block;background:#08090c;border:1px solid var(--line)}
+.dl{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;
+  text-decoration:none;font-weight:600;font-size:14.5px;padding:11px 18px;border-radius:9px;margin-top:6px}
+.dl.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:15px 17px;
+  overflow-x:auto;margin:0;font-family:var(--mono);font-size:12.6px;line-height:1.6}
+code{font-family:var(--mono);font-size:.89em;background:var(--sunken);border:1px solid var(--line);
+  border-radius:5px;padding:1px 5px}
+pre code{background:none;border:0;padding:0;font-size:inherit}
+table{border-collapse:collapse;width:100%;font-size:14.4px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:500}
+td.k{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{border-radius:11px;padding:17px 19px;border:1px solid}
+.note.warn{background:var(--warn-bg);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.note.danger{background:var(--danger-bg);border-color:color-mix(in srgb,var(--danger) 30%,transparent)}
+.note.ok{background:var(--ok-bg);border-color:color-mix(in srgb,var(--ok) 30%,transparent)}
+.note h3{color:inherit}
+.note.warn h3{color:var(--warn)} .note.danger h3{color:var(--danger)} .note.ok h3{color:var(--ok)}
+.note p{font-size:14.6px;color:var(--ink2)}
+.thumb{width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+del{color:var(--ink3)}
+ins{text-decoration:none;background:color-mix(in srgb,var(--ok) 18%,transparent);border-radius:3px;padding:0 2px}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">JobFairX &middot; developer handoff</p>
+  <h1>Reschedule and Follow-Up Interviews &mdash; employer tutorial</h1>
+  <p class="lead">A finished 1:04 employer tutorial, part of the JobFairX tutorial library. Everything you need to publish it is on this page.</p>
+</header>
+
+<section class="card">
+  <video controls preload="metadata" poster="thumbnail.jpg" src="jobfairx-01-reschedule-candidate-1080p.mp4"></video>
+  <div class="row" style="margin-top:14px">
+    <a class="dl" href="jobfairx-01-reschedule-candidate-1080p.mp4" download>Download video &middot; 3.3 MB</a>
+    <a class="dl ghost" href="thumbnail.jpg" download>Download thumbnail &middot; 2560&times;1440</a>
+  </div>
+  <table style="margin-top:18px">
+    <tr><th>Spec</th><th>Value</th></tr>
+    <tr><td class="k">Duration</td><td>1:04</td></tr>
+    <tr><td class="k">Video</td><td>1920&times;1080, H.264 High, 30&nbsp;fps, yuv420p, faststart</td></tr>
+    <tr><td class="k">File</td><td>3.3&nbsp;MB. Compressed for this page &mdash; the picture is screen content, so it holds up. A larger 22&nbsp;MB master exists if you want it; ask Scott.</td></tr>
+    <tr><td class="k">Audio</td><td>AAC stereo, 48&nbsp;kHz, &minus;14.9&nbsp;LUFS (YouTube's normalisation target)</td></tr>
+    <tr><td class="k">Captions</td><td>burned into the picture &mdash; <strong>do not upload a caption track</strong></td></tr>
+  </table>
+</section>
+
+<div class="step">
+  <div class="num">1</div>
+  <div>
+    <h2>Upload to YouTube</h2>
+    <p>Set <strong>thumbnail.jpg</strong> as the thumbnail in YouTube&nbsp;Studio. A YouTube thumbnail
+      lives on YouTube &mdash; the website has no say over it, and an embedded iframe serves whatever
+      Studio has.</p>
+    <div class="note warn" style="margin:14px 0">
+      <h3>Do not upload a caption file</h3>
+      <p>The captions are burned into the picture. A caption track on top would show two sets of
+        text to anyone who turns CC on. The full transcript goes in the description instead, which
+        is what YouTube indexes for search.</p>
+    </div>
+    <h3 style="margin-top:16px">Title</h3>
+    <pre><code>How to Reschedule Interviews and Schedule Follow-Ups in JobFairX</code></pre>
+    <h3 style="margin-top:16px">Description &mdash; paste as-is</h3>
+    <p style="font-size:14.5px;color:var(--ink2)">The timestamps at the top become YouTube's chapter
+      markers automatically.</p>
+    <pre><code>How to reschedule an interview and schedule follow-ups in JobFairX: proposing a new
+time, choosing the interview format, and starting a follow-up from Past Interviews
+or the post-event report.
+
+--- Transcript ---
+0:00  Reschedule interviews and schedule follow-ups in JobFairX.
+0:04  When a candidate requests an interview, you can propose a different time if needed.
+0:08  Choose how you want to interview the candidate: video, in person, or phone.
+0:13  For video interviews, use JobFairX.
+0:16  Or add your own video meeting link.
+0:18  For in-person interviews, enter the address and how to attend instructions.
+0:23  For phone interviews, you call the candidate at the scheduled interview time.
+0:27  Then propose multiple dates and times, and the candidate chooses what works best.
+0:31  The interview format only applies to this interview.
+0:34  It won't change your event settings or other scheduled interviews.
+0:38  Schedule a follow-up interview anytime from Past Interviews in the Interviews tab.
+0:43  Or directly from your post-event report.
+0:46  You can schedule unlimited interviews with each candidate before, during, or after the hiring event.
+0:52  Once a time is confirmed, JobFairX sends confirmation and reminders to both the candidate and interviewer.
+0:57  We hope this video helps you get the most out of your JobFairX hiring event.</code></pre>
+  </div>
+</div>
+
+<div class="step">
+  <div class="num">2</div>
+  <div>
+    <h2>Point the site at it</h2>
+    <p>The video on <code>jobfairx.com/employer</code> is a YouTube embed, not a self-hosted file.
+      The MP4 never goes on the web server &mdash; swap the video id in the hero iframe and you're done.</p>
+    <p>While you're in that element, three fixes that have been outstanding. All on the same iframe:</p>
+    <h3 style="margin-top:16px">Served today</h3>
+    <pre><code>&lt;iframe id="hero-video" class="aspect-video w-full"
+        src="https://www.youtube.com/embed/<del>QuRalPnpPLA</del>?<del>autoplay=1&amp;mute=1&amp;</del>playsinline=1&amp;rel=0"
+        title="JobFairX product overview" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"&gt;</code></pre>
+    <h3 style="margin-top:16px">Should be</h3>
+    <pre><code>&lt;iframe id="hero-video" class="aspect-video w-full"
+        src="https://www.youtube.com/embed/<ins>NEW_VIDEO_ID</ins>?playsinline=1&amp;rel=0"
+        title="JobFairX product overview" frameborder="0"
+        <ins>sandbox="allow-scripts allow-same-origin"</ins>
+        <ins>allowfullscreen</ins>
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"&gt;</code></pre>
+    <table style="margin-top:18px">
+      <tr><th>Change</th><th>Why</th></tr>
+      <tr><td class="k">sandbox=&hellip;</td><td>Stops click-through to YouTube from the logo, channel avatar, title and &ldquo;Watch on YouTube&rdquo;. This attribute is the only thing that does it.</td></tr>
+      <tr><td class="k">allowfullscreen</td><td>Must be in the <strong>server-rendered HTML</strong>. Script currently adds it after hydration, so DevTools shows it and it looks right &mdash; but a frame's permissions resolve at load, so the fullscreen button is inert today.</td></tr>
+      <tr><td class="k">drop autoplay&amp;mute</td><td>So it plays with sound when a visitor starts it. Unmuted autoplay is impossible in every browser &mdash; don't try to restore it.</td></tr>
+    </table>
+    <p style="margin-top:14px">The same <code>sandbox</code> attribute is wanted on the other two
+      embed locations: <code>/employer/demo</code>, and the
+      <code>/employer/job-fairs/{state}/{city}/next-{type}</code> template (one template, 1,760 pages).</p>
+  </div>
+</div>
+
+<div class="note danger">
+  <h3>One trap that will undo your work</h3>
+  <p><code>build-event-detail.py</code> regenerates <code>employer-event-detail.html</code> from a
+    deliberately un-sandboxed live capture and contains <strong>zero iframe logic</strong>, so it will
+    silently revert the sandbox patch the next time it runs. <code>build-employer-home.py</code> and
+    <code>build-event-healthcare.py</code> were both patched for this; that one was not. Patch it
+    before the next build, or re-apply after.</p>
+</div>
+
+<hr>
+<footer style="color:var(--ink3);font-size:13.5px">
+  <p>Video, thumbnail and this page are one bundle &mdash; keep them together. Questions on the
+    video itself go to Scott.</p>
+</footer>
+</div>
