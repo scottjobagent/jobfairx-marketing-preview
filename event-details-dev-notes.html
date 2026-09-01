@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Event details page: developer notes | JobFairX</title><style>
+ :root{--ink:#0f172a;--soft:#475569;--mut:#64748b;--rule:#e2e8f0;--blue:#2563eb;--navy:#00245b;
+   --amber:#b45309;--amberbg:#fffbeb;--amberbd:#fde68a}
+ *{box-sizing:border-box}
+ body{margin:0;background:#fff;color:var(--ink);
+  font:400 16px/1.65 Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:900px;margin:0 auto;padding:48px 24px 110px}
+ .kick{font:700 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:0 0 14px}
+ h1{font-size:36px;line-height:1.15;letter-spacing:-.022em;margin:0 0 10px;font-weight:600}
+ .lede{font-size:18px;color:var(--soft);margin:0 0 4px;max-width:68ch}
+ .meta{color:var(--mut);font-size:14px;margin:0 0 8px}
+ h2{font-size:23px;line-height:1.3;letter-spacing:-.012em;margin:52px 0 14px;font-weight:600;padding-top:22px;border-top:1px solid var(--rule)}
+ p{margin:0 0 14px;color:var(--soft);max-width:72ch}
+ ul{margin:0 0 16px;padding-left:22px;max-width:72ch}
+ li{margin:0 0 10px;color:var(--soft)}
+ code{font:500 13.5px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;background:#f1f5f9;color:var(--ink);padding:1.5px 5px;border-radius:4px}
+ strong{color:var(--ink);font-weight:600}
+ a{color:var(--blue)}
+ .links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 10px}
+ .links a{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;border-radius:8px;padding:10px 16px;font-weight:600;font-size:14px}
+ .links a.alt{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+ .toc{margin:26px 0 0;padding:16px 20px;background:#f8fafc;border:1px solid var(--rule);border-radius:10px}
+ .toc ol{margin:0;padding-left:20px}.toc li{margin:4px 0}
+ .copy{margin:14px 0 18px;padding:16px 20px;background:#f8fafc;border-left:3px solid var(--navy);border-radius:0 8px 8px 0;
+   white-space:pre-wrap;font-size:15px;line-height:1.55;color:var(--ink);max-width:72ch}
+ .copy .lab{display:block;font:700 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+ pre{margin:12px 0 22px;padding:16px 18px;background:#0b1220;color:#e6edf7;border-radius:10px;overflow:auto;
+   font:400 12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2;position:relative}
+ pre .lang{position:absolute;right:12px;top:10px;font:700 10px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#93a4bd}
+ .note{margin:0 0 18px;padding:12px 16px;background:var(--amberbg);border:1px solid var(--amberbd);border-radius:8px;color:#78350f;font-size:15px;max-width:72ch}
+ .note code{background:#fff3c4}
+</style></head><body><div class="wrap"><p class="kick">JobFairX &middot; employer marketing</p><h1>Event details page &mdash; developer notes</h1><p class="lede">Four changes to the event details page template, approved 1 Sep 2026. Everything you need is on this page.</p><div class="links"><a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">Open the visual reference</a><a class="alt" href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">Download the poster</a></div><div class="toc"><ol><li><a href="#read-this-first">Read this first</a></li><li><a href="#change-1-replace-the-video-section-with-the-hiring-event-dem">Change 1 · Replace the video section with the Hiring Event Demo</a></li><li><a href="#change-2-add-the-choose-your-interview-format-section">Change 2 · Add the Choose Your Interview Format section</a></li><li><a href="#change-3-how-it-works-event-day-step-copy-only">Change 3 · How It Works, Event day step: copy only</a></li><li><a href="#change-4-remove-the-built-in-tools-section">Change 4 · Remove the Built-in Tools section</a></li><li><a href="#checking-your-work">Checking your work</a></li><li><a href="#files">Files</a></li></ol></div><h2 id="read-this-first">Read this first</h2><p>Four changes to the <strong>event details page template</strong>. They apply to every event type and every city page, because they change the template, not one event.</p><p>Header, footer and everything not named below stay exactly as they are on the live site. Apply only the content changes here.</p><p>Visual reference for all four: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html</a>. Toggle the brand bar at the top to see the page in each event type; the bar itself is a review tool and is not part of the update.</p><p>Live example for orientation: <a href="https://jobfairx.com/employer/job-fairs/texas/houston/next-healthcare">Houston Healthcare</a>.</p><ul><li><strong>Change 1</strong> &mdash; replace the video section with the Hiring Event Demo band.</li><li><strong>Change 2</strong> &mdash; add the Choose Your Interview Format section directly below it.</li><li><strong>Change 3</strong> &mdash; update the copy of the How It Works &ldquo;Event day&rdquo; step.</li><li><strong>Change 4</strong> &mdash; remove the Built-in Tools section.</li></ul><p>The compiled Tailwind on the live site has no runtime, so anything new here ships as scoped CSS under <code>.jfx-wk-*</code>, <code>.jfx-dm-*</code> and <code>.jfx-fmt-*</code>. No new Tailwind classes are relied on.</p><h2 id="change-1-replace-the-video-section-with-the-hiring-event-dem">Change 1 · Replace the video section with the Hiring Event Demo</h2><p><strong>Where:</strong> the section <code>#how-it-works-video</code> &mdash; eyebrow &ldquo;Watch walkthrough&rdquo;, heading &ldquo;See How JobFairX Works&rdquo;, the YouTube embed. Remove that whole <code>&lt;section&gt;</code> and put this one in its place. It sits after the stats and logo strip, before How It Works.</p><p><strong>What it is:</strong> a navy band. Left: eyebrow, headline, five numbered steps. Right: a poster frame with our own play button. The YouTube iframe is created only when the poster is clicked, so none of YouTube&rsquo;s chrome appears on the page until the visitor asks for the video.</p><div class="copy"><span class="lab">Copy</span>HIRING EVENT DEMO
+
+Manage your hiring event from start to finish.
+
+1. Choose your interview format
+2. Add interviewers
+3. Manage interview requests
+4. Manage the event-day lobby
+5. Conduct interviews</div><p><strong>Poster image:</strong> <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">walkthrough-poster.jpg</a> (1052&times;586, 52&nbsp;KB). Copy it into your assets and point the <code>&lt;img src&gt;</code> at it. It is a frame from the video, so it stays accurate if the video does. No lazy-loading needed; it is one small image near the top of the page.</p><p><strong>Video:</strong> YouTube <code>cDvxtuvm7mA</code> (&ldquo;How to Run Your Hiring Event&rdquo;). Same video for every event type.</p><pre><span class="lang">html</span>&lt;section class=&quot;jfx-wk&quot;&gt;
+&lt;div class=&quot;jfx-wk-in&quot;&gt;
+&lt;div class=&quot;jfx-wk-text&quot;&gt;
+&lt;p class=&quot;jfx-wk-eyeb&quot;&gt;Hiring Event Demo&lt;/p&gt;
+&lt;h2 class=&quot;jfx-wk-h&quot;&gt;Manage your hiring event from start to finish.&lt;/h2&gt;
+&lt;ul class=&quot;jfx-wk-steps&quot;&gt;
+&lt;li class=&quot;jfx-wk-s&quot;&gt;
+&lt;span class=&quot;jfx-wk-n&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-st&quot;&gt;Choose your interview format&lt;/span&gt;
+&lt;/li&gt;
+&lt;li class=&quot;jfx-wk-s&quot;&gt;
+&lt;span class=&quot;jfx-wk-n&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-st&quot;&gt;Add interviewers&lt;/span&gt;
+&lt;/li&gt;
+&lt;li class=&quot;jfx-wk-s&quot;&gt;
+&lt;span class=&quot;jfx-wk-n&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-st&quot;&gt;Manage interview requests&lt;/span&gt;
+&lt;/li&gt;
+&lt;li class=&quot;jfx-wk-s&quot;&gt;
+&lt;span class=&quot;jfx-wk-n&quot;&gt;4&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-st&quot;&gt;Manage the event-day lobby&lt;/span&gt;
+&lt;/li&gt;
+&lt;li class=&quot;jfx-wk-s&quot;&gt;
+&lt;span class=&quot;jfx-wk-n&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-st&quot;&gt;Conduct interviews&lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-wk-media&quot;&gt;
+&lt;button type=&quot;button&quot; class=&quot;jfx-wk-poster&quot; data-yt=&quot;cDvxtuvm7mA&quot; aria-label=&quot;Play the walkthrough, 2:40&quot;&gt;
+&lt;img src=&quot;walkthrough-poster.jpg&quot; width=&quot;1052&quot; height=&quot;586&quot; alt=&quot;The JobFairX event-day lobby, with interview rooms ready to start&quot;&gt;
+&lt;span class=&quot;jfx-wk-scrim&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-btn&quot;&gt;
+&lt;svg width=&quot;26&quot; height=&quot;26&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M8 5v14l11-7z&quot;/&gt;
+&lt;/svg&gt;
+&lt;/span&gt;
+&lt;span class=&quot;jfx-wk-time&quot;&gt;2:40&lt;/span&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;</pre><pre><span class="lang">css</span>.jfx-wk{position:relative;overflow:hidden;background:#00245b;padding:56px 0;
+   background-image:radial-gradient(900px 460px at 86% -8%,#00306f 0%,rgba(0,48,111,0) 62%)}
+ @media (min-width:1024px){.jfx-wk{padding:88px 0}}
+ .jfx-wk-in{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 16px;
+   display:grid;grid-template-columns:1fr;gap:34px;align-items:center}
+ @media (min-width:640px){.jfx-wk-in{padding:0 24px}}
+ @media (min-width:1024px){.jfx-wk-in{padding:0 32px;gap:64px;
+   grid-template-columns:minmax(0,460px) minmax(0,1fr)}}
+ .jfx-wk-eyeb{margin:0 0 16px;font-size:12.5px;font-weight:700;letter-spacing:.14em;
+   text-transform:uppercase;color:#8fbbff;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+ .jfx-wk-h{margin:0 0 30px;font-size:28px;font-weight:600;letter-spacing:-.025em;
+   line-height:1.12;color:#fff}
+ @media (min-width:1024px){.jfx-wk-h{font-size:36px}}
+   justify-content:center;font-size:13.5px;font-weight:600;color:#9fc6ff;
+   background:rgba(255,255,255,.06);border:1px solid rgba(159,198,255,.4);
+   font-variant-numeric:tabular-nums}
+ @media (min-width:1024px){.jfx-wk-st{font-size:18px}}
+ .jfx-wk-poster{display:block;width:100%;padding:0;border:1px solid rgba(159,198,255,.2);
+   border-radius:14px;overflow:hidden;position:relative;cursor:pointer;background:#001b46;
+   box-shadow:0 20px 60px rgba(0,0,0,.34);transition:transform .2s ease,box-shadow .2s ease}
+ .jfx-wk-poster:hover{transform:translateY(-2px);box-shadow:0 26px 70px rgba(0,0,0,.42)}
+ .jfx-wk-poster:focus-visible{outline:3px solid #8fbbff;outline-offset:3px}
+ .jfx-wk-poster img{display:block;width:100%;height:auto}
+ .jfx-wk-scrim{position:absolute;inset:0;background:rgba(0,20,54,.24)}
+ .jfx-wk-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;
+   height:74px;border-radius:50%;background:#fff;color:#00245b;display:flex;align-items:center;
+   justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.34);transition:transform .2s ease}
+ .jfx-wk-btn svg{margin-left:4px}
+ .jfx-wk-poster:hover .jfx-wk-btn{transform:translate(-50%,-50%) scale(1.06)}
+ .jfx-wk-time{position:absolute;right:12px;bottom:12px;background:rgba(0,17,46,.78);color:#e6edf7;
+   font-size:12.5px;font-weight:600;padding:4px 9px;border-radius:6px;
+   font-variant-numeric:tabular-nums}
+ .jfx-wk-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block}</pre><pre><span class="lang">js</span>document.querySelector(&#x27;.jfx-wk-poster&#x27;).addEventListener(&#x27;click&#x27;, function () {
+  var f = document.createElement(&#x27;iframe&#x27;);
+  f.className = &#x27;jfx-wk-frame&#x27;;
+  f.src = &#x27;https://www.youtube.com/embed/cDvxtuvm7mA?rel=0&amp;autoplay=1&#x27;;
+  f.title = &#x27;How to Run Your Hiring Event&#x27;;
+  f.allow = &#x27;accelerometer; autoplay; encrypted-media; picture-in-picture&#x27;;
+  f.allowFullscreen = true;
+  this.replaceWith(f);
+});</pre><div class="note">Navy is <code>#00245b</code>, the same dark used on the employer home page&rsquo;s reschedule section. Not a new colour.</div><h2 id="change-2-add-the-choose-your-interview-format-section">Change 2 · Add the Choose Your Interview Format section</h2><p><strong>Where:</strong> a new section directly below the Hiring Event Demo and above How It Works. White background.</p><p><strong>What it is:</strong> centred eyebrow, headline and one-paragraph sub, then three equal cards &mdash; Video, In person, Phone, in that order. Each card has a soft gradient header, an icon tile, a title and a description. No links on the cards.</p><p><strong>The city token:</strong> the sub names the event&rsquo;s city. Render <code>{City}</code> from the event record, city only, no state &mdash; &ldquo;Houston&rdquo;, &ldquo;Los Angeles&rdquo;, &ldquo;Chicago&rdquo;.</p><div class="copy"><span class="lab">Copy</span>CHOOSE YOUR INTERVIEW FORMAT
+
+Meet candidates by video, in person, or phone.
+
+Select how you want to conduct interviews for the {City} hiring event. Choose the format that works best for your hiring process.
+
+Video
+Conduct interviews directly on the JobFairX platform. Candidates receive a secure link to join their interview.
+
+In person
+Provide the interview address and attendance instructions. Candidates receive the details they need to arrive prepared.
+
+Phone
+Call candidates at their scheduled interview time. Their phone number and interview details are available in JobFairX.</div><pre><span class="lang">html</span>&lt;section class=&quot;jfx-fmt&quot;&gt;
+&lt;span class=&quot;jfx-fmt-arc&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;jfx-fmt-dots&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;/span&gt;
+&lt;div class=&quot;jfx-fmt-in&quot;&gt;
+&lt;p class=&quot;jfx-fmt-eyeb&quot;&gt;Choose Your Interview Format&lt;/p&gt;
+&lt;h2 class=&quot;jfx-fmt-h&quot;&gt;Meet candidates by video, in person, or phone.&lt;/h2&gt;
+&lt;p class=&quot;jfx-fmt-sub&quot;&gt;Select how you want to conduct interviews for the {City} hiring event. Choose the format that works best for your hiring process.&lt;/p&gt;
+&lt;div class=&quot;jfx-fmt-cards&quot;&gt;
+&lt;div class=&quot;jfx-fmt-c jfx-fmt-blue&quot;&gt;
+&lt;div class=&quot;jfx-fmt-cap&quot;&gt;
+&lt;span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-fmt-body&quot;&gt;
+&lt;div class=&quot;jfx-fmt-tile&quot;&gt;
+&lt;svg width=&quot;26&quot; height=&quot;26&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;m22 8-6 4 6 4V8Z&quot;/&gt;
+&lt;rect width=&quot;14&quot; height=&quot;12&quot; x=&quot;2&quot; y=&quot;6&quot; rx=&quot;2&quot;/&gt;
+&lt;/svg&gt;
+&lt;/div&gt;
+&lt;h3 class=&quot;jfx-fmt-t&quot;&gt;Video&lt;/h3&gt;
+&lt;p class=&quot;jfx-fmt-d&quot;&gt;Conduct interviews directly on the JobFairX platform. Candidates receive a secure link to join their interview.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-fmt-c jfx-fmt-green&quot;&gt;
+&lt;div class=&quot;jfx-fmt-cap&quot;&gt;
+&lt;span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-fmt-body&quot;&gt;
+&lt;div class=&quot;jfx-fmt-tile&quot;&gt;
+&lt;svg width=&quot;26&quot; height=&quot;26&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;4&quot;/&gt;
+&lt;path d=&quot;M12 3v3M12 18v3M3 12h3M18 12h3&quot;/&gt;
+&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.2&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;
+&lt;/svg&gt;
+&lt;/div&gt;
+&lt;h3 class=&quot;jfx-fmt-t&quot;&gt;In person&lt;/h3&gt;
+&lt;p class=&quot;jfx-fmt-d&quot;&gt;Provide the interview address and attendance instructions. Candidates receive the details they need to arrive prepared.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-fmt-c jfx-fmt-amber&quot;&gt;
+&lt;div class=&quot;jfx-fmt-cap&quot;&gt;
+&lt;span&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-fmt-body&quot;&gt;
+&lt;div class=&quot;jfx-fmt-tile&quot;&gt;
+&lt;svg width=&quot;26&quot; height=&quot;26&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;path d=&quot;M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z&quot;/&gt;
+&lt;/svg&gt;
+&lt;/div&gt;
+&lt;h3 class=&quot;jfx-fmt-t&quot;&gt;Phone&lt;/h3&gt;
+&lt;p class=&quot;jfx-fmt-d&quot;&gt;Call candidates at their scheduled interview time. Their phone number and interview details are available in JobFairX.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;</pre><pre><span class="lang">css</span>.jfx-fmt{position:relative;overflow:hidden;background:#fff;padding:56px 0}
+ @media (min-width:1024px){.jfx-fmt{padding:90px 0}}
+ .jfx-fmt-arc{position:absolute;top:-190px;right:-140px;width:520px;height:520px;
+   border-radius:50%;background:#F4F7FF;pointer-events:none}
+ .jfx-fmt-dots{position:absolute;left:22px;bottom:34px;width:170px;height:78px;opacity:.55;
+   pointer-events:none;background-image:radial-gradient(#C7D2FE 1.6px,transparent 1.6px);
+   background-size:14px 14px}
+ .jfx-fmt-in{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 16px}
+ @media (min-width:640px){.jfx-fmt-in{padding:0 24px}}
+ @media (min-width:1024px){.jfx-fmt-in{padding:0 32px}}
+ .jfx-fmt-eyeb{margin:0 0 14px;text-align:center;font-size:13px;font-weight:700;
+   letter-spacing:.12em;text-transform:uppercase;color:#2563eb}
+ .jfx-fmt-h{margin:0 0 14px;text-align:center;font-size:28px;font-weight:600;
+   letter-spacing:-.02em;line-height:1.12;color:#0b1220}
+ @media (min-width:1024px){.jfx-fmt-h{font-size:40px}}
+ .jfx-fmt-sub{margin:0 auto 40px;max-width:660px;text-align:center;font-size:16px;
+   line-height:1.6;color:#5a6478}
+ @media (min-width:1024px){.jfx-fmt-sub{font-size:18px;margin-bottom:52px}}
+ .jfx-fmt-cards{display:grid;grid-template-columns:1fr;gap:18px}
+ @media (min-width:768px){.jfx-fmt-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}}
+ .jfx-fmt-c{display:flex;flex-direction:column;background:#fff;border:1px solid #e9e7e3;
+   border-radius:16px;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease}
+ .jfx-fmt-c:hover{box-shadow:0 10px 34px rgba(0,0,0,.06);transform:translateY(-2px)}
+ .jfx-fmt-cap{position:relative;height:132px;overflow:hidden}
+ .jfx-fmt-cap span{position:absolute;right:-52px;top:-46px;width:172px;height:172px;
+   border-radius:50%;background:rgba(255,255,255,.34)}
+ .jfx-fmt-blue .jfx-fmt-cap{background:linear-gradient(135deg,#edf1ff,#d9e2ff)}
+ .jfx-fmt-green .jfx-fmt-cap{background:linear-gradient(135deg,#e8f7f1,#cbeade)}
+ .jfx-fmt-amber .jfx-fmt-cap{background:linear-gradient(135deg,#fef5e6,#fae6c2)}
+ .jfx-fmt-body{display:flex;flex-direction:column;flex:1;padding:0 24px 26px}
+ .jfx-fmt-tile{position:relative;z-index:1;width:56px;height:56px;border-radius:15px;
+   display:flex;align-items:center;justify-content:center;margin:-28px 0 16px;
+   box-shadow:0 1px 2px rgba(0,0,0,.04)}
+ .jfx-fmt-blue .jfx-fmt-tile{background:#edf1ff;color:#2563eb}
+ .jfx-fmt-green .jfx-fmt-tile{background:#e8f7f1;color:#0e9488}
+ .jfx-fmt-amber .jfx-fmt-tile{background:#fef5e6;color:#b45309}
+ .jfx-fmt-t{margin:0 0 10px;font-size:22px;font-weight:500;letter-spacing:-.01em;color:#0b1220}
+ .jfx-fmt-d{margin:0;font-size:15.5px;line-height:1.55;color:#5a6478}</pre><div class="note">The three card colours are the calendar&rsquo;s existing event-type palette (<code>#2563eb</code>, <code>#0e9488</code>, <code>#b45309</code>). The decorative arc and dot pattern are pure CSS on the section; nothing to export.</div><h2 id="change-3-how-it-works-event-day-step-copy-only">Change 3 · How It Works, Event day step: copy only</h2><p><strong>Where:</strong> the second step of How It Works, eyebrow &ldquo;Event day&rdquo;. The visual (the video-call panel) does not change. Only the heading and the paragraph.</p><p><strong>Why:</strong> this step used to be the page&rsquo;s answer on interview formats. That job now belongs to Change 2, so the step is rewritten around knowing your schedule instead of repeating the three formats.</p><div class="copy"><span class="lab">Replace this</span>Interview in person, video, or phone
+
+Meet candidates in person at your address, on JobFairX video with nothing to install, or by phone. Whatever you choose, the schedule, resumes, and notes are right there in the same place.</div><div class="copy"><span class="lab">With this</span>You already know who you’re interviewing, and when
+
+Every candidate on your schedule is qualified and interview‑ready. You know who you’re interviewing, who each of your teammates is interviewing, and at what time. The schedule, resumes, and notes all sit in the same place.</div><h2 id="change-4-remove-the-built-in-tools-section">Change 4 · Remove the Built-in Tools section</h2><p><strong>Where:</strong> between How It Works and the testimonials. Eyebrow &ldquo;Built-in Tools&rdquo;, heading &ldquo;Candidate Messaging and Interview Scheduling&rdquo;, three sticky-scroll panels (Candidate Messaging, Flexible Scheduling, Interview Tracking) with the messaging and scheduling mock-ups. Opens with <code>&lt;section class="py-12 min-[901px]:py-24 bg-[#f8f7f4]"&gt;</code>.</p><p>Remove the whole section. Nothing replaces it; the testimonials move up to follow How It Works directly. It was already removed from the employer home page in the previous update.</p><h2 id="checking-your-work">Checking your work</h2><ul><li>Top of the page reads: hero &rarr; stats and logos &rarr; <strong>Hiring Event Demo</strong> &rarr; <strong>Choose Your Interview Format</strong> &rarr; How It Works &rarr; testimonials.</li><li>No &ldquo;See How JobFairX Works&rdquo; and no &ldquo;Built-in Tools&rdquo; anywhere on the page.</li><li>The demo eyebrow has no runtime badge next to it. The only place 2:40 appears is the small timestamp in the corner of the poster.</li><li>Clicking the poster loads the video in place and it starts playing; before that click, the page makes no request to youtube.com.</li><li>The format sub names the event&rsquo;s city, city only.</li><li>Cards read Video, In person, Phone, left to right, and none of them is a link.</li><li>How It Works step two is headed &ldquo;You already know who you’re interviewing, and when&rdquo;.</li><li>Nothing scrolls sideways at 375px. Cards and the poster stack full-width.</li><li>Open any two event types side by side: the only differences in these sections are the city in the sub and nothing else.</li></ul><h2 id="files">Files</h2><ul><li>Visual reference, all five event types: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">event-details-by-brand.html</a></li><li>Poster: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">walkthrough-poster.jpg</a></li><li>This page: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-dev-notes.html">event-details-dev-notes.html</a></li></ul><p>The review page carries all five event types in one file behind a brand bar. That is a review convenience only &mdash; production renders one event per page exactly as it does today.</p></div></body></html>
