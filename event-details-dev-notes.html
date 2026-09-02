@@ -29,7 +29,7 @@
  pre .lang{position:absolute;right:12px;top:10px;font:700 10px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#93a4bd}
  .note{margin:0 0 18px;padding:12px 16px;background:var(--amberbg);border:1px solid var(--amberbd);border-radius:8px;color:#78350f;font-size:15px;max-width:72ch}
  .note code{background:#fff3c4}
-</style></head><body><div class="wrap"><p class="kick">JobFairX &middot; employer marketing</p><h1>Event details page &mdash; developer notes</h1><p class="lede">Four changes to the event details page template, approved 1 Sep 2026. Everything you need is on this page.</p><div class="links"><a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">Open the visual reference</a><a class="alt" href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">Download the poster</a></div><div class="toc"><ol><li><a href="#read-this-first">Read this first</a></li><li><a href="#change-1-replace-the-video-section-with-the-hiring-event-dem">Change 1 · Replace the video section with the Hiring Event Demo</a></li><li><a href="#change-2-add-the-choose-your-interview-format-section">Change 2 · Add the Choose Your Interview Format section</a></li><li><a href="#change-3-how-it-works-event-day-step-copy-only">Change 3 · How It Works, Event day step: copy only</a></li><li><a href="#change-4-remove-the-built-in-tools-section">Change 4 · Remove the Built-in Tools section</a></li><li><a href="#checking-your-work">Checking your work</a></li><li><a href="#files">Files</a></li></ol></div><h2 id="read-this-first">Read this first</h2><p>Four changes to the <strong>event details page template</strong>. They apply to every event type and every city page, because they change the template, not one event.</p><p>Header, footer and everything not named below stay exactly as they are on the live site. Apply only the content changes here.</p><p>Visual reference for all four: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html</a>. Toggle the brand bar at the top to see the page in each event type; the bar itself is a review tool and is not part of the update.</p><p>Live example for orientation: <a href="https://jobfairx.com/employer/job-fairs/texas/houston/next-healthcare">Houston Healthcare</a>.</p><ul><li><strong>Change 1</strong> &mdash; replace the video section with the Hiring Event Demo band.</li><li><strong>Change 2</strong> &mdash; add the Choose Your Interview Format section directly below it.</li><li><strong>Change 3</strong> &mdash; update the copy of the How It Works &ldquo;Event day&rdquo; step.</li><li><strong>Change 4</strong> &mdash; remove the Built-in Tools section.</li></ul><p>The compiled Tailwind on the live site has no runtime, so anything new here ships as scoped CSS under <code>.jfx-wk-*</code> and <code>.jfx-fmt-*</code>. No new Tailwind classes are relied on.</p><h2 id="change-1-replace-the-video-section-with-the-hiring-event-dem">Change 1 · Replace the video section with the Hiring Event Demo</h2><p><strong>Where:</strong> the section <code>#how-it-works-video</code> &mdash; eyebrow &ldquo;Watch walkthrough&rdquo;, heading &ldquo;See How JobFairX Works&rdquo;, the YouTube embed. Remove that whole <code>&lt;section&gt;</code> and put this one in its place. It sits after the stats and logo strip, before How It Works.</p><p><strong>What it is:</strong> a navy band. Left: eyebrow, headline, five numbered steps. Right: a poster frame with our own play button. The YouTube iframe is created only when the poster is clicked, so none of YouTube&rsquo;s chrome appears on the page until the visitor asks for the video.</p><div class="copy"><span class="lab">Copy</span>HIRING EVENT DEMO
+</style></head><body><div class="wrap"><p class="kick">JobFairX &middot; employer marketing</p><h1>Event details page &mdash; developer notes</h1><p class="lede">Four changes to the event details page template, approved 1 Sep 2026. Everything you need is on this page.</p><div class="links"><a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">Open the visual reference</a><a class="alt" href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">Download the poster</a></div><div class="toc"><ol><li><a href="#read-this-first">Read this first</a></li><li><a href="#change-1-replace-the-video-section-with-the-hiring-event-dem">Change 1 · Replace the video section with the Hiring Event Demo</a></li><li><a href="#change-2-add-the-choose-your-interview-format-section">Change 2 · Add the Choose Your Interview Format section</a></li><li><a href="#change-3-replace-how-it-works-with-review-interview-outcomes">Change 3 · Replace How It Works with Review Interview Outcomes</a></li><li><a href="#change-4-remove-the-built-in-tools-section">Change 4 · Remove the Built-in Tools section</a></li><li><a href="#checking-your-work">Checking your work</a></li><li><a href="#files">Files</a></li></ol></div><h2 id="read-this-first">Read this first</h2><p>Four changes to the <strong>event details page template</strong>. They apply to every event type and every city page, because they change the template, not one event.</p><p>Header, footer and everything not named below stay exactly as they are on the live site. Apply only the content changes here.</p><p>Visual reference for all four: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html</a>. Toggle the brand bar at the top to see the page in each event type; the bar itself is a review tool and is not part of the update.</p><p>Live example for orientation: <a href="https://jobfairx.com/employer/job-fairs/texas/houston/next-healthcare">Houston Healthcare</a>.</p><ul><li><strong>Change 1</strong> &mdash; replace the video section with the Hiring Event Demo band.</li><li><strong>Change 2</strong> &mdash; add the Choose Your Interview Format section directly below it.</li><li><strong>Change 3</strong> &mdash; replace How It Works with the Review Interview Outcomes section.</li><li><strong>Change 4</strong> &mdash; remove the Built-in Tools section.</li></ul><p>The compiled Tailwind on the live site has no runtime, so anything new here ships as scoped CSS under <code>.jfx-wk-*</code>, <code>.jfx-fmt-*</code> and <code>.jfx-ro-*</code>. No new Tailwind classes are relied on.</p><h2 id="change-1-replace-the-video-section-with-the-hiring-event-dem">Change 1 · Replace the video section with the Hiring Event Demo</h2><p><strong>Where:</strong> the section <code>#how-it-works-video</code> &mdash; eyebrow &ldquo;Watch walkthrough&rdquo;, heading &ldquo;See How JobFairX Works&rdquo;, the YouTube embed. Remove that whole <code>&lt;section&gt;</code> and put this one in its place. It sits after the stats and logo strip, before How It Works.</p><p><strong>What it is:</strong> a navy band. Left: eyebrow, headline, five numbered steps. Right: a poster frame with our own play button. The YouTube iframe is created only when the poster is clicked, so none of YouTube&rsquo;s chrome appears on the page until the visitor asks for the video.</p><div class="copy"><span class="lab">Copy</span>HIRING EVENT DEMO
 
 Manage your hiring event from start to finish.
 
@@ -229,8 +229,136 @@ Call candidates at their scheduled interview time. Their phone number and interv
  .jfx-fmt-green .jfx-fmt-tile{background:#e8f7f1;color:#0e9488}
  .jfx-fmt-amber .jfx-fmt-tile{background:#fef5e6;color:#b45309}
  .jfx-fmt-t{margin:0 0 10px;font-size:22px;font-weight:500;letter-spacing:-.01em;color:#0b1220}
- .jfx-fmt-d{margin:0;font-size:15.5px;line-height:1.55;color:#5a6478}</pre><div class="note">The three card colours are the calendar&rsquo;s existing event-type palette (<code>#2563eb</code>, <code>#0e9488</code>, <code>#b45309</code>). The decorative arc and dot pattern are pure CSS on the section; nothing to export.</div><h2 id="change-3-how-it-works-event-day-step-copy-only">Change 3 · How It Works, Event day step: copy only</h2><p><strong>Where:</strong> the second step of How It Works, eyebrow &ldquo;Event day&rdquo;. The visual (the video-call panel) does not change. Only the heading and the paragraph.</p><p><strong>Why:</strong> this step used to be the page&rsquo;s answer on interview formats. That job now belongs to Change 2, so the step is rewritten around knowing your schedule instead of repeating the three formats.</p><div class="copy"><span class="lab">Replace this</span>Interview in person, video, or phone
+ .jfx-fmt-d{margin:0;font-size:15.5px;line-height:1.55;color:#5a6478}</pre><div class="note">The three card colours are the calendar&rsquo;s existing event-type palette (<code>#2563eb</code>, <code>#0e9488</code>, <code>#b45309</code>). The decorative arc and dot pattern are pure CSS on the section; nothing to export.</div><h2 id="change-3-replace-how-it-works-with-review-interview-outcomes">Change 3 · Replace How It Works with Review Interview Outcomes</h2><p><strong>Where:</strong> the How It Works section &mdash; eyebrow &ldquo;How It Works&rdquo;, heading &ldquo;Hiring Events Built Around Interviews&rdquo;, three alternating rows with product panels. Remove that whole <code>&lt;section class="how-section&hellip;"&gt;</code> and put this one in its place, between the format cards and the testimonials.</p><p><strong>Why:</strong> two of its three rows repeat what the Hiring Event Demo now says. The third row &mdash; the post-event report &mdash; is the one thing nothing else on the page covers, so it becomes its own section.</p><p><strong>What it is:</strong> light-grey band. Left: eyebrow, headline, one line, three checked points, a link. Right: the <strong>post-event report panel you already have</strong> &mdash; it is the third row&rsquo;s visual from the current How It Works, moved here unchanged. Its date line must be the event&rsquo;s own date; today the live panel shows a different old date on every event type (Apr 22 on Healthcare, Nov 13 2025 on Technology, and so on), which is a bug worth fixing while you are in there.</p><div class="copy"><span class="lab">Copy</span>AFTER THE EVENT
 
-Meet candidates in person at your address, on JobFairX video with nothing to install, or by phone. Whatever you choose, the schedule, resumes, and notes are right there in the same place.</div><div class="copy"><span class="lab">With this</span>You already know who you’re interviewing, and when
+Review interview outcomes.
 
-Every candidate on your schedule is qualified and interview‑ready. You know who you’re interviewing, who each of your teammates is interviewing, and at what time. The schedule, resumes, and notes all sit in the same place.</div><h2 id="change-4-remove-the-built-in-tools-section">Change 4 · Remove the Built-in Tools section</h2><p><strong>Where:</strong> between How It Works and the testimonials. Eyebrow &ldquo;Built-in Tools&rdquo;, heading &ldquo;Candidate Messaging and Interview Scheduling&rdquo;, three sticky-scroll panels (Candidate Messaging, Flexible Scheduling, Interview Tracking) with the messaging and scheduling mock-ups. Opens with <code>&lt;section class="py-12 min-[901px]:py-24 bg-[#f8f7f4]"&gt;</code>.</p><p>Remove the whole section. Nothing replaces it; the testimonials move up to follow How It Works directly. It was already removed from the employer home page in the previous update.</p><h2 id="checking-your-work">Checking your work</h2><ul><li>Top of the page reads: hero &rarr; stats and logos &rarr; <strong>Hiring Event Demo</strong> &rarr; <strong>Choose Your Interview Format</strong> &rarr; How It Works &rarr; testimonials.</li><li>No &ldquo;See How JobFairX Works&rdquo; and no &ldquo;Built-in Tools&rdquo; anywhere on the page.</li><li>The demo eyebrow has no runtime badge next to it. The only place 2:40 appears is the small timestamp in the corner of the poster.</li><li>Clicking the poster loads the video in place and it starts playing; before that click, the page makes no request to youtube.com.</li><li>The format sub names the event&rsquo;s city, city only.</li><li>Cards read Video, In person, Phone, left to right, and none of them is a link.</li><li>How It Works step two is headed &ldquo;You already know who you’re interviewing, and when&rdquo;.</li><li>Nothing scrolls sideways at 375px. Cards and the poster stack full-width.</li><li>Open any two event types side by side: the only differences in these sections are the city in the sub and nothing else.</li></ul><h2 id="files">Files</h2><ul><li>Visual reference, all five event types: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">event-details-by-brand.html</a></li><li>Poster: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">walkthrough-poster.jpg</a></li><li>This page: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-dev-notes.html">event-details-dev-notes.html</a></li></ul><p>The review page carries all five event types in one file behind a brand bar. That is a review convenience only &mdash; production renders one event per page exactly as it does today.</p></div></body></html>
+Your post-event report is ready in your dashboard. Every interview, every outcome, and who on your team saw whom.
+
+✓ Yes, maybe, or no for each candidate, with your team’s notes
+✓ Who interviewed whom, and who didn’t show
+✓ Message candidates or schedule next&amp;#8209;round interviews straight from the report
+
+Register for an event →</div><pre><span class="lang">html</span>&lt;section class=&quot;jfx-ro&quot;&gt;
+&lt;div class=&quot;jfx-ro-in&quot;&gt;
+&lt;div class=&quot;jfx-ro-text&quot;&gt;
+&lt;p class=&quot;jfx-ro-eyeb&quot;&gt;After the Event&lt;/p&gt;
+&lt;h2 class=&quot;jfx-ro-h&quot;&gt;Review interview outcomes.&lt;/h2&gt;
+&lt;p class=&quot;jfx-ro-sub&quot;&gt;Your post&amp;#8209;event report is ready in your dashboard. Every interview, every outcome, and who on your team saw whom.&lt;/p&gt;
+&lt;ul class=&quot;jfx-ro-list&quot;&gt;
+&lt;li&gt;
+&lt;span class=&quot;jfx-ro-ck&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;svg width=&quot;10&quot; height=&quot;10&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;
+&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;
+&lt;/svg&gt;
+&lt;/span&gt;
+&lt;span&gt;
+&lt;b&gt;Yes, maybe, or no&lt;/b&gt; for each candidate, with your team&amp;#8217;s notes&lt;/span&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;span class=&quot;jfx-ro-ck&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;svg width=&quot;10&quot; height=&quot;10&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;
+&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;
+&lt;/svg&gt;
+&lt;/span&gt;
+&lt;span&gt;
+&lt;b&gt;Who interviewed whom,&lt;/b&gt; and who didn&amp;#8217;t show&lt;/span&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;span class=&quot;jfx-ro-ck&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;svg width=&quot;10&quot; height=&quot;10&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3.5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;
+&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;
+&lt;/svg&gt;
+&lt;/span&gt;
+&lt;span&gt;
+&lt;b&gt;Message candidates or schedule next&amp;#8209;round interviews&lt;/b&gt; straight from the report&lt;/span&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;a href=&quot;#&quot; class=&quot;jfx-ro-link&quot;&gt;Register for an event &lt;span&gt;&amp;rarr;&lt;/span&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class=&quot;jfx-ro-media&quot;&gt;
+&lt;!-- your existing post-event report panel, dated to the event --&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;</pre><pre><span class="lang">css</span>.jfx-ro{background:#f8fafc;padding:56px 0;border-top:1px solid #eef2f7}
+ @media (min-width:1024px){.jfx-ro{padding:90px 0}}
+ .jfx-ro-in{max-width:1180px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:1fr;
+   gap:28px;align-items:center}
+ @media (min-width:640px){.jfx-ro-in{padding:0 24px}}
+ @media (min-width:1024px){.jfx-ro-in{padding:0 32px;gap:64px;grid-template-columns:minmax(0,1fr) 560px}}
+ .jfx-ro-eyeb{margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#2563eb}
+ .jfx-ro-h{margin:0 0 14px;font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.12;color:#0b1220}
+ @media (min-width:1024px){.jfx-ro-h{font-size:36px}}
+ .jfx-ro-sub{margin:0 0 20px;font-size:16px;line-height:1.6;color:#5a6478;max-width:48ch}
+ @media (min-width:1024px){.jfx-ro-sub{font-size:17px}}
+ .jfx-ro-list{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:12px}
+ .jfx-ro-list li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:11px;font-size:15.5px;
+   line-height:1.5;color:#334155;align-items:start}
+ .jfx-ro-list b{color:#0f172a;font-weight:600}
+ .jfx-ro-ck{width:20px;height:20px;border-radius:50%;background:#dcfce7;color:#15803d;display:flex;
+   align-items:center;justify-content:center;margin-top:2px}
+ .jfx-ro-link{display:inline-block;font-size:15px;font-weight:600;color:#2563eb;text-decoration:none}
+ .jfx-ro-link:hover{text-decoration:underline}
+ .jfx-ro-link span{display:inline-block;margin-left:4px}
+ .jfx-ro-media &gt; div{margin-left:auto;margin-right:auto}</pre><p>For reference, the report panel as it exists on the live page today, with the date line tokenised. Reuse your component rather than pasting this.</p><pre><span class="lang">html</span>&lt;div class=&quot;lg:order-1&quot;&gt;
+&lt;div class=&quot;w-full max-w-[560px] h-[420px] max-lg:h-auto max-lg:min-h-[280px] mx-auto overflow-hidden box-border bg-white border border-[#e8e6e3] rounded-[14px] p-5 shadow-[0_18px_48px_-12px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.05)]&quot;&gt;
+&lt;div class=&quot;flex items-baseline justify-between pb-3 border-b border-[#e8e6e3] mb-3 flex-wrap gap-1&quot;&gt;
+&lt;div class=&quot;text-[14px] max-[640px]:text-[13px] font-bold text-[#1a1a1a]&quot;&gt;Houston Healthcare · {Event date}&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;flex gap-1.5 mb-3.5 flex-wrap&quot;&gt;
+&lt;span class=&quot;text-[11px] max-[640px]:text-[10px] px-2.5 py-[5px] rounded-full bg-[#2563eb] text-white border border-[#2563eb] font-medium&quot;&gt;All &lt;b class=&quot;font-bold ml-1&quot;&gt;16&lt;/b&gt;
+&lt;/span&gt;
+&lt;span class=&quot;text-[11px] max-[640px]:text-[10px] px-2.5 py-[5px] rounded-full bg-white border border-[#e8e6e3] text-[#4b5563] font-medium&quot;&gt;Yes &lt;b class=&quot;font-bold ml-1 text-[#1a1a1a]&quot;&gt;8&lt;/b&gt;
+&lt;/span&gt;
+&lt;span class=&quot;text-[11px] max-[640px]:text-[10px] px-2.5 py-[5px] rounded-full bg-white border border-[#e8e6e3] text-[#4b5563] font-medium&quot;&gt;Maybe &lt;b class=&quot;font-bold ml-1 text-[#1a1a1a]&quot;&gt;4&lt;/b&gt;
+&lt;/span&gt;
+&lt;span class=&quot;text-[11px] max-[640px]:text-[10px] px-2.5 py-[5px] rounded-full bg-white border border-[#e8e6e3] text-[#4b5563] font-medium&quot;&gt;No &lt;b class=&quot;font-bold ml-1 text-[#1a1a1a]&quot;&gt;4&lt;/b&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-[1.3fr_1.1fr_0.8fr_0.8fr] gap-2.5 text-[10px] max-[640px]:text-[9px] font-bold text-[#6b6862] uppercase tracking-[0.06em] px-1 pb-2.5&quot;&gt;
+&lt;div&gt;Name&lt;/div&gt;
+&lt;div&gt;Desired job&lt;/div&gt;
+&lt;div&gt;Interview time&lt;/div&gt;
+&lt;div&gt;Feedback&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;flex flex-col&quot;&gt;
+&lt;div class=&quot;grid grid-cols-[1.3fr_1.1fr_0.8fr_0.8fr] gap-2.5 px-1 py-3 border-b border-[#f0eeea] items-start text-[12px] max-[640px]:text-[11px] last:border-b-0&quot;&gt;
+&lt;div class=&quot;flex flex-col gap-[3px]&quot;&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] font-semibold text-[#1a1a1a]&quot;&gt;Carla Mendoza&lt;/div&gt;
+&lt;a href=&quot;#&quot; class=&quot;text-[11px] max-[640px]:text-[10px] text-[#2563eb] underline underline-offset-2&quot;&gt;View resume&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#4b5563]&quot;&gt;Nurse&lt;br&gt;Practitioner&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#1a1a1a] font-medium&quot;&gt;9:00 AM&lt;/div&gt;
+&lt;div class=&quot;text-[12px] max-[640px]:text-[11px] px-2.5 py-1 rounded-md font-semibold inline-flex items-center justify-self-start h-fit whitespace-nowrap bg-[#dcfce7] text-[#15803d]&quot;&gt;✓ Yes&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-[1.3fr_1.1fr_0.8fr_0.8fr] gap-2.5 px-1 py-3 border-b border-[#f0eeea] items-start text-[12px] max-[640px]:text-[11px] last:border-b-0&quot;&gt;
+&lt;div class=&quot;flex flex-col gap-[3px]&quot;&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] font-semibold text-[#1a1a1a]&quot;&gt;Brendan Cole&lt;/div&gt;
+&lt;a href=&quot;#&quot; class=&quot;text-[11px] max-[640px]:text-[10px] text-[#2563eb] underline underline-offset-2&quot;&gt;View resume&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#4b5563]&quot;&gt;CT&lt;br&gt;Technologist&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#1a1a1a] font-medium&quot;&gt;9:30 AM&lt;/div&gt;
+&lt;div class=&quot;text-[12px] max-[640px]:text-[11px] px-2.5 py-1 rounded-md font-semibold inline-flex items-center justify-self-start h-fit whitespace-nowrap bg-[#dcfce7] text-[#15803d]&quot;&gt;✓ Yes&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-[1.3fr_1.1fr_0.8fr_0.8fr] gap-2.5 px-1 py-3 border-b border-[#f0eeea] items-start text-[12px] max-[640px]:text-[11px] last:border-b-0&quot;&gt;
+&lt;div class=&quot;flex flex-col gap-[3px]&quot;&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] font-semibold text-[#1a1a1a]&quot;&gt;Yuki Tanaka&lt;/div&gt;
+&lt;a href=&quot;#&quot; class=&quot;text-[11px] max-[640px]:text-[10px] text-[#2563eb] underline underline-offset-2&quot;&gt;View resume&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#4b5563]&quot;&gt;Ultrasound&lt;br&gt;Technologist&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#1a1a1a] font-medium&quot;&gt;10:00 AM&lt;/div&gt;
+&lt;div class=&quot;text-[12px] max-[640px]:text-[11px] px-2.5 py-1 rounded-md font-semibold inline-flex items-center justify-self-start h-fit whitespace-nowrap bg-[#fef9c3] text-[#a16207]&quot;&gt;• Maybe&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;grid grid-cols-[1.3fr_1.1fr_0.8fr_0.8fr] gap-2.5 px-1 py-3 border-b border-[#f0eeea] items-start text-[12px] max-[640px]:text-[11px] last:border-b-0&quot;&gt;
+&lt;div class=&quot;flex flex-col gap-[3px]&quot;&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] font-semibold text-[#1a1a1a]&quot;&gt;Trevor Park&lt;/div&gt;
+&lt;a href=&quot;#&quot; class=&quot;text-[11px] max-[640px]:text-[10px] text-[#2563eb] underline underline-offset-2&quot;&gt;View resume&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#4b5563]&quot;&gt;Respiratory&lt;br&gt;Therapist&lt;/div&gt;
+&lt;div class=&quot;text-[13px] max-[640px]:text-[12px] text-[#1a1a1a] font-medium&quot;&gt;11:00 AM&lt;/div&gt;
+&lt;div class=&quot;text-[12px] max-[640px]:text-[11px] px-2.5 py-1 rounded-md font-semibold inline-flex items-center justify-self-start h-fit whitespace-nowrap bg-[#dcfce7] text-[#15803d]&quot;&gt;✓ Yes&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</pre><h2 id="change-4-remove-the-built-in-tools-section">Change 4 · Remove the Built-in Tools section</h2><p><strong>Where:</strong> between How It Works and the testimonials. Eyebrow &ldquo;Built-in Tools&rdquo;, heading &ldquo;Candidate Messaging and Interview Scheduling&rdquo;, three sticky-scroll panels (Candidate Messaging, Flexible Scheduling, Interview Tracking) with the messaging and scheduling mock-ups. Opens with <code>&lt;section class="py-12 min-[901px]:py-24 bg-[#f8f7f4]"&gt;</code>.</p><p>Remove the whole section. Nothing replaces it; the testimonials move up to follow How It Works directly. It was already removed from the employer home page in the previous update.</p><h2 id="checking-your-work">Checking your work</h2><ul><li>Top of the page reads: hero &rarr; stats and logos &rarr; <strong>Hiring Event Demo</strong> &rarr; <strong>Choose Your Interview Format</strong> &rarr; <strong>Review Interview Outcomes</strong> &rarr; testimonials.</li><li>No &ldquo;See How JobFairX Works&rdquo;, no &ldquo;Hiring Events Built Around Interviews&rdquo; and no &ldquo;Built-in Tools&rdquo; anywhere on the page.</li><li>The report panel&rsquo;s date line is the event&rsquo;s own date.</li><li>The demo eyebrow has no runtime badge next to it. The only place 2:40 appears is the small timestamp in the corner of the poster.</li><li>Clicking the poster loads the video in place and it starts playing; before that click, the page makes no request to youtube.com.</li><li>The format sub names the event&rsquo;s city, city only.</li><li>Cards read Video, In person, Phone, left to right, and none of them is a link.</li><li>Nothing scrolls sideways at 375px. Cards and the poster stack full-width.</li><li>Open any two event types side by side: the only differences in these sections are the city in the sub and nothing else.</li></ul><h2 id="files">Files</h2><ul><li>Visual reference, all five event types: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-by-brand.html">event-details-by-brand.html</a></li><li>Poster: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/walkthrough-poster.jpg">walkthrough-poster.jpg</a></li><li>This page: <a href="https://scottjobagent.github.io/jobfairx-marketing-preview/event-details-dev-notes.html">event-details-dev-notes.html</a></li></ul><p>The review page carries all five event types in one file behind a brand bar. That is a review convenience only &mdash; production renders one event per page exactly as it does today.</p></div></body></html>
