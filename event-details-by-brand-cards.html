@@ -23,7 +23,9 @@
 
  .jfx-hx{background:#fff;padding:56px 0}
  @media (min-width:1024px){.jfx-hx{padding:96px 0}}
- .jfx-hx-in{max-width:1354px;margin:0 auto;padding:0 20px}
+ /* the live stylesheet leaves box-sizing at content-box, so max-width would
+    apply to the content box and the cards would land at 316, not 306 */
+ .jfx-hx-in{box-sizing:border-box;max-width:1354px;margin:0 auto;padding:0 20px}
  @media (min-width:640px){.jfx-hx-in{padding:0 24px}}
  /* at lg the 20px gutter makes the content exactly 1314, so the four cards
     land on Indeed's 306 rather than 304 */
