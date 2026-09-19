@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="./styles.css">
+<script src="./_ds_bundle.js"></script>
+<style>
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent); }
+</style>
+</helmet>
+
+<div style="max-width:960px;margin:0 auto;padding:var(--space-6) var(--space-4) var(--space-8)">
+
+<div style="border-bottom:2px solid var(--color-divider);padding-bottom:var(--space-4)">
+<h1 style="font-size:clamp(26px,4vw,36px)">Front-door city page — wireframe</h1>
+<p class="text-muted" style="font-size:14px;margin-top:var(--space-2)">Workstream B Part 4 §5. Order: 11 → 2 → 1 → 3 → 4 → 17 → 6 → 10 → 5 → 13 → 8 → 9 → 15 → 16 → 12 → 14 → 20.</p>
+</div>
+
+<div style="border-bottom:2px solid var(--color-divider);padding:var(--space-4) 0;display:grid;gap:var(--space-4)">
+<sc-for list="{{ toggles }}" as="t" hint-placeholder-count="6">
+<div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:baseline">
+<span class="text-muted" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase">{{ t.label }}</span>
+<span class="text-muted" style="font-size:11px">{{ t.source }}</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2)">
+<sc-for list="{{ t.options }}" as="o" hint-placeholder-count="3">
+<button type="button" onClick="{{ o.onSelect }}" class="{{ o.cls }}" style="cursor:pointer">{{ o.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="border-bottom:2px solid var(--color-divider);padding:var(--space-4) 0">
+<p style="font-size:15px;max-width:72ch">{{ summary }}</p>
+<div style="display:grid;gap:var(--space-2);margin-top:var(--space-3)">
+<sc-for list="{{ conflicts }}" as="cf" hint-placeholder-count="0">
+<p style="font-size:14px"><span class="{{ cf.cls }}">{{ cf.kind }}</span> <span style="max-width:70ch;display:inline-block;vertical-align:top">{{ cf.text }}</span></p>
+</sc-for>
+</div>
+</div>
+
+<div style="margin-top:var(--space-6);border:2px solid var(--color-divider);padding:var(--space-4)">
+<div class="text-muted" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase">Head — §7</div>
+<div style="margin-top:var(--space-2);font-family:var(--font-heading);font-weight:800;font-size:16px">{{ headTitle }}</div>
+<div class="text-muted" style="font-size:13px;margin-top:var(--space-1)">{{ headTitleLen }} characters · {{ headTitleRule }}</div>
+<div style="font-size:14px;margin-top:var(--space-3);max-width:72ch">{{ headMeta }}</div>
+</div>
+
+<div style="display:grid;gap:var(--space-4);margin-top:var(--space-4);width:{{ frameWidth }};max-width:100%">
+<sc-for list="{{ blocks }}" as="b" hint-placeholder-count="17">
+<section style="border:2px solid {{ b.border }};padding:var(--space-4);opacity:{{ b.opacity }}">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center">
+<span class="tag tag-neutral">{{ b.n }}</span>
+<span class="{{ b.priClass }}">{{ b.pri }}</span>
+<span class="{{ b.stateClass }}">{{ b.stateLabel }}</span>
+</div>
+<h2 style="font-size:clamp(17px,2.2vw,21px);margin-top:var(--space-3)">{{ b.name }}</h2>
+<p style="font-size:15px;margin-top:var(--space-2);max-width:66ch">{{ b.wants }}</p>
+<sc-if value="{{ b.hasResolution }}" hint-placeholder-val="{{ false }}">
+<p style="font-size:14px;margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--color-divider);max-width:66ch"><strong>{{ b.stateLabel }}:</strong> {{ b.resolution }}</p>
+</sc-if>
+</section>
+</sc-for>
+</div>
+
+<div style="border:2px solid var(--color-divider);padding:var(--space-4);margin-top:var(--space-6)">
+<h2 style="font-size:clamp(18px,2.4vw,22px)">No position in the order string</h2>
+<p style="font-size:14px;margin-top:var(--space-3);max-width:68ch"><span class="tag tag-accent">Note for Michael</span> <span style="display:inline-block;vertical-align:top;max-width:66ch">Blocks 7, 18 and 19 are specified in §5 with data requirements, thresholds, fallbacks and priorities, but the §5 order line runs 11 → 2 → 1 → 3 → 4 → 17 → 6 → 10 → 5 → 13 → 8 → 9 → 15 → 16 → 12 → 14 → 20 and does not include them. They are shown here unplaced rather than positioned by guess. Block 7 is Should priority and its counts feed Workstream C, so it most likely wants a position.</span></p>
+<div style="display:grid;gap:var(--space-3);margin-top:var(--space-4)">
+<sc-for list="{{ unplaced }}" as="u" hint-placeholder-count="3">
+<div style="border-top:1px solid var(--color-divider);padding-top:var(--space-2);opacity:{{ u.opacity }}">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center">
+<span class="tag tag-neutral">{{ u.n }}</span>
+<span class="{{ u.priClass }}">{{ u.pri }}</span>
+<span class="{{ u.stateClass }}">{{ u.stateLabel }}</span>
+</div>
+<h3 style="font-size:16px;margin-top:var(--space-2)">{{ u.name }}</h3>
+<p style="font-size:14px;margin-top:var(--space-1);max-width:66ch">{{ u.wants }}</p>
+<sc-if value="{{ u.hasResolution }}" hint-placeholder-val="{{ false }}">
+<p style="font-size:14px;margin-top:var(--space-2);max-width:66ch"><strong>{{ u.stateLabel }}:</strong> {{ u.resolution }}</p>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="border:2px solid var(--color-accent);padding:var(--space-4);margin-top:var(--space-4)">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center">
+<span class="tag tag-neutral">P5 · 14</span>
+<span class="tag tag-accent">Must (F2/F4)</span>
+<span class="{{ twinClass }}">{{ twinLabel }}</span>
+</div>
+<h2 style="font-size:clamp(17px,2.2vw,21px);margin-top:var(--space-3)">Link to the employer twin, by slug</h2>
+<p style="font-size:15px;margin-top:var(--space-2);max-width:66ch">Renders when: pending the F10 decision. Fallback: suppress.</p>
+<p style="font-size:14px;margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--color-divider);max-width:68ch"><strong>{{ twinLabel }}:</strong> {{ twinNote }}</p>
+<p style="font-size:14px;margin-top:var(--space-3);max-width:68ch"><span class="tag tag-accent">Note for Michael</span> <span style="display:inline-block;vertical-align:top;max-width:66ch">This block is Part 5 §5 block 14, on the city × vertical registration page. Part 4's §5 order has no employer-twin block — the front-door page's employer slot is block 17, which is Workstream C. It is surfaced on this wireframe so the F10 states are visible in one place; it is not a front-door section.</span></p>
+</div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:960}}">
+const PRI = { Must: 'tag tag-accent', Should: 'tag tag-neutral', Could: 'tag tag-outline' };
+
+// Part 4 §5 block table, verbatim: n, name, what it holds, priority, gate, fallback.
+const ORDER = [
+  ['11', 'Visible breadcrumb', 'Home › Job Fairs Near Me › {State} › {City}', 'Must', 'always', null, 'F4'],
+  ['2', 'H1 + dated subhead', 'H1 "{City} Job Fairs" — unchanged. Dated subhead (H2) "Upcoming job fairs in {City} — {month} {year}".', 'Must', 'events', 'H1 without date'],
+  ['1', 'Live status module', '"Today", "This week", "Next Houston job fair: Mon 7 Sep — in 3 days".', 'Must', 'events', '"No {City} events scheduled yet — nearest is {City}, {date}", with email capture as primary CTA'],
+  ['3', 'Upcoming events list', 'Date, time, vertical, format, registration deadline, employer count, link to the registration page.', 'Must', 'events', 'Nearest-city events, clearly labelled as another city'],
+  ['4', 'Employers hiring at the next {City} event', 'Real employer names.', 'Must', 'employers', 'Sector descriptors ("a regional health system, two national logistics firms"); then employers from this city\u2019s last event, labelled as past'],
+  ['17', 'Employer callout slot', 'Position reserved; content and variants are Workstream C.', 'Must', 'always', null, 'slot only'],
+  ['6', 'Jobs in {City}', '5–10 live listings, grouped by vertical, framed "employers like these hire at our events".', 'Must', 'feed', 'Widen to metro (labelled), then to state (labelled); suppress below 3'],
+  ['10', 'Other job fairs in {City}', 'The five vertical registration pages with their dates.', 'Must', 'verticals2', 'Suppress', 'F4'],
+  ['5', 'Local job market', 'Metro unemployment rate with month stamp, total employment, 3–5 top occupations matched to this city\u2019s event verticals, median wages, year-on-year change.', 'Must', 'cbsa', 'State-level figures, labelled as state-level; if neither, suppress'],
+  ['13', 'Who\u2019s hiring in {City} now', 'Top employers by open roles, from the feed; distinct from block 4.', 'Should', 'feed5', 'Suppress'],
+  ['8', 'City FAQ', '3–6 questions with genuinely city-specific answers.', 'Must', 'faq', 'Generic FAQ, shortened, and drop the FAQPage schema'],
+  ['9', 'Nearby cities', 'Nearest 5–8 US cities, each with its next event date.', 'Must', 'nearby', 'Same-state cities, dates omitted', 'also serves F4'],
+  ['15', 'Format and joining', 'What to expect, how the interview works, what to have ready.', 'Should', 'always', null],
+  ['16', 'How it works', 'Kept, cut to three short steps.', 'Should', 'always', null],
+  ['12', 'Testimonials', 'Trimmed to 2–3, region-matched where possible.', 'Must', 'region', '2–3 rotating without region matching'],
+  ['14', 'Track record', '"38 hiring events held in Houston since 2023, most recently 22 Aug".', 'Should', 'past3', 'Suppress'],
+  ['20', 'Email alert capture', 'Email capture. Always; primary CTA in the no-events state.', 'Should', 'always', null]
+];
+
+const UNPLACED = [
+  ['7', 'Real counts', 'Candidates registered in this metro, employers hiring at the next event, events held in this city to date.', 'Should', 'floors', 'Suppress that metric only, keep the others; never render a zero'],
+  ['18', 'Wage comparison', '"{Occupation} median in {Metro} $X vs $Y nationally".', 'Could', 'cbsa', 'Suppress'],
+  ['19', 'Seasonal hiring context', '"Retail hiring in {City} picks up from October".', 'Could', 'seasonal', 'Suppress']
+];
+
+// Part 6, the three exemplar cities. No fourth city is specified.
+const CITIES = {
+  houston: {
+    label: 'Houston, TX', city: 'Houston', st: 'TX', cbsa: '26420',
+    case: 'Large, metro anchor — the complete template with every block rendering. 1,085 clicks and 26,201 impressions a quarter, +5.6% year on year. The only US city page above 1,000.',
+    defaultEventState: 'tomorrow',
+    verticals: ['entry-level', 'veteran', 'technology', 'healthcare', 'diversity'],
+    dates: { 'entry-level': 'Mon 7 Sep', veteran: 'Mon 7 Sep', technology: 'Tue 8 Sep', healthcare: 'Wed 16 Sep', diversity: 'Wed 23 Sep' },
+    metaVerticalNaming: 'lists', metaDate: 'Monday 7 September',
+    marketLead: 'Metro = city. The block opens "Houston–The Woodlands–Sugar Land is home to…" because for the anchor city the metro is the city. Houston runs all five verticals, so the three occupations are the largest-employing occupation from each of the top three by upcoming event count.',
+    length: '1,400–1,800 words'
+  },
+  denton: {
+    label: 'Denton, TX', city: 'Denton', st: 'TX', cbsa: '19100',
+    case: 'Mid, metro satellite — metro data shared with fourteen sibling city pages, the duplication trap. 177 clicks, 2,351 impressions, +38.3% year on year.',
+    defaultEventState: 'thisweek',
+    verticals: ['healthcare', 'diversity', 'technology', 'entry-level', 'veteran'],
+    dates: { healthcare: 'Tue 8 Sep', diversity: 'Wed 16 Sep', technology: 'Thu 24 Sep', 'entry-level': 'Fri 2 Oct', veteran: 'Mon 5 Oct' },
+    metaVerticalNaming: 'names', metaDate: 'Tuesday 8 September',
+    marketLead: 'Metro ≠ city, relationship named. Leads "Denton is part of the Dallas–Fort Worth–Arlington metro" and varies the occupation selection by this city\u2019s own event mix — Denton leans healthcare and technology. Under about 90 words. Acceptance test: generate Denton and Plano, strip header, footer and nav, and confirm at least 40% of the remaining body differs.',
+    length: '1,100–1,500 words'
+  },
+  mankato: {
+    label: 'Mankato, MN', city: 'Mankato', st: 'MN', cbsa: '31860',
+    case: 'Sparse, no events at all — the honest thin page. 9 clicks, 231 impressions a quarter. Currently renders the full 1,174-word template with twelve testimonials from other cities.',
+    defaultEventState: 'none',
+    verticals: [],
+    dates: {},
+    metaVerticalNaming: 'none', metaDate: null,
+    // Part 6's Mankato exemplar writes its own meta rather than using §7's
+    // "otherwise" pattern. Both are in the document; they differ.
+    exemplarMeta: 'Job fairs and hiring events for Mankato, Minnesota. No Mankato event scheduled yet — see the next events near you, or get an email when one is announced.',
+    marketLead: 'Metro or state, or suppressed. One short paragraph from CBSA 31860, or Minnesota state-level labelled as state-level, or suppressed if the CBSA is absent from the OEWS release.',
+    length: '400–600 words',
+    prerequisite: 'Prerequisite, not a detail: /job-fairs/minnesota/mankato/next-healthcare and /next-technology both return HTTP 500 (verified 7 September). A Mankato visitor who follows a vertical link hits a server error. See Part 5 §7.'
+  }
+};
+
+// Block 1's own wording, from §5 and the Part 6 exemplar comparison.
+const EVENT_STATES = {
+  today: { label: 'Today', note: 'Status module reads "Today".' },
+  tomorrow: { label: 'Tomorrow', note: 'Status module reads "Tomorrow", not "in 1 day" — Part 6 states this explicitly for the Houston exemplar.' },
+  thisweek: { label: 'This week', note: 'Status module reads "This week".' },
+  indays: { label: 'In N days', note: 'Status module reads "Next {City} job fair: Mon 7 Sep — in 3 days".' },
+  none: { label: 'No event scheduled', note: '"No {City} events scheduled yet — nearest is {City}, {date}", with email capture as the primary CTA.' }
+};
+
+const VERTICALS = {
+  healthcare: 'Healthcare', technology: 'Technology', 'entry-level': 'Entry-Level',
+  veteran: 'Veteran', diversity: 'Diversity'
+};
+
+class Component extends DCLogic {
+  state = {
+    device: null, city: null, eventState: null, vertical: null, twin: null, conditions: null
+  };
+
+  pick(key, fallback) {
+    return this.state[key] || fallback;
+  }
+
+  renderVals() {
+    const device = this.pick('device', 'desktop');
+    const cityKey = this.pick('city', 'houston');
+    const c = CITIES[cityKey];
+    const conditions = this.pick('conditions', 'met');
+    const twin = this.pick('twin', 'pending');
+    const esKey = this.state.eventState || c.defaultEventState;
+    const es = EVENT_STATES[esKey] || EVENT_STATES.none;
+    const vertKey = this.pick('vertical', c.verticals[0] || 'healthcare');
+
+    // A city with no event records cannot be placed in a dated state — Part 4
+    // §10.6 requires the status module to match the event record on the page.
+    const cityHasDates = c.verticals.length > 0;
+    const hasEvents = esKey !== 'none' && cityHasDates;
+    const stateUndocumented = esKey !== 'none' && !cityHasDates;
+    const met = conditions === 'met';
+
+    // Gates resolve from the two axes the doc makes conditional: whether an
+    // upcoming event exists, and whether each threshold is cleared.
+    const holds = {
+      always: true,
+      events: hasEvents,
+      verticals2: hasEvents && met,
+      region: met,
+      employers: hasEvents && met,
+      feed: met,
+      feed5: met,
+      cbsa: met,
+      faq: hasEvents && met,
+      nearby: met,
+      past3: met,
+      floors: hasEvents && met,
+      seasonal: met
+    };
+
+    // Part 6, Mankato: the blocks suppressed outright in the no-event exemplar.
+    const sparseSuppress = ['3', '4', '5', '6', '7', '13', '14'];
+
+    const resolve = (row) => {
+      const [n, name, wants, pri, gate, fallback, priNote] = row;
+      const ok = holds[gate];
+      // Part 6 lets the market, jobs feed and who's-hiring blocks survive the
+      // sparse state when they clear their own thresholds.
+      const sparseEscape = met && (n === '5' || n === '6' || n === '13');
+      const forcedSparse = !hasEvents && sparseSuppress.indexOf(n) >= 0 && !sparseEscape;
+      // A documented fallback of "Suppress" is a suppression, not a fallback.
+      const fallbackIsSuppress = fallback === 'Suppress';
+
+      let stateLabel, stateClass, border, opacity, resolution;
+      if (forcedSparse || (!ok && !fallback) || (!ok && fallbackIsSuppress)) {
+        stateLabel = 'Suppressed';
+        stateClass = 'tag tag-outline';
+        border = 'var(--color-divider)';
+        opacity = 0.45;
+        resolution = 'Does not render at all. Never an empty card, a zero, or a placeholder.';
+      } else if (!ok) {
+        stateLabel = 'Fallback';
+        stateClass = 'tag tag-neutral';
+        border = 'var(--color-accent)';
+        opacity = 1;
+        resolution = fallback;
+      } else {
+        stateLabel = 'Renders';
+        stateClass = 'tag tag-neutral';
+        border = 'var(--color-divider)';
+        opacity = 1;
+        resolution = null;
+      }
+
+      // Block-specific notes the exemplars attach to this city or state.
+      if (n === '5' && ok) resolution = c.marketLead;
+      if (n === '1') {
+        resolution = stateUndocumented
+          ? EVENT_STATES.none.note + ' The "' + es.label + '" state cannot apply: ' + c.city +
+            ' has no event records, and the status module must match the event record on the same page (§10.6).'
+          : es.note;
+      }
+      if (n === '10' && ok) {
+        resolution = 'The five vertical registration pages with their dates. Currently viewing ' +
+          VERTICALS[vertKey] + ' — ' + (c.dates[vertKey] || 'no date, not scheduled') + '.';
+      }
+
+      return {
+        n, name, wants, priClass: PRI[pri],
+        pri: priNote ? pri + ' (' + priNote + ')' : pri,
+        stateLabel, stateClass, border, opacity,
+        resolution: resolution || '', hasResolution: !!resolution
+      };
+    };
+
+    const mkToggle = (key, label, source, opts, current) => ({
+      label, source,
+      options: opts.map(o => ({
+        label: o.label,
+        cls: o.value === current ? 'btn btn-primary' : 'btn btn-secondary',
+        onSelect: () => {
+          const patch = {};
+          patch[key] = o.value;
+          // Changing city resets the event state to that exemplar's own.
+          if (key === 'city') { patch.eventState = null; patch.vertical = null; }
+          this.setState(patch);
+        }
+      }))
+    });
+
+    const vertOpts = (c.verticals.length ? c.verticals : Object.keys(VERTICALS))
+      .map(v => ({ label: VERTICALS[v], value: v }));
+
+    // §7 title and meta rules, resolved against the current city and state.
+    const nextDate = c.dates[c.verticals[0]] || '';
+    const within21 = hasEvents && !!nextDate;
+    const headTitle = within21
+      ? 'Job Fairs in ' + c.city + ', ' + c.st + ' — Next Event ' + nextDate
+      : 'Job Fairs in ' + c.city + ', ' + c.st + ' — Upcoming Hiring Events';
+
+    const joinAnd = (arr) => arr.length < 2 ? arr.join('')
+      : arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
+
+    let headMeta, metaConflict = null;
+    if (!within21) {
+      if (c.exemplarMeta) {
+        headMeta = c.exemplarMeta;
+        metaConflict = '§7\u2019s "otherwise" pattern reads "Upcoming job fairs and hiring events in {City}, {ST}. See who\u2019s hiring, what they pay, and register free for scheduled interviews." Part 6\u2019s Mankato exemplar writes a different one, shown above, which is honest about there being no date. Both are in the document and they differ. Built to the Part 6 exemplar because it is the more specific of the two. Michael to confirm which governs.';
+      } else {
+        headMeta = 'Upcoming job fairs and hiring events in ' + c.city + ', ' + c.st +
+          '. See who\u2019s hiring, what they pay, and register free for scheduled interviews.';
+      }
+    } else if (c.metaVerticalNaming === 'names') {
+      headMeta = 'The next ' + c.city + ' job fair is ' + c.metaDate + ' — a ' +
+        VERTICALS[c.verticals[0]].toLowerCase() + ' hiring event. {{EMPLOYER_COUNT}} employers interviewing. ' +
+        'Register free — scheduled interviews, no resume black holes.';
+    } else {
+      headMeta = 'The next ' + c.city + ' job fair is ' + c.metaDate +
+        '. {{EMPLOYER_COUNT}} employers hiring across ' +
+        joinAnd(c.verticals.map(v => VERTICALS[v].toLowerCase())) +
+        '. Register free — scheduled interviews, no resume black holes.';
+    }
+
+    const TWIN = {
+      pending: { label: 'Pending F10', cls: 'tag tag-accent', note: 'The F10 decision is open. If the employer event pages are consolidated or noindexed, this link changes target or disappears. Suppress until it lands.' },
+      slug: { label: 'Renders', cls: 'tag tag-neutral', note: 'Links to the employer twin by slug. Never the numeric-ID URL the current template uses twice (F2).' },
+      suppressed: { label: 'Suppressed', cls: 'tag tag-outline', note: 'Does not render at all.' }
+    };
+
+    return {
+      frameWidth: device === 'mobile' ? '390px' : '100%',
+
+      toggles: [
+        mkToggle('device', 'Device', 'Part 3 — Googlebot crawls as smartphone; 87% of Googlebot traffic',
+          [{ label: 'Desktop', value: 'desktop' }, { label: 'Mobile 390', value: 'mobile' }], device),
+        mkToggle('city', 'City example', 'Part 6 — the three exemplars',
+          Object.keys(CITIES).map(k => ({ label: CITIES[k].label, value: k })), cityKey),
+        mkToggle('eventState', 'Event state', 'Part 4 §5 block 1',
+          Object.keys(EVENT_STATES).map(k => ({ label: EVENT_STATES[k].label, value: k })), esKey),
+        mkToggle('vertical', 'Event type', 'Part 4 §5 block 10 — the five verticals', vertOpts, vertKey),
+        mkToggle('twin', 'Employer twin link', 'Part 5 §5 block 14 — pending F10',
+          [{ label: 'Pending F10', value: 'pending' }, { label: 'Slug link', value: 'slug' }, { label: 'Suppressed', value: 'suppressed' }], twin),
+        mkToggle('conditions', 'Conditions', 'Part 4 §5 thresholds',
+          [{ label: 'Met', value: 'met' }, { label: 'Not met', value: 'notmet' }], conditions)
+      ],
+
+      summary: c.case + ' Expected length ' + c.length + '.',
+      conflicts: [
+        stateUndocumented ? {
+          kind: 'Not in the document',
+          cls: 'tag tag-accent',
+          text: 'Event state "' + es.label + '" with ' + c.city + ' is not one of Michael\u2019s exemplars — ' +
+            c.city + ' has no event records, so there is no date for the head, block 1, block 3 or block 10 to carry. ' +
+            'The page resolves to the no-event state instead of asserting an event that does not exist.'
+        } : null,
+        metaConflict ? { kind: 'Note for Michael', cls: 'tag tag-accent', text: metaConflict } : null,
+        c.prerequisite ? { kind: 'Prerequisite', cls: 'tag tag-outline', text: c.prerequisite } : null
+      ].filter(Boolean),
+
+      headTitle, headTitleLen: headTitle.length,
+      headTitleRule: within21 ? 'Rule: event within 21 days' : 'Rule: otherwise',
+      headMeta,
+
+      blocks: ORDER.map(resolve),
+      unplaced: UNPLACED.map(resolve),
+
+      twinLabel: TWIN[twin].label, twinClass: TWIN[twin].cls, twinNote: TWIN[twin].note
+    };
+  }
+}
+
+</script>
+</body>
+</html>
