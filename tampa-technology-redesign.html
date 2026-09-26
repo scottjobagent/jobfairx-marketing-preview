@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Tampa Technology Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Review page around the design. One light look on purpose: it frames a light website. */
+:root{
+  --r-ink:#0F172A; --r-muted:#475569; --r-line:#FCD34D; --r-bar:#FEF3C7; --r-bar-2:#FFFBEB;
+  --r-amber:#92400E; --r-amber-2:#D97706; --r-page:#F1F5F9; --r-stage:#CBD5E1; --r-card:#FFFFFF; --r-navy:#00245B;
+  --r-font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  color-scheme:light;
+}
+body{background:var(--r-page);color:var(--r-ink);font-family:var(--r-font);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--r-amber-2);outline-offset:2px;border-radius:6px}
+
+/* Toolbar: scrolls with the page (never sticky), collapses to one row. */
+.bar{background:var(--r-bar);border-bottom:1px solid var(--r-line);color:var(--r-amber)}
+.bar-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 20px}
+.bar-title{margin:0;font-size:14px;font-weight:700;color:#78350F}
+.bar-sum{flex:1 1 260px;min-width:0;margin:0;font-size:13px;color:var(--r-amber)}
+.bar-actions{display:flex;align-items:center;gap:10px;margin-left:auto}
+.bar-link{padding:6px 2px;border:0;background:none;font-size:13px;font-weight:600;color:#78350F;text-decoration:underline;text-underline-offset:3px}
+.bar-btn{height:32px;padding:0 14px;border:1px solid var(--r-amber-2);border-radius:8px;background:#fff;font-size:13px;font-weight:600;color:var(--r-amber)}
+.bar-body{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:4px 20px 14px;border-top:1px dashed var(--r-line)}
+.bar-body[hidden]{display:none}
+.ctl{display:flex;align-items:center;gap:10px;padding-top:10px}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--r-amber)}
+.seg{display:inline-flex;overflow:hidden;border:1px solid var(--r-amber-2);border-radius:8px;background:#fff}
+.seg button{padding:5px 14px;border:0;background:none;font-size:13px;font-weight:600;color:var(--r-amber)}
+.seg button + button{border-left:1px solid var(--r-line)}
+.seg button[aria-pressed="true"]{background:var(--r-amber-2);color:#fff}
+.ext{padding-top:10px;font-size:13px;font-weight:600;color:#78350F;text-underline-offset:3px}
+.bar-note{flex:1 1 100%;margin:4px 0 0;font-size:12.5px;line-height:1.5;color:var(--r-amber)}
+
+/* Stage: the design at full width, or in a 390px phone frame. */
+.stage{background:var(--r-page)}
+.stage[data-device="mobile"]{padding-block:36px 60px;background:var(--r-stage)}
+.shell{margin:0 auto;width:100%}
+.stage[data-device="mobile"] .shell{width:390px;max-width:calc(100% - 32px);overflow:hidden;border-radius:26px;
+  box-shadow:0 0 0 1px rgba(15,23,42,.12),0 30px 80px -30px rgba(15,23,42,.55)}
+.phone-lbl{display:none;margin:0 0 12px;text-align:center;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#334155}
+.stage[data-device="mobile"] .phone-lbl{display:block}
+#frame{display:block;width:100%;height:1400px;border:0;background:var(--r-page)}
+
+/* Build notes */
+.notes{padding-block:44px 90px;padding-inline:20px;background:#F8FAFC}
+.notes-in{max-width:760px;margin:0 auto;font-size:16px;line-height:1.65;color:#1E293B}
+.notes h1{margin:0 0 6px;font-size:30px;line-height:1.2;letter-spacing:-.02em;color:var(--r-navy);text-wrap:balance}
+.notes .sub{margin:0 0 30px;color:var(--r-muted)}
+.notes h2{margin:38px 0 10px;font-size:19px;line-height:1.3;color:var(--r-navy)}
+.notes p{margin:0 0 12px}
+.notes ul,.notes ol{margin:0 0 12px;padding-left:22px}
+.notes li{margin:0 0 8px}
+.notes code{padding:1px 5px;border-radius:4px;background:#E2E8F0;font:13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0F172A}
+.sw{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:14.5px}
+.sw td{padding:9px 10px;border-top:1px solid #E2E8F0;vertical-align:top}
+.sw td:first-child{white-space:nowrap;font-weight:600}
+.chip{display:inline-block;width:14px;height:14px;margin-right:8px;border-radius:4px;vertical-align:-2px;box-shadow:inset 0 0 0 1px rgba(15,23,42,.15)}
+@media (max-width:640px){
+  .sw td:first-child{white-space:normal}
+  .notes h1{font-size:25px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="bar" class="bar">
+  <div class="bar-top">
+    <p class="bar-title">Tampa Technology Redesign</p>
+    <p class="bar-sum" id="bar-sum">Desktop · full page · live content from 26 Sep 2026</p>
+    <div class="bar-actions">
+      <button type="button" class="bar-link" id="btn-notes">Build notes</button>
+      <button type="button" class="bar-btn" id="btn-toggle" aria-expanded="true" aria-controls="bar-body">Hide controls</button>
+    </div>
+  </div>
+  <div class="bar-body" id="bar-body">
+    <div class="ctl"><span class="lbl">Device</span>
+      <div class="seg" role="group" aria-label="Device">
+        <button type="button" id="dev-desktop" data-device="desktop" aria-pressed="true">Desktop</button>
+        <button type="button" id="dev-mobile" data-device="mobile" aria-pressed="false">Mobile</button>
+      </div>
+    </div>
+    <div class="ctl"><span class="lbl">View</span>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" id="view-page" data-view="page" aria-pressed="true">Page</button>
+        <button type="button" id="view-notes" data-view="notes" aria-pressed="false">Build notes</button>
+      </div>
+    </div>
+    <a class="ext" href="https://jobfairx.com/job-fairs/florida/tampa/next-technology" target="_blank" rel="noopener">Compare with the live page ↗</a>
+    <p class="bar-note">The ploy.ai look in JobFairX colours. Every word, link and section matches the live Tampa Technology page; only the design changes. Links in the design open jobfairx.com in a new tab.</p>
+  </div>
+</div>
+
+<main id="stage" class="stage" data-device="desktop">
+  <p class="phone-lbl">Phone · 390 px wide</p>
+  <div class="shell">
+    <iframe id="frame" title="Tampa Technology Job Fair page, redesigned" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;base href=&quot;https://jobfairx.com/&quot; target=&quot;_blank&quot;&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Tampa Technology Job Fair — Thu, Oct 1&lt;/title&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Anton&amp;family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+/* ============================================================================
+   Hero, Ploy-style direction, in JobFairX colours.
+   Words, links and element order are the live page&#x27;s, unchanged.
+   Header is the live site header, unchanged.
+   ========================================================================== */
+:root{
+  --navy:#00245B;
+  --brand:#2563EB;
+  --brand-d:#1D4ED8;
+  --sky:#93C5FD;
+  --sky-2:#BFDBFE;
+  --ink:#0F172A;
+  --slate-600:#475569;
+  --slate-500:#64748B;
+  --slate-400:#94A3B8;
+  --slate-200:#E2E8F0;
+  --slate-100:#F1F5F9;
+  --display:&#x27;Anton&#x27;,&#x27;Impact&#x27;,&#x27;Arial Narrow&#x27;,sans-serif;
+  --text:&#x27;Inter&#x27;,-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--text);color:var(--ink);background:var(--slate-100);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+ol,ul,dl,dd{margin:0;padding:0;list-style:none}
+h1,h2,p{margin:0}
+button{font:inherit;cursor:pointer}
+
+/* ---- Site header: the live one, as it is ---------------------------------- */
+.hdr{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #D1D5DB}
+.hdr-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center}
+.hdr-logo{display:block;width:98px;margin-right:50px}
+.hdr-logo img{display:block;width:98px;height:auto}
+.hdr-nav{display:flex;gap:48px;font-size:15px;font-weight:600;color:#475569}
+.hdr-right{display:flex;gap:16px;margin-left:auto;align-items:center}
+.hdr-signin{font-size:15px;font-weight:500;color:#64748B;padding:8px 12px}
+.hdr-emp{display:inline-block;border:1px solid var(--brand);border-radius:9999px;background:#fff;color:var(--brand);
+  font-size:16px;font-weight:500;line-height:24px;padding:12px 24px}
+.hdr-m{display:none}
+
+/* ---- Hero: a rounded navy panel inset on a soft page ---------------------- */
+.hero-wrap{padding:16px 24px 0}
+.hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  border-radius:24px;background:var(--navy);color:#fff;
+}
+/* Brand glow and dot grid, in place of Ploy&#x27;s background video. */
+.hero::before{
+  content:&quot;&quot;;position:absolute;z-index:-1;pointer-events:none;
+  width:980px;height:980px;right:-260px;top:-420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.62) 0%,rgba(37,99,235,.22) 36%,rgba(37,99,235,0) 68%);
+}
+.hero::after{
+  content:&quot;&quot;;position:absolute;z-index:-1;pointer-events:none;
+  left:0;bottom:0;width:640px;height:340px;
+  background-image:radial-gradient(rgba(147,197,253,.30) 1.2px,transparent 1.3px);
+  background-size:16px 16px;
+  -webkit-mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);
+  mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);
+}
+.hero-in{max-width:1248px;margin:0 auto;padding:34px 48px 60px}
+
+.crumbs ol{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:14px;color:var(--slate-400)}
+.crumbs li{display:flex;align-items:center;gap:6px}
+.crumbs a{color:var(--sky)}
+.crumbs a:hover{text-decoration:underline;text-underline-offset:3px}
+.crumbs svg{width:14px;height:14px;flex:none;color:#4B6A9B}
+.crumbs [aria-current]{font-weight:500;color:#fff}
+
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:56px;margin-top:34px;align-items:end}
+.hero-main{container-type:inline-size;min-width:0}
+
+.hero h1{
+  font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(44px,18.2cqi,140px);line-height:.88;letter-spacing:.004em;color:#fff;
+  text-wrap:balance;overflow-wrap:break-word;  /* sized so a 12-letter city name fits its column */
+}
+.hero-sub{margin-top:30px;max-width:540px;font-size:18px;line-height:1.6;color:#C9D6EA}
+
+.status{display:flex;margin-top:28px;max-width:560px;overflow:hidden;border-radius:14px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14)}
+.status .rail{width:4px;flex:none;background:#3B82F6}
+.status .in{padding:14px 20px}
+.status p{font-size:17px;line-height:1.45;color:var(--sky-2)}
+.status .wk{font-weight:600;color:#fff}
+
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:28px}
+.btn-reg{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--brand);border-radius:9999px;background:var(--brand);color:#fff;
+  font-size:16px;font-weight:600;line-height:24px;padding:14px 30px;
+  box-shadow:0 0 0 1px rgba(147,197,253,.28),0 12px 32px -10px rgba(37,99,235,.85);
+  transition:background-color .18s ease;
+}
+.btn-reg:hover{background:var(--brand-d)}
+.cta-note{font-size:14px;color:#A5B8D6}
+
+/* ---- Event details: a white data card with the date as its big figure ---- */
+.card{
+  background:#fff;color:var(--ink);border-radius:20px;padding:24px 24px 20px;
+  box-shadow:0 34px 70px -24px rgba(0,8,32,.75),0 2px 6px rgba(0,8,32,.18);
+}
+.card h2{font-size:12px;font-weight:700;line-height:1.4;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+.card dl{margin-top:14px}
+.card .r{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:12px;padding:11px 0;border-top:1px solid #EEF2F7}
+.card dt{font-size:14px;line-height:1.45;color:var(--slate-500)}
+.card dd{font-size:14px;line-height:1.45;color:var(--ink)}
+.card .strong{font-weight:500}
+.card .soft{color:var(--slate-600)}
+/* Date and time stack, label above value, like Ploy&#x27;s figure cards. */
+.card .r-date,.card .r-time{grid-template-columns:minmax(0,1fr);gap:4px;border-top:0}
+.card .r-date{padding:0 0 4px}
+.card .r-date dd{font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:40px;line-height:.98;letter-spacing:.006em;color:var(--navy);text-wrap:balance}
+.card .r-time{padding:6px 0 16px}
+.card .r-time dd{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.card .r-time + .r{border-top:1px solid var(--slate-200)}
+.card-foot{margin-top:6px;padding-top:14px;border-top:1px solid #EEF2F7;font-size:14px;line-height:1.5;color:var(--slate-600)}
+.card-foot a{font-weight:500;color:var(--brand)}
+.card-foot a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* ---- Tablet and phone ---------------------------------------------------- */
+@media (max-width:1023px){
+  .hdr{display:none}
+  .hdr-m{display:block;position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--slate-200)}
+  .hdr-m .in{height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+  .hdr-m .hdr-logo{margin:0}
+  .hdr-m button{padding:8px;margin-right:-8px;border:0;background:none;color:var(--slate-500)}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:30px}
+}
+@media (max-width:640px){
+  .hero-wrap{padding:10px 10px 0}
+  .hero{border-radius:20px}
+  .hero::before{width:620px;height:620px;right:-300px;top:-300px}
+  .hero::after{width:360px;height:260px}
+  .hero-in{padding:22px 20px 26px}
+  .crumbs ol{font-size:13px}
+  .hero-grid{margin-top:22px}
+  .hero h1{line-height:.9}
+  .hero-sub{margin-top:20px;font-size:16px}
+  .status{margin-top:22px}
+  .status .in{padding:12px 16px}
+  .status p{font-size:16px}
+  .cta-row{margin-top:22px}
+  .card{padding:22px 20px 18px}
+  .card .r-date dd{font-size:36px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ============================================================================
+   Sections below the hero. Shared shell: the soft grey page, a navy pill
+   eyebrow, and a big condensed heading with a quiet line under it.
+   ========================================================================== */
+.sec{padding:128px 24px 0}
+.sec-in{max-width:1152px;margin:0 auto}
+.sec-head{max-width:980px;margin:0 auto 52px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;height:28px;padding:0 13px;border-radius:9999px;
+  background:var(--navy);color:#fff;font-size:12.5px;font-weight:600;letter-spacing:.01em}
+.sec-head h2{margin-top:22px;font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(40px,5.6vw,80px);line-height:.92;letter-spacing:.004em;color:var(--navy);text-wrap:balance}
+.lede{margin-top:18px;font-size:16px;line-height:1.6;color:var(--slate-500);text-wrap:balance}
+
+/* ---- Past employers: a name wall in one white panel, hairline grid ------- */
+.emp{position:relative;overflow:hidden;background:#fff;border:1px solid var(--slate-200);border-radius:20px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.emp ul{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0 -1px -1px 0}
+.emp li{display:flex;align-items:center;justify-content:center;min-height:96px;padding:20px 24px;text-align:center;
+  border-right:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200);
+  font-size:15px;font-weight:600;line-height:1.35;color:#334155;text-wrap:balance}
+.emp li[hidden]{display:none}
+/* Ploy&#x27;s corner marks. */
+.emp::after{content:&quot;&quot;;position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle,var(--navy) 2.2px,transparent 2.8px) left 12px top 12px/6px 6px no-repeat,
+    radial-gradient(circle,var(--navy) 2.2px,transparent 2.8px) right 12px top 12px/6px 6px no-repeat,
+    radial-gradient(circle,var(--navy) 2.2px,transparent 2.8px) left 12px bottom 12px/6px 6px no-repeat,
+    radial-gradient(circle,var(--navy) 2.2px,transparent 2.8px) right 12px bottom 12px/6px 6px no-repeat}
+.more{display:flex;justify-content:center;margin-top:26px}
+.more button{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 20px 0 12px;
+  border:1px solid #CBD5E1;border-radius:9999px;background:#fff;color:var(--ink);font-size:15px;font-weight:600;
+  transition:border-color .18s ease}
+.more button:hover{border-color:var(--slate-500)}
+.more .plus{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;
+  background:var(--navy);color:#fff}
+
+@media (max-width:1023px){
+  .emp ul{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .sec{padding:80px 10px 0}
+  .sec-head{margin-bottom:34px;padding:0 10px}
+  .sec-head h2{margin-top:18px;font-size:clamp(36px,11vw,46px)}
+  .lede{margin-top:14px;font-size:15px}
+  .emp ul{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .emp li{min-height:84px;padding:16px 14px;font-size:14px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ============================================================================
+   Panel sections: a rounded colour panel inset like the hero, with the
+   heading on the left and its line on the right (Ploy&#x27;s &quot;Expert strategies&quot;).
+   ========================================================================== */
+.panel-wrap{padding:128px 24px 0}
+.panel{position:relative;border-radius:24px;padding:96px 48px}
+.panel-blue{background:#DBEAFE}
+.panel-in{max-width:1152px;margin:0 auto}
+.split-head{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:48px;align-items:end;margin-bottom:48px}
+.split-head h2{margin-top:22px;font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(40px,5.6vw,80px);line-height:.92;letter-spacing:.004em;color:var(--navy);text-wrap:balance}
+.split-head .lede{margin:0 0 8px;color:var(--slate-600)}
+
+/* ---- Jobs: one white list panel, hairline rows, quiet pill per row ------- */
+.jobs{overflow:hidden;background:#fff;border-radius:20px;
+  box-shadow:0 1px 2px rgba(15,23,42,.05),0 18px 40px -24px rgba(0,36,91,.35)}
+.jobs li + li{border-top:1px solid #E8EEF6}
+.jobs a{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 28px;transition:background-color .15s ease}
+.jobs a:hover{background:#F8FAFC}
+.jobs .jt{min-width:0}
+.jobs .t{display:block;font-size:16px;font-weight:600;line-height:1.4;color:var(--ink)}
+.jobs .m{display:block;margin-top:3px;font-size:14px;line-height:1.45;color:var(--slate-600)}
+.jobs .p{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--slate-500)}
+.view{display:inline-flex;flex:none;align-items:center;gap:6px;height:40px;padding:0 16px;border:1px solid #CBD5E1;
+  border-radius:9999px;background:#fff;font-size:14px;font-weight:600;color:var(--navy);
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+.jobs a:hover .view{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.jobs-foot{display:flex;align-items:center;justify-content:space-between;gap:10px 24px;margin-top:24px}
+.jobs-foot a{font-size:15px;font-weight:600;color:var(--navy);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+.jobs-foot p{font-size:12.5px;color:var(--slate-600)}
+
+/* ---- Register band: a navy card, the page&#x27;s second strongest moment ------ */
+.reg{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:32px;
+  margin-top:44px;padding:36px 40px;border-radius:20px;background:var(--navy);color:#fff}
+.reg::before{content:&quot;&quot;;position:absolute;z-index:-1;pointer-events:none;width:560px;height:560px;right:-160px;top:-300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.55) 0%,rgba(37,99,235,.16) 40%,rgba(37,99,235,0) 70%)}
+.reg .rt{max-width:660px;font-size:20px;font-weight:600;line-height:1.4;color:#fff;text-wrap:balance}
+.reg .rs{margin-top:8px;max-width:660px;font-size:15px;line-height:1.55;color:#C9D6EA;text-wrap:balance}
+.reg .btn-reg{flex:none}
+
+@media (max-width:1023px){
+  .split-head{grid-template-columns:minmax(0,1fr);gap:16px}
+}
+@media (max-width:640px){
+  .panel-wrap{padding:80px 10px 0}
+  .panel{padding:56px 14px 18px;border-radius:20px}
+  .split-head{margin-bottom:30px;padding:0 6px}
+  .split-head h2{margin-top:18px;font-size:clamp(36px,11vw,46px)}
+  .jobs a{gap:14px;padding:16px}
+  .jobs .t{font-size:15px}
+  .view{height:36px;padding:0 12px;font-size:13px}
+  .jobs-foot{flex-direction:column;align-items:flex-start;padding:0 6px}
+  .reg{flex-direction:column;align-items:flex-start;gap:20px;margin-top:34px;padding:28px 22px}
+  .reg .rt{font-size:18px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- Other job fairs: one white panel split into columns, like Ploy&#x27;s
+   &quot;Three engines&quot; row. The next date is each column&#x27;s big figure. ---------- */
+.types{overflow:hidden;background:#fff;border:1px solid var(--slate-200);border-radius:20px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.types ul{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0 -1px -1px 0}
+.types li{border-right:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200)}
+.types a{display:flex;flex-direction:column;height:100%;padding:28px 28px 26px;transition:background-color .15s ease}
+.types a:hover{background:#F8FAFC}
+.tag{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;height:26px;padding:0 11px 0 9px;border-radius:9999px;
+  background:var(--navy);color:#fff;font-size:12px;font-weight:600;letter-spacing:.01em}
+.tag .dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.14)}
+.types .tt{display:block;margin-top:22px;font-size:16px;font-weight:600;line-height:1.35;color:var(--ink)}
+.types .nx{display:block;margin:12px 0 28px;font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:38px;line-height:.95;letter-spacing:.006em;color:var(--navy);text-wrap:balance;
+  max-width:5em}  /* every date breaks the same way: NEXT: FRI, / OCT 9 */
+.types .view{margin-top:auto;align-self:flex-start}
+.types a:hover .view{background:var(--navy);border-color:var(--navy);color:#fff}
+
+@media (max-width:1023px){
+  .types ul{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .types a{padding:20px 16px 18px}
+  .tag{font-size:11.5px}
+  .types .tt{margin-top:16px;font-size:14.5px}
+  .types .nx{margin:10px 0 20px;font-size:28px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- Local job market: a white panel, heading left, paragraph right,
+   like Ploy&#x27;s &quot;You slept 8 hours&quot; layout. The heading runs a size smaller. -- */
+.panel-white{background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.04),0 18px 40px -30px rgba(0,36,91,.25)}
+.market{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:start}
+.market h2{margin-top:22px;font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(34px,3.7vw,54px);line-height:1;letter-spacing:.004em;color:var(--navy);text-wrap:balance}
+.market .body{padding-top:50px}
+.market .para{font-size:19px;line-height:1.75;color:#334155}
+.market .fig{font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums}
+.market .src{margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);font-size:13px;line-height:1.6;color:var(--slate-500)}
+
+@media (max-width:1023px){
+  .market{grid-template-columns:minmax(0,1fr);gap:26px}
+  .market .body{padding-top:0}
+}
+@media (max-width:640px){
+  .panel.panel-white{padding:56px 20px 48px}
+  .market h2{margin-top:18px;font-size:clamp(30px,9.4vw,40px)}
+  .market .para{font-size:17px;line-height:1.7}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- Preparation: five tip cards, three over two, each led by a big
+   numeral in the headline font (Ploy&#x27;s big figures). ----------------------- */
+.prep{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.prep li{grid-column:span 2;display:flex;flex-direction:column;padding:30px 30px 32px;
+  background:#fff;border:1px solid var(--slate-200);border-radius:20px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.prep li:nth-child(n+4){grid-column:span 3}
+.prep .num{display:block;font-family:var(--display);font-size:60px;line-height:.9;letter-spacing:.01em;color:var(--brand)}
+.prep h3{margin:26px 0 0;font-size:19px;font-weight:600;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.prep p{margin-top:10px;font-size:15.5px;line-height:1.65;color:var(--slate-600)}
+
+@media (max-width:1023px){
+  .prep{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prep li,.prep li:nth-child(n+4){grid-column:span 1}
+  .prep li:last-child{grid-column:span 2}
+}
+@media (max-width:640px){
+  .prep{grid-template-columns:minmax(0,1fr);gap:12px}
+  .prep li:last-child{grid-column:span 1}
+  .prep li{padding:24px 22px 26px}
+  .prep .num{font-size:48px}
+  .prep h3{margin:18px 0 0;font-size:18px}
+  .prep p{font-size:15px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- FAQ: a pale-blue panel, heading on the left, the questions in a white
+   card on the right. Answers stay in the page (details/summary). ---------- */
+.faq-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:64px;align-items:start}
+.faq-grid h2{margin-top:22px;font-family:var(--display);font-weight:400;text-transform:uppercase;
+  font-size:clamp(40px,4.6vw,66px);line-height:1.02;  /* clears the Q&#x27;s tail */
+  letter-spacing:.004em;color:var(--navy);text-wrap:balance}
+.faq{overflow:hidden;background:#fff;border-radius:20px;box-shadow:0 1px 2px rgba(15,23,42,.05),0 18px 40px -24px rgba(0,36,91,.35)}
+.faq li + li{border-top:1px solid #E8EEF6}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 28px;cursor:pointer;list-style:none;
+  transition:background-color .15s ease}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{background:#F8FAFC}
+.faq .q{font-size:17px;font-weight:600;line-height:1.4;color:var(--ink)}
+.faq .pm{position:relative;flex:none;width:32px;height:32px;border:1px solid #CBD5E1;border-radius:50%;background:#fff;
+  transition:background-color .2s ease,border-color .2s ease}
+.faq .pm::before,.faq .pm::after{content:&quot;&quot;;position:absolute;left:50%;top:50%;width:12px;height:2px;border-radius:2px;
+  background:var(--navy);transform:translate(-50%,-50%);transition:transform .2s ease,background-color .2s ease}
+.faq .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq details[open] .pm{background:var(--navy);border-color:var(--navy)}
+.faq details[open] .pm::before,.faq details[open] .pm::after{background:#fff}
+.faq details[open] .pm::after{transform:translate(-50%,-50%) rotate(0deg)}
+.faq .a{padding:0 76px 24px 28px}
+.faq .a p{font-size:16px;line-height:1.7;color:var(--slate-600)}
+.faq-more{margin-top:24px}
+.faq-more a{font-size:15px;font-weight:600;color:var(--navy);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+
+@media (max-width:1023px){
+  .faq-grid{grid-template-columns:minmax(0,1fr);gap:30px}
+}
+@media (max-width:640px){
+  .panel.panel-faq{padding:56px 14px 44px}
+  .faq-grid &gt; div:first-child{padding:0 6px}
+  .faq-grid h2{margin-top:18px;font-size:clamp(36px,11vw,46px)}
+  .faq summary{padding:18px 18px;gap:14px}
+  .faq .q{font-size:16px}
+  .faq .a{padding:0 18px 20px}
+  .faq .a p{font-size:15px}
+  .faq-more{padding:0 6px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- Nearby: one white panel split into cells; each city name is the big
+   figure, with its next date underneath. ----------------------------------- */
+.near{overflow:hidden;background:#fff;border:1px solid var(--slate-200);border-radius:20px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.near ul{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0 -1px -1px 0}
+.near li{border-right:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200)}
+.near a{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:22px;height:100%;min-height:168px;
+  padding:26px 24px 24px;transition:background-color .15s ease}
+.near a:hover{background:#F8FAFC}
+.near .c{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:32px;line-height:1;
+  letter-spacing:.006em;color:var(--navy);text-wrap:balance}
+.near .n{padding-right:40px;font-size:14px;font-weight:500;line-height:28px;color:var(--slate-600);font-variant-numeric:tabular-nums}
+.near a::after{content:&quot;&quot;;position:absolute;bottom:24px;right:22px;width:28px;height:28px;border:1px solid #CBD5E1;border-radius:50%;
+  background:#fff url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 24 24&#x27; fill=&#x27;none&#x27; stroke=&#x27;%2300245B&#x27; stroke-width=&#x27;2.4&#x27; stroke-linecap=&#x27;round&#x27; stroke-linejoin=&#x27;round&#x27;%3E%3Cpath d=&#x27;M5 12h14&#x27;/%3E%3Cpath d=&#x27;m12 5 7 7-7 7&#x27;/%3E%3C/svg%3E&quot;) center/12px no-repeat;transition:background-color .18s ease,border-color .18s ease}
+.near a:hover::after{background:var(--navy) url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 24 24&#x27; fill=&#x27;none&#x27; stroke=&#x27;%23FFFFFF&#x27; stroke-width=&#x27;2.4&#x27; stroke-linecap=&#x27;round&#x27; stroke-linejoin=&#x27;round&#x27;%3E%3Cpath d=&#x27;M5 12h14&#x27;/%3E%3Cpath d=&#x27;m12 5 7 7-7 7&#x27;/%3E%3C/svg%3E&quot;) center/12px no-repeat;border-color:var(--navy)}
+
+@media (max-width:1023px){
+  .near ul{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  /* One city per row on a phone: name and date on the left, arrow on the right. */
+  .near ul{grid-template-columns:minmax(0,1fr)}
+  .near a{min-height:0;justify-content:center;gap:6px;padding:20px 64px 20px 20px}
+  .near .c{font-size:28px}
+  .near .n{padding-right:0;font-size:14px;line-height:1.4}
+  .near a::after{top:50%;bottom:auto;right:18px;width:30px;height:30px;margin-top:-15px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- How it works: a navy panel like the hero, so the page opens and closes
+   on navy. The three steps sit in a glass panel split into columns. ------- */
+.panel-navy{isolation:isolate;overflow:hidden;background:var(--navy);color:#fff}
+.panel-navy::before{content:&quot;&quot;;position:absolute;z-index:-1;pointer-events:none;width:1100px;height:1100px;left:50%;top:-720px;
+  margin-left:-550px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.52) 0%,rgba(37,99,235,.16) 38%,rgba(37,99,235,0) 68%)}
+.panel-navy::after{content:&quot;&quot;;position:absolute;z-index:-1;pointer-events:none;right:0;bottom:0;width:640px;height:340px;
+  background-image:radial-gradient(rgba(147,197,253,.28) 1.2px,transparent 1.3px);background-size:16px 16px;
+  -webkit-mask-image:radial-gradient(80% 90% at 100% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);
+  mask-image:radial-gradient(80% 90% at 100% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%)}
+.panel-navy .eyebrow{background:#fff;color:var(--navy)}
+.panel-navy .sec-head h2{color:#fff}
+.panel-navy .lede{color:#C9D6EA}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:hidden;border:1px solid rgba(255,255,255,.14);
+  border-radius:20px;background:rgba(255,255,255,.04)}
+.steps li{position:relative;padding:36px 34px 40px}
+.steps li + li{border-left:1px solid rgba(255,255,255,.14)}
+.steps .sn{font-family:var(--display);font-weight:400;font-size:88px;line-height:.85;color:#93C5FD}
+.steps .conn{display:none}
+.steps h3{margin:28px 0 0;font-size:20px;font-weight:600;line-height:1.3;letter-spacing:-.01em;color:#fff}
+.steps p{margin-top:10px;font-size:15.5px;line-height:1.65;color:#C9D6EA;text-wrap:pretty}
+
+@media (max-width:640px){
+  .panel.panel-navy{padding:56px 14px 18px}
+  .panel-navy .sec-head{margin-bottom:34px}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .steps li{padding:26px 22px 28px}
+  .steps li + li{border-left:0;border-top:1px solid rgba(255,255,255,.14)}
+  .steps .sn{font-size:64px}
+  .steps h3{margin-top:20px;font-size:18px}
+  .steps p{font-size:15px}
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+/* ---- Site footer: the live one, as it is ---------------------------------- */
+.ftr{position:relative;overflow:hidden;margin-top:24px;padding-top:96px;background:#020617;border-top:1px solid #1E293B}
+.ftr::before{content:&quot;&quot;;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,#334155,transparent);opacity:.5}
+.ftr-in{position:relative;max-width:1280px;margin:0 auto;padding:0 32px}
+.ftr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;margin-bottom:80px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ftr h3{display:flex;align-items:center;gap:8px;margin:0 0 24px;font-size:18px;font-weight:600;line-height:1.55;color:#fff}
+.ftr h3 svg{width:20px;height:20px;flex:none;color:#60A5FA}
+.ftr ul{display:flex;flex-direction:column;gap:16px}
+.ftr-link{display:flex;align-items:center;font-size:16px;font-weight:500;line-height:24px;color:#94A3B8;transition:color .2s ease}
+.ftr-link .b{width:6px;height:6px;margin-right:8px;border-radius:50%;background:#475569;transition:background-color .2s ease}
+.ftr-link:hover{color:#fff}
+.ftr-link:hover .b{background:#3B82F6}
+.ftr-soc{display:flex;align-items:center;gap:12px;width:100%;padding:10px 16px;border:1px solid #1E293B;border-radius:8px;background:#0F172A;
+  font-size:16px;font-weight:500;line-height:24px;color:#94A3B8;transition:color .2s ease,background-color .2s ease,border-color .2s ease}
+.ftr-soc:hover{color:#fff;background:#1E293B;border-color:#334155}
+.ftr-soc .chev{margin-left:auto;opacity:.5}
+.ftr-cc{display:flex;align-items:center;gap:4px;margin-top:4px}
+.ftr-cc button{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid transparent;border-radius:8px;background:none;
+  font-size:14px;line-height:20px;color:#64748B}
+.ftr-cc button.on{background:#1E293B;border-color:#334155;color:#fff}
+.ftr-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:32px 0 48px;border-top:1px solid #1E293B}
+.ftr-bottom p,.ftr-legal{font-size:12px;font-weight:600;letter-spacing:.025em;text-transform:uppercase;color:#64748B}
+.ftr-legal{display:flex;align-items:center;gap:24px}
+.ftr-legal a,.ftr-legal button{color:inherit;font:inherit;letter-spacing:inherit;text-transform:uppercase;background:none;border:0;padding:0}
+.ftr-legal a:hover,.ftr-legal button:hover{color:#60A5FA}
+.ftr-legal .d{width:4px;height:4px;border-radius:50%;background:#334155}
+@media (max-width:1023px){
+  .ftr{padding-top:80px}
+  .ftr-in{padding:0 24px}
+  .ftr-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+}
+@media (max-width:767px){
+  .ftr-grid{grid-template-columns:minmax(0,1fr)}
+  .ftr h3.md-up{display:none}
+  .ftr-bottom{flex-direction:column}
+  .ftr-bottom p{text-align:center}
+}
+
+/* ---- Keyboard focus and reduced motion, page-wide ------------------------ */
+:focus-visible{outline:2px solid #2563EB;outline-offset:3px;border-radius:6px}
+.hero :focus-visible,.panel-navy :focus-visible,.reg :focus-visible,.ftr :focus-visible{outline-color:#93C5FD}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;hdr&quot;&gt;
+  &lt;div class=&quot;hdr-in&quot;&gt;
+    &lt;a href=&quot;/&quot; class=&quot;hdr-logo&quot;&gt;&lt;img src=&quot;data:image/png;base64,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&quot; alt=&quot;JobFairX&quot;&gt;&lt;/a&gt;
+    &lt;ul class=&quot;hdr-nav&quot;&gt;
+      &lt;li&gt;&lt;a href=&quot;/job-fair-calendar&quot;&gt;Upcoming Job Fairs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;/jobs&quot;&gt;Search Jobs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;/job-seeker-faqs&quot;&gt;FAQ&#x27;s&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class=&quot;hdr-right&quot;&gt;
+      &lt;a href=&quot;https://virtual.jobfairx.com/auth/#/?countryCode=US&quot; class=&quot;hdr-signin&quot;&gt;Sign In&lt;/a&gt;
+      &lt;a href=&quot;/employer&quot; class=&quot;hdr-emp&quot;&gt;For Employers&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+&lt;div class=&quot;hdr-m&quot;&gt;
+  &lt;div class=&quot;in&quot;&gt;
+    &lt;a href=&quot;/&quot; class=&quot;hdr-logo&quot;&gt;&lt;img src=&quot;data:image/png;base64,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&quot; alt=&quot;JobFairX&quot;&gt;&lt;/a&gt;
+    &lt;button type=&quot;button&quot; aria-label=&quot;Menu&quot;&gt;&lt;svg width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 6h16M4 12h16M4 18h16&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;hero-wrap&quot;&gt;
+&lt;section class=&quot;hero&quot;&gt;
+  &lt;div class=&quot;hero-in&quot;&gt;
+    &lt;nav aria-label=&quot;Breadcrumb&quot; class=&quot;crumbs&quot;&gt;
+      &lt;ol&gt;
+        &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 5l7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;a href=&quot;/job-fairs-near-me&quot;&gt;Job Fairs Near Me&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 5l7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;a href=&quot;/job-fairs-near-me/florida&quot;&gt;Florida&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 5l7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;a href=&quot;/job-fairs-near-me/florida/tampa&quot;&gt;Tampa&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 5l7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;span aria-current=&quot;page&quot;&gt;Technology&lt;/span&gt;&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/nav&gt;
+
+    &lt;div class=&quot;hero-grid&quot;&gt;
+      &lt;div class=&quot;hero-main&quot;&gt;
+        &lt;h1&gt;Tampa Technology Job Fair&lt;/h1&gt;
+        &lt;p class=&quot;hero-sub&quot;&gt;Technology employers interview by video, in person, and phone. Register free and get AI-matched with employers hiring in Tampa.&lt;/p&gt;
+        &lt;div class=&quot;status&quot;&gt;
+          &lt;span class=&quot;rail&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+          &lt;div class=&quot;in&quot;&gt;&lt;p&gt;&lt;span class=&quot;wk&quot;&gt;This week&lt;/span&gt;&lt;span&gt; — Thursday, October 1, 11:00 AM–3:00 PM EDT.&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;cta-row&quot;&gt;
+          &lt;button type=&quot;button&quot; class=&quot;btn-reg&quot;&gt;Register free&lt;/button&gt;
+          &lt;span class=&quot;cta-note&quot;&gt;Scheduled interviews. No resume black holes.&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;aside class=&quot;card&quot;&gt;
+        &lt;h2&gt;Event details&lt;/h2&gt;
+        &lt;dl&gt;
+          &lt;div class=&quot;r r-date&quot;&gt;&lt;dt&gt;Date&lt;/dt&gt;&lt;dd&gt;Thursday, October 1&lt;/dd&gt;&lt;/div&gt;
+          &lt;div class=&quot;r r-time&quot;&gt;&lt;dt&gt;Time&lt;/dt&gt;&lt;dd&gt;11:00 AM–3:00 PM EDT&lt;/dd&gt;&lt;/div&gt;
+          &lt;div class=&quot;r&quot;&gt;&lt;dt&gt;Interviews&lt;/dt&gt;&lt;dd&gt;&lt;span class=&quot;strong&quot;&gt;Video, in person, and phone.&lt;/span&gt; &lt;span class=&quot;soft&quot;&gt;Each employer chooses; your confirmation shows which, with any address or link.&lt;/span&gt;&lt;/dd&gt;&lt;/div&gt;
+          &lt;div class=&quot;r&quot;&gt;&lt;dt&gt;Cost&lt;/dt&gt;&lt;dd class=&quot;strong&quot;&gt;Free for job seekers&lt;/dd&gt;&lt;/div&gt;
+          &lt;div class=&quot;r&quot;&gt;&lt;dt&gt;Registration closes&lt;/dt&gt;&lt;dd class=&quot;strong&quot;&gt;11:00 AM EDT, when the event starts.&lt;/dd&gt;&lt;/div&gt;
+          &lt;div class=&quot;r&quot;&gt;&lt;dt&gt;Have ready&lt;/dt&gt;&lt;dd&gt;Your resume and a link to your portfolio or GitHub.&lt;/dd&gt;&lt;/div&gt;
+        &lt;/dl&gt;
+        &lt;p class=&quot;card-foot&quot;&gt;Hiring for technology roles in Tampa? &lt;a href=&quot;/employer/job-fairs/florida/tampa/next-technology&quot;&gt;Register as an employer for this event&lt;/a&gt;&lt;/p&gt;
+      &lt;/aside&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+
+&lt;section class=&quot;sec&quot;&gt;
+  &lt;div class=&quot;sec-in&quot;&gt;
+    &lt;div class=&quot;sec-head&quot;&gt;
+      &lt;p class=&quot;eyebrow&quot;&gt;Past employers&lt;/p&gt;
+      &lt;h2&gt;Employers who have hired at Tampa job fairs&lt;/h2&gt;
+      &lt;p class=&quot;lede&quot;&gt;Named from past JobFairX events in Tampa, all verticals.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;emp&quot;&gt;
+      &lt;ul id=&quot;emp-list&quot;&gt;
+        &lt;li&gt;Ameriprise Financial&lt;/li&gt;
+        &lt;li&gt;Lions World Vision Institute&lt;/li&gt;
+        &lt;li&gt;Closers.io&lt;/li&gt;
+        &lt;li&gt;EMCOR MSI&lt;/li&gt;
+        &lt;li&gt;Triton Logistics, Inc.&lt;/li&gt;
+        &lt;li&gt;Commercial Appliance &amp;amp; Parts Service (CAPS)&lt;/li&gt;
+        &lt;li&gt;Nike&lt;/li&gt;
+        &lt;li&gt;ACS Infrastructure&lt;/li&gt;
+        &lt;li&gt;CloudHire&lt;/li&gt;
+        &lt;li&gt;Romy Consulting LLC&lt;/li&gt;
+        &lt;li&gt;By Light Professional IT Services&lt;/li&gt;
+        &lt;li&gt;ADT&lt;/li&gt;
+        &lt;li hidden&gt;KNR Therapy&lt;/li&gt;
+        &lt;li hidden&gt;CW Carriers USA&lt;/li&gt;
+        &lt;li hidden&gt;HealthPRO Pediatrics&lt;/li&gt;
+        &lt;li hidden&gt;Roshonda Isom Agency LLC&lt;/li&gt;
+        &lt;li hidden&gt;PostcardMania&lt;/li&gt;
+        &lt;li hidden&gt;Procore&lt;/li&gt;
+        &lt;li hidden&gt;GardaWorld&lt;/li&gt;
+        &lt;li hidden&gt;Hillsborough County Property Appraiser&lt;/li&gt;
+        &lt;li hidden&gt;Suncoast Behavioral Health Center&lt;/li&gt;
+        &lt;li hidden&gt;Greenman-Pedersen, Inc.&lt;/li&gt;
+        &lt;li hidden&gt;TECO&lt;/li&gt;
+        &lt;li hidden&gt;HAYS Recruiting Experts Worldwide&lt;/li&gt;
+        &lt;li hidden&gt;Maximus&lt;/li&gt;
+        &lt;li hidden&gt;Capital Vacations&lt;/li&gt;
+        &lt;li hidden&gt;Florida Autism Center&lt;/li&gt;
+        &lt;li hidden&gt;Paragon Water Systems&lt;/li&gt;
+        &lt;li hidden&gt;Angelo&#x27;s Recycled Materials&lt;/li&gt;
+        &lt;li hidden&gt;Bread&lt;/li&gt;
+        &lt;li hidden&gt;Diamond Resorts&lt;/li&gt;
+        &lt;li hidden&gt;Ensurem&lt;/li&gt;
+        &lt;li hidden&gt;HydroExcavators, LLC&lt;/li&gt;
+        &lt;li hidden&gt;KnowBe4&lt;/li&gt;
+        &lt;li hidden&gt;New Horizons/ Troops to Tech&lt;/li&gt;
+        &lt;li hidden&gt;OneBlood&lt;/li&gt;
+        &lt;li hidden&gt;Quiet Professionals&lt;/li&gt;
+        &lt;li hidden&gt;Scotlynn USA Division&lt;/li&gt;
+        &lt;li hidden&gt;Starbucks&lt;/li&gt;
+        &lt;li hidden&gt;WebstaurantStore&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;more&quot;&gt;
+      &lt;button type=&quot;button&quot; id=&quot;emp-more&quot; aria-controls=&quot;emp-list&quot; aria-expanded=&quot;false&quot;&gt;&lt;span class=&quot;plus&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 12 12&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linecap=&quot;round&quot;&gt;&lt;path d=&quot;M6 1.5v9M1.5 6h9&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Show all 40 employers&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;div class=&quot;panel-wrap&quot;&gt;
+&lt;section class=&quot;panel panel-blue&quot;&gt;
+  &lt;div class=&quot;panel-in&quot;&gt;
+    &lt;div class=&quot;split-head&quot;&gt;
+      &lt;div&gt;
+        &lt;p class=&quot;eyebrow&quot;&gt;From the job board&lt;/p&gt;
+        &lt;h2&gt;Technology jobs in Tampa right now&lt;/h2&gt;
+      &lt;/div&gt;
+      &lt;p class=&quot;lede&quot;&gt;Current technology openings in Tampa from the JobFairX job board.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;ul class=&quot;jobs&quot;&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/Mq6kqHOd3fZ-DGYHNd6AhLRdZvv-dWwxkaZ-JA1p5XXjWgnDuIRGrSNjMfKb9U4qorhaMHaTI_vc7I_vkrJlDQ==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Senior Principal Product Manager - Infusion&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Inovalon · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/wtsOt1zJcccL7QT2e6C9p3hIxWyQ876vgv6qKY2hkwX5cbS5QjVL4lAhNWrIfhHgHOCHaCckw2-5IfqvoA8I9w==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Cyber Security &amp;amp; Risk Strategy Manager&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Deloitte · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/aW3hFzXOi2s_gvYbsogexPj_9VjntTP22mm17-nQTTDi7Hd5ajpcZAEkuCTPjYczCHa4C_T_Hl7D2qI_gpztKw==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Dynatrace Software Engineering&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;DXC Technology · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/wmEgzbA0_IAxbKqmTAdrWEimgAQDns-KFDYrvaeFuRqeR8UCM3C3_nLRn664x-lFD8bwx6u6nj9eQ_uzmYXpGw==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Cyber - Physical Security - Senior Manager&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Deloitte · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/KcgOOUNnMOMwAECmaZZryLSmkArskM8PrRmHUM8e4BXu4KVYDDE3pezkJW7IRddEp7ooVArHQEKykOPPuAx-Sg==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;IT Project Technology Lead (VP)&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Citigroup · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/Cv9OmM1uCKPGCrPIl5wMsM3Ncc7MyZKBevGoiVJOBPMFgIUBpT1ysJcAmLKJvUvwnx0AqEoCFBUHrZroUkvrHA==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Payments-Integrated Digital Solutions-Product Manager-Vice President&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Chase · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/BGDAN9FgyU20qYkvQAh8XpW8k_t7_6S6bKVEiRUVs-hmI_cY4jFLx_wJbQdYe0yU6SpMF7qDnjOR96M4gnDSPA==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Sr Manager Engineering - DevOps&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Reltio · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/vj0ZLoF6b4RUu5z5Ki0TtEUtiIPilVwmfpByP9Oi71eFWVVSdpbbeYBbD6Q_nckpmJmInfBDE9VqTfjbS77TRA==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Oracle Cloud Finance - Manager&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;PwC (US) · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/ZmnCrBa88lmzn08Vjv6wd8oXCkUpHLZJqhj4bc8Y0QwjFi6zHLRkAdqiP6QcKg98GzFuhA6cRTy-TVHZhu52Bw==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Principal - International Tax Services (ITS)&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;CliftonLarsonAllen · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;https://click.appcast.io/t/qR-DbBBvJsd4TBlQfpl3yxG8GPj_ayFLPS-Ed_-_cWwjDGsswfFCRmaEsSAqvhPkA7JqiEAMCtMqyAyZ8iJjPQ==&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener&quot;&gt;&lt;div class=&quot;jt&quot;&gt;&lt;span class=&quot;t&quot;&gt;Oracle Field Service Cloud (OFSC) Functional Lead&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;Accenture · Tampa, FL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;Posted Sep 26&lt;/span&gt;&lt;/div&gt; &lt;span class=&quot;view&quot;&gt;View job&lt;svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 20&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; aria-hidden=&quot;true&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; d=&quot;M4 10h12m-5-5 5 5-5 5&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class=&quot;jobs-foot&quot;&gt;
+      &lt;a href=&quot;/jobs?city=Tampa&quot;&gt;See all Tampa jobs&lt;/a&gt;
+      &lt;p&gt;From the JobFairX job feed, updated Sep 26, 2026.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;reg&quot;&gt;
+      &lt;div&gt;
+        &lt;p class=&quot;rt&quot;&gt;Register for the Thursday, October 1 event to be matched with employers hiring roles like these.&lt;/p&gt;
+        &lt;p class=&quot;rs&quot;&gt;Registration is free. When an employer matches your resume, you get an invite to request an interview.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn-reg&quot;&gt;Register free&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+&lt;section class=&quot;sec&quot;&gt;
+  &lt;div class=&quot;sec-in&quot;&gt;
+    &lt;div class=&quot;sec-head&quot;&gt;
+      &lt;p class=&quot;eyebrow&quot;&gt;Job fair types&lt;/p&gt;
+      &lt;h2&gt;Other job fairs in Tampa&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;types&quot;&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-entry-level&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#0EA5E9&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Entry-Level&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Entry-Level Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Fri, Oct 9&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-veteran&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#EF4444&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Veteran&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Veteran Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Mon, Oct 12&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-healthcare&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#14B8A6&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Healthcare&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Healthcare Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Tue, Oct 20&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-diversity&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#F97316&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Diversity&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Diversity Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Wed, Oct 28&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;div class=&quot;panel-wrap&quot;&gt;
+&lt;section class=&quot;panel panel-white&quot;&gt;
+  &lt;div class=&quot;panel-in&quot;&gt;
+    &lt;div class=&quot;market&quot;&gt;
+      &lt;div&gt;
+        &lt;p class=&quot;eyebrow&quot;&gt;Local job market&lt;/p&gt;
+        &lt;h2&gt;Technology jobs in the Tampa-St. Petersburg-Clearwater metro&lt;/h2&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;body&quot;&gt;
+        &lt;p class=&quot;para&quot;&gt;Tampa-St. Petersburg-Clearwater employed &lt;span class=&quot;fig&quot;&gt;1,447,120&lt;/span&gt; people as of May 2025 (BLS OEWS). Unemployment in the metro was &lt;span class=&quot;fig&quot;&gt;4.8%&lt;/span&gt; in July 2026, up from &lt;span class=&quot;fig&quot;&gt;4.1%&lt;/span&gt; a year earlier (BLS LAUS, preliminary). Technology roles in the metro: Software Developers (&lt;span class=&quot;fig&quot;&gt;14,230&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$130,450&lt;/span&gt; a year); Computer User Support Specialists (&lt;span class=&quot;fig&quot;&gt;7,410&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$61,050&lt;/span&gt; a year); Network and Computer Systems Administrators (&lt;span class=&quot;fig&quot;&gt;4,720&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$101,560&lt;/span&gt; a year).&lt;/p&gt;
+        &lt;p class=&quot;src&quot;&gt;Source: US Bureau of Labor Statistics, OEWS May 2025 and LAUS July 2026. Figures cover the Tampa-St. Petersburg-Clearwater metro area, not Tampa alone.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+&lt;section class=&quot;sec&quot;&gt;
+  &lt;div class=&quot;sec-in&quot;&gt;
+    &lt;div class=&quot;sec-head&quot;&gt;
+      &lt;p class=&quot;eyebrow&quot;&gt;Preparation&lt;/p&gt;
+      &lt;h2&gt;Preparing for a technology job fair&lt;/h2&gt;
+      &lt;p class=&quot;lede&quot;&gt;What technology employers ask for, and what to have ready before your interview.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;ol class=&quot;prep&quot;&gt;
+        &lt;li&gt;&lt;span class=&quot;num&quot; aria-hidden=&quot;true&quot;&gt;01&lt;/span&gt;&lt;h3&gt;A portfolio or GitHub link&lt;/h3&gt;&lt;p&gt;One link, ready to paste into the chat or read out. Employers hiring developers and analysts will ask for it before they ask anything else.&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;num&quot; aria-hidden=&quot;true&quot;&gt;02&lt;/span&gt;&lt;h3&gt;Your stack, honestly&lt;/h3&gt;&lt;p&gt;Name the languages and tools you use every week, then the ones you have touched. Overstating a stack costs the interview once the questions start.&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;num&quot; aria-hidden=&quot;true&quot;&gt;03&lt;/span&gt;&lt;h3&gt;One project you can walk through&lt;/h3&gt;&lt;p&gt;Five minutes on what it does, what you built and what you would change. It is the most common technical question at a hiring event.&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;num&quot; aria-hidden=&quot;true&quot;&gt;04&lt;/span&gt;&lt;h3&gt;Your questions for them&lt;/h3&gt;&lt;p&gt;Team size, on-call expectations, remote or hybrid, and the stack they are moving to. The answers decide whether the offer is right for you.&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;num&quot; aria-hidden=&quot;true&quot;&gt;05&lt;/span&gt;&lt;h3&gt;Be ready for video, in person, or phone&lt;/h3&gt;&lt;p&gt;Your confirmation says which. For video, a quiet space and a camera test, and be ready to share your screen. For in person, the address and parking are in the confirmation; arrive ten minutes early. For phone, a number you can answer at the confirmed time.&lt;/p&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;div class=&quot;panel-wrap&quot;&gt;
+&lt;section class=&quot;panel panel-blue panel-faq&quot;&gt;
+  &lt;div class=&quot;panel-in&quot;&gt;
+    &lt;div class=&quot;faq-grid&quot;&gt;
+      &lt;div&gt;
+        &lt;p class=&quot;eyebrow&quot;&gt;FAQ&lt;/p&gt;
+        &lt;h2&gt;Frequently asked questions&lt;/h2&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;ul class=&quot;faq&quot;&gt;
+          &lt;li&gt;&lt;details open&gt;&lt;summary&gt;&lt;span class=&quot;q&quot;&gt;How does matching work?&lt;/span&gt;&lt;span class=&quot;pm&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/summary&gt;&lt;div class=&quot;a&quot;&gt;&lt;p&gt;Our AI analyzes your resume and matches it against employer job descriptions. When we find a strong match, you&#x27;ll receive a notification and can request an interview directly with the company.&lt;/p&gt;&lt;/div&gt;&lt;/details&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;details&gt;&lt;summary&gt;&lt;span class=&quot;q&quot;&gt;How do I pick an interview time?&lt;/span&gt;&lt;span class=&quot;pm&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/summary&gt;&lt;div class=&quot;a&quot;&gt;&lt;p&gt;Once an employer accepts your interview request, you&#x27;ll be able to see their available time slots and pick one that works best for you.&lt;/p&gt;&lt;/div&gt;&lt;/details&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;details&gt;&lt;summary&gt;&lt;span class=&quot;q&quot;&gt;When should I join my video interview?&lt;/span&gt;&lt;span class=&quot;pm&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/summary&gt;&lt;div class=&quot;a&quot;&gt;&lt;p&gt;We recommend joining 5 minutes early to test your audio and video. You&#x27;ll receive a notification with the join link when it&#x27;s time for your interview.&lt;/p&gt;&lt;/div&gt;&lt;/details&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;details&gt;&lt;summary&gt;&lt;span class=&quot;q&quot;&gt;How long are interviews?&lt;/span&gt;&lt;span class=&quot;pm&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/summary&gt;&lt;div class=&quot;a&quot;&gt;&lt;p&gt;Most initial interviews during the job fair are 15-30 minutes long. This is enough time to get to know each other and discuss the role. Follow-up interviews may be scheduled after the event.&lt;/p&gt;&lt;/div&gt;&lt;/details&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;details&gt;&lt;summary&gt;&lt;span class=&quot;q&quot;&gt;Why didn&#x27;t I get a link to join the event?&lt;/span&gt;&lt;span class=&quot;pm&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/summary&gt;&lt;div class=&quot;a&quot;&gt;&lt;p&gt;Make sure you&#x27;ve registered and confirmed your email. Check your spam folder if you don&#x27;t see the confirmation email. You&#x27;ll receive the join link when you have a scheduled video interview, not for the general event.&lt;/p&gt;&lt;/div&gt;&lt;/details&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;details&gt;&lt;summary&gt;&lt;span class=&quot;q&quot;&gt;When will I hear back from the employer?&lt;/span&gt;&lt;span class=&quot;pm&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/summary&gt;&lt;div class=&quot;a&quot;&gt;&lt;p&gt;Employers typically respond within 24-48 hours after the event. You&#x27;ll receive notifications through your JobFairX dashboard and email about any follow-up interviews or next steps.&lt;/p&gt;&lt;/div&gt;&lt;/details&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&quot;faq-more&quot;&gt;&lt;a href=&quot;/job-seeker-faqs&quot;&gt;View all FAQs →&lt;/a&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+&lt;section class=&quot;sec&quot;&gt;
+  &lt;div class=&quot;sec-in&quot;&gt;
+    &lt;div class=&quot;sec-head&quot;&gt;
+      &lt;p class=&quot;eyebrow&quot;&gt;Nearby&lt;/p&gt;
+      &lt;h2&gt;Technology job fairs near Tampa&lt;/h2&gt;
+      &lt;p class=&quot;lede&quot;&gt;The nearest cities with a scheduled technology job fair&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;near&quot;&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/clearwater/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Clearwater&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Fri, Oct 9&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/st-petersburg/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;St. Petersburg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 1&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/lakeland/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Lakeland&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 22&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/fort-myers/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Fort Myers&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 22&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/gainesville/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Gainesville&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 29&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;div class=&quot;panel-wrap&quot;&gt;
+&lt;section class=&quot;panel panel-navy&quot;&gt;
+  &lt;div class=&quot;panel-in&quot;&gt;
+    &lt;div class=&quot;sec-head&quot;&gt;
+      &lt;p class=&quot;eyebrow&quot;&gt;How it works&lt;/p&gt;
+      &lt;h2&gt;How JobFairX job fairs work&lt;/h2&gt;
+      &lt;p class=&quot;lede&quot;&gt;Three steps to your next interview&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;ol class=&quot;steps&quot;&gt;
+        &lt;li&gt;&lt;div class=&quot;sn&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;conn&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;&lt;h3&gt;Register and build your resume&lt;/h3&gt;&lt;p&gt;Create a free account and build your resume in minutes. That is all it takes to be seen.&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;div class=&quot;sn&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;conn&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;&lt;h3&gt;Get matched and request interviews&lt;/h3&gt;&lt;p&gt;Employers post roles and our system matches your resume, then emails you an invite to request an interview. No applications, no black hole.&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;div class=&quot;sn&quot;&gt;3&lt;/div&gt;&lt;h3&gt;Interview directly with employers&lt;/h3&gt;&lt;p&gt;When the employer accepts, you get a confirmed time and interview by video, in-person, or phone.&lt;/p&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+&lt;footer class=&quot;ftr&quot;&gt;
+  &lt;div class=&quot;ftr-in&quot;&gt;
+    &lt;div class=&quot;ftr-grid&quot;&gt;
+      &lt;h2 class=&quot;sr-only&quot;&gt;Footer&lt;/h2&gt;
+      &lt;div&gt;
+        &lt;h3 class=&quot;md-up&quot;&gt;&lt;svg fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;M22 21v-2a4 4 0 0 0-3-3.87&quot;/&gt;&lt;path d=&quot;M16 3.13a4 4 0 0 1 0 7.75&quot;/&gt;&lt;/svg&gt;Job Seekers&lt;/h3&gt;
+        &lt;ul role=&quot;list&quot;&gt;
+          &lt;li&gt;&lt;a href=&quot;/job-fairs-near-me&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Job Fairs Near Me&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/job-fair-calendar&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Job Fair Calendar&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/jobs&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Search Jobs&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/job-seeker-faqs&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;FAQs&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;h3 class=&quot;md-up&quot;&gt;&lt;svg fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z&quot;/&gt;&lt;path d=&quot;M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2&quot;/&gt;&lt;path d=&quot;M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2&quot;/&gt;&lt;path d=&quot;M10 6h4&quot;/&gt;&lt;path d=&quot;M10 10h4&quot;/&gt;&lt;path d=&quot;M10 14h4&quot;/&gt;&lt;path d=&quot;M10 18h4&quot;/&gt;&lt;/svg&gt;Employers&lt;/h3&gt;
+        &lt;ul role=&quot;list&quot;&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Hiring Event Platform&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer/hiring-event-calendar&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Hiring Event Calendar&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer/hiring-event-pricing&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Hiring Event Pricing&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer/hiring-event-bundles&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Hiring Event Bundles&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer/hiring-event-faq&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Hiring Event FAQs&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer/resources&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Resources&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;/employer/contact&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Contact Us&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;h3&gt;&lt;svg fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;line x1=&quot;2&quot; y1=&quot;12&quot; x2=&quot;22&quot; y2=&quot;12&quot;/&gt;&lt;path d=&quot;M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z&quot;/&gt;&lt;/svg&gt;Social&lt;/h3&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;https://www.linkedin.com/company/jobfairx.com&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; class=&quot;ftr-soc&quot;&gt;&lt;svg width=&quot;16&quot; height=&quot;16&quot; fill=&quot;#0A66C2&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z&quot;/&gt;&lt;/svg&gt;LinkedIn&lt;svg class=&quot;chev&quot; width=&quot;16&quot; height=&quot;16&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;polyline points=&quot;9 18 15 12 9 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;https://www.facebook.com/jobfairx&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; class=&quot;ftr-soc&quot;&gt;&lt;svg width=&quot;16&quot; height=&quot;16&quot; fill=&quot;#1877F2&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z&quot;/&gt;&lt;/svg&gt;Facebook&lt;svg class=&quot;chev&quot; width=&quot;16&quot; height=&quot;16&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;polyline points=&quot;9 18 15 12 9 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;h3&gt;JobFairX&lt;/h3&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;/about-us&quot; class=&quot;ftr-link&quot;&gt;&lt;span class=&quot;b&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;About Us&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;div class=&quot;ftr-cc&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;on&quot;&gt;&lt;svg width=&quot;20&quot; height=&quot;14&quot; viewBox=&quot;0 0 60 42&quot; style=&quot;border-radius:2px;flex:none&quot; aria-hidden=&quot;true&quot;&gt;&lt;rect width=&quot;60&quot; height=&quot;42&quot; fill=&quot;#B22234&quot;/&gt;&lt;path d=&quot;M0,0h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.46h60v3.23H0zm0,6.47h60V42H0z&quot; fill=&quot;#fff&quot;/&gt;&lt;rect width=&quot;24&quot; height=&quot;22.62&quot; fill=&quot;#3C3B6E&quot;/&gt;&lt;g fill=&quot;#fff&quot;&gt;&lt;circle cx=&quot;4&quot; cy=&quot;3.77&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;8&quot; cy=&quot;3.77&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;3.77&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;16&quot; cy=&quot;3.77&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;20&quot; cy=&quot;3.77&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;6&quot; cy=&quot;7.08&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;10&quot; cy=&quot;7.08&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;14&quot; cy=&quot;7.08&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;18&quot; cy=&quot;7.08&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;4&quot; cy=&quot;10.39&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;8&quot; cy=&quot;10.39&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;10.39&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;16&quot; cy=&quot;10.39&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;20&quot; cy=&quot;10.39&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;6&quot; cy=&quot;13.7&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;10&quot; cy=&quot;13.7&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;14&quot; cy=&quot;13.7&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;18&quot; cy=&quot;13.7&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;4&quot; cy=&quot;17.01&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;8&quot; cy=&quot;17.01&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;17.01&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;16&quot; cy=&quot;17.01&quot; r=&quot;1.2&quot;/&gt;&lt;circle cx=&quot;20&quot; cy=&quot;17.01&quot; r=&quot;1.2&quot;/&gt;&lt;/g&gt;&lt;/svg&gt;US&lt;/button&gt;&lt;button type=&quot;button&quot;&gt;&lt;svg width=&quot;20&quot; height=&quot;14&quot; viewBox=&quot;0 0 60 42&quot; style=&quot;border-radius:2px;flex:none&quot; aria-hidden=&quot;true&quot;&gt;&lt;rect width=&quot;60&quot; height=&quot;42&quot; fill=&quot;#fff&quot;/&gt;&lt;rect width=&quot;15&quot; height=&quot;42&quot; fill=&quot;#FF0000&quot;/&gt;&lt;rect x=&quot;45&quot; width=&quot;15&quot; height=&quot;42&quot; fill=&quot;#FF0000&quot;/&gt;&lt;path d=&quot;M30 8l-2 4-4.5-.5 3 3.5-1 4.5L30 17l4.5 2.5-1-4.5 3-3.5-4.5.5z&quot; fill=&quot;#FF0000&quot;/&gt;&lt;path d=&quot;M30 8l1.5 3h-3z&quot; fill=&quot;#FF0000&quot;/&gt;&lt;/svg&gt;Canada&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ftr-bottom&quot;&gt;
+      &lt;p&gt;COPYRIGHT 2026 JOBFAIRX ALL RIGHTS RESERVED&lt;/p&gt;
+      &lt;div class=&quot;ftr-legal&quot;&gt;&lt;a href=&quot;/privacy-policy&quot;&gt;PRIVACY POLICY&lt;/a&gt;&lt;span class=&quot;d&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;a href=&quot;/terms-and-conditions&quot;&gt;TERMS AND CONDITIONS&lt;/a&gt;&lt;span class=&quot;d&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;button type=&quot;button&quot;&gt;Your Privacy Choices&lt;/button&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;
+&lt;script&gt;
+document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;, function () {
+  document.querySelectorAll(&#x27;#emp-list li[hidden]&#x27;).forEach(function (li) { li.hidden = false; });
+  this.parentElement.hidden = true;
+});
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+  </div>
+</main>
+
+<article id="notes" class="notes" hidden>
+  <div class="notes-in">
+    <h1>Build notes</h1>
+    <p class="sub">For Brandon. Tampa Technology Job Fair page, redesigned in the ploy.ai direction.</p>
+
+<h2 id="n-what">What this is</h2>
+<p>A visual redesign of the city × vertical event page, shown on Tampa Technology (<code>/job-fairs/florida/tampa/next-technology</code>). It follows the look of ploy.ai in JobFairX colours. Only the visual layer changes. Every word, heading level, link, button and the section order match the live page as captured on 26 Sep 2026. The header, footer, title, meta description and structured data are unchanged.</p>
+<ul>
+  <li>The content is the live page's, captured 26 Sep 2026. The job feed refreshes during the day, so the ten jobs here won't match the live list later. The markup is the same.</li>
+  <li>The first FAQ answer is shown open for review only. On the page, every answer starts closed.</li>
+</ul>
+
+<h2 id="n-fonts">Fonts</h2>
+<ul>
+  <li>Add <b>Anton</b> from Google Fonts (one weight, 400) for display type only: the H1, the section H2s, and the big figures. The big figures are the date in the Event details card, the next dates in Other job fairs, the city names in Nearby, and the 01–05 and 1–3 numerals.</li>
+  <li>Everything else stays <b>Inter</b>.</li>
+  <li>Display type is set in capitals with CSS (<code>text-transform: uppercase</code>). The text in the HTML keeps its normal case.</li>
+</ul>
+
+<h2 id="n-colours">Colours</h2>
+<p>Existing JobFairX colours only.</p>
+<table class="sw">
+  <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, How it works, Register band, headings, pill labels</td></tr>
+  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons only (Register free)</td></tr>
+  <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>Jobs panel and FAQ panel</td></tr>
+  <tr><td><span class="chip" style="background:#F1F5F9"></span>Page <code>#F1F5F9</code></td><td>Page background behind every section</td></tr>
+  <tr><td><span class="chip" style="background:#0F172A"></span>Text <code>#0F172A #334155 #475569 #64748B</code></td><td>On navy: <code>#FFFFFF #C9D6EA #93C5FD</code></td></tr>
+  <tr><td><span class="chip" style="background:linear-gradient(90deg,#0EA5E9 25%,#EF4444 25% 50%,#14B8A6 50% 75%,#F97316 75%)"></span>Vertical dots</td><td>Unchanged: Entry-Level <code>#0EA5E9</code>, Veteran <code>#EF4444</code>, Healthcare <code>#14B8A6</code>, Diversity <code>#F97316</code></td></tr>
+</table>
+
+<h2 id="n-rhythm">Page rhythm</h2>
+<ul>
+  <li>Sections alternate. <b>Open sections</b> sit on the grey page with a centred heading. <b>Panel sections</b> are rounded panels (24px radius) inset 24px from the window edge, 10px on phones, with content up to 1152px wide.</li>
+  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (open) → Local job market (white panel) → Preparation (open) → FAQ (blue panel) → Nearby (open) → How it works (navy panel) → footer.</li>
+  <li>128px between sections on desktop, 80px on phones.</li>
+</ul>
+
+<h2 id="n-pieces">Shared pieces</h2>
+<ul>
+  <li><b>Pill label</b> (the eyebrow): 28px tall, navy with white text. On navy panels it turns white with navy text.</li>
+  <li><b>Section H2</b>: Anton, navy, <code>clamp(40px, 5.6vw, 80px)</code>, line-height 0.92, <code>text-wrap: balance</code>.</li>
+  <li><b>Hairline panels</b> (Past employers, Other job fairs, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
+  <li><b>Quiet pills</b> (View job, View events, the round arrows): white, 1px <code>#CBD5E1</code> border, navy text. They fill navy when their row or card is hovered. The whole row or card stays the link.</li>
+  <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
+</ul>
+
+<h2 id="n-rules">Rules for other cities and verticals</h2>
+<ol>
+  <li><b>H1 size follows its column.</b> The hero's left column is a size container (<code>container-type: inline-size</code>) and the H1 uses <code>clamp(44px, 19.4cqi, 140px)</code>. A 12-letter word such as Jacksonville or Philadelphia runs about 3% wider than the column at that size. Pass the H1's longest word length as <code>--h1-longest</code> and use <code>font-size: min(140px, 19.4cqi, calc(100cqi / (var(--h1-longest) * 0.47)))</code>.</li>
+  <li><b>Headings with a Q.</b> Anton's Q has a tail that reaches into the next line. Any display heading containing a Q uses line-height 1.02 (the FAQ heading does).</li>
+  <li><b>Big dates.</b> The next dates in Other job fairs use <code>max-width: 5em</code>, so every date breaks the same way (NEXT: FRI, / OCT 9). The Event details date uses <code>text-wrap: balance</code>.</li>
+  <li><b>Metro heading.</b> The Local job market heading runs smaller: <code>clamp(34px, 3.7vw, 54px)</code>, line-height 1. Long metro names break at their hyphens.</li>
+  <li><b>Market figures.</b> In the Local job market paragraph, each figure is wrapped in <code>&lt;span class="fig"&gt;</code> (bold navy). The paragraph's words are unchanged.</li>
+</ol>
+
+<h2 id="n-fix">Fix carried over from the live page</h2>
+<p>On the live page the FAQ answers are added only after a question is clicked, so they aren't in the HTML Google reads. This design uses <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code>: all six answers are in the page from the start and fold closed.</p>
+
+<h2 id="n-noticed">Also noticed on the live page</h2>
+<p>Not part of this design. The meta description is built from job titles and mangles them: "Employers interviewing for senior principal product managers, dynatrace software engineerings and more." The same sentence is in the Event structured data.</p>
+
+<h2 id="n-checks">Checks done on this file</h2>
+<ul>
+  <li>Every word, heading level, link target, link name and button compared against the live page on 26 Sep 2026. All identical, apart from the job feed refreshing.</li>
+  <li>Keyboard focus shows a 2px outline on every link and button (light blue on navy).</li>
+  <li>Text in the redesigned sections meets WCAG AA contrast on its background. The footer is the live one, unchanged.</li>
+  <li>Transitions switch off for visitors who ask for reduced motion.</li>
+  <li>No new images, video or libraries. The only script is the existing Show all 40 employers toggle; the FAQ uses the browser's own details element.</li>
+  <li>Checked at 1440px desktop and at 390px and 375px phone widths.</li>
+</ul>
+
+  </div>
+</article>
+
+<script>
+(function () {
+  var K_OPEN = 'tampaRedesign.open', K_DEV = 'tampaRedesign.device';
+  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function write(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  var body = document.getElementById('bar-body'), toggle = document.getElementById('btn-toggle');
+  var notesBtn = document.getElementById('btn-notes'), sum = document.getElementById('bar-sum');
+  var stage = document.getElementById('stage'), notes = document.getElementById('notes'), frame = document.getElementById('frame');
+  var state = { open: read(K_OPEN) !== '0', device: read(K_DEV) === 'mobile' ? 'mobile' : 'desktop', view: 'page' };
+
+  function fit() {
+    try {
+      var d = frame.contentDocument;
+      if (!d || !d.body) return;
+      frame.style.height = Math.ceil(d.body.getBoundingClientRect().height) + 'px';
+    } catch (e) {}
+  }
+  function render() {
+    body.hidden = !state.open;
+    toggle.textContent = state.open ? 'Hide controls' : 'Show controls';
+    toggle.setAttribute('aria-expanded', state.open ? 'true' : 'false');
+    stage.hidden = state.view !== 'page';
+    notes.hidden = state.view !== 'notes';
+    stage.setAttribute('data-device', state.device);
+    notesBtn.textContent = state.view === 'notes' ? 'Back to the page' : 'Build notes';
+    document.querySelectorAll('[data-device]').forEach(function (b) { if (b.tagName === 'BUTTON') b.setAttribute('aria-pressed', b.getAttribute('data-device') === state.device ? 'true' : 'false'); });
+    document.querySelectorAll('[data-view]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-view') === state.view ? 'true' : 'false'); });
+    sum.textContent = state.view === 'notes' ? 'Build notes for Brandon'
+      : (state.device === 'mobile' ? 'Mobile · 390 px phone' : 'Desktop') + ' · full page · live content from 26 Sep 2026';
+    requestAnimationFrame(fit);
+  }
+
+  toggle.addEventListener('click', function () { state.open = !state.open; write(K_OPEN, state.open ? '1' : '0'); render(); });
+  notesBtn.addEventListener('click', function () { state.view = state.view === 'notes' ? 'page' : 'notes'; render(); window.scrollTo(0, 0); });
+  document.querySelectorAll('button[data-device]').forEach(function (b) {
+    b.addEventListener('click', function () { state.device = b.getAttribute('data-device'); state.view = 'page'; write(K_DEV, state.device); render(); });
+  });
+  document.querySelectorAll('button[data-view]').forEach(function (b) {
+    b.addEventListener('click', function () { state.view = b.getAttribute('data-view'); render(); });
+  });
+
+  frame.addEventListener('load', function () {
+    fit();
+    try { new ResizeObserver(fit).observe(frame.contentDocument.body); } catch (e) {}
+    try { frame.contentDocument.fonts.ready.then(fit); } catch (e) {}
+    setTimeout(fit, 600); setTimeout(fit, 1600);
+  });
+  window.addEventListener('resize', fit);
+  render();
+})();
+</script>
+
+</body>
+</html>
