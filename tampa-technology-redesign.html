@@ -709,6 +709,25 @@ button{font:inherit;cursor:pointer}
   .hero .card .card-foot{margin:18px -20px 0;padding:14px 20px 16px}
 }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Phone audit fixes: tighter spacing, no lone words, 44px tap areas. Words unchanged. ===== */
+@media (max-width:640px){
+  .sec,.panel-wrap{padding-top:64px}
+  .emp li{min-height:64px;padding:12px}
+  .jobs .m{text-wrap:pretty}
+  .types .tt{text-wrap:pretty}
+  .panel.panel-white{padding:44px 20px 40px}
+  .panel.panel-faq{padding:44px 14px 36px}
+  .panel.panel-navy{padding:44px 14px 14px}
+  .panel-navy .sec-head{margin-bottom:26px}
+  .steps li{padding:20px 20px 22px}
+  .steps .sn{width:40px;height:40px;border-radius:10px}
+  .steps h3{margin-top:14px}
+  .near a{padding:14px 64px 14px 20px}
+}
+/* Standalone text links get a 44px tap area without moving */
+.jobs-foot a,.faq-more a{display:inline-block;padding-block:13px;margin-block:-13px}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1089,6 +1108,17 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Jobs footer.</b> The feed note sits on the left and See all Tampa jobs on the right (<code>flex-direction: row-reverse</code>; the HTML order is unchanged). On phones they stack with the link first.</li>
   <li><b>Market figures.</b> In the Local job market paragraph, each figure is wrapped in <code>&lt;span class="fig"&gt;</code> (bold navy). The paragraph's words are unchanged.</li>
 </ol>
+
+<h2 id="n-phone">Phones (640px and narrower)</h2>
+<ul>
+  <li>Sections sit 64px apart (80px before the phone audit).</li>
+  <li>Past employers name boxes are 64px tall with 12px padding.</li>
+  <li>Panel padding: Local job market 44px top and 40px bottom, FAQ 44px and 36px, How it works 44px and 14px. The three steps use 20px padding and 40px number squares.</li>
+  <li>Nearby rows use 14px top and bottom padding.</li>
+  <li>Job company lines and Other job fairs titles use <code>text-wrap: pretty</code>, so no single word such as "FL" or "Fair" sits alone on the last line.</li>
+  <li>"See all Tampa jobs" and "View all FAQs" get a 45px tap area (13px padding above and below, with a matching negative margin), with no visible change. This applies at every width.</li>
+  <li>With these, the phone page is about 3.8% shorter than before the audit. Nothing scrolls sideways at 375px.</li>
+</ul>
 
 <h2 id="n-fix">Fix carried over from the live page</h2>
 <p>On the live page the FAQ answers are added only after a question is clicked, so they aren't in the HTML Google reads. This design uses <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code>: all six answers are in the page from the start and fold closed.</p>
