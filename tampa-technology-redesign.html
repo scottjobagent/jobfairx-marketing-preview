@@ -778,6 +778,24 @@ button{font:inherit;cursor:pointer}
   .types .vicon svg{width:18px;height:18px}
 }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Local job market: one paragraph for Google, shown as a list for people. Words unchanged. ===== */
+.market .para .ln,.market .para .lead,.market .para .role{display:block}
+.market .para .ln + .ln{margin-top:12px}
+.market .para .lead{margin-top:20px;padding-top:18px;border-top:1px solid var(--slate-200);font-weight:600;color:var(--ink)}
+.market .para .role{position:relative;margin-top:8px;padding-left:20px;text-wrap:pretty}
+.market .para .ln{text-wrap:pretty}
+.market .para .role::before{content:&quot;&quot;;position:absolute;left:3px;top:.72em;width:7px;height:7px;border-radius:50%;background:#93C5FD}
+&lt;/style&gt;
+&lt;style&gt;
+/* the page&#x27;s dot pattern, fading out from the panel&#x27;s bottom-left corner */
+.panel-white{isolation:isolate;overflow:hidden}
+.panel-white::after{content:&quot;&quot;;position:absolute;z-index:-1;left:0;bottom:0;width:560px;height:340px;pointer-events:none;
+  background-image:radial-gradient(rgba(37,99,235,.28) 1.2px,transparent 1.3px);background-size:16px 16px;
+  -webkit-mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);
+  mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%)}
+@media (max-width:1023px){ .panel-white::after{display:none} }
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -963,7 +981,7 @@ button{font:inherit;cursor:pointer}
         &lt;h2&gt;Technology jobs in the Tampa-St. Petersburg-Clearwater metro&lt;/h2&gt;
       &lt;/div&gt;
       &lt;div class=&quot;body&quot;&gt;
-        &lt;p class=&quot;para&quot;&gt;Tampa-St. Petersburg-Clearwater employed &lt;span class=&quot;fig&quot;&gt;1,447,120&lt;/span&gt; people as of May 2025 (BLS OEWS). Unemployment in the metro was &lt;span class=&quot;fig&quot;&gt;4.8%&lt;/span&gt; in July 2026, up from &lt;span class=&quot;fig&quot;&gt;4.1%&lt;/span&gt; a year earlier (BLS LAUS, preliminary). Technology roles in the metro: Software Developers (&lt;span class=&quot;fig&quot;&gt;14,230&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$130,450&lt;/span&gt; a year); Computer User Support Specialists (&lt;span class=&quot;fig&quot;&gt;7,410&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$61,050&lt;/span&gt; a year); Network and Computer Systems Administrators (&lt;span class=&quot;fig&quot;&gt;4,720&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$101,560&lt;/span&gt; a year).&lt;/p&gt;
+        &lt;p class=&quot;para&quot;&gt;&lt;span class=&quot;ln&quot;&gt;Tampa-St. Petersburg-Clearwater employed &lt;span class=&quot;fig&quot;&gt;1,447,120&lt;/span&gt; people as of May 2025 (BLS OEWS).&lt;/span&gt; &lt;span class=&quot;ln&quot;&gt;Unemployment in the metro was &lt;span class=&quot;fig&quot;&gt;4.8%&lt;/span&gt; in July 2026, up from &lt;span class=&quot;fig&quot;&gt;4.1%&lt;/span&gt; a year earlier (BLS LAUS, preliminary).&lt;/span&gt; &lt;span class=&quot;lead&quot;&gt;Technology roles in the metro:&lt;/span&gt; &lt;span class=&quot;role&quot;&gt;Software Developers (&lt;span class=&quot;fig&quot;&gt;14,230&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$130,450&lt;/span&gt; a year);&lt;/span&gt; &lt;span class=&quot;role&quot;&gt;Computer User Support Specialists (&lt;span class=&quot;fig&quot;&gt;7,410&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$61,050&lt;/span&gt; a year);&lt;/span&gt; &lt;span class=&quot;role&quot;&gt;Network and Computer Systems Administrators (&lt;span class=&quot;fig&quot;&gt;4,720&lt;/span&gt; jobs, median &lt;span class=&quot;fig&quot;&gt;$101,560&lt;/span&gt; a year).&lt;/span&gt;&lt;/p&gt;
         &lt;p class=&quot;src&quot;&gt;Source: US Bureau of Labor Statistics, OEWS May 2025 and LAUS July 2026. Figures cover the Tampa-St. Petersburg-Clearwater metro area, not Tampa alone.&lt;/p&gt;
       &lt;/div&gt;
     &lt;/div&gt;
@@ -1160,6 +1178,8 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Metro heading.</b> The Local job market heading is 26px (22px on phones), line-height 1.12. Long metro names break at their hyphens.</li>
   <li><b>Jobs footer.</b> The feed note sits on the left and See all Tampa jobs on the right (<code>flex-direction: row-reverse</code>; the HTML order is unchanged). On phones they stack with the link first.</li>
   <li><b>Market figures.</b> In the Local job market paragraph, each figure is wrapped in <code>&lt;span class="fig"&gt;</code> (bold navy). The paragraph's words are unchanged.</li>
+  <li><b>Local job market as a list.</b> It stays one <code>&lt;p&gt;</code> with the same words and punctuation, but each part is wrapped in a span shown as a block. The two stat sentences use <code>.ln</code> and sit on their own lines. "Technology roles in the metro:" uses <code>.lead</code>, which is bold with a divider above it. Each role clause uses <code>.role</code> and becomes a bullet with a light-blue dot. All of them use <code>text-wrap: pretty</code>.</li>
+  <li><b>Dot pattern in the job market panel.</b> It's the same dot texture as the hero: brand blue at 28% on a 16px grid, 560 by 340px, fading out from the panel's bottom-left corner. It's shown only at 1024px and wider, so it never sits behind text when the columns stack.</li>
 </ol>
 
 <h2 id="n-phone">Phones (640px and narrower)</h2>
