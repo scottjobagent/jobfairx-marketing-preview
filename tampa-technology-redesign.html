@@ -600,6 +600,87 @@ button{font:inherit;cursor:pointer}
 .hero :focus-visible,.panel-navy :focus-visible,.reg :focus-visible,.ftr :focus-visible{outline-color:#93C5FD}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Font-size audit: every text style at the live site&#x27;s size and weight ===== */
+.hero-sub{font-size:16px;line-height:24px}
+.status p{font-size:18px;line-height:28px}
+.cta-note{font-size:14px}
+.card dt,.card dd{font-size:14px;line-height:20px}
+.card-foot{font-size:14px}
+.eyebrow{font-size:14px;font-weight:700}
+.lede{font-size:15px;line-height:1.625}
+.emp li{font-size:14px;font-weight:500}
+.more button{font-size:15px;font-weight:500}
+.jobs .t{font-size:15px}
+.jobs .m,.jobs .p{font-size:13px}
+.jobs .view{font-size:14px}
+.jobs-foot a{font-size:15px;font-weight:500}
+.jobs-foot p{font-size:12px}
+.reg .rt{font-size:17px}
+.reg .rs{font-size:15px}
+.tag{font-size:12px}
+.types .tt{font-size:15px}
+.types .view{font-size:12px}
+.market .para{font-size:17px;line-height:1.7}
+.market .src{font-size:12px}
+.prep h3{font-size:16px}
+.prep p{font-size:15px}
+.faq .q{font-size:16px}
+.faq .a p{font-size:15px}
+.faq-more a{font-weight:500}
+.near .n{font-size:13px;font-weight:400}
+.steps h3{font-size:17px}
+.steps p{font-size:15px}
+.panel-navy .lede{font-size:16px}
+
+/* The big figures go back to the live sizes */
+.card .r-date,.card .r-time{grid-template-columns:6.5rem minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid #EEF2F7}
+.card .r-date{border-top:0}
+.card .r-date dd,.card .r-time dd{font-family:var(--text);text-transform:none;font-size:14px;line-height:20px;font-weight:500;letter-spacing:0;color:var(--ink)}
+.card .r-time + .r{border-top:1px solid #EEF2F7}
+.types .nx{margin:4px 0 22px;max-width:none;font-family:var(--text);text-transform:none;font-size:13px;font-weight:400;line-height:1.5;letter-spacing:0;color:var(--slate-500)}
+.near a{min-height:0;gap:6px;padding:22px 24px}
+.near .c{font-family:var(--text);text-transform:none;font-size:15px;font-weight:600;line-height:1.375;letter-spacing:0;color:var(--ink)}
+.near a::after{bottom:20px}
+.prep .num{font-family:var(--text);font-size:13px;font-weight:600;line-height:1.5;letter-spacing:.18em}
+.prep h3{margin-top:12px}
+.steps .sn{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:#3B82F6;
+  font-family:var(--text);font-size:14px;font-weight:700;line-height:1;color:#fff}
+.steps h3{margin-top:20px}
+
+/* A shorter hero: the text column sits level with the card */
+.hero-grid{align-items:center;margin-top:28px}
+.hero-in{padding-bottom:48px}
+
+/* See all Tampa jobs on the right, the feed note on the left */
+.jobs-foot{flex-direction:row-reverse}
+
+@media (max-width:640px){
+  .status p{font-size:17px;line-height:23.4px}
+  .eyebrow{font-size:12px}
+  .faq .q{font-size:15px}
+  .types .nx{margin:4px 0 18px;font-size:13px}
+  .near a{padding:18px 64px 18px 20px}
+  .near .c{font-size:15px}
+  .near a::after{bottom:auto}
+  .prep .num{font-size:13px}
+  .prep h3{margin-top:10px}
+  .steps .sn{font-size:14px}
+  .jobs-foot{flex-direction:column;align-items:flex-start}
+  .hero-in{padding-bottom:26px}
+  .card .r,.card .r-date,.card .r-time{grid-template-columns:5.6rem minmax(0,1fr);gap:10px}
+}
+
+/* Option A: headings stay Anton capitals, at the live sizes */
+.hero h1{font-size:52px;line-height:1.02}
+.sec-head h2,.split-head h2,.faq-grid h2{font-size:36px;line-height:1.08}
+.market h2{font-size:26px;line-height:1.12}
+@media (max-width:640px){
+  .hero h1{font-size:30px;line-height:1.05}
+  .sec-head h2,.split-head h2,.faq-grid h2{font-size:26px}
+  .market h2{font-size:22px}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -938,8 +1019,9 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 
 <h2 id="n-fonts">Fonts</h2>
 <ul>
-  <li>Add <b>Anton</b> from Google Fonts (one weight, 400) for display type only: the H1, the section H2s, and the big figures. The big figures are the date in the Event details card, the next dates in Other job fairs, the city names in Nearby, and the 01–05 and 1–3 numerals.</li>
-  <li>Everything else stays <b>Inter</b>.</li>
+  <li>Add <b>Anton</b> from Google Fonts (one weight, 400) for the H1 and the section H2s only.</li>
+  <li>Headings use the live site's sizes: H1 52px (30px on phones), section H2s 36px (26px), the Local job market H2 26px (22px).</li>
+  <li>Everything else stays <b>Inter</b> at the live site's size and weight. Every text style was audited against the live page on 26 Sep at 1440px and 375px.</li>
   <li>Display type is set in capitals with CSS (<code>text-transform: uppercase</code>). The text in the HTML keeps its normal case.</li>
 </ul>
 
@@ -964,7 +1046,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <h2 id="n-pieces">Shared pieces</h2>
 <ul>
   <li><b>Pill label</b> (the eyebrow): 28px tall, navy with white text. On navy panels it turns white with navy text.</li>
-  <li><b>Section H2</b>: Anton, navy, <code>clamp(40px, 5.6vw, 80px)</code>, line-height 0.92, <code>text-wrap: balance</code>.</li>
+  <li><b>Section H2</b>: Anton, navy, 36px (26px on phones), line-height 1.08, <code>text-wrap: balance</code>.</li>
   <li><b>Hairline panels</b> (Past employers, Other job fairs, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
   <li><b>Quiet pills</b> (View job, View events, the round arrows): white, 1px <code>#CBD5E1</code> border, navy text. They fill navy when their row or card is hovered. The whole row or card stays the link.</li>
   <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
@@ -972,10 +1054,11 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 
 <h2 id="n-rules">Rules for other cities and verticals</h2>
 <ol>
-  <li><b>H1 size follows its column.</b> The hero's left column is a size container (<code>container-type: inline-size</code>) and the H1 uses <code>clamp(44px, 19.4cqi, 140px)</code>. A 12-letter word such as Jacksonville or Philadelphia runs about 3% wider than the column at that size. Pass the H1's longest word length as <code>--h1-longest</code> and use <code>font-size: min(140px, 19.4cqi, calc(100cqi / (var(--h1-longest) * 0.47)))</code>.</li>
-  <li><b>Headings with a Q.</b> Anton's Q has a tail that reaches into the next line. Any display heading containing a Q uses line-height 1.02 (the FAQ heading does).</li>
-  <li><b>Big dates.</b> The next dates in Other job fairs use <code>max-width: 5em</code>, so every date breaks the same way (NEXT: FRI, / OCT 9). The Event details date uses <code>text-wrap: balance</code>.</li>
-  <li><b>Metro heading.</b> The Local job market heading runs smaller: <code>clamp(34px, 3.7vw, 54px)</code>, line-height 1. Long metro names break at their hyphens.</li>
+  <li><b>H1.</b> 52px on desktop and 30px on phones, like the live site. Tampa Technology fits on one line; longer city names wrap to a second line.</li>
+  <li><b>Headings with a Q.</b> Anton's Q has a tail that reaches into the next line. Keep every Anton heading at line-height 1.02 or more (they're 1.02–1.12 here).</li>
+  <li><b>Metro heading.</b> The Local job market heading is 26px (22px on phones), line-height 1.12. Long metro names break at their hyphens.</li>
+  <li><b>Event details card on phones.</b> The label column is 5.6rem, so 11:00 AM–3:00 PM EDT stays on one line.</li>
+  <li><b>Jobs footer.</b> The feed note sits on the left and See all Tampa jobs on the right (<code>flex-direction: row-reverse</code>; the HTML order is unchanged). On phones they stack with the link first.</li>
   <li><b>Market figures.</b> In the Local job market paragraph, each figure is wrapped in <code>&lt;span class="fig"&gt;</code> (bold navy). The paragraph's words are unchanged.</li>
 </ol>
 
@@ -992,6 +1075,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li>Text in the redesigned sections meets WCAG AA contrast on its background. The footer is the live one, unchanged.</li>
   <li>Transitions switch off for visitors who ask for reduced motion.</li>
   <li>No new images, video or libraries. The only script is the existing Show all 40 employers toggle; the FAQ uses the browser's own details element.</li>
+  <li>Font sizes and weights audited element by element against the live page on desktop (1440px) and phone (375px).</li>
   <li>Checked at 1440px desktop and at 390px and 375px phone widths.</li>
 </ul>
 
