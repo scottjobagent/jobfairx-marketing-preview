@@ -681,6 +681,34 @@ button{font:inherit;cursor:pointer}
   .market h2{font-size:22px}
 }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Event details card: grouped layout (Option A). Words and markup unchanged. ===== */
+@media (min-width:1024px){ .hero-grid{grid-template-columns:minmax(0,1fr) 440px} }
+.hero .card{padding:24px 26px 0;overflow:hidden}
+.hero .card dl{display:grid;grid-template-columns:1fr 1.15fr;gap:18px 20px;margin-top:18px}
+.hero .card .r{display:flex;flex-direction:column;gap:4px;grid-template-columns:none;border:0;padding:0}
+.hero .card .r dt{font-size:11.5px;line-height:16px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748B}
+.hero .card .r dd{font-size:14.5px;line-height:1.5;color:var(--ink);text-wrap:pretty}
+.hero .card .r dd .strong,.hero .card .r dd.strong{font-weight:600}
+.hero .card .r dd .soft{display:block;margin-top:2px;font-size:13px;line-height:1.5;color:#64748B}
+.hero .card .r-time + .r{border-top:0}
+/* When first: date and time side by side, in navy */
+.hero .card .r:nth-child(1) dd,.hero .card .r:nth-child(2) dd{font-size:16px;line-height:1.35;font-weight:600;color:var(--navy)}
+/* One divider, then Interviews across the full width */
+.hero .card .r:nth-child(3){grid-column:1/-1;padding-top:18px;border-top:1px solid #E2E8F0}
+/* Cost as a blue pill, beside Registration closes */
+.hero .card .r:nth-child(4) dd{align-self:flex-start;padding:2px 10px;border-radius:999px;background:#DBEAFE;color:var(--navy);font-size:13.5px}
+.hero .card .r:nth-child(6){grid-column:1/-1}
+/* The employer line in a light grey strip */
+.hero .card .card-foot{margin:22px -26px 0;padding:16px 26px 18px;background:#F8FAFC;border-top:1px solid #E2E8F0}
+@media (max-width:640px){
+  /* One column on phones: date, time, then the rest, each label above its answer */
+  .hero .card{padding:20px 20px 0}
+  .hero .card dl{grid-template-columns:minmax(0,1fr);gap:14px}
+  .hero .card .r:nth-child(3){padding-top:14px}
+  .hero .card .card-foot{margin:18px -20px 0;padding:14px 20px 16px}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1049,6 +1077,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Section H2</b>: Anton, navy, 36px (26px on phones), line-height 1.08, <code>text-wrap: balance</code>.</li>
   <li><b>Hairline panels</b> (Past employers, Other job fairs, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
   <li><b>Quiet pills</b> (View job, View events, the round arrows): white, 1px <code>#CBD5E1</code> border, navy text. They fill navy when their row or card is hovered. The whole row or card stays the link.</li>
+  <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
   <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
 </ul>
 
@@ -1057,7 +1086,6 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>H1.</b> 52px on desktop and 30px on phones, like the live site. Tampa Technology fits on one line; longer city names wrap to a second line.</li>
   <li><b>Headings with a Q.</b> Anton's Q has a tail that reaches into the next line. Keep every Anton heading at line-height 1.02 or more (they're 1.02–1.12 here).</li>
   <li><b>Metro heading.</b> The Local job market heading is 26px (22px on phones), line-height 1.12. Long metro names break at their hyphens.</li>
-  <li><b>Event details card on phones.</b> The label column is 5.6rem, so 11:00 AM–3:00 PM EDT stays on one line.</li>
   <li><b>Jobs footer.</b> The feed note sits on the left and See all Tampa jobs on the right (<code>flex-direction: row-reverse</code>; the HTML order is unchanged). On phones they stack with the link first.</li>
   <li><b>Market figures.</b> In the Local job market paragraph, each figure is wrapped in <code>&lt;span class="fig"&gt;</code> (bold navy). The paragraph's words are unchanged.</li>
 </ol>
