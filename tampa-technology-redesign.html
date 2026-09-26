@@ -728,6 +728,22 @@ button{font:inherit;cursor:pointer}
 /* Standalone text links get a 44px tap area without moving */
 .jobs-foot a,.faq-more a{display:inline-block;padding-block:13px;margin-block:-13px}
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Past employers: initials badges (Option A). Names unchanged; initials come from data-i via CSS. ===== */
+.emp-mono li{justify-content:flex-start;gap:14px;min-height:84px;padding:18px 22px;text-align:left}
+.emp-mono .mono{flex:none;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:11px;
+  background:var(--c);box-shadow:inset 0 -2px 0 rgba(0,0,0,.12)}
+.emp-mono .mono::before{content:attr(data-i);color:#fff;font-size:14px;font-weight:700;letter-spacing:.02em;line-height:1}
+.emp-mono .nm{color:var(--ink);text-wrap:pretty}
+.emp-mono::after{display:none}
+@media (max-width:640px){
+  /* Two across on phones: badge above the name, centred */
+  .emp-mono li{flex-direction:column;justify-content:flex-start;gap:8px;min-height:0;padding:16px 10px;text-align:center}
+  .emp-mono .mono{width:34px;height:34px;border-radius:10px}
+  .emp-mono .mono::before{font-size:12.5px}
+  .emp-mono .nm{font-size:13.5px;line-height:1.35;text-wrap:balance}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -803,48 +819,48 @@ button{font:inherit;cursor:pointer}
       &lt;h2&gt;Employers who have hired at Tampa job fairs&lt;/h2&gt;
       &lt;p class=&quot;lede&quot;&gt;Named from past JobFairX events in Tampa, all verticals.&lt;/p&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;emp&quot;&gt;
+    &lt;div class=&quot;emp emp-mono&quot;&gt;
       &lt;ul id=&quot;emp-list&quot;&gt;
-        &lt;li&gt;Ameriprise Financial&lt;/li&gt;
-        &lt;li&gt;Lions World Vision Institute&lt;/li&gt;
-        &lt;li&gt;Closers.io&lt;/li&gt;
-        &lt;li&gt;EMCOR MSI&lt;/li&gt;
-        &lt;li&gt;Triton Logistics, Inc.&lt;/li&gt;
-        &lt;li&gt;Commercial Appliance &amp;amp; Parts Service (CAPS)&lt;/li&gt;
-        &lt;li&gt;Nike&lt;/li&gt;
-        &lt;li&gt;ACS Infrastructure&lt;/li&gt;
-        &lt;li&gt;CloudHire&lt;/li&gt;
-        &lt;li&gt;Romy Consulting LLC&lt;/li&gt;
-        &lt;li&gt;By Light Professional IT Services&lt;/li&gt;
-        &lt;li&gt;ADT&lt;/li&gt;
-        &lt;li hidden&gt;KNR Therapy&lt;/li&gt;
-        &lt;li hidden&gt;CW Carriers USA&lt;/li&gt;
-        &lt;li hidden&gt;HealthPRO Pediatrics&lt;/li&gt;
-        &lt;li hidden&gt;Roshonda Isom Agency LLC&lt;/li&gt;
-        &lt;li hidden&gt;PostcardMania&lt;/li&gt;
-        &lt;li hidden&gt;Procore&lt;/li&gt;
-        &lt;li hidden&gt;GardaWorld&lt;/li&gt;
-        &lt;li hidden&gt;Hillsborough County Property Appraiser&lt;/li&gt;
-        &lt;li hidden&gt;Suncoast Behavioral Health Center&lt;/li&gt;
-        &lt;li hidden&gt;Greenman-Pedersen, Inc.&lt;/li&gt;
-        &lt;li hidden&gt;TECO&lt;/li&gt;
-        &lt;li hidden&gt;HAYS Recruiting Experts Worldwide&lt;/li&gt;
-        &lt;li hidden&gt;Maximus&lt;/li&gt;
-        &lt;li hidden&gt;Capital Vacations&lt;/li&gt;
-        &lt;li hidden&gt;Florida Autism Center&lt;/li&gt;
-        &lt;li hidden&gt;Paragon Water Systems&lt;/li&gt;
-        &lt;li hidden&gt;Angelo&#x27;s Recycled Materials&lt;/li&gt;
-        &lt;li hidden&gt;Bread&lt;/li&gt;
-        &lt;li hidden&gt;Diamond Resorts&lt;/li&gt;
-        &lt;li hidden&gt;Ensurem&lt;/li&gt;
-        &lt;li hidden&gt;HydroExcavators, LLC&lt;/li&gt;
-        &lt;li hidden&gt;KnowBe4&lt;/li&gt;
-        &lt;li hidden&gt;New Horizons/ Troops to Tech&lt;/li&gt;
-        &lt;li hidden&gt;OneBlood&lt;/li&gt;
-        &lt;li hidden&gt;Quiet Professionals&lt;/li&gt;
-        &lt;li hidden&gt;Scotlynn USA Division&lt;/li&gt;
-        &lt;li hidden&gt;Starbucks&lt;/li&gt;
-        &lt;li hidden&gt;WebstaurantStore&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;AF&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Ameriprise Financial&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;LW&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Lions World Vision Institute&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;C&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Closers.io&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;EM&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;EMCOR MSI&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;TL&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Triton Logistics, Inc.&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;CA&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Commercial Appliance &amp;amp; Parts Service (CAPS)&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;N&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Nike&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;AI&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;ACS Infrastructure&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;CH&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;CloudHire&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;RC&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Romy Consulting LLC&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;BL&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;By Light Professional IT Services&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span class=&quot;mono&quot; data-i=&quot;ADT&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;ADT&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;KT&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;KNR Therapy&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;CC&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;CW Carriers USA&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;HP&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;HealthPRO Pediatrics&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;RI&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Roshonda Isom Agency LLC&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;PM&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;PostcardMania&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;P&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Procore&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;GW&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;GardaWorld&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;HC&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Hillsborough County Property Appraiser&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;SB&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Suncoast Behavioral Health Center&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;GP&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Greenman-Pedersen, Inc.&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;TE&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;TECO&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;HR&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;HAYS Recruiting Experts Worldwide&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;M&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Maximus&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;CV&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Capital Vacations&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;FA&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Florida Autism Center&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;PW&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Paragon Water Systems&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;AR&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Angelo&#x27;s Recycled Materials&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;B&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Bread&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;DR&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Diamond Resorts&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;E&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Ensurem&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;HE&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;HydroExcavators, LLC&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;KB&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;KnowBe4&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;NH&quot; style=&quot;--c:#334155&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;New Horizons/ Troops to Tech&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;OB&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;OneBlood&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;QP&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Quiet Professionals&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;SD&quot; style=&quot;--c:#00245B&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Scotlynn USA Division&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;S&quot; style=&quot;--c:#0369A1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;Starbucks&lt;/span&gt;&lt;/li&gt;
+        &lt;li hidden&gt;&lt;span class=&quot;mono&quot; data-i=&quot;WS&quot; style=&quot;--c:#2563EB&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;nm&quot;&gt;WebstaurantStore&lt;/span&gt;&lt;/li&gt;
       &lt;/ul&gt;
     &lt;/div&gt;
     &lt;div class=&quot;more&quot;&gt;
@@ -1096,6 +1112,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Section H2</b>: Anton, navy, 36px (26px on phones), line-height 1.08, <code>text-wrap: balance</code>.</li>
   <li><b>Hairline panels</b> (Past employers, Other job fairs, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
   <li><b>Quiet pills</b> (View job, View events, the round arrows): white, 1px <code>#CBD5E1</code> border, navy text. They fill navy when their row or card is hovered. The whole row or card stays the link.</li>
+  <li><b>Past employers badges.</b> Each name gets a 40px rounded badge with its initials, beside the name (on phones a 34px badge sits above the name, two across). Initials: the first letters of the first two words, skipping Inc., LLC, The, &amp;, of, Co. and USA. A single word uses its first letter, plus the next capital in joined-up names (CloudHire becomes CH). All-caps names of three letters or fewer keep every letter (ADT). The colour is navy <code>#00245B</code>, blue <code>#2563EB</code>, deep sky <code>#0369A1</code> or slate <code>#334155</code>, chosen by the sum of the name's character codes modulo 4, so a company always gets the same colour. The initials sit in a <code>data-i</code> attribute and are drawn with CSS (<code>content: attr(data-i)</code>), so they stay out of the page text Google reads. The badge is <code>aria-hidden</code>.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
   <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
 </ul>
