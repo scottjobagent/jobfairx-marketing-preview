@@ -762,23 +762,6 @@ button{font:inherit;cursor:pointer}
 @media (prefers-reduced-motion:reduce){ .jobs a:hover{transform:none} }
 &lt;/style&gt;
 &lt;style&gt;
-/* ===== Other job fairs: each fair in its own colour, with an icon; darker dates; quiet View events. Words unchanged. ===== */
-.types a.vt{position:relative;transition:background-color .18s ease}
-.types a.vt:hover{background:var(--v0)}
-.types a.vt .tag{background:var(--v1);color:var(--v8)}
-.types a.vt .tag .dot{background:var(--v5)!important;box-shadow:none}
-.types a.vt .nx{color:var(--ink);font-weight:600}
-.types a.vt .view{border-color:transparent;background:transparent;margin-left:-16px}   /* text lines up with the title */
-.types a.vt:hover .view,.types a.vt:focus-visible .view{background:var(--navy);border-color:var(--navy);color:#fff}
-.types .vicon{position:absolute;top:22px;right:22px;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
-  border-radius:12px;background:var(--v1);color:var(--v6)}
-@media (max-width:640px){
-  .types a.vt .view{margin-left:-12px}
-  .types .vicon{position:static;width:34px;height:34px;border-radius:10px;margin-bottom:12px}
-  .types .vicon svg{width:18px;height:18px}
-}
-&lt;/style&gt;
-&lt;style&gt;
 /* ===== Local job market: one paragraph for Google, shown as a list for people. Words unchanged. ===== */
 .market .para .ln,.market .para .lead,.market .para .role{display:block}
 .market .para .ln + .ln{margin-top:12px}
@@ -816,6 +799,42 @@ button{font:inherit;cursor:pointer}
   .near .c{padding-right:0}
   .near a::after{top:50%;bottom:auto;margin-top:-15px}
 }
+&lt;/style&gt;
+&lt;style&gt;
+/* ===== Other job fairs: back to the live site&#x27;s design (26 Sep, Scott). Sizes, colours and spacing copied from the
+   live page&#x27;s computed styles at 1440px and 375px. Live breakpoints: 2 columns from 640px, 4 from 1024px. Words unchanged. ===== */
+.sec.sec-types{margin-top:128px;padding:48px 0;background:#F8FAFC;border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0}
+.sec-types .sec-in{max-width:1024px;padding:0 24px}
+.sec-types .sec-head{max-width:none;margin:0 0 40px;padding:0;text-align:left}
+.sec-types .eyebrow{display:block;height:auto;margin:0 0 12px;padding:0;border-radius:0;background:none;box-shadow:none;color:#2563EB;
+  font-family:var(--text);font-size:12px;font-weight:700;line-height:16px;letter-spacing:.12em;text-transform:uppercase}
+.sec-types .sec-head h2{margin:0;font-family:var(--text);font-size:26px;font-weight:600;line-height:1.5;letter-spacing:-.02em;
+  text-transform:none;color:#0F172A;text-wrap:wrap}
+.sec-types .types{overflow:visible;background:none;border:0;border-radius:0;box-shadow:none}
+.sec-types .types ul{grid-template-columns:minmax(0,1fr);gap:12px;margin:0}
+.sec-types .types li{border:0}
+.sec-types .types a{display:flex;flex-direction:column;height:100%;padding:20px;border:1px solid #E2E8F0;border-radius:16px;background:#fff;
+  transition:all .3s cubic-bezier(.4,0,.2,1)}
+.sec-types .types a:hover{border-color:#CBD5E1;background:#fff;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)}
+.sec-types .tag{display:flex;align-self:stretch;align-items:center;gap:8px;height:auto;padding:0;border-radius:0;background:none;color:#64748B;
+  font-size:12px;font-weight:600;line-height:16px;letter-spacing:.08em;text-transform:uppercase}
+.sec-types .tag .dot{flex:none;width:10px;height:10px;border-radius:50%;box-shadow:none}
+.sec-types .types .tt{margin-top:12px;font-size:15px;font-weight:600;line-height:1.375;color:#0F172A;text-wrap:wrap}
+.sec-types .types .nx{max-width:none;margin:4px 0 0;font-family:var(--text);font-size:13px;font-weight:400;line-height:1.5;letter-spacing:normal;
+  text-transform:none;color:#64748B;font-variant-numeric:tabular-nums;text-wrap:wrap}
+.sec-types .types .view{align-self:stretch;height:auto;margin:auto 0 0;padding:20px 0 0;gap:4px;border:0;border-radius:0;background:none;
+  color:#2563EB;font-size:12px;font-weight:600;line-height:16px;transition:all .15s cubic-bezier(.4,0,.2,1)}
+.sec-types .types .view svg{width:12px;height:12px;stroke-width:2}
+.sec-types .types a:hover .view,.sec-types .types a:focus-visible .view{gap:8px;background:none;border-color:transparent;color:#2563EB}
+@media (min-width:640px){ .sec-types .types ul{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (min-width:1024px){
+  .sec.sec-types{padding:90px 0}
+  .sec-types .sec-in{padding:0 32px}
+  .sec-types .eyebrow{font-size:14px;line-height:20px}
+  .sec-types .sec-head h2{font-size:36px}
+  .sec-types .types ul{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:640px){ .sec.sec-types{margin-top:64px} }
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -977,7 +996,7 @@ button{font:inherit;cursor:pointer}
   &lt;/div&gt;
 &lt;/section&gt;
 &lt;/div&gt;
-&lt;section class=&quot;sec&quot;&gt;
+&lt;section class=&quot;sec sec-types&quot;&gt;
   &lt;div class=&quot;sec-in&quot;&gt;
     &lt;div class=&quot;sec-head&quot;&gt;
       &lt;p class=&quot;eyebrow&quot;&gt;Job fair types&lt;/p&gt;
@@ -985,10 +1004,10 @@ button{font:inherit;cursor:pointer}
     &lt;/div&gt;
     &lt;div class=&quot;types&quot;&gt;
       &lt;ul&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-entry-level&quot; class=&quot;vt&quot; style=&quot;--v5:#0EA5E9;--v1:#E0F2FE;--v8:#075985;--v0:#F0F9FF;--v6:#0284C7&quot;&gt;&lt;span class=&quot;vicon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg width=&quot;22&quot; height=&quot;22&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.7&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M7 20h10&quot;/&gt;&lt;path d=&quot;M10 20c5.5-2.5.8-6.4 3-10&quot;/&gt;&lt;path d=&quot;M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z&quot;/&gt;&lt;path d=&quot;M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z&quot;/&gt;&lt;/svg&gt;&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#0EA5E9&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Entry-Level&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Entry-Level Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Fri, Oct 9&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-veteran&quot; class=&quot;vt&quot; style=&quot;--v5:#EF4444;--v1:#FEE2E2;--v8:#991B1B;--v0:#FEF2F2;--v6:#DC2626&quot;&gt;&lt;span class=&quot;vicon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg width=&quot;22&quot; height=&quot;22&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.7&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M12 2.8l7.5 3v5.7c0 4.4-3.1 8.4-7.5 9.7-4.4-1.3-7.5-5.3-7.5-9.7V5.8z&quot;/&gt;&lt;path d=&quot;M12 8.2l1.35 2.8 3 .4-2.2 2.1.55 3-2.7-1.45L9.3 16.5l.55-3-2.2-2.1 3-.4z&quot;/&gt;&lt;/svg&gt;&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#EF4444&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Veteran&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Veteran Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Mon, Oct 12&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-healthcare&quot; class=&quot;vt&quot; style=&quot;--v5:#14B8A6;--v1:#CCFBF1;--v8:#115E59;--v0:#F0FDFA;--v6:#0D9488&quot;&gt;&lt;span class=&quot;vicon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg width=&quot;22&quot; height=&quot;22&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.7&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M20.8 5.6a5.2 5.2 0 00-7.35 0L12 7.04l-1.45-1.44a5.2 5.2 0 10-7.35 7.35L12 21.7l8.8-8.75a5.2 5.2 0 000-7.35z&quot;/&gt;&lt;path d=&quot;M8.5 12h2l1-2 1.6 3.2 1.1-1.7h2.3&quot;/&gt;&lt;/svg&gt;&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#14B8A6&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Healthcare&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Healthcare Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Tue, Oct 20&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-diversity&quot; class=&quot;vt&quot; style=&quot;--v5:#F97316;--v1:#FFEDD5;--v8:#9A3412;--v0:#FFF7ED;--v6:#EA580C&quot;&gt;&lt;span class=&quot;vicon&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg width=&quot;22&quot; height=&quot;22&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.7&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; focusable=&quot;false&quot;&gt;&lt;circle cx=&quot;9&quot; cy=&quot;8&quot; r=&quot;3.2&quot;/&gt;&lt;path d=&quot;M3 20v-1.2A4.8 4.8 0 017.8 14h2.4a4.8 4.8 0 014.8 4.8V20&quot;/&gt;&lt;path d=&quot;M16.5 5.2a3.2 3.2 0 010 6&quot;/&gt;&lt;path d=&quot;M18 14.2a4.8 4.8 0 013 4.6V20&quot;/&gt;&lt;/svg&gt;&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#F97316&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Diversity&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Diversity Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Wed, Oct 28&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-entry-level&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#0EA5E9&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Entry-Level&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Entry-Level Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Fri, Oct 9&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-veteran&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#EF4444&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Veteran&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Veteran Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Mon, Oct 12&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-healthcare&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#14B8A6&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Healthcare&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Healthcare Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Tue, Oct 20&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/tampa/next-diversity&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&lt;span class=&quot;dot&quot; style=&quot;background:#F97316&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt; &lt;span&gt;Diversity&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;tt&quot;&gt;Tampa Diversity Job Fair&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Next: Wed, Oct 28&lt;/span&gt; &lt;span class=&quot;view&quot;&gt;View events&lt;svg width=&quot;13&quot; height=&quot;13&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
     &lt;/div&gt;
   &lt;/div&gt;
@@ -1165,7 +1184,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <p>Existing JobFairX colours only.</p>
 <table class="sw">
   <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, How it works, Register band, headings, pill labels</td></tr>
-  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free), the top strip of the Nearby date squares, and one of the four Past employers badge colours</td></tr>
+  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free), the top strip of the Nearby date squares, one of the four Past employers badge colours, and the Other job fairs label and links (as on the live site)</td></tr>
   <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>Jobs panel and FAQ panel</td></tr>
   <tr><td><span class="chip" style="background:#F1F5F9"></span>Page <code>#F1F5F9</code></td><td>Page background behind every section</td></tr>
   <tr><td><span class="chip" style="background:#0F172A"></span>Text <code>#0F172A #334155 #475569 #64748B</code></td><td>On navy: <code>#FFFFFF #C9D6EA #93C5FD</code></td></tr>
@@ -1175,17 +1194,18 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <h2 id="n-rhythm">Page rhythm</h2>
 <ul>
   <li>Sections alternate. <b>Open sections</b> sit on the grey page with a centred heading. <b>Panel sections</b> are rounded panels (24px radius) inset 24px from the window edge, 10px on phones, with content up to 1152px wide.</li>
-  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (open) → Local job market (white panel) → Preparation (open) → FAQ (blue panel) → Nearby (open) → How it works (navy panel) → footer.</li>
+  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (blue panel) → Nearby (open) → How it works (navy panel) → footer.</li>
   <li>128px between sections on desktop, 80px on phones.</li>
+  <li>Other job fairs is the one exception to the ploy look: it keeps the live page's design, on a full-width light band (see Shared pieces).</li>
 </ul>
 
 <h2 id="n-pieces">Shared pieces</h2>
 <ul>
   <li><b>Pill label</b> (the eyebrow): 28px tall, navy with white text. On navy panels it turns white with navy text.</li>
   <li><b>Section H2</b>: Anton, navy, 36px (26px on phones), line-height 1.08, <code>text-wrap: balance</code>.</li>
-  <li><b>Hairline panels</b> (Past employers, Other job fairs, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
+  <li><b>Hairline panels</b> (Past employers, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
   <li><b>Round arrows</b> (Nearby): white, 1px <code>#CBD5E1</code> border, navy arrow. They fill navy when their row is hovered. The whole row stays the link.</li>
-  <li><b>Other job fairs.</b> Each fair takes its live-site colour. The tag has a 100 tint background with 800 text, and the dot stays the 500 colour. Entry-Level is sky (<code>#0EA5E9</code>, tag <code>#E0F2FE</code> / <code>#075985</code>), Veteran red (<code>#EF4444</code>, <code>#FEE2E2</code> / <code>#991B1B</code>), Healthcare teal (<code>#14B8A6</code>, <code>#CCFBF1</code> / <code>#115E59</code>) and Diversity orange (<code>#F97316</code>, <code>#FFEDD5</code> / <code>#9A3412</code>). Each card has a line icon in the 600 shade on a 100 tint: a sprout, a shield with a star, a heart with a pulse, a group of people. It's 22px in a 44px square at the top right, and 18px in a 34px square above the tag on phones. The "Next:" date is ink <code>#0F172A</code>, weight 600, still 13px. "View events" is the same quiet link as "View job", pulled left by its padding so the text lines up with the title. On hover the card takes a 50 tint of its colour and the link becomes the navy pill. The icons are <code>aria-hidden</code>, and the link text is unchanged.</li>
+  <li><b>Other job fairs keeps the live site's design</b> (Scott, 26 Sep). Brandon can leave this section's live markup and classes as they are. The values, from the live page's computed styles: a full-width band <code>#F8FAFC</code> with a 1px <code>#E2E8F0</code> line above and below, 90px padding (48px under 1024px), content 960px wide (max-width 1024px, 32px sides; 24px under 1024px). The heading is left-aligned: the label is 14px bold capitals in <code>#2563EB</code> with .12em tracking (12px under 1024px), then the H2 in Inter, 36px, weight 600, -0.02em (26px under 1024px), 40px above the cards. The cards sit in a grid with 12px gaps: four across from 1024px, two from 640px, one below that. Each card is white with a 1px <code>#E2E8F0</code> border, a 16px radius and 20px padding, and on hover gets a <code>#CBD5E1</code> border and a large soft shadow. Inside: a 10px dot in the fair's colour and a 12px grey capitals label (.08em), the title at 15px weight 600, the date at 13px grey, and "View events" at 12px weight 600 in brand blue with a 12px arrow whose gap grows from 4px to 8px on hover. There are no icons or coloured tags.</li>
   <li><b>Jobs section.</b> On desktop (1024px and wider) the ten jobs are white cards, two across, with a 16px radius and 14px gaps; a card lifts 2px on hover. Tablets and phones show one list. There are no company badges in this section. "View job" is navy text with an arrow and no border, and it becomes the navy pill when the card is hovered or has keyboard focus. The whole card stays the link.</li>
   <li><b>Past employers badges.</b> Each name gets a 40px rounded badge with its initials, beside the name (on phones a 34px badge sits above the name, two across). Initials: the first letters of the first two words, skipping Inc., LLC, The, &amp;, of, Co. and USA. A single word uses its first letter, plus the next capital in joined-up names (CloudHire becomes CH). All-caps names of three letters or fewer keep every letter (ADT). The colour is navy <code>#00245B</code>, blue <code>#2563EB</code>, deep sky <code>#0369A1</code> or slate <code>#334155</code>, chosen by the sum of the name's character codes modulo 4, so a company always gets the same colour. The initials sit in a <code>data-i</code> attribute and are drawn with CSS (<code>content: attr(data-i)</code>), so they stay out of the page text Google reads. The badge is <code>aria-hidden</code>.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
@@ -1210,7 +1230,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li>Past employers name boxes are 64px tall with 12px padding.</li>
   <li>Panel padding: Local job market 44px top and 40px bottom, FAQ 44px and 36px, How it works 44px and 14px. The three steps use 20px padding and 40px number squares.</li>
   <li>Nearby rows use 14px top and bottom padding. Phones show no date square: the date spans display inline, so each row is the city with "Next: Fri, Oct 9" as the plain grey line underneath, the same as before.</li>
-  <li>Job company lines and Other job fairs titles use <code>text-wrap: pretty</code>, so no single word such as "FL" or "Fair" sits alone on the last line.</li>
+  <li>Job company lines use <code>text-wrap: pretty</code>, so no single word such as "FL" sits alone on the last line.</li>
   <li>"See all Tampa jobs" and "View all FAQs" get a 45px tap area (13px padding above and below, with a matching negative margin), with no visible change. This applies at every width.</li>
   <li>With these, the phone page is about 3.8% shorter than before the audit. Nothing scrolls sideways at 375px.</li>
 </ul>
