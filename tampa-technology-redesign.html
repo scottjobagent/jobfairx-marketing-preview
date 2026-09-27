@@ -927,6 +927,17 @@ button{font:inherit;cursor:pointer}
   .sec-near .near a::after{top:50%;bottom:auto;margin-top:-15px}
 }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Jobs: white panel (Scott, 27 Sep) like Local job market, How it works, FAQ and Nearby; the job cards get a thin
+   border so they read on white; the navy Register band stays. No panel uses pale blue any more. Words unchanged. ===== */
+.panel-jobs{background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.04),0 18px 40px -30px rgba(0,36,91,.25)}
+.panel-jobs .jobs{border:1px solid var(--slate-200);box-shadow:0 1px 2px rgba(15,23,42,.04)}
+@media (min-width:1024px){
+  .panel-jobs .jobs{border:0}
+  .panel-jobs .jobs a{border:1px solid var(--slate-200);box-shadow:0 1px 2px rgba(15,23,42,.04),0 10px 26px -20px rgba(0,36,91,.3)}
+  .panel-jobs .jobs a:hover{border-color:#93C5FD}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1052,7 +1063,7 @@ button{font:inherit;cursor:pointer}
   &lt;/div&gt;
 &lt;/section&gt;
 &lt;div class=&quot;panel-wrap&quot;&gt;
-&lt;section class=&quot;panel panel-blue&quot;&gt;
+&lt;section class=&quot;panel panel-jobs&quot;&gt;
   &lt;div class=&quot;panel-in&quot;&gt;
     &lt;div class=&quot;split-head&quot;&gt;
       &lt;div&gt;
@@ -1276,7 +1287,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <table class="sw">
   <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, Register band, headings, pill labels</td></tr>
   <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free) on light backgrounds, the text of the white Register free on navy, the "NEXT:" labels in Nearby, and the Other job fairs label and links (as on the live site)</td></tr>
-  <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>Jobs panel</td></tr>
+  <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>The Cost pill in the Event details card and the hover on the white Register free buttons. No panel uses it any more.</td></tr>
   <tr><td><span class="chip" style="background:#F1F5F9"></span>Page <code>#F1F5F9</code></td><td>Page background behind every section</td></tr>
   <tr><td><span class="chip" style="background:#0F172A"></span>Text <code>#0F172A #334155 #475569 #64748B</code></td><td>On navy: <code>#FFFFFF #C9D6EA #93C5FD</code></td></tr>
   <tr><td><span class="chip" style="background:linear-gradient(90deg,#0EA5E9 25%,#EF4444 25% 50%,#14B8A6 50% 75%,#F97316 75%)"></span>Vertical dots</td><td>Unchanged: Entry-Level <code>#0EA5E9</code>, Veteran <code>#EF4444</code>, Healthcare <code>#14B8A6</code>, Diversity <code>#F97316</code></td></tr>
@@ -1285,7 +1296,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <h2 id="n-rhythm">Page rhythm</h2>
 <ul>
   <li>Sections alternate. <b>Open sections</b> sit on the grey page with a centred heading. <b>Panel sections</b> are rounded panels (24px radius) inset 24px from the window edge, 10px on phones, with content up to 1152px wide.</li>
-  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (white panel) → Nearby (white panel) → How it works (white panel) → footer. The page ends on a light panel, so the dark footer never sits against another dark blue.</li>
+  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (white panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (white panel) → Nearby (white panel) → How it works (white panel) → footer. The page ends on a light panel, so the dark footer never sits against another dark blue.</li>
   <li>128px between sections on desktop, 80px on phones.</li>
   <li>Other job fairs is the one exception to the ploy look: it keeps the live page's design, on a full-width light band (see Shared pieces).</li>
 </ul>
@@ -1297,7 +1308,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Hairline panels</b> (Past employers): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
   <li><b>Round arrows</b> (Nearby): white, 1px <code>#CBD5E1</code> border, navy arrow. They fill navy when their card is hovered. The whole card stays the link.</li>
   <li><b>Other job fairs keeps the live site's design</b> (Scott, 26 Sep). Brandon can leave this section's live markup and classes as they are. The values, from the live page's computed styles: a full-width band <code>#F8FAFC</code> with a 1px <code>#E2E8F0</code> line above and below, 90px padding (48px under 1024px), content 960px wide (max-width 1024px, 32px sides; 24px under 1024px). The heading is left-aligned: the label is 14px bold capitals in <code>#2563EB</code> with .12em tracking (12px under 1024px), then the H2 in Inter, 36px, weight 600, -0.02em (26px under 1024px), 40px above the cards. The cards sit in a grid with 12px gaps: four across from 1024px, two from 640px, one below that. Each card is white with a 1px <code>#E2E8F0</code> border, a 16px radius and 20px padding, and on hover gets a <code>#CBD5E1</code> border and a large soft shadow. Inside: a 10px dot in the fair's colour and a 12px grey capitals label (.08em), the title at 15px weight 600, the date at 13px grey, and "View events" at 12px weight 600 in brand blue with a 12px arrow whose gap grows from 4px to 8px on hover. There are no icons or coloured tags.</li>
-  <li><b>Jobs section.</b> On desktop (1024px and wider) the ten jobs are white cards, two across, with a 16px radius and 14px gaps; a card lifts 2px on hover. Tablets and phones show one list. There are no company badges in this section. "View job" is navy text with an arrow and no border, and it becomes the navy pill when the card is hovered or has keyboard focus. The whole card stays the link.</li>
+  <li><b>Jobs section.</b> A white panel (Scott, 27 Sep) like the lower sections, with the navy Register band inside it. On desktop (1024px and wider) the ten jobs are white cards, two across, with a 1px <code>#E2E8F0</code> border, a 16px radius and 14px gaps; on hover a card lifts 2px and its border turns <code>#93C5FD</code>. On tablets and phones the list sits in one white box with a thin border. Tablets and phones show one list. There are no company badges in this section. "View job" is navy text with an arrow and no border, and it becomes the navy pill when the card is hovered or has keyboard focus. The whole card stays the link.</li>
   <li><b>Past employers, name grid</b> (Scott, 27 Sep). No logos and no initials squares. The white hairline panel stays, four columns on desktop, three on tablets and two on phones. Each name sits centred in its cell in navy <code>#00245B</code>, 15px, weight 600 (14px on phones); cells are 88px tall with 18px 22px padding (72px and 14px 12px on phones). The first 12 names show and "Show all 40 employers" reveals the rest, as on the live page.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
   <li><b>Nearby, Destinations</b> (Scott, 27 Sep). The section is a white panel like How it works and FAQ, with the faint blue dot pattern in its bottom-left corner on desktop. The five cities are separate white cards in one row on desktop (three across on tablets), 14px apart, each with a 1px <code>#E2E8F0</code> border, 16px radius and a soft shadow. Each card is the link: the city on top (18px, weight 600, navy), then 22px lower a small "NEXT:" label (11px, weight 600, capitals, brand blue) with the date under it (17px, weight 600, ink). The round arrow sits bottom right, level with the date. Hover: the border turns <code>#93C5FD</code>, the shadow deepens and the arrow fills navy. The date is the live "Next: Fri, Oct 9" text: <code>.nl</code> holds "Next:" and <code>.nd</code> the date, so the words are unchanged.</li>
