@@ -856,6 +856,22 @@ button{font:inherit;cursor:pointer}
   .steps .conn{left:19.5px;top:48px;bottom:-24px;width:1px;height:auto}
 }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== How it works, enterprise layout (Scott, 27 Sep): on desktop (1024px and wider) the heading sits on the left and the
+   three steps stack on the right as a timeline, a line running down from 1 to 2 to 3. Tablets keep the three columns with
+   the line across; phones keep the timeline under the heading, which is left-aligned. Words unchanged. ===== */
+@media (min-width:1024px){
+  .how .panel-in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:72px;align-items:start}
+  .how .sec-head{max-width:none;margin:0;text-align:left}
+  .how .steps{grid-template-columns:minmax(0,1fr);gap:36px}
+  .how .steps li{display:grid;grid-template-columns:48px minmax(0,1fr);column-gap:20px;align-items:start}
+  .how .steps .sn{grid-row:1 / span 2}
+  .how .steps h3{grid-column:2;margin-top:13px}
+  .how .steps p{grid-column:2;max-width:34em}
+  .how .steps .conn{left:23.5px;top:56px;bottom:-28px;width:1px;height:auto}
+}
+@media (max-width:640px){ .how .sec-head{text-align:left} }
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1230,7 +1246,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Past employers badges.</b> Each name gets a 40px rounded badge with its initials, beside the name (on phones a 34px badge sits above the name, two across). Initials: the first letters of the first two words, skipping Inc., LLC, The, &amp;, of, Co. and USA. A single word uses its first letter, plus the next capital in joined-up names (CloudHire becomes CH). All-caps names of three letters or fewer keep every letter (ADT). The colour is navy <code>#00245B</code>, blue <code>#2563EB</code>, deep sky <code>#0369A1</code> or slate <code>#334155</code>, chosen by the sum of the name's character codes modulo 4, so a company always gets the same colour. The initials sit in a <code>data-i</code> attribute and are drawn with CSS (<code>content: attr(data-i)</code>), so they stay out of the page text Google reads. The badge is <code>aria-hidden</code>.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
   <li><b>Nearby date cards.</b> On desktop and tablet (641px and wider) each city's next date shows as a calendar square under the city name, and the date appears only once. The square is the live text, not a copy: <code>&lt;span class="n"&gt;</code> now holds <code>&lt;span class="nl"&gt;Next:&lt;/span&gt; &lt;span class="nd"&gt;&lt;span class="nw"&gt;Fri, Oct&lt;/span&gt; &lt;span class="nn"&gt;9&lt;/span&gt;&lt;/span&gt;</code>. Keep the spaces between the spans so the text still reads "Next: Fri, Oct 9". The city comes first, then "Next:" and the square, in the HTML order (no CSS reordering). "Next:" is a small grey capital label (11px, weight 600, <code>#64748B</code>). The square is at least 84px wide, with a 1px <code>#BFDBFE</code> border and a 10px radius. Its top strip is brand blue <code>#2563EB</code> with the weekday and month in white capitals (10.5px, weight 700), and the day is navy, 22px, weight 700. The city is 15px, weight 600, with 14px between it and the "Next:" label. The round arrow sits at the bottom right, level with the middle of the square. Each box is 154px tall (99px before).</li>
-  <li><b>How it works</b> is a white panel like Local job market, with no dot pattern. The steps sit straight on the panel in three columns with 48px gaps: a 48px blue number square (<code>#3B82F6</code>, white number), the title at 17px weight 600 in ink <code>#0F172A</code>, and the text at 15px in <code>#475569</code>. The live page's connector line is shown again: 1px, brand blue at 35%, from 16px right of each number square to 16px before the next (<code>left: 64px; top: 24px; width: calc(100% - 32px)</code>). The "Three steps to your next interview" line is 16px, the live size.</li>
+  <li><b>How it works</b> is a white panel like Local job market, with no dot pattern. On desktop (1024px and wider) it uses the enterprise split: the label, H2 and "Three steps to your next interview" line sit on the left (5 of 12 columns, left-aligned), and the three steps stack on the right (7 of 12) as a timeline, with 72px between the columns. Each step has a 48px blue number square (<code>#3B82F6</code>, white number) with its title (17px, weight 600, ink <code>#0F172A</code>) and text (15px, <code>#475569</code>, up to 34em wide) beside it, 20px away; the steps are 36px apart. The live page's connector is shown as a 1px vertical line, brand blue at 35%, from 8px under each number square to 8px above the next (<code>left: 23.5px; top: 56px; bottom: -28px</code>). There is no line after step 3. Tablets (641 to 1023px) keep the heading centred with the steps in three columns and the line running across. The "Three steps to your next interview" line is 16px, the live size.</li>
   <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
 </ul>
 
@@ -1250,7 +1266,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li>Sections sit 64px apart (80px before the phone audit).</li>
   <li>Past employers name boxes are 64px tall with 12px padding.</li>
   <li>Panel padding: Local job market and How it works (both white panels) 44px top and 40px bottom, FAQ 44px and 36px.</li>
-  <li>How it works becomes a timeline: 40px number squares on the left, each title and text beside its square (18px gap), 32px between steps, and a 1px line from each square down to the next.</li>
+  <li>How it works is a timeline under a left-aligned heading: 40px number squares on the left, each title and text beside its square (18px gap), 32px between steps, and a 1px line from each square down to the next.</li>
   <li>Nearby rows use 14px top and bottom padding. Phones show no date square: the date spans display inline, so each row is the city with "Next: Fri, Oct 9" as the plain grey line underneath, the same as before.</li>
   <li>Job company lines use <code>text-wrap: pretty</code>, so no single word such as "FL" sits alone on the last line.</li>
   <li>"See all Tampa jobs" and "View all FAQs" get a 45px tap area (13px padding above and below, with a matching negative margin), with no visible change. This applies at every width.</li>
