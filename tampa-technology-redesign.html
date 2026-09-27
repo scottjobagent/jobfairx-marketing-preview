@@ -988,6 +988,16 @@ body{background:#fff}
   .split-head{margin-bottom:32px}
 }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== Register band title (Scott, 27 Sep): the band&#x27;s first line reads as a title, so it fills the band instead of leaving
+   a gap before the button. It stays a paragraph, so the heading outline is unchanged. The date never splits across two lines. ===== */
+.reg{gap:48px;padding:48px 56px}
+.reg .rt{max-width:820px;font-size:32px;font-weight:600;line-height:1.25;letter-spacing:-.02em}
+.reg .rt-date{white-space:nowrap}
+.reg .rs{max-width:640px;margin-top:14px;font-size:17px;line-height:1.6}
+@media (max-width:1023px){ .reg{padding:40px 36px} .reg .rt{font-size:28px} }
+@media (max-width:640px){ .reg{gap:24px;padding:32px 22px} .reg .rt{font-size:24px;line-height:1.3} .reg .rs{margin-top:12px;font-size:15px;line-height:1.6} }
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1140,7 +1150,7 @@ body{background:#fff}
     &lt;/div&gt;
     &lt;div class=&quot;reg&quot;&gt;
       &lt;div&gt;
-        &lt;p class=&quot;rt&quot;&gt;Register for the Thursday, October 1 event to be matched with employers hiring roles like these.&lt;/p&gt;
+        &lt;p class=&quot;rt&quot;&gt;Register for the Thursday, &lt;span class=&quot;rt-date&quot;&gt;October 1&lt;/span&gt; event to be matched with employers hiring roles like these.&lt;/p&gt;
         &lt;p class=&quot;rs&quot;&gt;Registration is free. When an employer matches your resume, you get an invite to request an interview.&lt;/p&gt;
       &lt;/div&gt;
       &lt;button type=&quot;button&quot; class=&quot;btn-reg&quot;&gt;Register free&lt;/button&gt;
@@ -1366,6 +1376,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Preparation</b> keeps its five white cards with the small 01 to 05 numbers and no icons. On desktop (1024px and wider) every card sits on the same three columns of a six-column grid: 01, 02 and 03 take two columns each, 04 (the short tip) takes two, and 05 (the long tip) takes four, so every edge lines up with the row above. Hover: the border turns <code>#93C5FD</code> and a soft shadow appears (<code>0 16px 34px -22px rgba(0,36,91,.45)</code>), over .2s. There is no lift and no pointer cursor, because the cards are not links; transitions switch off for reduced motion. Tablets keep two columns with 05 full width, and phones keep one card per row.</li>
   <li><b>FAQ</b> is a white section; the question list has a 1px <code>#E2E8F0</code> border. Hover on a question: the row tints <code>#F1F5F9</code> and its + circle's border turns navy. An open question's circle fills navy with a minus, as before. "View all FAQs" stays under the questions, right-aligned on desktop (1024px and wider) so it lines up with the list's right edge, and left-aligned on tablets and phones. The answers stay in the page (<code>details</code> and <code>summary</code>).</li>
   <li><b>Primary button (Register free).</b> One button everywhere: the same pill shape, padding (14px 30px) and text (16px, weight 600). Only its colour follows the background. On light backgrounds it is brand blue <code>#2563EB</code> with white text (hover <code>#1D4ED8</code>). On navy (the hero and the Register band under the jobs) it flips to white with brand-blue text (hover: <code>#DBEAFE</code> background, <code>#1D4ED8</code> text) and a soft dark shadow. Brand blue on navy is only about 2.9:1 contrast; white on navy is about 15:1, so the button is the first thing the eye finds. Use the same rule for any primary button on a dark background.</li>
+  <li><b>Register band title</b> (Scott, 27 Sep). The band's first line ("Register for the Thursday, October 1 event&hellip;") reads as a title: 32px, weight 600, line-height 1.25, -0.02em, up to 820px wide, so it fills the band instead of leaving an empty gap before the button. It is 28px under 1024px and 24px (line-height 1.3) on phones. It stays a <code>&lt;p&gt;</code>, so the heading outline doesn't change. The date is wrapped in <code>&lt;span class="rt-date"&gt;</code> with <code>white-space: nowrap</code>, so "October 1" never splits across two lines; the words are unchanged. The line under it is 17px (15px on phones), up to 640px wide, 14px below the title (12px on phones). The band's padding is 48px 56px (40px 36px under 1024px, 32px 22px on phones), with 48px between the text and the button (24px on phones, where the button sits under the text).</li>
 </ul>
 
 <h2 id="n-rules">Rules for other cities and verticals</h2>
