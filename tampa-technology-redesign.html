@@ -834,6 +834,28 @@ button{font:inherit;cursor:pointer}
 }
 @media (max-width:640px){ .sec.sec-types{margin-top:64px} }
 &lt;/style&gt;
+&lt;style&gt;
+/* ===== How it works: a white panel like Local job market (Scott, 27 Sep), so the page ends light before the dark footer.
+   The section is now .panel-white.how; the older .panel-navy rules above no longer apply to it.
+   The steps sit straight on the panel and a line joins 1, 2, 3; on phones the steps are a timeline. Words unchanged. ===== */
+.steps{gap:48px;overflow:visible;border:0;border-radius:0;background:none}
+.steps li{padding:0}
+.steps li + li{border-left:0}
+.steps .conn{display:block;position:absolute;left:64px;top:24px;width:calc(100% - 32px);height:1px;background:rgba(37,99,235,.35);pointer-events:none}
+.panel-white.how::after{display:none}   /* no dot pattern in this panel */
+.how .lede{font-size:16px}              /* the live site&#x27;s size for this line */
+.how .steps h3{color:var(--ink)}
+.how .steps p{color:var(--slate-600)}
+@media (max-width:640px){
+  .steps{gap:32px}
+  .steps li{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:18px;align-items:start;padding:0}
+  .steps li + li{border-top:0}
+  .steps .sn{grid-row:1 / span 2}
+  .steps h3{grid-column:2;margin-top:9px}
+  .steps p{grid-column:2}
+  .steps .conn{left:19.5px;top:48px;bottom:-24px;width:1px;height:auto}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1084,7 +1106,7 @@ button{font:inherit;cursor:pointer}
   &lt;/div&gt;
 &lt;/section&gt;
 &lt;div class=&quot;panel-wrap&quot;&gt;
-&lt;section class=&quot;panel panel-navy&quot;&gt;
+&lt;section class=&quot;panel panel-white how&quot;&gt;
   &lt;div class=&quot;panel-in&quot;&gt;
     &lt;div class=&quot;sec-head&quot;&gt;
       &lt;p class=&quot;eyebrow&quot;&gt;How it works&lt;/p&gt;
@@ -1181,7 +1203,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <h2 id="n-colours">Colours</h2>
 <p>Existing JobFairX colours only.</p>
 <table class="sw">
-  <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, How it works, Register band, headings, pill labels</td></tr>
+  <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, Register band, headings, pill labels</td></tr>
   <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free), the top strip of the Nearby date squares, one of the four Past employers badge colours, and the Other job fairs label and links (as on the live site)</td></tr>
   <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>Jobs panel and FAQ panel</td></tr>
   <tr><td><span class="chip" style="background:#F1F5F9"></span>Page <code>#F1F5F9</code></td><td>Page background behind every section</td></tr>
@@ -1192,7 +1214,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <h2 id="n-rhythm">Page rhythm</h2>
 <ul>
   <li>Sections alternate. <b>Open sections</b> sit on the grey page with a centred heading. <b>Panel sections</b> are rounded panels (24px radius) inset 24px from the window edge, 10px on phones, with content up to 1152px wide.</li>
-  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (blue panel) → Nearby (open) → How it works (navy panel) → footer.</li>
+  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (blue panel) → Nearby (open) → How it works (white panel) → footer. The page ends on a light panel, so the dark footer never sits against another dark blue.</li>
   <li>128px between sections on desktop, 80px on phones.</li>
   <li>Other job fairs is the one exception to the ploy look: it keeps the live page's design, on a full-width light band (see Shared pieces).</li>
 </ul>
@@ -1208,6 +1230,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Past employers badges.</b> Each name gets a 40px rounded badge with its initials, beside the name (on phones a 34px badge sits above the name, two across). Initials: the first letters of the first two words, skipping Inc., LLC, The, &amp;, of, Co. and USA. A single word uses its first letter, plus the next capital in joined-up names (CloudHire becomes CH). All-caps names of three letters or fewer keep every letter (ADT). The colour is navy <code>#00245B</code>, blue <code>#2563EB</code>, deep sky <code>#0369A1</code> or slate <code>#334155</code>, chosen by the sum of the name's character codes modulo 4, so a company always gets the same colour. The initials sit in a <code>data-i</code> attribute and are drawn with CSS (<code>content: attr(data-i)</code>), so they stay out of the page text Google reads. The badge is <code>aria-hidden</code>.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
   <li><b>Nearby date cards.</b> On desktop and tablet (641px and wider) each city's next date shows as a calendar square under the city name, and the date appears only once. The square is the live text, not a copy: <code>&lt;span class="n"&gt;</code> now holds <code>&lt;span class="nl"&gt;Next:&lt;/span&gt; &lt;span class="nd"&gt;&lt;span class="nw"&gt;Fri, Oct&lt;/span&gt; &lt;span class="nn"&gt;9&lt;/span&gt;&lt;/span&gt;</code>. Keep the spaces between the spans so the text still reads "Next: Fri, Oct 9". The city comes first, then "Next:" and the square, in the HTML order (no CSS reordering). "Next:" is a small grey capital label (11px, weight 600, <code>#64748B</code>). The square is at least 84px wide, with a 1px <code>#BFDBFE</code> border and a 10px radius. Its top strip is brand blue <code>#2563EB</code> with the weekday and month in white capitals (10.5px, weight 700), and the day is navy, 22px, weight 700. The city is 15px, weight 600, with 14px between it and the "Next:" label. The round arrow sits at the bottom right, level with the middle of the square. Each box is 154px tall (99px before).</li>
+  <li><b>How it works</b> is a white panel like Local job market, with no dot pattern. The steps sit straight on the panel in three columns with 48px gaps: a 48px blue number square (<code>#3B82F6</code>, white number), the title at 17px weight 600 in ink <code>#0F172A</code>, and the text at 15px in <code>#475569</code>. The live page's connector line is shown again: 1px, brand blue at 35%, from 16px right of each number square to 16px before the next (<code>left: 64px; top: 24px; width: calc(100% - 32px)</code>). The "Three steps to your next interview" line is 16px, the live size.</li>
   <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
 </ul>
 
@@ -1226,7 +1249,8 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <ul>
   <li>Sections sit 64px apart (80px before the phone audit).</li>
   <li>Past employers name boxes are 64px tall with 12px padding.</li>
-  <li>Panel padding: Local job market 44px top and 40px bottom, FAQ 44px and 36px, How it works 44px and 14px. The three steps use 20px padding and 40px number squares.</li>
+  <li>Panel padding: Local job market and How it works (both white panels) 44px top and 40px bottom, FAQ 44px and 36px.</li>
+  <li>How it works becomes a timeline: 40px number squares on the left, each title and text beside its square (18px gap), 32px between steps, and a 1px line from each square down to the next.</li>
   <li>Nearby rows use 14px top and bottom padding. Phones show no date square: the date spans display inline, so each row is the city with "Next: Fri, Oct 9" as the plain grey line underneath, the same as before.</li>
   <li>Job company lines use <code>text-wrap: pretty</code>, so no single word such as "FL" sits alone on the last line.</li>
   <li>"See all Tampa jobs" and "View all FAQs" get a 45px tap area (13px padding above and below, with a matching negative margin), with no visible change. This applies at every width.</li>
