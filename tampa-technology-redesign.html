@@ -796,6 +796,27 @@ button{font:inherit;cursor:pointer}
   mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%)}
 @media (max-width:1023px){ .panel-white::after{display:none} }
 &lt;/style&gt;
+&lt;style&gt;
+/* Nearby date cards (26 Sep): the real &quot;Next: Fri, Oct 9&quot; text is styled as a calendar square above the city.
+   The HTML order stays city, then date; CSS order shows the date first. Phones show no square. */
+.near a{min-height:0;justify-content:flex-start;gap:0;padding:22px 24px 20px}
+.near .n{order:-1;display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:16px;padding-right:0;line-height:normal}
+.near .nl{font-size:11px;font-weight:600;line-height:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-500)}
+.near .nd{display:flex;flex-direction:column;min-width:84px;border:1px solid #BFDBFE;border-radius:10px;overflow:hidden;background:#fff;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.06)}
+.near .nw{padding:3px 9px 2px;background:var(--brand);color:#fff;font-size:10.5px;font-weight:700;line-height:14px;letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;white-space:nowrap}
+.near .nn{padding:5px 0 6px;font-size:22px;font-weight:700;line-height:24px;color:var(--navy);font-variant-numeric:tabular-nums}
+.near .c{padding-right:36px}
+.near a::after{bottom:16px}
+@media (max-width:640px){
+  /* Phones: no square. The city, then the date as plain text underneath, as on today&#x27;s phone view */
+  .near a{justify-content:center;gap:6px;padding:14px 64px 14px 20px}
+  .near .n{order:0;display:block;margin:0;line-height:1.4}
+  .near .nl,.near .nd,.near .nw,.near .nn{display:inline;min-width:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;
+    color:inherit;font:inherit;letter-spacing:0;text-indent:0;text-transform:none;white-space:normal}
+  .near .c{padding-right:0}
+  .near a::after{top:50%;bottom:auto;margin-top:-15px}
+}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -1036,11 +1057,11 @@ button{font:inherit;cursor:pointer}
     &lt;/div&gt;
     &lt;div class=&quot;near&quot;&gt;
       &lt;ul&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/clearwater/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Clearwater&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Fri, Oct 9&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/st-petersburg/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;St. Petersburg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 1&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/lakeland/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Lakeland&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 22&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/fort-myers/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Fort Myers&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 22&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/gainesville/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Gainesville&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Next: Thu, Oct 29&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/clearwater/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Clearwater&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;&lt;span class=&quot;nl&quot;&gt;Next:&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;&lt;span class=&quot;nw&quot;&gt;Fri, Oct&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;9&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/st-petersburg/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;St. Petersburg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;&lt;span class=&quot;nl&quot;&gt;Next:&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;&lt;span class=&quot;nw&quot;&gt;Thu, Oct&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/lakeland/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Lakeland&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;&lt;span class=&quot;nl&quot;&gt;Next:&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;&lt;span class=&quot;nw&quot;&gt;Thu, Oct&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;22&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/fort-myers/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Fort Myers&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;&lt;span class=&quot;nl&quot;&gt;Next:&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;&lt;span class=&quot;nw&quot;&gt;Thu, Oct&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;22&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/job-fairs/florida/gainesville/next-technology&quot;&gt;&lt;span class=&quot;c&quot;&gt;Gainesville&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;&lt;span class=&quot;nl&quot;&gt;Next:&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;&lt;span class=&quot;nw&quot;&gt;Thu, Oct&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;29&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
     &lt;/div&gt;
   &lt;/div&gt;
@@ -1144,7 +1165,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <p>Existing JobFairX colours only.</p>
 <table class="sw">
   <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, How it works, Register band, headings, pill labels</td></tr>
-  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons only (Register free)</td></tr>
+  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free), the top strip of the Nearby date squares, and one of the four Past employers badge colours</td></tr>
   <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>Jobs panel and FAQ panel</td></tr>
   <tr><td><span class="chip" style="background:#F1F5F9"></span>Page <code>#F1F5F9</code></td><td>Page background behind every section</td></tr>
   <tr><td><span class="chip" style="background:#0F172A"></span>Text <code>#0F172A #334155 #475569 #64748B</code></td><td>On navy: <code>#FFFFFF #C9D6EA #93C5FD</code></td></tr>
@@ -1168,6 +1189,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li><b>Jobs section.</b> On desktop (1024px and wider) the ten jobs are white cards, two across, with a 16px radius and 14px gaps; a card lifts 2px on hover. Tablets and phones show one list. There are no company badges in this section. "View job" is navy text with an arrow and no border, and it becomes the navy pill when the card is hovered or has keyboard focus. The whole card stays the link.</li>
   <li><b>Past employers badges.</b> Each name gets a 40px rounded badge with its initials, beside the name (on phones a 34px badge sits above the name, two across). Initials: the first letters of the first two words, skipping Inc., LLC, The, &amp;, of, Co. and USA. A single word uses its first letter, plus the next capital in joined-up names (CloudHire becomes CH). All-caps names of three letters or fewer keep every letter (ADT). The colour is navy <code>#00245B</code>, blue <code>#2563EB</code>, deep sky <code>#0369A1</code> or slate <code>#334155</code>, chosen by the sum of the name's character codes modulo 4, so a company always gets the same colour. The initials sit in a <code>data-i</code> attribute and are drawn with CSS (<code>content: attr(data-i)</code>), so they stay out of the page text Google reads. The badge is <code>aria-hidden</code>.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
+  <li><b>Nearby date cards.</b> On desktop and tablet (641px and wider) each city's next date shows as a calendar square above the city name, and the date appears only once. The square is the live text, not a copy: <code>&lt;span class="n"&gt;</code> now holds <code>&lt;span class="nl"&gt;Next:&lt;/span&gt; &lt;span class="nd"&gt;&lt;span class="nw"&gt;Fri, Oct&lt;/span&gt; &lt;span class="nn"&gt;9&lt;/span&gt;&lt;/span&gt;</code>. Keep the spaces between the spans so the text still reads "Next: Fri, Oct 9". The HTML order stays city, then date; CSS <code>order: -1</code> shows the date first. "Next:" is a small grey capital label (11px, weight 600, <code>#64748B</code>). The square is at least 84px wide, with a 1px <code>#BFDBFE</code> border and a 10px radius. Its top strip is brand blue <code>#2563EB</code> with the weekday and month in white capitals (10.5px, weight 700), and the day is navy, 22px, weight 700. The city sits under the square (15px, weight 600) with the round arrow beside it. Each box is 156px tall (99px before).</li>
   <li><b>Register free</b> keeps the brand blue. On navy it adds a 1px light ring and a soft blue glow so it separates from the background.</li>
 </ul>
 
@@ -1187,7 +1209,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li>Sections sit 64px apart (80px before the phone audit).</li>
   <li>Past employers name boxes are 64px tall with 12px padding.</li>
   <li>Panel padding: Local job market 44px top and 40px bottom, FAQ 44px and 36px, How it works 44px and 14px. The three steps use 20px padding and 40px number squares.</li>
-  <li>Nearby rows use 14px top and bottom padding.</li>
+  <li>Nearby rows use 14px top and bottom padding. Phones show no date square: the date spans display inline, so each row is the city with "Next: Fri, Oct 9" as the plain grey line underneath, the same as before.</li>
   <li>Job company lines and Other job fairs titles use <code>text-wrap: pretty</code>, so no single word such as "FL" or "Fair" sits alone on the last line.</li>
   <li>"See all Tampa jobs" and "View all FAQs" get a 45px tap area (13px padding above and below, with a matching negative margin), with no visible change. This applies at every width.</li>
   <li>With these, the phone page is about 3.8% shorter than before the audit. Nothing scrolls sideways at 375px.</li>
