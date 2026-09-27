@@ -780,25 +780,6 @@ button{font:inherit;cursor:pointer}
 @media (max-width:1023px){ .panel-white::after{display:none} }
 &lt;/style&gt;
 &lt;style&gt;
-/* Nearby date cards (26 Sep): the real &quot;Next: Fri, Oct 9&quot; text is styled as a calendar square.
-   Desktop and tablet show the city first, then the square, in the HTML order. Phones show no square. */
-.near a{min-height:0;justify-content:flex-start;gap:0;padding:22px 24px 20px}
-.near .n{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:14px;padding-right:0;line-height:normal}
-.near .nl{font-size:11px;font-weight:600;line-height:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-500)}
-.near .nd{display:flex;flex-direction:column;min-width:84px;border:1px solid #BFDBFE;border-radius:10px;overflow:hidden;background:#fff;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.06)}
-.near .nw{padding:3px 9px 2px;background:var(--brand);color:#fff;font-size:10.5px;font-weight:700;line-height:14px;letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;white-space:nowrap}
-.near .nn{padding:5px 0 6px;font-size:22px;font-weight:700;line-height:24px;color:var(--navy);font-variant-numeric:tabular-nums}
-.near a::after{bottom:34px}   /* level with the middle of the date square */
-@media (max-width:640px){
-  /* Phones: no square. The city, then the date as plain text underneath, as on today&#x27;s phone view */
-  .near a{justify-content:center;gap:6px;padding:14px 64px 14px 20px}
-  .near .n{order:0;display:block;margin:0;line-height:1.4}
-  .near .nl,.near .nd,.near .nw,.near .nn{display:inline;min-width:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;
-    color:inherit;font:inherit;letter-spacing:0;text-indent:0;text-transform:none;white-space:normal}
-  .near a::after{top:50%;bottom:auto;margin-top:-15px}
-}
-&lt;/style&gt;
-&lt;style&gt;
 /* ===== Other job fairs: back to the live site&#x27;s design (26 Sep, Scott). Sizes, colours and spacing copied from the
    live page&#x27;s computed styles at 1440px and 375px. Live breakpoints: 2 columns from 640px, 4 from 1024px. Words unchanged. ===== */
 .sec.sec-types{margin-top:128px;padding:48px 0;background:#F8FAFC;border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0}
@@ -908,6 +889,43 @@ button{font:inherit;cursor:pointer}
 .faq summary:hover .pm{border-color:var(--navy)}
 @media (min-width:1024px){ .faq-more{text-align:right} }
 @media (prefers-reduced-motion:reduce){ .faq summary{transition:none} }
+&lt;/style&gt;
+&lt;style&gt;
+/* ===== Nearby: Destinations on a white panel (Scott, 27 Sep). Five white cards in one row; each card is the link:
+   the city on top, then a small &quot;NEXT:&quot; label and the date, with the round arrow bottom right, level with the date.
+   The date is the live &quot;Next: Fri, Oct 9&quot; text; its spans (.nl .nd .nw .nn) are styled, the words are unchanged. ===== */
+.near .n{order:0;display:block;margin:0;line-height:1.4}
+.near .nl,.near .nd,.near .nw,.near .nn{display:inline;min-width:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;
+  color:inherit;font:inherit;letter-spacing:0;text-indent:0;text-transform:none;white-space:normal}
+.sec-near{position:relative;isolation:isolate;overflow:hidden;margin:128px 24px 0;padding:96px 48px 104px;border-radius:24px;background:#fff;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 18px 40px -30px rgba(0,36,91,.25)}
+.sec-near::after{content:&quot;&quot;;position:absolute;z-index:-1;pointer-events:none;left:0;bottom:0;width:560px;height:340px;
+  background-image:radial-gradient(rgba(37,99,235,.28) 1.2px,transparent 1.3px);background-size:16px 16px;
+  -webkit-mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%);mask-image:radial-gradient(80% 90% at 0% 100%,#000 0%,rgba(0,0,0,.5) 45%,transparent 75%)}
+.sec-near .near{background:none;border:0;border-radius:0;box-shadow:none;overflow:visible}
+.sec-near .near ul{gap:14px;margin:0}
+.sec-near .near li{border:0}
+.sec-near .near a{min-height:0;justify-content:flex-start;gap:0;padding:24px 22px 22px;background:#fff;border:1px solid var(--slate-200);border-radius:16px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 28px -22px rgba(0,36,91,.35);transition:border-color .15s ease,box-shadow .15s ease}
+.sec-near .near a:hover{background:#fff;border-color:#93C5FD;box-shadow:0 16px 34px -22px rgba(0,36,91,.45)}
+.sec-near .near .c{padding-right:0;font-size:18px;font-weight:600;color:var(--navy)}
+.sec-near .near .n{margin-top:22px;padding-right:40px}
+.sec-near .near .nl{display:block;margin-bottom:4px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+.sec-near .near .nd{font-size:17px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.sec-near .near a::after{top:auto;bottom:22px;right:18px;margin-top:0}
+.sec-near .near a:hover::after{background:var(--navy) url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 24 24&#x27; fill=&#x27;none&#x27; stroke=&#x27;%23FFFFFF&#x27; stroke-width=&#x27;2.4&#x27; stroke-linecap=&#x27;round&#x27; stroke-linejoin=&#x27;round&#x27;%3E%3Cpath d=&#x27;M5 12h14&#x27;/%3E%3Cpath d=&#x27;m12 5 7 7-7 7&#x27;/%3E%3C/svg%3E&quot;) center/12px no-repeat;border-color:var(--navy)}
+@media (prefers-reduced-motion:reduce){ .sec-near .near a{transition:none} }
+@media (max-width:640px){
+  .sec-near{margin:64px 10px 0;padding:56px 14px 18px;border-radius:20px}
+  .sec-near::after{display:none}
+  .sec-near .near ul{gap:10px}
+  .sec-near .near a{padding:16px 60px 16px 18px}
+  .sec-near .near .c{font-size:16px}
+  .sec-near .near .n{margin-top:4px;padding-right:0}
+  .sec-near .near .nl{display:inline;margin:0;font-size:inherit;font-weight:400;letter-spacing:0;text-transform:none;color:var(--slate-600)}
+  .sec-near .near .nd{font-size:inherit;font-weight:400;color:var(--slate-600)}
+  .sec-near .near a::after{top:50%;bottom:auto;margin-top:-15px}
+}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -1140,7 +1158,7 @@ button{font:inherit;cursor:pointer}
   &lt;/div&gt;
 &lt;/section&gt;
 &lt;/div&gt;
-&lt;section class=&quot;sec&quot;&gt;
+&lt;section class=&quot;sec sec-near&quot;&gt;
   &lt;div class=&quot;sec-in&quot;&gt;
     &lt;div class=&quot;sec-head&quot;&gt;
       &lt;p class=&quot;eyebrow&quot;&gt;Nearby&lt;/p&gt;
@@ -1257,7 +1275,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <p>Existing JobFairX colours only.</p>
 <table class="sw">
   <tr><td><span class="chip" style="background:#00245B"></span>Navy <code>#00245B</code></td><td>Hero, Register band, headings, pill labels</td></tr>
-  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free) on light backgrounds, the text of the white Register free on navy, the top strip of the Nearby date squares, and the Other job fairs label and links (as on the live site)</td></tr>
+  <tr><td><span class="chip" style="background:#2563EB"></span>Brand blue <code>#2563EB</code></td><td>Primary buttons (Register free) on light backgrounds, the text of the white Register free on navy, the "NEXT:" labels in Nearby, and the Other job fairs label and links (as on the live site)</td></tr>
   <tr><td><span class="chip" style="background:#DBEAFE"></span>Pale blue <code>#DBEAFE</code></td><td>Jobs panel</td></tr>
   <tr><td><span class="chip" style="background:#F1F5F9"></span>Page <code>#F1F5F9</code></td><td>Page background behind every section</td></tr>
   <tr><td><span class="chip" style="background:#0F172A"></span>Text <code>#0F172A #334155 #475569 #64748B</code></td><td>On navy: <code>#FFFFFF #C9D6EA #93C5FD</code></td></tr>
@@ -1267,7 +1285,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <h2 id="n-rhythm">Page rhythm</h2>
 <ul>
   <li>Sections alternate. <b>Open sections</b> sit on the grey page with a centred heading. <b>Panel sections</b> are rounded panels (24px radius) inset 24px from the window edge, 10px on phones, with content up to 1152px wide.</li>
-  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (white panel) → Nearby (open) → How it works (white panel) → footer. The page ends on a light panel, so the dark footer never sits against another dark blue.</li>
+  <li>Order: Hero (navy panel) → Past employers (open) → Jobs and Register band (blue panel) → Other job fairs (the live site's band) → Local job market (white panel) → Preparation (open) → FAQ (white panel) → Nearby (white panel) → How it works (white panel) → footer. The page ends on a light panel, so the dark footer never sits against another dark blue.</li>
   <li>128px between sections on desktop, 80px on phones.</li>
   <li>Other job fairs is the one exception to the ploy look: it keeps the live page's design, on a full-width light band (see Shared pieces).</li>
 </ul>
@@ -1276,13 +1294,13 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
 <ul>
   <li><b>Pill label</b> (the eyebrow): 28px tall, navy with white text. On navy panels it turns white with navy text.</li>
   <li><b>Section H2</b>: Anton, navy, 36px (26px on phones), line-height 1.08, <code>text-wrap: balance</code>.</li>
-  <li><b>Hairline panels</b> (Past employers, Nearby): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
-  <li><b>Round arrows</b> (Nearby): white, 1px <code>#CBD5E1</code> border, navy arrow. They fill navy when their row is hovered. The whole row stays the link.</li>
+  <li><b>Hairline panels</b> (Past employers): white, 1px <code>#E2E8F0</code> border, 20px radius, cells split by 1px lines.</li>
+  <li><b>Round arrows</b> (Nearby): white, 1px <code>#CBD5E1</code> border, navy arrow. They fill navy when their card is hovered. The whole card stays the link.</li>
   <li><b>Other job fairs keeps the live site's design</b> (Scott, 26 Sep). Brandon can leave this section's live markup and classes as they are. The values, from the live page's computed styles: a full-width band <code>#F8FAFC</code> with a 1px <code>#E2E8F0</code> line above and below, 90px padding (48px under 1024px), content 960px wide (max-width 1024px, 32px sides; 24px under 1024px). The heading is left-aligned: the label is 14px bold capitals in <code>#2563EB</code> with .12em tracking (12px under 1024px), then the H2 in Inter, 36px, weight 600, -0.02em (26px under 1024px), 40px above the cards. The cards sit in a grid with 12px gaps: four across from 1024px, two from 640px, one below that. Each card is white with a 1px <code>#E2E8F0</code> border, a 16px radius and 20px padding, and on hover gets a <code>#CBD5E1</code> border and a large soft shadow. Inside: a 10px dot in the fair's colour and a 12px grey capitals label (.08em), the title at 15px weight 600, the date at 13px grey, and "View events" at 12px weight 600 in brand blue with a 12px arrow whose gap grows from 4px to 8px on hover. There are no icons or coloured tags.</li>
   <li><b>Jobs section.</b> On desktop (1024px and wider) the ten jobs are white cards, two across, with a 16px radius and 14px gaps; a card lifts 2px on hover. Tablets and phones show one list. There are no company badges in this section. "View job" is navy text with an arrow and no border, and it becomes the navy pill when the card is hovered or has keyboard focus. The whole card stays the link.</li>
   <li><b>Past employers, name grid</b> (Scott, 27 Sep). No logos and no initials squares. The white hairline panel stays, four columns on desktop, three on tablets and two on phones. Each name sits centred in its cell in navy <code>#00245B</code>, 15px, weight 600 (14px on phones); cells are 88px tall with 18px 22px padding (72px and 14px 12px on phones). The first 12 names show and "Show all 40 employers" reveals the rest, as on the live page.</li>
   <li><b>Event details card.</b> Each label is a small grey capital heading above its answer, with no divider under every row. Date and Time sit side by side at the top in navy (16px, weight 600), then one divider. Interviews runs the full width, with its explanation on its own smaller grey line. Cost (a pale-blue pill) and Registration closes share a line. Have ready runs the full width, and the employer line sits in a light grey strip at the bottom. The card is 440px wide on desktop; on phones everything stacks in one column.</li>
-  <li><b>Nearby date cards.</b> On desktop and tablet (641px and wider) each city's next date shows as a calendar square under the city name, and the date appears only once. The square is the live text, not a copy: <code>&lt;span class="n"&gt;</code> now holds <code>&lt;span class="nl"&gt;Next:&lt;/span&gt; &lt;span class="nd"&gt;&lt;span class="nw"&gt;Fri, Oct&lt;/span&gt; &lt;span class="nn"&gt;9&lt;/span&gt;&lt;/span&gt;</code>. Keep the spaces between the spans so the text still reads "Next: Fri, Oct 9". The city comes first, then "Next:" and the square, in the HTML order (no CSS reordering). "Next:" is a small grey capital label (11px, weight 600, <code>#64748B</code>). The square is at least 84px wide, with a 1px <code>#BFDBFE</code> border and a 10px radius. Its top strip is brand blue <code>#2563EB</code> with the weekday and month in white capitals (10.5px, weight 700), and the day is navy, 22px, weight 700. The city is 15px, weight 600, with 14px between it and the "Next:" label. The round arrow sits at the bottom right, level with the middle of the square. Each box is 154px tall (99px before).</li>
+  <li><b>Nearby, Destinations</b> (Scott, 27 Sep). The section is a white panel like How it works and FAQ, with the faint blue dot pattern in its bottom-left corner on desktop. The five cities are separate white cards in one row on desktop (three across on tablets), 14px apart, each with a 1px <code>#E2E8F0</code> border, 16px radius and a soft shadow. Each card is the link: the city on top (18px, weight 600, navy), then 22px lower a small "NEXT:" label (11px, weight 600, capitals, brand blue) with the date under it (17px, weight 600, ink). The round arrow sits bottom right, level with the date. Hover: the border turns <code>#93C5FD</code>, the shadow deepens and the arrow fills navy. The date is the live "Next: Fri, Oct 9" text: <code>.nl</code> holds "Next:" and <code>.nd</code> the date, so the words are unchanged.</li>
   <li><b>How it works</b> is a white panel like Local job market, with no dot pattern. On desktop (1024px and wider) it uses the enterprise split: the label, H2 and "Three steps to your next interview" line sit on the left (5 of 12 columns, left-aligned), and the three steps stack on the right (7 of 12) as a timeline, with 72px between the columns. Each step has a 48px blue number square (<code>#3B82F6</code>, white number) with its title (17px, weight 600, ink <code>#0F172A</code>) and text (15px, <code>#475569</code>, up to 34em wide) beside it, 20px away; the steps are 36px apart. The live page's connector is shown as a 1px vertical line, brand blue at 35%, from 8px under each number square to 8px above the next (<code>left: 23.5px; top: 56px; bottom: -28px</code>). There is no line after step 3. Tablets (641 to 1023px) keep the heading centred with the steps in three columns and the line running across. The "Three steps to your next interview" line is 16px, the live size.</li>
   <li><b>Preparation</b> keeps its five white cards with the small 01 to 05 numbers and no icons. On desktop (1024px and wider) every card sits on the same three columns of a six-column grid: 01, 02 and 03 take two columns each, 04 (the short tip) takes two, and 05 (the long tip) takes four, so every edge lines up with the row above. Hover: the border turns <code>#93C5FD</code> and a soft shadow appears (<code>0 16px 34px -22px rgba(0,36,91,.45)</code>), over .2s. There is no lift and no pointer cursor, because the cards are not links; transitions switch off for reduced motion. Tablets keep two columns with 05 full width, and phones keep one card per row.</li>
   <li><b>FAQ</b> is a white panel like How it works; the question list has a 1px <code>#E2E8F0</code> border. Hover on a question: the row tints <code>#F1F5F9</code> and its + circle's border turns navy. An open question's circle fills navy with a minus, as before. "View all FAQs" stays under the questions, right-aligned on desktop (1024px and wider) so it lines up with the list's right edge, and left-aligned on tablets and phones. The answers stay in the page (<code>details</code> and <code>summary</code>).</li>
@@ -1306,7 +1324,7 @@ document.getElementById(&#x27;emp-more&#x27;).addEventListener(&#x27;click&#x27;
   <li>Past employers name boxes are 64px tall with 12px padding.</li>
   <li>Panel padding: Local job market and How it works (both white panels) 44px top and 40px bottom, FAQ 44px and 36px.</li>
   <li>How it works is a timeline under a left-aligned heading: 40px number squares on the left, each title and text beside its square (18px gap), 32px between steps, and a 1px line from each square down to the next.</li>
-  <li>Nearby rows use 14px top and bottom padding. Phones show no date square: the date spans display inline, so each row is the city with "Next: Fri, Oct 9" as the plain grey line underneath, the same as before.</li>
+  <li>Nearby: one white card per row inside the white panel, the city (16px) with "Next: Fri, Oct 9" as a plain grey line underneath, and the round arrow on the right.</li>
   <li>Job company lines use <code>text-wrap: pretty</code>, so no single word such as "FL" sits alone on the last line.</li>
   <li>"See all Tampa jobs" and "View all FAQs" get a 45px tap area (13px padding above and below, with a matching negative margin), with no visible change. This applies at every width.</li>
   <li>With these, the phone page is about 3.8% shorter than before the audit. Nothing scrolls sideways at 375px.</li>
