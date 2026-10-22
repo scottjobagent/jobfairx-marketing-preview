@@ -168,6 +168,29 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .dframe .shot.is-on{opacity:1}
 .dframe .shot img{width:100%;height:100%;object-fit:cover;object-position:top left}
 
+/* pinned how-it-works: a tall track, a sticky stage one screen high; JS sets the track height and the step from the scroll position */
+.pin-track{position:relative}
+.pin-stage{position:sticky;top:var(--nav);height:calc(100vh - var(--nav));height:calc(100svh - var(--nav));overflow:hidden;display:flex;flex-direction:column}
+.pin-stage>.wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:clamp(20px, 4vh, 40px);padding-bottom:clamp(16px, 3.5vh, 36px)}
+.pin .eyebrow{margin-bottom:clamp(14px, 3.5vh, 36px)}
+.pin .head{margin-bottom:clamp(14px, 3vh, 28px)}
+.pin .action{flex:1;min-height:0;grid-template-rows:minmax(0,1fr);align-items:stretch}
+.pin .steps{position:relative;align-self:start}
+.pin .dframe{display:flex;flex-direction:column;min-height:0}
+.pin .dframe .inner{max-height:100%;min-height:200px}
+.pin .step{padding:14px 0}
+.pin .step-h{font-size:clamp(1.35rem, 1.1vw + .7rem, 1.9rem)}
+.pin .step:not(.is-on) .step-h{color:rgba(255,255,255,.55)}
+.pin .step.is-on .step-h{color:#fff}
+.rail{position:absolute;left:-18px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.1);border-radius:2px}
+.rail i{position:absolute;left:0;top:0;width:100%;height:var(--p, 0%);background:#A9C6FF;border-radius:2px;transition:height .15s linear}
+@media (max-height:820px){.pin .display{font-size:clamp(2rem, 1.6vw + 1.2rem, 3rem)}.pin .step-body p{font-size:var(--fs-sm)}}
+.no-pin .pin-track{height:auto!important}
+.no-pin .pin-stage{position:static;height:auto;overflow:visible}
+.no-pin .pin .step .step-body{grid-template-rows:1fr}
+.no-pin .pin .step .step-h{color:#fff}
+.no-pin .rail{display:none}
+
 /* the difference (dark) */
 .diff{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px;margin-bottom:var(--sp-h)}
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
@@ -342,6 +365,18 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .steps{grid-column:1/13}
  .dframe{grid-column:1/13}
  .action{row-gap:var(--sp-xl)}
+ .pin .action{display:flex;flex-direction:column;gap:14px}
+ .pin .head .desc{display:none}
+ .pin .head{margin-bottom:12px}
+ .pin .steps{align-self:stretch}
+ .pin .dframe{flex:1;min-height:150px}
+ .pin .dframe .inner{aspect-ratio:auto;height:100%;max-height:none;min-height:0}
+ .pin .step{padding:10px 0}
+ .pin .step-h{font-size:1.25rem}
+ .pin .step-body p{font-size:15px;padding-top:8px}
+ .pin .step-body .btn{margin-top:10px;margin-bottom:2px}
+ .rail{position:relative;left:auto;top:auto;bottom:auto;width:100%;height:2px;margin-bottom:8px}
+ .rail i{height:100%;width:var(--p, 0%);transition:width .15s linear}
 }
 @media (max-width:900px){
  .nav-links,.nav-right .signin{display:none}
@@ -382,6 +417,11 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .type{flex-direction:row;align-items:center;gap:14px}
  .type img{width:96px;aspect-ratio:1;flex:none}
  .type .tx{display:flex;flex-direction:column;gap:4px;min-width:0}
+ .pin-stage>.wrap{padding-top:16px;padding-bottom:16px}
+ .pin .eyebrow{margin-bottom:14px}
+ .pin .display{font-size:1.75rem}
+ .pin .dframe .inner{padding:10px}
+ .pin .dframe .shot{inset:10px}
  .diff-grid{grid-template-columns:1fr}
  .includes ul{grid-template-columns:1fr}
  .band .float{position:static;max-width:none;margin-top:12px}
@@ -485,8 +525,8 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  </div>
 </div></section>
 
-<!-- 3. how it works (dark, steps + product frame) -->
-<section class="sec theme-dark"><div class="wrap">
+<!-- 3. how it works (dark): pinned section, the scroll drives the four steps -->
+<section class="sec theme-dark pin" id="howitworks"><div class="pin-track" id="pinTrack"><div class="pin-stage" id="pinStage"><div class="wrap">
  <div class="eyebrow"><span>How it works</span></div>
  <div class="head" data-reveal>
   <div class="ttl"><h2 class="display">Hiring events <span class="dim">built around interviews</span></h2></div>
@@ -494,6 +534,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  </div>
  <div class="action" id="action" data-reveal>
   <div class="steps">
+   <div class="rail" aria-hidden="true"><i id="rail"></i></div>
    <div class="step is-on" data-i="0">
     <button class="step-h" aria-expanded="true">Set up <small>01</small></button>
     <div class="step-body"><div>
@@ -529,7 +570,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
    <div class="shot"><img src="img/post-event-report-austin.png" alt="Post-event report"></div>
   </div></div>
  </div>
-</div></section>
+</div></div></div></section>
 
 <!-- 4. the difference (dark) -->
 <section class="sec theme-dark"><div class="wrap">
@@ -856,13 +897,38 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  var frame=document.getElementById('heroFrame');frame.addEventListener('mouseenter',function(){clearTimeout(tTimer)});frame.addEventListener('mouseleave',cycle);
  cycle();
 
- /* how-it-works steps */
- var steps=[].slice.call(document.querySelectorAll('#action .step')),dshots=[].slice.call(document.querySelectorAll('#action .shot')),si=0,sTimer,touched=false;
- function showStep(i){si=i;steps.forEach(function(s,k){s.classList.toggle('is-on',k===i);s.querySelector('.step-h').setAttribute('aria-expanded',k===i?'true':'false')});dshots.forEach(function(s,k){s.classList.toggle('is-on',k===i)})}
- steps.forEach(function(s){s.querySelector('.step-h').addEventListener('click',function(){touched=true;clearTimeout(sTimer);showStep(+s.dataset.i)})});
- if(!reduce && 'IntersectionObserver' in window){
-  var aio=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting&&!touched){(function tick(){sTimer=setTimeout(function(){if(touched)return;showStep((si+1)%steps.length);tick()},5000)})();aio.disconnect()}})},{threshold:0.4});
-  aio.observe(document.getElementById('action'));
+ /* how-it-works: the section pins and the scroll position picks the step */
+ var track=document.getElementById('pinTrack'),stage=document.getElementById('pinStage'),rail=document.getElementById('rail');
+ var steps=[].slice.call(document.querySelectorAll('#action .step')),dshots=[].slice.call(document.querySelectorAll('#action .shot')),N=steps.length,si=-1;
+ function showStep(i){if(i===si)return;si=i;steps.forEach(function(s,k){s.classList.toggle('is-on',k===i);s.querySelector('.step-h').setAttribute('aria-expanded',k===i?'true':'false')});dshots.forEach(function(s,k){s.classList.toggle('is-on',k===i)})}
+ if(reduce){
+  html.classList.add('no-pin');
+  steps.forEach(function(s){s.classList.add('is-on');s.querySelector('.step-h').setAttribute('aria-expanded','true')});
+  dshots[0].classList.add('is-on');
+  steps.forEach(function(s){s.querySelector('.step-h').addEventListener('click',function(){dshots.forEach(function(d,k){d.classList.toggle('is-on',k===+s.dataset.i)})})});
+ }else{
+  var navH=0,stepDist=0,trackTop=0,scrollable=1;
+  function measure(){
+   navH=parseFloat(getComputedStyle(html).getPropertyValue('--nav'))||64;
+   var stageH=stage.offsetHeight;
+   stepDist=Math.round(stageH*0.8);
+   scrollable=N*stepDist;
+   track.style.height=(stageH+scrollable)+'px';
+   trackTop=track.getBoundingClientRect().top+window.scrollY-navH;
+  }
+  function update(){
+   var y=window.scrollY-trackTop;
+   var p=Math.min(1,Math.max(0,y/scrollable));
+   var i=Math.min(N-1,Math.floor(p*N));
+   showStep(i);
+   rail.style.setProperty('--p',(p*100).toFixed(2)+'%');
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  window.addEventListener('resize',function(){measure();update()});
+  if('ResizeObserver' in window){new ResizeObserver(function(){measure();update()}).observe(stage)}
+  window.addEventListener('load',function(){measure();update()});
+  measure();update();
+  steps.forEach(function(s){s.querySelector('.step-h').addEventListener('click',function(){var i=+s.dataset.i;window.scrollTo({top:Math.round(trackTop+i*stepDist+2),behavior:'smooth'})})});
  }
 })();
 </script>
