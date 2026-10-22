@@ -142,8 +142,8 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 /* logos + stats */
 .logos{text-align:center}
 .logos .cap{font-size:var(--fs-sm);color:var(--body);margin-bottom:var(--sp-xl)}
-.logo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp) var(--gutter);max-width:1000px;margin:0 auto}
-.logo-grid span{font-family:var(--display);font-weight:650;font-size:clamp(1.1rem, .6vw + .9rem, 1.45rem);letter-spacing:-.02em;color:#1A1A1A;opacity:.78;padding:10px 0}
+.logo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:36px var(--gutter);align-items:center;justify-items:center;max-width:1040px;margin:0 auto}
+.logo-grid img{height:var(--h, 36px);width:auto;max-width:200px;object-fit:contain}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gutter);margin-top:var(--sec-m)}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
 .stat b{font-family:var(--display);font-weight:500;font-size:var(--fs-h3);letter-spacing:-.02em;color:var(--ink);margin:auto 0;font-variant-numeric:tabular-nums}
@@ -410,7 +410,8 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .hero-bar .btn{margin-left:0;width:100%}
  .screen{aspect-ratio:4/3}
  .dframe .inner{aspect-ratio:4/3}
- .logo-grid{grid-template-columns:repeat(2,1fr)}
+ .logo-grid{grid-template-columns:repeat(2,1fr);gap:28px 16px}
+ .logo-grid img{height:calc(var(--h, 36px) * .85);max-width:150px}
  .stats{grid-template-columns:1fr 1fr}
  .stat{min-height:150px;padding:18px}
  .types{grid-template-columns:1fr}
@@ -512,9 +513,15 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 <section class="sec tight"><div class="wrap">
  <div class="logos">
   <p class="cap">Trusted by top organizations</p>
-  <div class="logo-grid" data-reveal>
-   <span>T-Mobile</span><span>Amazon</span><span>UnitedHealthcare</span><span>Target</span>
-   <span>New York Life</span><span>HCA Healthcare</span><span>Tesla</span><span>Kaiser Permanente</span>
+  <div class="logo-grid" data-reveal data-stagger>
+   <img src="img/logos/tmobile.svg" alt="T-Mobile" style="--h:34px">
+   <img src="img/logos/amazon.svg" alt="Amazon" style="--h:40px">
+   <img src="img/logos/unitedhealthcare.svg" alt="UnitedHealthcare" style="--h:42px">
+   <img src="img/logos/target.svg" alt="Target" style="--h:58px">
+   <img src="img/logos/newyorklife.svg" alt="New York Life" style="--h:52px">
+   <img src="img/logos/hca.svg" alt="HCA Healthcare" style="--h:44px">
+   <img src="img/logos/tesla.svg" alt="Tesla" style="--h:24px">
+   <img src="img/logos/kaiser.svg" alt="Kaiser Permanente" style="--h:26px">
   </div>
  </div>
  <div class="stats" data-reveal data-stagger>
