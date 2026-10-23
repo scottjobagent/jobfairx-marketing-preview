@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Scottsdale Technology Rezi Direction</title>
+<style>
+:root{--bg:#f3f5f9;--fg:#0f172a;--mute:#5b6478;--line:#d9deea;--card:#fff;--accent:#0044b3;--chip:#e8efff;--chipfg:#0044b3}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0e1320;--fg:#e8ecf5;--mute:#98a2b8;--line:#263044;--card:#161c2b;--accent:#8fb4ff;--chip:#1c2a47;--chipfg:#b9d0ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1320;--fg:#e8ecf5;--mute:#98a2b8;--line:#263044;--card:#161c2b;--accent:#8fb4ff;--chip:#1c2a47;--chipfg:#b9d0ff;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;padding-block:0 40px;padding-left:max(0px, env(safe-area-inset-left, 0px));padding-right:max(0px, env(safe-area-inset-right, 0px))}
+.bar{background:var(--card);border-bottom:1px solid var(--line);padding:12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.bar b{font-size:15px}
+.bar .grp{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mute)}
+.bar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}
+.bar button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .bar button.on{color:#0e1320}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bar button.on{color:#0e1320}}
+.bar a{color:var(--accent);font-size:13px;font-weight:600}
+.bar .hide{margin-left:auto}
+.bar .sum{font-size:13px;color:var(--mute)}
+.view{padding:16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px))}
+iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 110px);min-height:700px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mob iframe{width:390px;max-width:100%;height:844px;margin:0 auto;border-radius:28px;box-shadow:0 0 0 10px #111,0 0 0 11px #333}
+.notes{max-width:880px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.notes h2{font-size:18px;margin:0 0 8px}.notes h3{font-size:15px;margin:22px 0 6px}.notes p,.notes li{color:var(--fg)}.notes table{border-collapse:collapse;width:100%;font-size:13px}.notes td,.notes th{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}.notes code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--chip);color:var(--chipfg);padding:1px 5px;border-radius:4px}
+.notes a{color:var(--accent)}
+[hidden]{display:none!important}
+@media (max-width:700px){.mob iframe{width:100%;border-radius:10px;box-shadow:none}iframe{height:720px}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar">
+ <b>Scottsdale Technology · rezi.ai direction</b>
+ <span class="grp ctl">Device <button id="bD" class="on">Desktop</button><button id="bM">Mobile</button></span>
+ <span class="grp ctl">View <button id="bP" class="on">Page</button><button id="bN">Build notes</button></span>
+ <a class="ctl" href="https://jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology" target="_blank" rel="noopener">Live page</a>
+ <a class="ctl" href="https://www.rezi.ai/" target="_blank" rel="noopener">rezi.ai</a>
+ <span class="sum" id="sum" hidden></span>
+ <button class="hide" id="bH">Hide controls</button>
+</div>
+<div class="view" id="view"><iframe id="fr" title="Scottsdale Technology event page design, rezi.ai direction" src="scottsdale-technology.html"></iframe></div>
+<div class="view" id="notes" hidden><div class="notes">
+<h2>Scottsdale Technology event page, rezi.ai direction: build notes for Brandon</h2>
+<p>Design reference for jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology (the employer event-page template), rebuilt in the same system as the rezi-direction employer home page: rezi.ai&#39;s layout and feel, JobFairX colours, Inter. Every word is the live event page&#39;s copy, the live FAQ, or the live home page&#39;s product wording, except the hero headline and supporting line, which come from Scott&#39;s 22 Oct brief. Design only: nothing here is production code, and nothing here changes the event data model. Product screens are the prototype captures used on the home page (a Dallas demo event); the live page shows this event&#39;s own data in the same frames.</p>
+
+<h3>What stays exactly as it is on the live page</h3>
+<ul>
+<li>Event facts: Scottsdale, AZ · Technology Hiring Event · October 29, 2026 · 11:00 AM – 3:00 PM MST. The date, time and timezone come from the event record, never from the template.</li>
+<li>Dynamic values, marked in the markup with <code>data-dynamic</code>: the pre-registered candidate count (<code>pre-registered-count</code>, shown twice: the proof strip and the closing card) and the registration countdown (<code>registration-countdown</code>, &quot;Employer registration closes in N days&quot;, the live top bar&#39;s text). Both keep their live source. The three historical figures (53 average interviews, 11 average hires, 84% show rate) are the technology type&#39;s figures from the live page and are captioned &quot;Averages across past JobFairX technology hiring events&quot; so they are never read as this event&#39;s promise.</li>
+<li>Reserve My Spot: every button carries <code>data-live=&quot;reserve&quot;</code> and must call the live page&#39;s existing Reserve handler (checkout). In this reference they scroll to the closing band. Labels are identical everywhere: Reserve My Spot.</li>
+<li>Pricing: Starter $495, Growth $895 (Most Popular, as on the live page), Pro $1,495, the four lines per package, All packages include, and the bundles callout with its link to /employer/hiring-event-bundles. Any promotional pricing logic stays in the component.</li>
+<li>FAQ: the six live questions and answers verbatim, as real details/summary elements so the answers are in the HTML (the live page injects them on click, which search engines never see; worth fixing while here). FAQPage JSON-LD stays as it is.</li>
+<li>Testimonials: James K., Priya D. and Ryan T., exact words and attributions. The Unsplash portraits are replaced with initials because stock faces presented as the person misrepresent who said it.</li>
+<li>Past companies: the sixteen logo files already on the page (Accenture to VMware). The scrolling strip of CloudScale, ByteForge Labs, NexGen and the other invented names is not carried over (flagged to Scott on 30 Sep 2026).</li>
+<li>Contact form: the five live fields, Submit, reCAPTCHA notice. Title, meta description and canonical as live. Event JSON-LD unchanged by this design; note separately that it declares an online-only event while the page offers in-person interviews.</li>
+<li>Nav, footer, Sign In (virtual.jobfairx.com) and all page links as live.</li>
+</ul>
+
+<h3>Page map and the rezi pattern each section uses</h3>
+<table>
+<tr><th>#</th><th>Section</th><th>Pattern</th><th>Notes</th></tr>
+<tr><td>1</td><td>Hero</td><td>rezi hero: event line, two-tone H1 left, paragraph + blue pill + text link right, browser frame below</td><td>H1 &quot;Meet your next great tech hire in Scottsdale.&quot; (brief&#39;s headline, localised). The event pill, date line and countdown pill sit above the H1. The frame cycles four real product screens (interview requests first, so technology candidates are the first thing seen). No stock photo.</td></tr>
+<tr><td>2</td><td>Proof strip</td><td>Integrated strip, not cards: live count left with its Updated daily pill, hairline, three averages right with their caption</td><td>Figures count up once on entry (1.2 s). The count element is dynamic.</td></tr>
+<tr><td>3</td><td>Trusted by + walkthrough</td><td>Logo grid 8 x 2 in colour; a bordered card with the YouTube poster and a play button</td><td>Video opens on YouTube (jE3IjF5q4Pg); on the live site keep the embed if preferred.</td></tr>
+<tr><td>4</td><td>How JobFairX works</td><td>The pinned, scroll-driven step section from the home page (see the home notes) with the four steps from the brief</td><td>Screens: event setup, dashboard with matching, interview requests, post-event report.</td></tr>
+<tr><td>5</td><td>Interview management (navy)</td><td>Dark double frame with the event lobby, three points under it</td><td>Words from the live Event day step, the FAQ and the live scheduling copy; the panel-interviews sentence is the product wording from the home page.</td></tr>
+<tr><td>6</td><td>Messaging and scheduling (blue band)</td><td>One light panel with three real product views side by side: the message thread, the Schedule form, the Waiting for candidate&#39;s response table; the live page&#39;s three bullet lists under it</td><td>The three live sub-sections are one workflow here, as the brief asked. Names and texts are the live page&#39;s mock content.</td></tr>
+<tr><td>7</td><td>Results</td><td>Three story cards, first sentence in black, grey attribution band</td><td></td></tr>
+<tr><td>8</td><td>Pricing</td><td>Three plans, Growth featured in brand blue, All packages include, bundles callout</td><td></td></tr>
+<tr><td>9</td><td>FAQ</td><td>Centred narrow accordion</td><td></td></tr>
+<tr><td>10</td><td>Closing band (blue)</td><td>Countdown pill, two-tone headline, show-rate line, Reserve My Spot; an event card on the right with date, time, formats, live count and the starting price, bleeding off the band&#39;s bottom edge</td><td>The card answers &quot;what, when, how, how much&quot; in one place.</td></tr>
+<tr><td>11</td><td>Contact + footer</td><td>Two columns: intro left, the live form right</td><td></td></tr>
+</table>
+
+<h3>System</h3>
+<p>Identical tokens, type, buttons, frames, reveals and the pinned section to the employer home page in this folder (employer-home-rezi.html); its build notes carry the measured rezi values and the motion rules. Page-specific CSS is appended at the end of the stylesheet under &quot;event page additions&quot;. Breakpoints: 1100px (logo grid 4 across, flow panel 2 + 1), 900px (proof strip stacks, walkthrough stacks, points stack, contact stacks), 640px (phone sizes). Reduced motion: no reveals, no pin, no count-up, no tab cycling.</p>
+
+<h3>Decisions for Scott</h3>
+<ol>
+<li>Headline: &quot;Meet your next great tech hire in Scottsdale.&quot; (the brief&#39;s line with the city added so the H1 says where). The live H1 was &quot;Hire Top Tech Talent&quot;.</li>
+<li>The invented company strip is out; the sixteen real logos carry the proof.</li>
+<li>Testimonial portraits replaced with initials.</li>
+<li>The YouTube walkthrough is a poster card linking out rather than an embedded player.</li>
+<li>Reserve My Spot scrolls to the closing band in this reference; Brandon wires the live handler.</li>
+</ol>
+
+<h3>Files</h3>
+<p><code>scottsdale-technology-rezi.html</code> is the page; <code>scottsdale-technology-rezi-review.html</code> is this review page; shared images in <code>img/</code>, the sixteen past-company logos in <code>img/past/</code>, the walkthrough poster <code>img/walkthrough.jpg</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>.</p>
+</div></div>
+<script>
+(function(){var st={dev:'d',view:'p',open:true};try{var s=JSON.parse(localStorage.getItem('jfx-rezi-scottsdale-review')||'{}');Object.assign(st,s)}catch(e){}
+var bD=document.getElementById('bD'),bM=document.getElementById('bM'),bP=document.getElementById('bP'),bN=document.getElementById('bN'),bH=document.getElementById('bH'),view=document.getElementById('view'),notes=document.getElementById('notes'),sum=document.getElementById('sum');
+function save(){try{localStorage.setItem('jfx-rezi-scottsdale-review',JSON.stringify(st))}catch(e){}}
+function render(){bD.classList.toggle('on',st.dev==='d');bM.classList.toggle('on',st.dev==='m');view.classList.toggle('mob',st.dev==='m');bP.classList.toggle('on',st.view==='p');bN.classList.toggle('on',st.view==='n');view.hidden=st.view!=='p';notes.hidden=st.view!=='n';
+ document.querySelectorAll('.ctl').forEach(function(e){e.hidden=!st.open});sum.hidden=st.open;sum.textContent=(st.dev==='d'?'Desktop':'Mobile')+' · '+(st.view==='p'?'Page':'Build notes');bH.textContent=st.open?'Hide controls':'Show controls'}
+bD.onclick=function(){st.dev='d';save();render()};bM.onclick=function(){st.dev='m';save();render()};bP.onclick=function(){st.view='p';save();render()};bN.onclick=function(){st.view='n';save();render()};bH.onclick=function(){st.open=!st.open;save();render()};render()})();
+</script>
+
+</body>
+</html>
