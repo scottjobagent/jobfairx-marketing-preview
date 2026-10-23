@@ -32,7 +32,7 @@ iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 
 </head>
 <body>
 <div class="bar" id="bar">
- <b>Employer hiring event calendar · rezi.ai direction</b>
+ <b>Employer hiring event calendar · rezi changelog + examples shape, v2</b>
  <span class="grp ctl">Device <button id="bD" class="on">Desktop</button><button id="bM">Mobile</button></span>
  <span class="grp ctl">View <button id="bP" class="on">Page</button><button id="bN">Build notes</button></span>
  <a class="ctl" href="https://jobfairx.com/employer/hiring-event-calendar" target="_blank" rel="noopener">Live page</a>
@@ -42,50 +42,41 @@ iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 
 </div>
 <div class="view" id="view"><iframe id="fr" title="Hiring event calendar design, rezi.ai direction" src="hiring-event-calendar.html"></iframe></div>
 <div class="view" id="notes" hidden><div class="notes">
-<h2>Hiring event calendar, rezi.ai direction: build notes for Brandon</h2>
-<p>Design reference for <a href="https://jobfairx.com/employer/hiring-event-calendar" target="_blank" rel="noopener">jobfairx.com/employer/hiring-event-calendar</a>, built in the same system as the rezi-direction employer home page and the event page: rezi.ai&#39;s layout and feel (the pattern here is rezi&#39;s blog listing: eyebrow pill on a rule, headline 7/12 with the description 5/12, a chip filter row on rules, hairline rows), JobFairX colours, Inter and Inter Tight. Every word is the live calendar&#39;s copy and every row is a real event read from the live page on 22 Oct 2026 (the first 100 it lists: October 27 to November 18, 2026). Nothing is invented; the one new string is marked below.</p>
+<h2>Hiring event calendar, version 2 (rezi changelog and examples shape): build notes for Brandon</h2>
+<p>Design reference for <a href="https://jobfairx.com/employer/hiring-event-calendar" target="_blank" rel="noopener">jobfairx.com/employer/hiring-event-calendar</a>. Version 1 (23 Oct, morning) reused the home page&#39;s opening block and closing band; Scott asked for one rezi layout per kind of page, so this version takes the shape of rezi&#39;s <a href="https://www.rezi.ai/rezi-changelog" target="_blank" rel="noopener">changelog</a> (a plain title and one line, dated entries under big month headings) and its <a href="https://www.rezi.ai/resume-examples" target="_blank" rel="noopener">examples catalogue</a> (a sticky sidebar with the search and the categories). Same tokens, nav and footer as the other rezi-direction pages. Every word is the live calendar&#39;s copy and every row is a real event read from the live page on 22 Oct 2026 (the first 100 it lists, October 27 to November 18). Version 1 is kept in <code>v1-same-layout/</code>.</p>
+
+<h3>Page map</h3>
+<ol>
+<li><b>Header:</b> the H1 &quot;2026 Hiring events&quot; as a plain small label, the H2 &quot;Interview-Ready Candidates Matched to Your Jobs&quot; as the title in one colour, the live sub-line, a hairline. No pill, no two-tone headline, no right column.</li>
+<li><b>Sidebar (sticky):</b> the city search (the field shows &quot;Search by city&quot;; the live placeholder &quot;Search by city (e.g. Dallas, TX)&quot; is its tooltip and label, because the full text does not fit a 220px column: decision for Scott), the event types in the live order with the live colour per type and a count each, the months with a count each (a click jumps to that month), and the &quot;Showing x of y&quot; line. The counts follow the filters.</li>
+<li><b>List:</b> one column-header row (Date, City, Type, Candidate matching), then each month as a big heading with its count and its hairline rows: date and weekday, &quot;City, ST Hiring Event&quot; linking to the live event page, type with its dot, the matching status pill (Live / Activates soon, <code>data-dynamic="candidate-matching-status"</code>), View Details. 30 rows, then Load More Events (+30). An empty state when nothing matches (new copy: &quot;No events match. Try another city or type, or clear the filters.&quot;).</li>
+<li><b>Bundles card</b> (live copy and link), then the footer. No closing band on this page.</li>
+<li>On phones the navy &quot;Looking for a job?&quot; strip sits under the nav as on the live phone layout; the sidebar becomes a block of chips above the list; rows stack with a chevron.</li>
+</ol>
 
 <h3>What stays exactly as it is on the live page</h3>
 <ul>
-<li>Title, meta description and canonical. The H1 is still the small &quot;2026 Hiring events&quot; label (on the live page it is the eyebrow; here it is the eyebrow pill) and the H2 is &quot;Interview-Ready Candidates Matched to Your Jobs&quot; with the same sub-line.</li>
-<li>The two controls: the city search with the live placeholder (&quot;Search by city (e.g. Dallas, TX)&quot;) and the type filter with the live options in the live order (All Types, Diversity, Veterans, Healthcare, Entry Level, Technology), each with the live colour for that type.</li>
-<li>The four columns (Date, City, Type, Candidate matching), the row content (date, &quot;City, ST Hiring Event&quot; linking to that event&#39;s live page, type, matching status &quot;Live&quot; or &quot;Activates soon&quot;, View Details), the &quot;Load More Events&quot; button, the bundles card (&quot;Interested in multiple events?&quot; with its link), the phone-only &quot;Looking for a job?&quot; strip, the nav and the footer.</li>
-<li>Keep the live page&#39;s JSON-LD ItemList and the load-more and filter behaviour on the server side; this file only demonstrates them on the 100 rows it holds.</li>
-<li>Everything that changes with the data carries <code>data-dynamic</code>: the candidate-matching status pill (<code>candidate-matching-status</code>). The month groups, their counts and the &quot;Showing x of y&quot; line are computed from the rows.</li>
-</ul>
-
-<h3>What the design changes</h3>
-<ul>
-<li>Rows are hairline rows inside the container&#39;s two vertical rules (rezi), not bordered cards. 69px tall on desktop, stacked on phones with a chevron.</li>
-<li>Rows are sorted by date and grouped by month, each group with its count (the live page lists them in a rotating-type order). Decision for Scott.</li>
-<li>30 rows per page, then &quot;Load More Events&quot; reveals 30 more (the live page shows 100). Page size is yours.</li>
-<li>The type dropdown becomes a chip row (same options, same order, same colours). On narrow screens it scrolls sideways with a fade on the right edge, as rezi&#39;s does.</li>
-<li>A &quot;Showing 30 of 100 upcoming events&quot; line above the columns, which rewrites itself as the filters change, and an empty state when nothing matches. <b>New copy</b> (change as you like): &quot;No events match. Try another city or type, or clear the filters.&quot;</li>
-<li>The closing band is shared with the employer home design; its button here goes to pricing/registration instead of back to this calendar.</li>
+<li>Title, meta description, canonical, the H1 and H2 texts, the sub-line, the two controls and their options, the four columns, the row content and links, Load More Events, the bundles card, the footer. Keep the live JSON-LD ItemList and the server-side filtering and paging; this file demonstrates the behaviour on the 100 rows it holds.</li>
 </ul>
 
 <h3>Motion</h3>
-<p>The header fades and rises on load (rezi&#39;s power4 ease, replicated with <code>cubic-bezier(.165,.84,.44,1)</code>), the first rows rise in a 40 ms stagger, the Live dot pulses, and the bundles card reveals on scroll. All of it is off under <code>prefers-reduced-motion</code>.</p>
+<p>The header and sidebar rise on load, the first rows rise in a 40 ms stagger, the Live dot pulses, month jumps scroll smoothly. All off under <code>prefers-reduced-motion</code>.</p>
 
 <h3>Breakpoints</h3>
-<p>Above 1100px the search sits left of the chips. At 1100px and below the search takes its own line. At 900px and below the column headers go, each row becomes a stacked block (date and weekday, city, type and status chips, chevron), the bundles card stacks, and the navy &quot;Looking for a job?&quot; strip appears under the nav, as on the live phone layout.</p>
-
-<h3>System</h3>
-<p>Same tokens as the home design: #FAFAFA page, two vertical hairlines at the container edges, container margin <code>clamp(0.75rem, 3.44vw - 0.095rem, 3rem)</code>, padding <code>clamp(1.25rem, 3.82vw + 0.312rem, 3.75rem)</code>, pill buttons 48px (36px in rows), brand blue #0044B3 with the #E8EFFB tint, navy #00245B, the live type colours for the dots (#2563EB technology, #EA580C diversity, #0D9488 healthcare, #DC2626 veterans, #0284C7 entry-level), Live pill #E3F6EE/#146C43.</p>
+<p>Above 1100px: sidebar 3/12, list 9/12. At 1100px and below the row columns tighten. At 900px and below the sidebar stops being sticky and becomes chips above the list, the column headers go, and rows stack.</p>
 
 <h3>Decisions for Scott</h3>
 <ol>
-<li>Date order with month groups, or the live order?</li>
+<li>Sidebar with search, types and months (as built), or a toolbar row above the list?</li>
+<li>Date order with month groups (as built), or the live rotating order?</li>
 <li>30 rows per page or the live 100?</li>
-<li>Chips or keep the dropdown?</li>
-<li>Keep the closing band on this page, or end at the bundles card?</li>
-<li>The toolbar is not sticky here; should it stick under the nav while scrolling the list?</li>
+<li>The shortened search placeholder (&quot;Search by city&quot;) or the live one in a wider field?</li>
 <li>The empty-state wording (new copy).</li>
-<li>Should the big headline become the H1 (SEO question for Michael)? The live page keeps the H1 on the small label.</li>
+<li>Should the big headline become the H1 (SEO question for Michael)?</li>
 </ol>
 
 <h3>Files</h3>
-<p><code>hiring-event-calendar.html</code> is the page; <code>hiring-event-calendar-review.html</code> is this review page; shared images in <code>img/</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>. The rows come from <code>scratchpad/calendar/live/events.json</code> (parsed from the live page) and the page is generated by <code>scratchpad/calendar/gen_calendar.py</code> from the home page&#39;s CSS and script.</p>
+<p><code>hiring-event-calendar.html</code> is the page; <code>hiring-event-calendar-review.html</code> is this review page; shared images in <code>img/</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>. Rows from <code>scratchpad/calendar/live/events.json</code>; generated by <code>scratchpad/calendar/gen_calendar_v2.py</code> from the home page&#39;s CSS and script.</p>
 </div></div>
 <script>
 (function(){var st={dev:'d',view:'p',open:true};try{var s=JSON.parse(localStorage.getItem('jfx-rezi-calendar-review')||'{}');Object.assign(st,s)}catch(e){}
