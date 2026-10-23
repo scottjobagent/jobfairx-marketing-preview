@@ -558,6 +558,32 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 @media (max-width:900px){.bgrid,.srow,.srow.four,.rel{grid-template-columns:1fr}.faq2{grid-template-columns:1fr}.vstats{grid-template-columns:1fr}.ev{grid-template-columns:1fr auto;grid-template-areas:"d act" "city act" "st act";row-gap:6px}.ev .d{grid-area:d;flex-direction:row;gap:6px}.ev .city{grid-area:city}.ev .st{grid-area:st}.ev .act{grid-area:act}.vclose .wrap{grid-template-columns:1fr}.pframe.two{grid-template-columns:1fr}.flow{grid-template-columns:1fr}}
 @media (max-width:640px){.pastgrid{grid-template-columns:repeat(4,1fr);gap:16px 12px}.pastgrid img{height:22px;max-width:76px}}
 
+/* ===== heroes (23 Oct): type pages = live photo to the edge + type colour on pill, dot and numbers, one brand-blue primary; feature pages = no picture in the hero, captures below the cards ===== */
+.heroB{position:relative;overflow:hidden}
+.heroB .wrap{padding-top:clamp(24px,4vh,48px);padding-bottom:0}
+.heroB-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(24px,4vw,56px);align-items:center}
+.heroB h1{font-family:var(--display);font-weight:500;font-size:var(--fs-h1);line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin:0 0 18px;text-wrap:balance}
+.heroB .lead{max-width:46ch;margin:0 0 22px}
+.heroB .acts{display:flex;gap:12px;flex-wrap:wrap}
+.heroB .eyebrow{margin-bottom:22px}
+.heroB-pic{height:clamp(380px,44vw,560px);margin-right:calc(-1 * (var(--pad) + var(--margin)));border-radius:24px 0 0 24px;overflow:hidden;background:#EEF1F6}
+.heroB-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.heroB .eyebrow span{background:var(--acc-t);color:var(--acc)}
+.heroB .eyebrow span i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc);margin-right:8px;vertical-align:middle}
+.heroB-stats{position:relative;z-index:2;margin:-58px 0 0;max-width:780px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;box-shadow:0 24px 50px -28px rgba(0,36,91,.32)}
+.heroB-stats b{display:block;font-family:var(--display);font-weight:500;font-size:var(--fs-h3);letter-spacing:-.02em;color:var(--acc);line-height:1.05}
+.heroB-stats span{display:block;color:var(--body);font-size:var(--fs-sm);margin-top:6px}
+.heroB-stats .note{grid-column:1/-1;font-size:var(--fs-xs);color:var(--muted);margin:0}
+.heroB-after{height:40px}
+.heroB.nopic .heroB-grid{grid-template-columns:1fr}
+.heroB.nopic .heroB-stats{margin-top:28px}
+.heroT h1{font-family:var(--display);font-weight:500;font-size:var(--fs-h1);line-height:1.08;letter-spacing:-.015em;color:var(--ink);max-width:22ch;margin:0 0 16px;text-wrap:balance}
+.heroT .lead{max-width:60ch;margin:0 0 22px}
+.heroT .acts{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:0}
+.heroT .vstats{margin-top:28px;border-top:1px solid var(--line);padding-top:22px}
+.heroT{padding-bottom:0}.heroT .wrap{padding-bottom:0}.heroT+.sec.tight{padding-top:28px}.heroT+.sec.tight .wrap{padding-top:0}
+@media (max-width:900px){.heroB-grid{grid-template-columns:1fr}.heroB-stats{grid-template-columns:1fr;margin-top:-30px}.heroB-pic{height:300px;margin-right:calc(-1 * var(--pad))}.heroB.nopic .heroB-stats{margin-top:20px}}
+
 /* ===== dropdown navigation (rezi style) ===== */
 .nav .wrap{gap:22px}
 .nav-links{display:flex;align-items:center;gap:2px}
@@ -645,13 +671,16 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 </div>
 <!-- nav:end -->
 <main>
-<section class="sec theme-dark vhero"><div class="wrap">
- <div class="eyebrow load" style="--i:0"><span>Diversity hiring events</span></div>
- <div class="head">
-  <div class="ttl"><h1 class="display load" style="--i:1">Build a More <span class="dim">Inclusive Team</span></h1></div>
-  <div class="desc load" style="--i:2"><p class="lead">Expand your pipeline with qualified, diverse candidates in a structured event built for real conversations.</p><div class="acts"><a class="btn" href="#upcoming" style="background:#fff;color:var(--ink)">See upcoming diversity hiring events</a><a class="btn ghost" href="hiring-event-pricing.html" data-live="reserve">Reserve My Spot</a></div></div>
+<section class="sec heroB" style="--acc:#ea580c;--acc-t:#FFEDD5"><div class="wrap">
+ <div class="heroB-grid">
+  <div><div class="eyebrow load" style="--i:0"><span><i></i>Diversity hiring events</span></div>
+   <h1 class="display load" style="--i:1">Build a More <span class="dim">Inclusive Team</span></h1>
+   <p class="lead load" style="--i:2">Expand your pipeline with qualified, diverse candidates in a structured event built for real conversations.</p>
+   <div class="acts load" style="--i:3"><a class="btn" href="hiring-event-pricing.html" data-live="reserve">Reserve My Spot</a><a class="btn ghost" href="#upcoming">See upcoming diversity hiring events</a></div></div>
+  <div class="heroB-pic load" style="--i:2"><img src="img/hero/diversity.jpg" alt="Diversity candidates" style="object-position:50% 32%"></div>
  </div>
- <div class="vstats load" style="--i:3"><div><b>35</b><span>Avg. interviews per employer</span></div><div><b>11</b><span>Avg. hires per employer</span></div><div><b>87%</b><span>Avg. interview show rate</span></div><p class="note">Averages across past JobFairX diversity hiring events.</p></div>
+ <div class="heroB-stats load" style="--i:4"><div><b>35</b><span>Avg. interviews per employer</span></div><div><b>11</b><span>Avg. hires per employer</span></div><div><b>87%</b><span>Avg. interview show rate</span></div><p class="note">Averages across past JobFairX diversity hiring events.</p></div>
+ <div class="heroB-after"></div>
 </div></section>
 <section class="sec tight" id="upcoming"><div class="wrap">
  <div class="eyebrow"><span>Upcoming events</span></div>
