@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Hiring Calendar Rezi Direction</title>
+<style>
+:root{--bg:#f3f5f9;--fg:#0f172a;--mute:#5b6478;--line:#d9deea;--card:#fff;--accent:#0044b3;--chip:#e8efff;--chipfg:#0044b3}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0e1320;--fg:#e8ecf5;--mute:#98a2b8;--line:#263044;--card:#161c2b;--accent:#8fb4ff;--chip:#1c2a47;--chipfg:#b9d0ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1320;--fg:#e8ecf5;--mute:#98a2b8;--line:#263044;--card:#161c2b;--accent:#8fb4ff;--chip:#1c2a47;--chipfg:#b9d0ff;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;padding-block:0 40px;padding-left:max(0px, env(safe-area-inset-left, 0px));padding-right:max(0px, env(safe-area-inset-right, 0px))}
+.bar{background:var(--card);border-bottom:1px solid var(--line);padding:12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.bar b{font-size:15px}
+.bar .grp{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mute)}
+.bar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}
+.bar button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .bar button.on{color:#0e1320}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bar button.on{color:#0e1320}}
+.bar a{color:var(--accent);font-size:13px;font-weight:600}
+.bar .hide{margin-left:auto}
+.bar .sum{font-size:13px;color:var(--mute)}
+.view{padding:16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px))}
+iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 110px);min-height:700px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mob iframe{width:390px;max-width:100%;height:844px;margin:0 auto;border-radius:28px;box-shadow:0 0 0 10px #111,0 0 0 11px #333}
+.notes{max-width:880px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.notes h2{font-size:18px;margin:0 0 8px}.notes h3{font-size:15px;margin:22px 0 6px}.notes p,.notes li{color:var(--fg)}.notes table{border-collapse:collapse;width:100%;font-size:13px}.notes td,.notes th{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}.notes code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--chip);color:var(--chipfg);padding:1px 5px;border-radius:4px}
+.notes a{color:var(--accent)}
+[hidden]{display:none!important}
+@media (max-width:700px){.mob iframe{width:100%;border-radius:10px;box-shadow:none}iframe{height:720px}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar">
+ <b>Employer hiring event calendar · rezi.ai direction</b>
+ <span class="grp ctl">Device <button id="bD" class="on">Desktop</button><button id="bM">Mobile</button></span>
+ <span class="grp ctl">View <button id="bP" class="on">Page</button><button id="bN">Build notes</button></span>
+ <a class="ctl" href="https://jobfairx.com/employer/hiring-event-calendar" target="_blank" rel="noopener">Live page</a>
+ <a class="ctl" href="https://www.rezi.ai/" target="_blank" rel="noopener">rezi.ai</a>
+ <span class="sum" id="sum" hidden></span>
+ <button class="hide" id="bH">Hide controls</button>
+</div>
+<div class="view" id="view"><iframe id="fr" title="Hiring event calendar design, rezi.ai direction" src="hiring-event-calendar.html"></iframe></div>
+<div class="view" id="notes" hidden><div class="notes">
+<h2>Hiring event calendar, rezi.ai direction: build notes for Brandon</h2>
+<p>Design reference for <a href="https://jobfairx.com/employer/hiring-event-calendar" target="_blank" rel="noopener">jobfairx.com/employer/hiring-event-calendar</a>, built in the same system as the rezi-direction employer home page and the event page: rezi.ai&#39;s layout and feel (the pattern here is rezi&#39;s blog listing: eyebrow pill on a rule, headline 7/12 with the description 5/12, a chip filter row on rules, hairline rows), JobFairX colours, Inter and Inter Tight. Every word is the live calendar&#39;s copy and every row is a real event read from the live page on 22 Oct 2026 (the first 100 it lists: October 27 to November 18, 2026). Nothing is invented; the one new string is marked below.</p>
+
+<h3>What stays exactly as it is on the live page</h3>
+<ul>
+<li>Title, meta description and canonical. The H1 is still the small &quot;2026 Hiring events&quot; label (on the live page it is the eyebrow; here it is the eyebrow pill) and the H2 is &quot;Interview-Ready Candidates Matched to Your Jobs&quot; with the same sub-line.</li>
+<li>The two controls: the city search with the live placeholder (&quot;Search by city (e.g. Dallas, TX)&quot;) and the type filter with the live options in the live order (All Types, Diversity, Veterans, Healthcare, Entry Level, Technology), each with the live colour for that type.</li>
+<li>The four columns (Date, City, Type, Candidate matching), the row content (date, &quot;City, ST Hiring Event&quot; linking to that event&#39;s live page, type, matching status &quot;Live&quot; or &quot;Activates soon&quot;, View Details), the &quot;Load More Events&quot; button, the bundles card (&quot;Interested in multiple events?&quot; with its link), the phone-only &quot;Looking for a job?&quot; strip, the nav and the footer.</li>
+<li>Keep the live page&#39;s JSON-LD ItemList and the load-more and filter behaviour on the server side; this file only demonstrates them on the 100 rows it holds.</li>
+<li>Everything that changes with the data carries <code>data-dynamic</code>: the candidate-matching status pill (<code>candidate-matching-status</code>). The month groups, their counts and the &quot;Showing x of y&quot; line are computed from the rows.</li>
+</ul>
+
+<h3>What the design changes</h3>
+<ul>
+<li>Rows are hairline rows inside the container&#39;s two vertical rules (rezi), not bordered cards. 69px tall on desktop, stacked on phones with a chevron.</li>
+<li>Rows are sorted by date and grouped by month, each group with its count (the live page lists them in a rotating-type order). Decision for Scott.</li>
+<li>30 rows per page, then &quot;Load More Events&quot; reveals 30 more (the live page shows 100). Page size is yours.</li>
+<li>The type dropdown becomes a chip row (same options, same order, same colours). On narrow screens it scrolls sideways with a fade on the right edge, as rezi&#39;s does.</li>
+<li>A &quot;Showing 30 of 100 upcoming events&quot; line above the columns, which rewrites itself as the filters change, and an empty state when nothing matches. <b>New copy</b> (change as you like): &quot;No events match. Try another city or type, or clear the filters.&quot;</li>
+<li>The closing band is shared with the employer home design; its button here goes to pricing/registration instead of back to this calendar.</li>
+</ul>
+
+<h3>Motion</h3>
+<p>The header fades and rises on load (rezi&#39;s power4 ease, replicated with <code>cubic-bezier(.165,.84,.44,1)</code>), the first rows rise in a 40 ms stagger, the Live dot pulses, and the bundles card reveals on scroll. All of it is off under <code>prefers-reduced-motion</code>.</p>
+
+<h3>Breakpoints</h3>
+<p>Above 1100px the search sits left of the chips. At 1100px and below the search takes its own line. At 900px and below the column headers go, each row becomes a stacked block (date and weekday, city, type and status chips, chevron), the bundles card stacks, and the navy &quot;Looking for a job?&quot; strip appears under the nav, as on the live phone layout.</p>
+
+<h3>System</h3>
+<p>Same tokens as the home design: #FAFAFA page, two vertical hairlines at the container edges, container margin <code>clamp(0.75rem, 3.44vw - 0.095rem, 3rem)</code>, padding <code>clamp(1.25rem, 3.82vw + 0.312rem, 3.75rem)</code>, pill buttons 48px (36px in rows), brand blue #0044B3 with the #E8EFFB tint, navy #00245B, the live type colours for the dots (#2563EB technology, #EA580C diversity, #0D9488 healthcare, #DC2626 veterans, #0284C7 entry-level), Live pill #E3F6EE/#146C43.</p>
+
+<h3>Decisions for Scott</h3>
+<ol>
+<li>Date order with month groups, or the live order?</li>
+<li>30 rows per page or the live 100?</li>
+<li>Chips or keep the dropdown?</li>
+<li>Keep the closing band on this page, or end at the bundles card?</li>
+<li>The toolbar is not sticky here; should it stick under the nav while scrolling the list?</li>
+<li>The empty-state wording (new copy).</li>
+<li>Should the big headline become the H1 (SEO question for Michael)? The live page keeps the H1 on the small label.</li>
+</ol>
+
+<h3>Files</h3>
+<p><code>hiring-event-calendar.html</code> is the page; <code>hiring-event-calendar-review.html</code> is this review page; shared images in <code>img/</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>. The rows come from <code>scratchpad/calendar/live/events.json</code> (parsed from the live page) and the page is generated by <code>scratchpad/calendar/gen_calendar.py</code> from the home page&#39;s CSS and script.</p>
+</div></div>
+<script>
+(function(){var st={dev:'d',view:'p',open:true};try{var s=JSON.parse(localStorage.getItem('jfx-rezi-calendar-review')||'{}');Object.assign(st,s)}catch(e){}
+var bD=document.getElementById('bD'),bM=document.getElementById('bM'),bP=document.getElementById('bP'),bN=document.getElementById('bN'),bH=document.getElementById('bH'),view=document.getElementById('view'),notes=document.getElementById('notes'),sum=document.getElementById('sum');
+function save(){try{localStorage.setItem('jfx-rezi-calendar-review',JSON.stringify(st))}catch(e){}}
+function render(){bD.classList.toggle('on',st.dev==='d');bM.classList.toggle('on',st.dev==='m');view.classList.toggle('mob',st.dev==='m');bP.classList.toggle('on',st.view==='p');bN.classList.toggle('on',st.view==='n');view.hidden=st.view!=='p';notes.hidden=st.view!=='n';
+ document.querySelectorAll('.ctl').forEach(function(e){e.hidden=!st.open});sum.hidden=st.open;sum.textContent=(st.dev==='d'?'Desktop':'Mobile')+' · '+(st.view==='p'?'Page':'Build notes');bH.textContent=st.open?'Hide controls':'Show controls'}
+bD.onclick=function(){st.dev='d';save();render()};bM.onclick=function(){st.dev='m';save();render()};bP.onclick=function(){st.view='p';save();render()};bN.onclick=function(){st.view='n';save();render()};bH.onclick=function(){st.open=!st.open;save();render()};render()})();
+</script>
+
+</body>
+</html>
