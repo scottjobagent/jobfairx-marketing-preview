@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Hiring Pricing Rezi Direction</title>
+<style>
+:root{--bg:#f3f5f9;--fg:#0f172a;--mute:#5b6478;--line:#d9deea;--card:#fff;--accent:#0044b3;--chip:#e8efff;--chipfg:#0044b3}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0e1320;--fg:#e8ecf5;--mute:#98a2b8;--line:#263044;--card:#161c2b;--accent:#8fb4ff;--chip:#1c2a47;--chipfg:#b9d0ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1320;--fg:#e8ecf5;--mute:#98a2b8;--line:#263044;--card:#161c2b;--accent:#8fb4ff;--chip:#1c2a47;--chipfg:#b9d0ff;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;padding-block:0 40px;padding-left:max(0px, env(safe-area-inset-left, 0px));padding-right:max(0px, env(safe-area-inset-right, 0px))}
+.bar{background:var(--card);border-bottom:1px solid var(--line);padding:12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.bar b{font-size:15px}
+.bar .grp{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mute)}
+.bar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}
+.bar button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .bar button.on{color:#0e1320}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bar button.on{color:#0e1320}}
+.bar a{color:var(--accent);font-size:13px;font-weight:600}
+.bar .hide{margin-left:auto}
+.bar .sum{font-size:13px;color:var(--mute)}
+.view{padding:16px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px))}
+iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 110px);min-height:700px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mob iframe{width:390px;max-width:100%;height:844px;margin:0 auto;border-radius:28px;box-shadow:0 0 0 10px #111,0 0 0 11px #333}
+.notes{max-width:880px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.notes h2{font-size:18px;margin:0 0 8px}.notes h3{font-size:15px;margin:22px 0 6px}.notes p,.notes li{color:var(--fg)}.notes table{border-collapse:collapse;width:100%;font-size:13px}.notes td,.notes th{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}.notes code{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:var(--chip);color:var(--chipfg);padding:1px 5px;border-radius:4px}
+.notes a{color:var(--accent)}
+[hidden]{display:none!important}
+@media (max-width:700px){.mob iframe{width:100%;border-radius:10px;box-shadow:none}iframe{height:720px}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar">
+ <b>Employer pricing page · rezi pricing-page shape</b>
+ <span class="grp ctl">Device <button id="bD" class="on">Desktop</button><button id="bM">Mobile</button></span>
+ <span class="grp ctl">View <button id="bP" class="on">Page</button><button id="bN">Build notes</button></span>
+ <a class="ctl" href="https://jobfairx.com/employer/hiring-event-pricing" target="_blank" rel="noopener">Live page</a>
+ <a class="ctl" href="https://www.rezi.ai/" target="_blank" rel="noopener">rezi.ai</a>
+ <span class="sum" id="sum" hidden></span>
+ <button class="hide" id="bH">Hide controls</button>
+</div>
+<div class="view" id="view"><iframe id="fr" title="Hiring event pricing design, rezi.ai direction" src="hiring-event-pricing.html"></iframe></div>
+<div class="view" id="notes" hidden><div class="notes">
+<h2>Hiring event pricing, rezi pricing-page shape: build notes for Brandon</h2>
+<p>Design reference for <a href="https://jobfairx.com/employer/hiring-event-pricing" target="_blank" rel="noopener">jobfairx.com/employer/hiring-event-pricing</a>, built in the shape of rezi&#39;s <a href="https://www.rezi.ai/pricing" target="_blank" rel="noopener">pricing page</a>: a short header, the plan cards straight away, a link row on rules, a logo wall, one quote, a compare table, a FAQ with side tabs, a blue closing band. Same tokens, nav and footer as the other rezi-direction pages (home, event page, calendar), and a different shape from all of them. Every word is the live pricing page&#39;s copy unless marked below; prices and plan contents are the live ones (Pro says &quot;Unlimited recruiters&quot;, as the live pricing page and its Product JSON-LD do).</p>
+
+<h3>Page map</h3>
+<ol>
+<li><b>Header:</b> the &quot;Pricing&quot; pill on a rule, the H1 &quot;Flexible Hiring Event Packages&quot; in one colour, the live sub-line. Short, so the plans sit in the first screen.</li>
+<li><b>Plans:</b> Starter (white, grey button), Growth (brand blue, &quot;Most Popular&quot;, white button) with the live Events stepper, Total and &quot;You save&quot; inside an inset box (<code>data-dynamic="bundle-total"</code>: the stepper is static here; the live bundle maths stays yours), Pro (white, black button). Then the live line &quot;Looking for larger bundles or custom volume? See all bundles&quot; on two rules.</li>
+<li><b>Logos:</b> the home page&#39;s &quot;Trusted by top organizations&quot; wall.</li>
+<li><b>One quote:</b> the first employer story from the home page (Director of Talent Acquisition, Western Regional Medical Center; healthcare event, 36 interviews, 7 hires), centered, first sentence in black.</li>
+<li><b>What Employers Experience:</b> the live heading, line and three numbers (87% employers who return, 91% satisfaction, $28 average cost per interview) as three white cards.</li>
+<li><b>Compare table:</b> the plan-specific rows (price, jobs promoted, scheduled interviews, interview formats, recruiters), then the live &quot;All Packages Include&quot; list as eight rows with a check in every column, then a Reserve row. Growth column tinted. <b>New copy:</b> the heading &quot;Compare packages&quot; and the line &quot;Everything in the three packages, side by side.&quot;</li>
+<li><b>FAQ with tabs:</b> the six live questions in three tabs. <b>New copy:</b> the tab names Getting started, Interviews, Candidates. &quot;View all FAQs&quot; links to the live FAQ page.</li>
+<li><b>Closing band:</b> the live &quot;Ready to Start Hiring?&quot; heading and line, Reserve My Spot, the dashboard capture on the right (rezi&#39;s band). Then the footer.</li>
+</ol>
+
+<h3>What stays exactly as it is on the live page</h3>
+<ul>
+<li>Title, meta description, canonical, the Product JSON-LD with the three Offers, the three plans and their prices and lines, the bundles line and link, the eight &quot;All Packages Include&quot; items, the three experience numbers, the closing copy, the footer. The Reserve buttons must keep the live checkout handler (<code>data-live="reserve"</code>); the Growth stepper, Total and savings keep the live logic.</li>
+</ul>
+
+<h3>Motion</h3>
+<p>Header and plans rise on load; sections reveal on scroll. All off under <code>prefers-reduced-motion</code>.</p>
+
+<h3>Breakpoints</h3>
+<p>At 900px and below the plans stack, the stat cards stack, the FAQ tabs become a row above the questions, and the compare table scrolls sideways inside its card.</p>
+
+<h3>Decisions for Scott</h3>
+<ol>
+<li>The three experience numbers are on the live pricing page, so they are here. Keep them, or strike the 87% as you asked for the home page?</li>
+<li>Keep the compare table (the live page has the &quot;All Packages Include&quot; card instead)?</li>
+<li>The FAQ is new to this page (the live pricing page has none; the questions are the live FAQ&#39;s). Keep it?</li>
+<li>The quote: this one from the home page, or a different employer?</li>
+<li>The new strings: &quot;Compare packages&quot;, &quot;Everything in the three packages, side by side.&quot;, and the three tab names.</li>
+</ol>
+
+<h3>Files</h3>
+<p><code>hiring-event-pricing.html</code> is the page; <code>hiring-event-pricing-review.html</code> is this review page; shared images in <code>img/</code> and <code>img/logos/</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>. Generated by <code>scratchpad/pricing/gen_pricing.py</code> from the home page&#39;s CSS and script.</p>
+</div></div>
+<script>
+(function(){var st={dev:'d',view:'p',open:true};try{var s=JSON.parse(localStorage.getItem('jfx-rezi-pricing-review')||'{}');Object.assign(st,s)}catch(e){}
+var bD=document.getElementById('bD'),bM=document.getElementById('bM'),bP=document.getElementById('bP'),bN=document.getElementById('bN'),bH=document.getElementById('bH'),view=document.getElementById('view'),notes=document.getElementById('notes'),sum=document.getElementById('sum');
+function save(){try{localStorage.setItem('jfx-rezi-pricing-review',JSON.stringify(st))}catch(e){}}
+function render(){bD.classList.toggle('on',st.dev==='d');bM.classList.toggle('on',st.dev==='m');view.classList.toggle('mob',st.dev==='m');bP.classList.toggle('on',st.view==='p');bN.classList.toggle('on',st.view==='n');view.hidden=st.view!=='p';notes.hidden=st.view!=='n';
+ document.querySelectorAll('.ctl').forEach(function(e){e.hidden=!st.open});sum.hidden=st.open;sum.textContent=(st.dev==='d'?'Desktop':'Mobile')+' · '+(st.view==='p'?'Page':'Build notes');bH.textContent=st.open?'Hide controls':'Show controls'}
+bD.onclick=function(){st.dev='d';save();render()};bM.onclick=function(){st.dev='m';save();render()};bP.onclick=function(){st.view='p';save();render()};bN.onclick=function(){st.view='n';save();render()};bH.onclick=function(){st.open=!st.open;save();render()};render()})();
+</script>
+
+</body>
+</html>
