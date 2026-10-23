@@ -566,34 +566,91 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .calhead2 .wrap{padding-top:var(--sp-l)}
  .bundle{padding:var(--sp-l)}
 }
+
+
+/* ===== dropdown navigation (rezi style) ===== */
+.nav .wrap{gap:22px}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links>a,.dd>button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:0;background:transparent;color:var(--body);font:inherit;font-size:var(--fs-sm);letter-spacing:inherit;text-decoration:none;border-radius:8px;cursor:pointer;transition:color .3s var(--ease)}
+.nav-links>a:hover,.dd>button:hover,.dd.is-open>button,.nav-links>a[aria-current],.dd>button[aria-current]{color:var(--ink)}
+.nav-links>a[aria-current],.dd>button[aria-current]{font-weight:550}
+.dd>button svg{width:12px;height:12px;transition:transform .25s var(--ease)}
+.dd.is-open>button svg{transform:rotate(180deg)}
+.dd{position:relative}
+.dd-panel{position:absolute;left:0;top:calc(100% + 14px);min-width:560px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,36,91,.25),0 2px 8px rgba(0,0,0,.05);padding:22px 24px 10px;display:grid;grid-template-columns:1fr 1fr;gap:8px 32px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease);z-index:70}
+.dd-panel.cols3{grid-template-columns:1fr 1fr 220px;min-width:820px}
+.dd-panel.one{grid-template-columns:1fr;min-width:280px}
+.dd.is-open .dd-panel{opacity:1;transform:none;pointer-events:auto}
+.dd-panel .col h6{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px;font-size:var(--fs-xs);font-weight:450;color:var(--muted)}
+.dd-panel .col h6 a{color:var(--ink);font-weight:550;text-decoration:none;font-size:var(--fs-xs)}
+.dd-panel .col h6 a:hover{color:var(--brand)}
+.dd-item{display:block;padding:10px 10px;margin:0 -10px;border-radius:10px;text-decoration:none;color:inherit;transition:background .2s}
+.dd-item:hover{background:#F3F3F3}
+.dd-item b{display:block;font-size:var(--fs-sm);font-weight:550;color:var(--ink);line-height:1.3}
+.dd-item b .new{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:var(--pill);background:var(--green-t);color:var(--green);font-size:10px;font-weight:650;vertical-align:middle;letter-spacing:.02em}
+.dd-item span{display:block;font-size:var(--fs-xs);color:var(--muted);margin-top:3px;line-height:1.4}
+.dd-card{background:#F7F7F7;border:1px solid var(--line);border-radius:12px;padding:14px;align-self:start}
+.dd-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin-bottom:10px;display:block}
+.dd-card b{display:block;font-size:var(--fs-sm);font-weight:550;color:var(--ink)}
+.dd-card p{font-size:var(--fs-xs);color:var(--muted);margin:4px 0 8px;line-height:1.4}
+.dd-card a{font-size:var(--fs-xs);color:var(--brand);font-weight:550;text-decoration:none}
+.dd-foot{grid-column:1/-1;margin:8px -24px -10px;padding:12px 24px;border-top:1px solid var(--line);display:flex;gap:18px;flex-wrap:wrap}
+.dd-foot a{font-size:var(--fs-xs);color:var(--brand);font-weight:550;text-decoration:none}
+.menu .grp{border-top:1px solid var(--line);padding:8px 0;display:flex;flex-direction:column}
+.menu .grp>b{display:block;font-size:var(--fs-xs);color:var(--muted);font-weight:550;letter-spacing:.04em;text-transform:uppercase;padding:8px 0 4px}
+.menu .grp a{font-size:var(--fs);padding:9px 8px;border-bottom:0}
+.menu .grp .btn{margin-top:12px}
+@media (max-width:1100px){.dd-panel.cols3{grid-template-columns:1fr 1fr;min-width:600px}.dd-panel.cols3 .dd-card{display:none}}
+@media (max-width:1180px){#dd-resources .dd-panel{left:auto;right:0}.nav .wrap{gap:12px;padding-inline:20px}.nav-links>a,.dd>button{padding:6px 7px}.nav-right{gap:12px}.nav-right .signin{white-space:nowrap}}
+.nav-links a.cal .short{display:none}
+@media (max-width:1100px){.nav-links a.cal .long{display:none}.nav-links a.cal .short{display:inline}}
+@media (max-width:900px){.nav-links{display:none}.nav-right .signin{display:none}}
+/* ===== /dropdown navigation ===== */
 </style>
 </head>
 <body>
 
+<!-- nav:start -->
 <header class="nav">
  <div class="wrap">
   <a class="logo" href="https://jobfairx.com/employer" aria-label="JobFairX"><img src="img/logo.png" alt="JobFairX"></a>
   <nav class="nav-links" aria-label="Primary">
-   <a href="https://jobfairx.com/employer/hiring-event-calendar">Upcoming Hiring Events</a>
+   <div class="dd" id="dd-solutions"><button type="button" aria-expanded="false" aria-controls="p-solutions">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+    <div class="dd-panel cols3" id="p-solutions">
+     <div class="col"><h6>Hiring events by type <a href="https://jobfairx.com/employer/hiring-event-calendar">View all ›</a></h6><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-calendar#technology"><b>Technology hiring events</b><span>Engineers, developers, and data talent in live interviews</span></a><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-calendar#healthcare"><b>Healthcare hiring events</b><span>Nurses, techs, and clinical staff ready to interview</span></a><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-calendar#entry-level"><b>Entry-Level hiring events</b><span>Recent graduates to early-career professionals, matched to your roles</span></a><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-calendar#diversity"><b>Diversity hiring events</b><span>Qualified, diverse candidates in a structured event</span></a><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-calendar#veteran"><b>Veteran hiring events</b><span>Reliable, well-trained veterans matched to your open roles</span></a></div>
+     <div class="col"><h6>Plan your hiring</h6><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-calendar"><b>Upcoming hiring events</b><span>Hiring events in 300+ cities, by date and type</span></a><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-bundles"><b>Event bundles</b><span>Save up to 40% compared to individual pricing</span></a><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-pricing"><b>Hiring event pricing</b><span>Flat rate per event from $495. No per-candidate fees.</span></a></div>
+     <div class="dd-card"><img src="img/walkthrough.jpg" alt=""><b>See how JobFairX works</b><p>A quick walkthrough of the platform.</p><a href="https://www.youtube.com/watch?v=jE3IjF5q4Pg" target="_blank" rel="noopener">Watch the walkthrough ›</a></div>
+     <div class="dd-foot"><a href="https://jobfairx.com/employer/hiring-event-calendar">Browse all upcoming hiring events ›</a><a href="https://jobfairx.com/employer/hiring-event-pricing">Pricing ›</a></div>
+    </div>
+   </div>
+   <div class="dd" id="dd-features"><button type="button" aria-expanded="false" aria-controls="p-features">Features <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+    <div class="dd-panel" id="p-features">
+     <div class="col"><h6>Before the event</h6><a class="dd-item" href="https://jobfairx.com/employer#how-it-works"><b>AI candidate matching</b><span>Your roles matched to registered candidates within hours</span></a><a class="dd-item" href="https://jobfairx.com/employer#how-it-works"><b>Interview requests</b><span>Accept each request or turn on auto-accept</span></a><a class="dd-item" href="https://jobfairx.com/employer#how-it-works"><b>Candidate messaging and scheduling</b><span>Propose times, reschedule, and schedule follow-ups</span></a><a class="dd-item" href="https://jobfairx.com/employer#how-it-works"><b>Local candidate database</b><span>3+ million job seekers, verified within about 20 miles of the event city</span></a></div>
+     <div class="col"><h6>Event day and after</h6><a class="dd-item" href="https://jobfairx.com/employer#interviews"><b>In-person, video, or phone interviews</b><span>You choose the format, with 15 or 30 minute slots</span></a><a class="dd-item" href="https://jobfairx.com/employer#interviews"><b>Event-day lobby</b><span>Interview rooms, candidate check-in, and Start interview</span></a><a class="dd-item" href="https://jobfairx.com/employer#interviews"><b>Panel interviews<span class=new>NEW</span></b><span>More than one interviewer in the same interview</span></a><a class="dd-item" href="https://jobfairx.com/employer#how-it-works"><b>Post-event report</b><span>Interview stats, candidate dispositions, and downloadable data</span></a></div>
+     <div class="dd-foot"><a href="https://jobfairx.com/employer#how-it-works">See how it works ›</a><a href="https://jobfairx.com/employer/hiring-event-faq">Hiring event FAQ ›</a></div>
+    </div>
+   </div>
+   <a class="cal" href="https://jobfairx.com/employer/hiring-event-calendar" aria-current="page"><span class="long">Upcoming Hiring Events</span><span class="short">Hiring Events</span></a>
    <a href="https://jobfairx.com/employer/hiring-event-pricing">Pricing</a>
-   <a href="https://jobfairx.com/employer/hiring-event-faq">FAQ</a>
-   <a href="https://jobfairx.com/employer/contact">Contact Us</a>
+   <div class="dd" id="dd-resources"><button type="button" aria-expanded="false" aria-controls="p-resources">Resources <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+    <div class="dd-panel one" id="p-resources"><div class="col"><a class="dd-item" href="https://jobfairx.com/employer/hiring-event-faq"><b>Hiring event FAQ</b><span>Answers to the questions employers ask first</span></a><a class="dd-item" href="https://jobfairx.com/employer/resources"><b>Resources</b><span>Guides for hiring at events</span></a><a class="dd-item" href="https://jobfairx.com/employer/about-us"><b>About JobFairX</b><span>Who we are</span></a><a class="dd-item" href="https://jobfairx.com/employer/contact"><b>Contact us</b><span>We reply within one business day</span></a><a class="dd-item" href="https://jobfairx.com/job-fair-calendar"><b>For job seekers</b><span>Browse upcoming job fairs</span></a></div></div>
+   </div>
   </nav>
   <div class="nav-right">
-   <a class="signin" href="https://jobfairx.com/employer">Sign In</a>
+   <a class="signin" href="https://virtual.jobfairx.com/login/#/">Sign In</a>
    <a class="btn sm" href="https://jobfairx.com/employer/hiring-event-pricing">Register for an Event</a>
    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
   </div>
  </div>
 </header>
 <div class="menu" id="menu">
- <a href="https://jobfairx.com/employer/hiring-event-calendar">Upcoming Hiring Events</a>
- <a href="https://jobfairx.com/employer/hiring-event-pricing">Pricing</a>
- <a href="https://jobfairx.com/employer/hiring-event-faq">FAQ</a>
- <a href="https://jobfairx.com/employer/contact">Contact Us</a>
- <a href="https://jobfairx.com/employer">Sign In</a>
- <a class="btn" href="https://jobfairx.com/employer/hiring-event-pricing">Register for an Event</a>
+ <div class="grp"><b>Solutions</b><a href="https://jobfairx.com/employer/hiring-event-calendar#technology">Technology hiring events</a><a href="https://jobfairx.com/employer/hiring-event-calendar#healthcare">Healthcare hiring events</a><a href="https://jobfairx.com/employer/hiring-event-calendar#entry-level">Entry-Level hiring events</a><a href="https://jobfairx.com/employer/hiring-event-calendar#diversity">Diversity hiring events</a><a href="https://jobfairx.com/employer/hiring-event-calendar#veteran">Veteran hiring events</a><a href="https://jobfairx.com/employer/hiring-event-bundles">Event bundles</a></div>
+ <div class="grp"><b>Features</b><a href="https://jobfairx.com/employer#how-it-works">AI candidate matching</a><a href="https://jobfairx.com/employer#how-it-works">Interview requests</a><a href="https://jobfairx.com/employer#how-it-works">Candidate messaging and scheduling</a><a href="https://jobfairx.com/employer#interviews">In-person, video, or phone interviews</a><a href="https://jobfairx.com/employer#interviews">Event-day lobby</a><a href="https://jobfairx.com/employer#interviews">Panel interviews</a><a href="https://jobfairx.com/employer#how-it-works">Post-event report</a></div>
+ <div class="grp"><a href="https://jobfairx.com/employer/hiring-event-calendar">Upcoming Hiring Events</a><a href="https://jobfairx.com/employer/hiring-event-pricing">Pricing</a></div>
+ <div class="grp"><b>Resources</b><a href="https://jobfairx.com/employer/hiring-event-faq">Hiring event FAQ</a><a href="https://jobfairx.com/employer/resources">Resources</a><a href="https://jobfairx.com/employer/about-us">About JobFairX</a><a href="https://jobfairx.com/employer/contact">Contact us</a></div>
+ <div class="grp"><a href="https://virtual.jobfairx.com/login/#/">Sign In</a><a class="btn" href="https://jobfairx.com/employer/hiring-event-pricing">Register for an Event</a></div>
 </div>
+<!-- nav:end -->
 <main>
 <div class="seekers">Looking for a job? <a href="https://jobfairx.com/job-fair-calendar">Browse upcoming job fairs →</a></div>
 <!-- 1. header: a plain title and one line (rezi changelog) -->
@@ -1403,8 +1460,27 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
   more.addEventListener('click',function(){shown+=PAGE;apply()});
   months.forEach(function(m){m.addEventListener('click',function(e){var g=document.getElementById(m.getAttribute('href').slice(1));if(!g)return;e.preventDefault();if(g.hidden){shown=rows.length;apply()}window.scrollTo({top:g.getBoundingClientRect().top+window.scrollY-90,behavior:'smooth'})})});
   document.getElementById('reset').addEventListener('click',function(e){e.preventDefault();q.value='';text='';type='all';shown=PAGE;types.forEach(function(x){var on=x.dataset.type==='all';x.classList.toggle('is-on',on);x.setAttribute('aria-pressed',on?'true':'false')});apply();q.focus()});
+  var hk=(location.hash||'').replace('#','').toLowerCase(); if(hk==='veteran')hk='veterans'; if(hk==='entry-level'||hk==='entrylevel')hk='entry-level';
+  var hb=hk?document.querySelector('#tlist button[data-type="'+hk+'"]'):null; if(hb){type=hk;types.forEach(function(x){var on=x===hb;x.classList.toggle('is-on',on);x.setAttribute('aria-pressed',on?'true':'false')})}
+  window.addEventListener('hashchange',function(){var k=(location.hash||'').replace('#','').toLowerCase(); if(k==='veteran')k='veterans'; var b=document.querySelector('#tlist button[data-type="'+k+'"]'); if(b)b.click()});
   apply();
  })();
 })();</script>
+
+<script>
+/* dropdown navigation: hover and click on desktop, Escape closes, focus leaves close */
+(function(){
+ var dds=[].slice.call(document.querySelectorAll('.dd')),timer=null;
+ function setOpen(dd,on){dds.forEach(function(d){var o=d===dd&&on;d.classList.toggle('is-open',o);d.querySelector('button').setAttribute('aria-expanded',o?'true':'false')})}
+ dds.forEach(function(dd){
+  var btn=dd.querySelector('button');
+  dd.addEventListener('mouseenter',function(){clearTimeout(timer);setOpen(dd,true)});
+  dd.addEventListener('mouseleave',function(){timer=setTimeout(function(){setOpen(dd,false)},160)});
+  btn.addEventListener('click',function(){setOpen(dd,!dd.classList.contains('is-open'))});
+  dd.addEventListener('focusout',function(e){if(!dd.contains(e.relatedTarget))setOpen(dd,false)});
+ });
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(null,false)});
+})();
+</script>
 </body>
 </html>
