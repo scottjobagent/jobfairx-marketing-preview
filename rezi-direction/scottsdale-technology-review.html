@@ -32,7 +32,7 @@ iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 
 </head>
 <body>
 <div class="bar" id="bar">
- <b>Employer event page · rezi.ai direction (five types, switch on the left)</b>
+ <b>Employer event page · rezi tool-page shape, v2 (five types, switch on the left)</b>
  <span class="grp ctl">Device <button id="bD" class="on">Desktop</button><button id="bM">Mobile</button></span>
  <span class="grp ctl">View <button id="bP" class="on">Page</button><button id="bN">Build notes</button></span>
  <a class="ctl" href="https://jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology" target="_blank" rel="noopener">Live page</a>
@@ -42,56 +42,47 @@ iframe{display:block;border:0;background:#FAFAFA;width:100%;height:calc(100vh - 
 </div>
 <div class="view" id="view"><iframe id="fr" title="Scottsdale Technology event page design, rezi.ai direction" src="scottsdale-technology.html"></iframe></div>
 <div class="view" id="notes" hidden><div class="notes">
-<h2>Scottsdale Technology event page, rezi.ai direction: build notes for Brandon</h2>
-<p>Design reference for jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology (the employer event-page template), rebuilt in the same system as the rezi-direction employer home page: rezi.ai&#39;s layout and feel, JobFairX colours, Inter. Every word is the live event page&#39;s copy, the live FAQ, or the live home page&#39;s product wording, except the hero headline and supporting line, which come from Scott&#39;s 22 Oct brief. Design only: nothing here is production code, and nothing here changes the event data model. Product screens are the prototype captures used on the home page (a Dallas demo event); the live page shows this event&#39;s own data in the same frames.</p>
+<h2>Employer event page, version 2 (rezi tool-page shape): build notes for Brandon</h2>
+<p>Design reference for the employer event-page template (<a href="https://jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology" target="_blank" rel="noopener">Scottsdale Technology</a> and the four other types behind the switch on the left). Version 1 (22 Oct) reused the home page&#39;s layout; Scott asked for one rezi layout per kind of page, so this version takes the shape of rezi&#39;s <a href="https://www.rezi.ai/tools/resume-checker" target="_blank" rel="noopener">Resume Checker</a> page (the hero does the job) and the pinned feature band from rezi&#39;s <a href="https://www.rezi.ai/ai-resume-builder" target="_blank" rel="noopener">AI Resume Builder</a> page. Same tokens, nav and footer as the other rezi-direction pages; every word is the live event page&#39;s copy and every number is live data. Version 1 is kept in <code>v1-same-layout/</code>.</p>
+
+<h3>Page map</h3>
+<ol>
+<li><b>Hero, two columns with one vertical rule between them.</b> Left: the event line (city and type pill, date and time), the H1 in one colour, the live sub-line, Reserve My Spot with the show-rate line beside it, and three checklist items (live copy from the home page). Right: the reservation card: event, date, time, interview formats, pre-registered candidates (<code>data-dynamic="pre-registered-count"</code>), the From price, a full-width Reserve My Spot, the registration countdown (<code>data-dynamic="registration-countdown"</code>) and the averages line. This card replaces the stat strip, the product frame and the closing-band card of version 1.</li>
+<li><b>The difference: three cards with pictures.</b> The home page&#39;s three points, each with a product capture. Then rezi&#39;s slim bar sitting on the rule: the candidate count and a small Reserve My Spot.</li>
+<li><b>How JobFairX works, dark band.</b> The product frame stays pinned on the left while five steps scroll past on the right (Post jobs, AI matching, Review and confirm, Interview, Track results); each step carries its own capture into the frame and its checklist is the live page&#39;s bullet copy (candidate messaging, scheduling, tracking, the post-event report). On phones the frame is not pinned; each step shows its own picture above the text.</li>
+<li><b>Results:</b> the type&#39;s heading and line, the past-company logos for that type, three employer quotes.</li>
+<li><b>Pricing:</b> the three plans, All packages include, the bundles note. Unchanged content.</li>
+<li><b>FAQ:</b> heading on the left, the six live questions on the right.</li>
+<li><b>Closing band:</b> centered on navy, the countdown, the type&#39;s closing headline, the show-rate line, Reserve My Spot.</li>
+<li><b>Contact form</b> and the footer, as on the live page.</li>
+</ol>
 
 <h3>The event-type switch (review aid, far left edge)</h3>
-<p>The small T / E / D / V / H control on the left edge of the page switches the whole design between the five live employer event pages, so one link shows every type: <b>T</b> Technology (Scottsdale, Oct 29), <b>E</b> Entry-Level (Dallas, Nov 18), <b>D</b> Diversity (Birmingham, Dec 17), <b>V</b> Veterans (Dearborn, Nov 2), <b>H</b> Healthcare (Boise, Oct 28). It sits in the page margin on desktop (the content column starts further right) and becomes a small row at the bottom-left on phones. It is a review aid, not part of the production page. Each type can be linked directly with a hash: <code>#technology</code>, <code>#entry-level</code>, <code>#diversity</code>, <code>#veteran</code>, <code>#healthcare</code>; the last choice is remembered in the browser.</p>
-<p>What changes per type, all read from that type&#39;s live page on 22 Oct 2026: the event pill, date, time and timezone; the registration countdown; the H1 (the live headline with the city added: &quot;Hire emerging new talent in Dallas.&quot;, &quot;Build a more inclusive team in Birmingham.&quot;, &quot;Hire mission-ready veterans in Dearborn.&quot;, &quot;Fill your open healthcare roles in Boise.&quot;; Technology keeps the brief&#39;s line); the supporting line (the live sub copy; Technology keeps the brief&#39;s); the pre-registered count and the three averages with their caption; the past-company logos (each type&#39;s own set from its live page, in <code>img/past/</code> with a type prefix); the results heading, sub-line and three testimonials; the messaging mock&#39;s job title, the Schedule name and message, and the Waiting-for-response rows; the closing headline, event card, page title and meta description. Everything else (steps, interview management, pricing, FAQ, contact, footer) is identical across types on the live pages too. Live pages: <a href="https://jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology">Technology</a> · <a href="https://jobfairx.com/employer/job-fairs/texas/dallas/next-entry-level">Entry-Level</a> · <a href="https://jobfairx.com/employer/job-fairs/alabama/birmingham/642761702315655213">Diversity</a> · <a href="https://jobfairx.com/employer/job-fairs/michigan/dearborn/next-veteran">Veterans</a> · <a href="https://jobfairx.com/employer/job-fairs/idaho/boise/next-healthcare">Healthcare</a>.</p>
+<p>Unchanged from the first round: T / E / D / V / H switches the whole page between the five live event pages (Technology Scottsdale, Entry-Level Dallas, Diversity Birmingham, Veterans Dearborn, Healthcare Boise). Hash links <code>#technology</code> <code>#entry-level</code> <code>#diversity</code> <code>#veteran</code> <code>#healthcare</code>; the choice is remembered. Everything that changes per type carries a <code>data-f</code> hook, the past-company grid and the three quotes are rebuilt from the embedded JSON, and the title and meta description follow. Not part of the production page.</p>
 
 <h3>What stays exactly as it is on the live page</h3>
 <ul>
-<li>Event facts: Scottsdale, AZ · Technology Hiring Event · October 29, 2026 · 11:00 AM – 3:00 PM MST. The date, time and timezone come from the event record, never from the template.</li>
-<li>Dynamic values, marked in the markup with <code>data-dynamic</code>: the pre-registered candidate count (<code>pre-registered-count</code>, shown twice: the proof strip and the closing card) and the registration countdown (<code>registration-countdown</code>, &quot;Employer registration closes in N days&quot;, the live top bar&#39;s text). Both keep their live source. The three historical figures (53 average interviews, 11 average hires, 84% show rate) are the technology type&#39;s figures from the live page and are captioned &quot;Averages across past JobFairX technology hiring events&quot; so they are never read as this event&#39;s promise.</li>
-<li>Reserve My Spot: every button carries <code>data-live=&quot;reserve&quot;</code> and must call the live page&#39;s existing Reserve handler (checkout). In this reference they scroll to the closing band. Labels are identical everywhere: Reserve My Spot.</li>
-<li>Pricing: Starter $495, Growth $895 (Most Popular, as on the live page), Pro $1,495, the four lines per package, All packages include, and the bundles callout with its link to /employer/hiring-event-bundles. Any promotional pricing logic stays in the component.</li>
-<li>FAQ: the six live questions and answers verbatim, as real details/summary elements so the answers are in the HTML (the live page injects them on click, which search engines never see; worth fixing while here). FAQPage JSON-LD stays as it is.</li>
-<li>Testimonials: James K., Priya D. and Ryan T., exact words and attributions. The Unsplash portraits are replaced with initials because stock faces presented as the person misrepresent who said it.</li>
-<li>Past companies: the sixteen logo files already on the page (Accenture to VMware). The scrolling strip of CloudScale, ByteForge Labs, NexGen and the other invented names is not carried over (flagged to Scott on 30 Sep 2026).</li>
-<li>Contact form: the five live fields, Submit, reCAPTCHA notice. Title, meta description and canonical as live. Event JSON-LD unchanged by this design; note separately that it declares an online-only event while the page offers in-person interviews.</li>
-<li>Nav, footer, Sign In (virtual.jobfairx.com) and all page links as live.</li>
+<li>All copy, numbers, prices, the FAQ, the contact form and the footer. The Reserve buttons must keep the live checkout handler (<code>data-live="reserve"</code>); here they scroll to pricing.</li>
+<li>Dynamic values are marked <code>data-dynamic</code>: the pre-registered count (hero card and slim bar) and the registration countdown (hero card and closing band). The averages and show rate come from the type&#39;s live page.</li>
+<li>Keep the live page&#39;s Event JSON-LD, with the online-only attendance flag.</li>
 </ul>
 
-<h3>Page map and the rezi pattern each section uses</h3>
-<table>
-<tr><th>#</th><th>Section</th><th>Pattern</th><th>Notes</th></tr>
-<tr><td>1</td><td>Hero</td><td>rezi hero: event line, two-tone H1 left, paragraph + blue pill + text link right, browser frame below</td><td>H1 &quot;Meet your next great tech hire in Scottsdale.&quot; (brief&#39;s headline, localised). The event pill, date line and countdown pill sit above the H1. The frame cycles four real product screens (interview requests first, so technology candidates are the first thing seen). No stock photo.</td></tr>
-<tr><td>2</td><td>Proof strip</td><td>Integrated strip, not cards: live count left with its Updated daily pill, hairline, three averages right with their caption</td><td>Figures count up once on entry (1.2 s). The count element is dynamic.</td></tr>
-<tr><td>3</td><td>Trusted by + walkthrough</td><td>Logo grid 8 x 2 in colour; a bordered card with the YouTube poster and a play button</td><td>Video opens on YouTube (jE3IjF5q4Pg); on the live site keep the embed if preferred.</td></tr>
-<tr><td>4</td><td>How JobFairX works</td><td>The pinned, scroll-driven step section from the home page (see the home notes) with the four steps from the brief</td><td>Screens: event setup, dashboard with matching, interview requests, post-event report.</td></tr>
-<tr><td>5</td><td>Interview management (navy)</td><td>Dark double frame with the event lobby, three points under it</td><td>Words from the live Event day step, the FAQ and the live scheduling copy; the panel-interviews sentence is the product wording from the home page.</td></tr>
-<tr><td>6</td><td>Messaging and scheduling (blue band)</td><td>One light panel with three real product views side by side: the message thread, the Schedule form, the Waiting for candidate&#39;s response table; the live page&#39;s three bullet lists under it</td><td>The three live sub-sections are one workflow here, as the brief asked. Names and texts are the live page&#39;s mock content.</td></tr>
-<tr><td>7</td><td>Results</td><td>Three story cards, first sentence in black, grey attribution band</td><td></td></tr>
-<tr><td>8</td><td>Pricing</td><td>Three plans, Growth featured in brand blue, All packages include, bundles callout</td><td></td></tr>
-<tr><td>9</td><td>FAQ</td><td>Centred narrow accordion</td><td></td></tr>
-<tr><td>10</td><td>Closing band (blue)</td><td>Countdown pill, two-tone headline, show-rate line, Reserve My Spot; an event card on the right with date, time, formats, live count and the starting price, bleeding off the band&#39;s bottom edge</td><td>The card answers &quot;what, when, how, how much&quot; in one place.</td></tr>
-<tr><td>11</td><td>Contact + footer</td><td>Two columns: intro left, the live form right</td><td></td></tr>
-</table>
+<h3>Motion</h3>
+<p>The hero rises in a stagger on load; sections reveal on scroll; the pinned frame cross-fades between captures as each step crosses the middle of the screen (IntersectionObserver with a 45% band). All off under <code>prefers-reduced-motion</code>.</p>
 
-<h3>System</h3>
-<p>Identical tokens, type, buttons, frames, reveals and the pinned section to the employer home page in this folder (employer-home-rezi.html); its build notes carry the measured rezi values and the motion rules. Page-specific CSS is appended at the end of the stylesheet under &quot;event page additions&quot;. Breakpoints: 1100px (logo grid 4 across, flow panel 2 + 1), 900px (proof strip stacks, walkthrough stacks, points stack, contact stacks), 640px (phone sizes). Reduced motion: no reveals, no pin, no count-up, no tab cycling.</p>
+<h3>Breakpoints</h3>
+<p>At 1100px and below the hero and the feature band go half and half; at 900px and below the hero stacks (card under the text, the vertical rule becomes a horizontal one), the cards stack, the pinned frame gives way to one picture per step, and the FAQ and contact grids stack.</p>
 
 <h3>Decisions for Scott</h3>
 <ol>
-<li>Headline: &quot;Meet your next great tech hire in Scottsdale.&quot; (the brief&#39;s line with the city added so the H1 says where). The live H1 was &quot;Hire Top Tech Talent&quot;.</li>
-<li>The invented company strip is out; the sixteen real logos carry the proof.</li>
-<li>Testimonial portraits replaced with initials.</li>
-<li>The YouTube walkthrough is a poster card linking out rather than an embedded player.</li>
-<li>Reserve My Spot scrolls to the closing band in this reference; Brandon wires the live handler.</li>
+<li>Is the reservation card the right thing to put in the hero, or should the hero keep a product picture with the card lower down?</li>
+<li>Five steps in the dark band, or the four of version 1?</li>
+<li>The closing band is centered and navy here; keep, or drop it now that the card sits in the hero?</li>
+<li>Pricing stays on the event page (as live); should it move to a shorter three-line summary with a link to the pricing page?</li>
 </ol>
 
 <h3>Files</h3>
-<p><code>scottsdale-technology-rezi.html</code> is the page; <code>scottsdale-technology-rezi-review.html</code> is this review page; shared images in <code>img/</code>, the sixteen past-company logos in <code>img/past/</code>, the walkthrough poster <code>img/walkthrough.jpg</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>.</p>
+<p><code>scottsdale-technology.html</code> is the page; <code>scottsdale-technology-review.html</code> is this review page; shared images in <code>img/</code>, the past-company logos in <code>img/past/</code>. Folder: <code>Desktop/JFX Design Ideas/make-redesign/rezi-direction-2026-10-22/</code>. Generated by <code>scratchpad/scottsdale/gen_page_v2.py</code> from the home page&#39;s CSS and script and <code>scottsdale/types/types.json</code>.</p>
 </div></div>
 <script>
 (function(){var st={dev:'d',view:'p',open:true};try{var s=JSON.parse(localStorage.getItem('jfx-rezi-scottsdale-review')||'{}');Object.assign(st,s)}catch(e){}
