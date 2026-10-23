@@ -553,6 +553,16 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .form textarea.in{height:110px;resize:vertical}
 .form .btn{min-width:180px}
 .form .legal{font-size:var(--fs-xs);color:var(--muted);margin-top:14px}
+/* review aid: event-type switch on the far left edge (not part of the production design) */
+.typeswitch{position:fixed;left:10px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:6px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:999px;box-shadow:0 8px 24px rgba(0,36,91,.12)}
+.typeswitch button{position:relative;width:34px;height:34px;border-radius:50%;border:0;background:transparent;color:var(--body);font:inherit;font-size:13px;font-weight:650;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.typeswitch button:hover{background:var(--tint);color:var(--brand)}
+.typeswitch button.is-on{background:var(--brand);color:#fff}
+.typeswitch button .tip{position:absolute;left:44px;top:50%;transform:translateY(-50%) translateX(-6px);white-space:nowrap;background:var(--ink);color:#fff;font-size:12.5px;font-weight:550;padding:6px 10px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+.typeswitch button:hover .tip,.typeswitch button:focus-visible .tip{opacity:1;transform:translateY(-50%) translateX(0)}
+.typeswitch .cap{font-size:9px;letter-spacing:.06em;color:var(--muted);text-align:center;padding:2px 0 0;text-transform:uppercase}
+@media (max-width:900px){.typeswitch{top:auto;bottom:14px;left:12px;transform:none;flex-direction:row;padding:5px}.typeswitch .cap{display:none}.typeswitch button .tip{display:none}}
+@media print{.typeswitch{display:none}}
 @media (max-width:1100px){.pastgrid{grid-template-columns:repeat(4,1fr)}.flow{grid-template-columns:1fr 1fr}.flow .track{grid-column:1/-1}}
 @media (max-width:900px){.proof{grid-template-columns:1fr}.proof .live{border-right:0;border-bottom:1px solid var(--line);padding:22px 0}.proof .hist{padding:20px 0}.walk{grid-template-columns:1fr}.walk .wt{padding:20px 20px 10px}.dpoints,.fpoints{grid-template-columns:1fr}.contact{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.flow .track{grid-column:auto}}
 @media (max-width:640px){.pastgrid{grid-template-columns:repeat(4,1fr);gap:16px 12px}.pastgrid img{height:22px;max-width:76px}.proof .hist{grid-template-columns:1fr 1fr 1fr;gap:10px}.proof .hist div b{font-size:1.5rem}.evline .ev-when{width:100%}.form .g2{grid-template-columns:1fr}.bundle{padding:16px}}
@@ -587,20 +597,27 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  <a href="https://virtual.jobfairx.com/login/#/">Sign In</a>
  <a class="btn" href="https://jobfairx.com/employer/hiring-event-pricing">Register for an Event</a>
 </div>
+<nav class="typeswitch" id="typeswitch" aria-label="Event type (review aid: switches the page between the five live event pages)">
+ <button type="button" data-type="technology" class="is-on" aria-pressed="true">T<span class="tip">Technology · Scottsdale</span></button>
+ <button type="button" data-type="entry-level" aria-pressed="false">E<span class="tip">Entry-Level · Dallas</span></button>
+ <button type="button" data-type="diversity" aria-pressed="false">D<span class="tip">Diversity · Birmingham</span></button>
+ <button type="button" data-type="veteran" aria-pressed="false">V<span class="tip">Veterans · Dearborn</span></button>
+ <button type="button" data-type="healthcare" aria-pressed="false">H<span class="tip">Healthcare · Boise</span></button>
+</nav>
 <main>
 <!-- 1. hero -->
 <section class="sec hero"><div class="wrap">
  <div class="hero-grid">
   <div class="hero-text">
    <div class="evline load" style="--i:0">
-    <span class="ev-pill"><i></i>Scottsdale, AZ · Technology Hiring Event</span>
-    <span class="ev-when">October 29, 2026 · 11:00 AM – 3:00 PM MST</span>
-    <span class="ev-closes" data-dynamic="registration-countdown">Employer registration closes in 6 days</span>
+    <span class="ev-pill"><i></i><span data-f="pill">Scottsdale, AZ · Technology Hiring Event</span></span>
+    <span class="ev-when" data-f="when">October 29, 2026 · 11:00 AM – 3:00 PM MST</span>
+    <span class="ev-closes" data-dynamic="registration-countdown">Employer registration closes in <span data-f="closes">6</span> days</span>
    </div>
-   <h1 class="display load" style="--i:1">Meet your next great tech hire <span class="dim">in Scottsdale.</span></h1>
+   <h1 class="display load" style="--i:1"><span data-f="h1a">Meet your next great tech hire</span> <span class="dim" data-f="h1b">in Scottsdale.</span></h1>
   </div>
   <div class="hero-side">
-   <p class="lead load" style="--i:2">Connect with engineers, developers, and data professionals through AI-powered candidate matching and scheduled interviews at the Scottsdale Technology hiring event.</p>
+   <p class="lead load" style="--i:2" data-f="sub">Connect with engineers, developers, and data professionals through AI-powered candidate matching and scheduled interviews at the Scottsdale Technology hiring event.</p>
    <div class="hero-cta load" style="--i:3">
     <a class="btn" href="#reserve" data-live="reserve">Reserve My Spot</a>
     <a class="more" href="#how-it-works">See how it works <i>→</i></a>
@@ -625,12 +642,12 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
   </div>
  </div>
  <div class="proof load" id="proof" style="--i:5">
-  <div class="live"><b class="cnt" data-n="778" data-dynamic="pre-registered-count">778</b><div class="lt"><span>Pre-registered candidates for this event</span><em>Updated daily</em></div></div>
+  <div class="live"><b class="cnt" data-n="778" data-dynamic="pre-registered-count" data-f="count">778</b><div class="lt"><span>Pre-registered candidates for this event</span><em>Updated daily</em></div></div>
   <div class="hist">
-   <div><b class="cnt" data-n="53">53</b><span>Avg. interviews per employer</span></div>
-   <div><b class="cnt" data-n="11">11</b><span>Avg. hires per employer</span></div>
-   <div><b class="cnt" data-n="84" data-fmt="%">84%</b><span>Avg. interview show rate</span></div>
-   <p class="note">Averages across past JobFairX technology hiring events.</p>
+   <div><b class="cnt" data-n="53" data-f="avgInt">53</b><span>Avg. interviews per employer</span></div>
+   <div><b class="cnt" data-n="11" data-f="avgHires">11</b><span>Avg. hires per employer</span></div>
+   <div><b class="cnt" data-n="84" data-fmt="%" data-f="show">84%</b><span>Avg. interview show rate</span></div>
+   <p class="note">Averages across past JobFairX <span data-f="adj">technology</span> hiring events.</p>
   </div>
  </div>
 </div></section>
@@ -639,7 +656,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 <section class="sec tight"><div class="wrap">
  <div class="logos">
   <p class="cap">Trusted by top employers to build their teams</p>
-  <div class="pastgrid" data-reveal data-stagger><img src="img/past/accenture.png" alt="Accenture"><img src="img/past/adobe.png" alt="Adobe"><img src="img/past/capital-one.png" alt="Capital One"><img src="img/past/cdw.png" alt="CDW"><img src="img/past/cisco.png" alt="Cisco"><img src="img/past/cognizant.png" alt="Cognizant"><img src="img/past/dell.png" alt="Dell"><img src="img/past/hp.png" alt="HP"><img src="img/past/ibm.png" alt="IBM"><img src="img/past/infosys.png" alt="Infosys"><img src="img/past/intuit.png" alt="Intuit"><img src="img/past/oracle.png" alt="Oracle"><img src="img/past/paypal.png" alt="PayPal"><img src="img/past/salesforce.png" alt="Salesforce"><img src="img/past/servicenow.png" alt="ServiceNow"><img src="img/past/vmware.png" alt="VMware"></div>
+  <div class="pastgrid" id="pastgrid" data-reveal data-stagger><img src="img/past/accenture.png" alt="Accenture"><img src="img/past/adobe.png" alt="Adobe"><img src="img/past/capital-one.png" alt="Capital One"><img src="img/past/cdw.png" alt="CDW"><img src="img/past/cisco.png" alt="Cisco"><img src="img/past/cognizant.png" alt="Cognizant"><img src="img/past/dell.png" alt="Dell"><img src="img/past/hp.png" alt="HP"><img src="img/past/ibm.png" alt="IBM"><img src="img/past/infosys.png" alt="Infosys"><img src="img/past/intuit.png" alt="Intuit"><img src="img/past/oracle.png" alt="Oracle"><img src="img/past/paypal.png" alt="PayPal"><img src="img/past/salesforce.png" alt="Salesforce"><img src="img/past/servicenow.png" alt="ServiceNow"><img src="img/past/vmware.png" alt="VMware"></div>
  </div>
  <div class="walk" data-reveal>
   <div class="wt"><p class="kicker" style="margin-bottom:8px">Watch walkthrough</p><h3>See how JobFairX works</h3><p>A quick walkthrough of the platform.</p><a class="btn ghost sm" href="https://www.youtube.com/watch?v=jE3IjF5q4Pg" target="_blank" rel="noopener">Watch the walkthrough</a></div>
@@ -707,20 +724,20 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  <div class="flow" data-reveal>
   <div class="ui">
    <div class="t">Messages</div>
-   <div class="who"><span class="mono">TW</span><div><b>Tamara Williams</b><small>Senior Network Engineer · Scottsdale, AZ</small></div></div>
+   <div class="who"><span class="mono">TW</span><div><b>Tamara Williams</b><small data-f="msgJob">Senior Network Engineer · Scottsdale, AZ</small></div></div>
    <div class="msg"><div class="b me">Hi Tamara — your interview is confirmed for tomorrow at 2pm. Talk soon!</div><div class="b them">Confirmed, thank you! Looking forward to it.</div><small>Delivered · 11:00 AM</small></div>
   </div>
   <div class="ui frm">
-   <div class="t">Schedule with Nadia Joshi</div>
+   <div class="t">Schedule with <span data-f="schedName">Nadia Joshi</span></div>
    <div class="row2"><div><div class="lab">Interview Date*</div><div class="field">05/28/2026</div></div><div><div class="lab">Start Time (MDT)*</div><div class="field">11:00 AM</div></div></div>
    <span class="more">+ Suggest multiple times</span>
-   <div class="lab">Message to Nadia Joshi</div>
-   <textarea readonly>Hi Nadia, Thank you for your interest in our open IT Support Technician role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.</textarea>
+   <div class="lab">Message to <span data-f="schedName">Nadia Joshi</span></div>
+   <textarea readonly data-f="schedMsg">Hi Nadia, Thank you for your interest in our open IT Support Technician role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.</textarea>
    <div class="acts"><span class="ghostb">Cancel</span><span class="mini">Send</span></div>
   </div>
   <div class="ui track">
    <div class="t">Waiting for candidate's response</div>
-   <table><thead><tr><th>Name</th><th>Desired job</th><th>Proposed time</th><th>Status</th></tr></thead><tbody>
+   <table><thead><tr><th>Name</th><th>Desired job</th><th>Proposed time</th><th>Status</th></tr></thead><tbody id="trackrows">
     <tr><td>Sanjay Iyer<small>View resume</small></td><td>Software Engineer</td><td>May 28 · 12 PM<small>+1 more</small></td><td><span class="st">Awaiting candidate</span></td></tr>
     <tr><td>Emma Rivera<small>View resume</small></td><td>Data Scientist</td><td>May 30 · 2 PM</td><td><span class="st">Awaiting candidate</span></td></tr>
     <tr><td>Tyler Brooks<small>View resume</small></td><td>Automation Engineer</td><td>Jun 3 · 3 PM</td><td><span class="st">Awaiting candidate</span></td></tr>
@@ -739,10 +756,10 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 <section class="sec"><div class="wrap">
  <div class="eyebrow"><span>Hiring event results</span></div>
  <div class="head" data-reveal>
-  <div class="ttl"><h2 class="display">Results from <span class="dim">top tech teams</span></h2></div>
-  <div class="desc"><p>Hear from engineering leaders who've used our events to hire developers, data scientists, and IT professionals.</p></div>
+  <div class="ttl"><h2 class="display"><span data-f="resultsA">Results from</span> <span class="dim" data-f="resultsB">top tech teams</span></h2></div>
+  <div class="desc"><p data-f="resultsSub">Hear from engineering leaders who've used our events to hire developers, data scientists, and IT professionals.</p></div>
  </div>
- <div class="stories" data-reveal data-stagger>
+ <div class="stories" id="stories" data-reveal data-stagger>
   <div class="story"><div class="story-top"><q><b>We'd been ghosted by candidates from LinkedIn for weeks.</b> Here, we had back-to-back conversations with engineers who actually wanted to talk. Ended up extending offers that same week.</q></div><div class="story-foot"><span class="mono">JK</span><div><b>James K.</b><span>Engineering Manager, Mid-Size SaaS Company</span></div></div></div>
   <div class="story"><div class="story-top"><q><b>Honestly, I was skeptical about finding ML talent at an event.</b> But the matching was surprisingly good—every candidate I spoke with had relevant experience and could hold a technical conversation.</q></div><div class="story-foot"><span class="mono">PD</span><div><b>Priya D.</b><span>Head of Data, Series B Startup</span></div></div></div>
   <div class="story"><div class="story-top"><q><b>The thing I appreciated most was not having to chase people down.</b> Candidates requested time with us, showed up on time, and were ready to go. My calendar was full but it didn’t feel like a waste.</q></div><div class="story-foot"><span class="mono">RT</span><div><b>Ryan T.</b><span>IT Director, Enterprise Software Company</span></div></div></div>
@@ -777,19 +794,19 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 <!-- 9. closing band -->
 <section class="sec theme-blue cta" id="reserve"><div class="wrap">
  <div class="cta-text" data-reveal>
-  <span class="ev-closes" data-dynamic="registration-countdown" style="background:rgba(255,255,255,.16);color:#fff">Employer registration closes in 6 days</span>
-  <h2 class="display">Secure your spot for the <span class="dim">Scottsdale Technology hiring event</span></h2>
-  <p class="lead">84% average interview show rate across past JobFairX technology hiring events.</p>
+  <span class="ev-closes" data-dynamic="registration-countdown" style="background:rgba(255,255,255,.16);color:#fff">Employer registration closes in <span data-f="closes">6</span> days</span>
+  <h2 class="display"><span data-f="closeA">Secure your spot for the</span> <span class="dim" data-f="closeB">Scottsdale Technology hiring event</span></h2>
+  <p class="lead"><span data-f="show">84%</span> average interview show rate across past JobFairX <span data-f="adj">technology</span> hiring events.</p>
   <a class="btn" href="#reserve" data-live="reserve">Reserve My Spot</a>
  </div>
  <div class="cta-visual" data-reveal>
   <div class="evcard">
-   <div class="d">Thursday, October 29</div>
+   <div class="d" data-f="dateShort">Thursday, October 29</div>
    <dl>
-    <dt>Event</dt><dd>Scottsdale Technology Hiring Event</dd>
-    <dt>Time</dt><dd>11:00 AM – 3:00 PM MST</dd>
+    <dt>Event</dt><dd data-f="eventName">Scottsdale Technology Hiring Event</dd>
+    <dt>Time</dt><dd data-f="time">11:00 AM – 3:00 PM MST</dd>
     <dt>Interviews</dt><dd class="fmt"><span>In person</span><span>Video</span><span>Phone</span></dd>
-    <dt>Candidates</dt><dd><span data-dynamic="pre-registered-count">778</span> pre-registered, updated daily</dd>
+    <dt>Candidates</dt><dd><span data-dynamic="pre-registered-count" data-f="count">778</span> pre-registered, updated daily</dd>
     <dt>From</dt><dd>$495 per event</dd>
    </dl>
   </div>
@@ -824,6 +841,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  <div class="foot-bot"><span>Copyright 2026 JobFairX All Rights Reserved</span><a href="https://jobfairx.com/employer/privacy-policy">Privacy Policy</a><a href="https://jobfairx.com/employer/terms-and-conditions">Terms and Conditions</a><a href="https://jobfairx.com/employer/privacy-policy">Your Privacy Choices</a></div>
 </div></footer>
 
+<script id="types" type="application/json">{"technology": {"key": "technology", "label": "Technology", "pill": "Scottsdale, AZ · Technology Hiring Event", "when": "October 29, 2026 · 11:00 AM – 3:00 PM MST", "closes": 6, "h1a": "Meet your next great tech hire", "h1b": "in Scottsdale.", "sub": "Connect with engineers, developers, and data professionals through AI-powered candidate matching and scheduled interviews at the Scottsdale Technology hiring event.", "count": "778", "avgInt": "53", "avgHires": "11", "show": "84", "adj": "technology", "logos": ["img/past/accenture.png", "img/past/adobe.png", "img/past/capital-one.png", "img/past/cdw.png", "img/past/cisco.png", "img/past/cognizant.png", "img/past/dell.png", "img/past/hp.png", "img/past/ibm.png", "img/past/infosys.png", "img/past/intuit.png", "img/past/oracle.png", "img/past/paypal.png", "img/past/salesforce.png", "img/past/servicenow.png", "img/past/vmware.png"], "resultsA": "Results from", "resultsB": "top tech teams", "resultsSub": "Hear from engineering leaders who've used our events to hire developers, data scientists, and IT professionals.", "tes": [{"lead": "We'd been ghosted by candidates from LinkedIn for weeks.", "rest": "Here, we had back-to-back conversations with engineers who actually wanted to talk. Ended up extending offers that same week.", "name": "James K.", "title": "Engineering Manager, Mid-Size SaaS Company", "ini": "JK"}, {"lead": "Honestly, I was skeptical about finding ML talent at an event.", "rest": "But the matching was surprisingly good—every candidate I spoke with had relevant experience and could hold a technical conversation.", "name": "Priya D.", "title": "Head of Data, Series B Startup", "ini": "PD"}, {"lead": "The thing I appreciated most was not having to chase people down.", "rest": "Candidates requested time with us, showed up on time, and were ready to go. My calendar was full but it didn’t feel like a waste.", "name": "Ryan T.", "title": "IT Director, Enterprise Software Company", "ini": "RT"}], "closeA": "Secure your spot for the", "closeB": "Scottsdale Technology hiring event", "eventName": "Scottsdale Technology Hiring Event", "dateShort": "Thursday, October 29", "time": "11:00 AM – 3:00 PM MST", "msgJob": "Senior Network Engineer · Scottsdale, AZ", "schedName": "Nadia Joshi", "schedMsg": "Hi Nadia, Thank you for your interest in our open IT Support Technician role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.", "rows": [{"name": "Sanjay Iyer", "job": "Software Engineer"}, {"name": "Emma Rivera", "job": "Data Scientist"}, {"name": "Tyler Brooks", "job": "Automation Engineer"}, {"name": "Priscilla Ng", "job": "Project Engineer"}], "title": "For Employers: Technology Scottsdale, AZ Job Fair", "desc": "Recruit smart tech people at JobFairX's Scottsdale, AZ job fair.", "live": "https://jobfairx.com/employer/job-fairs/arizona/scottsdale/next-technology"}, "entry-level": {"key": "entry-level", "label": "Entry-Level", "pill": "Dallas, TX · Entry-Level Hiring Event", "when": "November 18, 2026 · 11:00 AM – 3:00 PM CST", "closes": 26, "h1a": "Hire emerging new talent", "h1b": "in Dallas.", "sub": "Candidates range from recent graduates to early-career professionals with one to three years of experience, already matched to your open roles.", "count": "845", "avgInt": "73", "avgHires": "19", "show": "86", "adj": "entry-level", "logos": ["img/past/entry-level-amazon.png", "img/past/entry-level-amerprise.png", "img/past/entry-level-chipotle.png", "img/past/entry-level-cocacola.png", "img/past/entry-level-costco.png", "img/past/entry-level-enterprise.png", "img/past/entry-level-fedex.png", "img/past/entry-level-hilton.png", "img/past/entry-level-home-depot.png", "img/past/entry-level-sherwin-williams.png", "img/past/entry-level-t-mobile.png", "img/past/entry-level-target.png", "img/past/entry-level-tesla.png", "img/past/entry-level-ups.png", "img/past/entry-level-walmart.png"], "resultsA": "Results from", "resultsB": "top early-career hiring teams", "resultsSub": "Hear from managers who've used our events to find motivated new grads and early-career talent.", "tes": [{"lead": "We usually dread entry-level hiring because you get hundreds of applications and most aren’t serious.", "rest": "Here, every candidate we spoke with had done their homework and actually wanted the job. Huge difference.", "name": "Lauren M.", "title": "Staffing Manager, Retail Operations Company", "ini": "LM"}, {"lead": "I was looking for junior analysts who could communicate clearly and think on their feet.", "rest": "Found exactly that. Two of them are still with us a year later and doing great.", "name": "Derek W.", "title": "Branch Manager, Financial Services", "ini": "DW"}, {"lead": "Our internship pipeline dried up and we needed to fill marketing coordinator roles fast.", "rest": "The event saved us weeks of sourcing. The candidates were polished and eager—exactly what we needed.", "name": "Hannah K.", "title": "Marketing Operations Lead, Digital Agency", "ini": "HK"}], "closeA": "Secure your spot for the", "closeB": "Dallas Entry-Level hiring event", "eventName": "Dallas Entry-Level Hiring Event", "dateShort": "Wednesday, November 18", "time": "11:00 AM – 3:00 PM CST", "msgJob": "Customer Service Representative · Dallas, TX", "schedName": "Madison Lopez", "schedMsg": "Hi Madison, Thank you for your interest in our open Call Center Representative role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.", "rows": [{"name": "Riley Foster", "job": "Sales Associate"}, {"name": "Diego Ortega", "job": "Brand Ambassador"}, {"name": "Olivia Reed", "job": "Warehouse Associate"}, {"name": "Jaden Hill", "job": "Driver"}], "title": "For Employers:  Dallas, TX Job Fair", "desc": "Recruit quality candidates at JobFairX's Dallas, TX job fair.", "live": "https://jobfairx.com/employer/job-fairs/texas/dallas/next-entry-level"}, "diversity": {"key": "diversity", "label": "Diversity", "pill": "Birmingham, AL · Diversity Hiring Event", "when": "December 17, 2026 · 11:00 AM – 3:00 PM CST", "closes": 55, "h1a": "Build a more inclusive team", "h1b": "in Birmingham.", "sub": "Expand your pipeline with qualified, diverse candidates in a structured event built for real conversations.", "count": "414", "avgInt": "35", "avgHires": "11", "show": "87", "adj": "diversity", "logos": ["img/past/diversity-amazon.png", "img/past/diversity-american.png", "img/past/diversity-amex.png", "img/past/diversity-bank-of-america.png", "img/past/diversity-chase.png", "img/past/diversity-comcast.png", "img/past/diversity-cvs.png", "img/past/diversity-deloitte.png", "img/past/diversity-kpmg.png", "img/past/diversity-new-york-life.png", "img/past/diversity-tesla.png", "img/past/diversity-unilever.png", "img/past/diversity-united.png", "img/past/diversity-verizon.png", "img/past/diversity-wells-fargo.png"], "resultsA": "Results from", "resultsB": "top inclusive hiring teams", "resultsSub": "Hear from organizations that have expanded their talent pipeline through our diversity-focused hiring events.", "tes": [{"lead": "We'd been saying we wanted to diversify our pipeline for two years but didn’t know where to start.", "rest": "This event put us in front of candidates we’d never have found through our usual channels.", "name": "Jasmine T.", "title": "Chief People Officer, Financial Services Firm", "ini": "JT"}, {"lead": "What I liked is that it didn’t feel performative.", "rest": "These were strong candidates who happened to also expand our representation. The conversations were substantive, not checkbox-y.", "name": "Carlos R.", "title": "VP of Talent, Management Consulting Firm", "ini": "CR"}, {"lead": "I’ve attended a lot of diversity hiring events over 15 years.", "rest": "Most of them are disorganized and the candidate quality is inconsistent. This one was the exception—every conversation was worth having.", "name": "Dr. Aisha O.", "title": "Director of HR, Healthcare Organization", "ini": "AO"}], "closeA": "Secure your spot for the", "closeB": "Birmingham Diversity hiring event", "eventName": "Birmingham Diversity Hiring Event", "dateShort": "Thursday, December 17", "time": "11:00 AM – 3:00 PM CST", "msgJob": "Business Development Representative · Birmingham, AL", "schedName": "Zoe Henderson", "schedMsg": "Hi Zoe, Thank you for your interest in our open Call Center Representative role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.", "rows": [{"name": "Aaliyah Lee", "job": "Account Executive"}, {"name": "Carlos Vega", "job": "Sales Manager"}, {"name": "Lin Hayes", "job": "Brand Ambassador"}, {"name": "Fatima Ali", "job": "Marketing Agent"}], "title": "For Employers: Diversity Birmingham, AL Job Fair", "desc": "Recruit diverse candidates at JobFairX's Birmingham, AL job fair.", "live": "https://jobfairx.com/employer/job-fairs/alabama/birmingham/642761702315655213"}, "veteran": {"key": "veteran", "label": "Veterans", "pill": "Dearborn, MI · Veterans Hiring Event", "when": "November 2, 2026 · 11:00 AM – 3:00 PM EST", "closes": 10, "h1a": "Hire mission-ready veterans", "h1b": "in Dearborn.", "sub": "Interview reliable, well-trained veterans matched to your open roles in a structured hiring event.", "count": "558", "avgInt": "35", "avgHires": "7", "show": "89", "adj": "veterans", "logos": ["img/past/veteran-aecom.png", "img/past/veteran-bae-systems.png", "img/past/veteran-boeing.png", "img/past/veteran-booz.png", "img/past/veteran-caci.png", "img/past/veteran-general-dynamics.png", "img/past/veteran-honeywell.png", "img/past/veteran-kbr.png", "img/past/veteran-leidos.png", "img/past/veteran-lockheed.png", "img/past/veteran-northrop.png", "img/past/veteran-raytheon.png", "img/past/veteran-saic.png", "img/past/veteran-siemens.png", "img/past/veteran-tesla.png"], "resultsA": "Results from", "resultsB": "top veteran hiring teams", "resultsSub": "Hear from employers who've connected with disciplined, mission-ready veterans through our hiring events.", "tes": [{"lead": "The veterans we met were the most prepared candidates I've ever interviewed.", "rest": "They showed up early, answered questions directly, and followed up the same day. We brought on three within a month.", "name": "David P.", "title": "Talent Acquisition Director, Government Contractor", "ini": "DP"}, {"lead": "I wasn’t sure how well military experience would translate to our operations roles.", "rest": "Turns out a logistics officer with 12 years of deployment experience knows more about supply chain than most MBAs.", "name": "Amanda C.", "title": "VP of Operations, National Logistics Company", "ini": "AC"}, {"lead": "We’ve tried veteran hiring programs before and they always felt like a formality.", "rest": "This was different—the candidates were matched to our actual openings, not just sent over in bulk.", "name": "Kevin W.", "title": "HR Manager, Defense Technology Firm", "ini": "KW"}], "closeA": "Secure your spot for the", "closeB": "Dearborn Veterans hiring event", "eventName": "Dearborn Veterans Hiring Event", "dateShort": "Monday, November 2", "time": "11:00 AM – 3:00 PM EST", "msgJob": "Armed Security Guard · Dearborn, MI", "schedName": "Tyrell Banks", "schedMsg": "Hi Tyrell, Thank you for your interest in our open Warehouse Order Selector role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.", "rows": [{"name": "James Ward", "job": "Security Officer"}, {"name": "Derek Walsh", "job": "CDL Driver"}, {"name": "Daniel Cruz", "job": "Welder"}, {"name": "Rebecca Cho", "job": "Mechanical Assembler"}], "title": "For Employers: Veterans Dearborn, MI Job Fair", "desc": "Recruit Veterans at JobFairX's Dearborn, MI job fair.", "live": "https://jobfairx.com/employer/job-fairs/michigan/dearborn/next-veteran"}, "healthcare": {"key": "healthcare", "label": "Healthcare", "pill": "Boise, ID · Healthcare Hiring Event", "when": "October 28, 2026 · 11:00 AM – 3:00 PM MDT", "closes": 5, "h1a": "Fill your open healthcare roles", "h1b": "in Boise.", "sub": "Connect with nurses, techs, and clinical staff ready to interview and hire in a single event.", "count": "798", "avgInt": "35", "avgHires": "8", "show": "91", "adj": "healthcare", "logos": ["img/past/healthcare-advent.png", "img/past/healthcare-ascension.png", "img/past/healthcare-baptist.png", "img/past/healthcare-chs.png", "img/past/healthcare-cleveland.png", "img/past/healthcare-common.png", "img/past/healthcare-cvs.png", "img/past/healthcare-hca.png", "img/past/healthcare-intermountain.png", "img/past/healthcare-kaiser.png", "img/past/healthcare-mayo.png", "img/past/healthcare-mount-sinai.png", "img/past/healthcare-providence.png", "img/past/healthcare-tenet.png", "img/past/healthcare-trinity.png", "img/past/healthcare-united.png"], "resultsA": "Results from", "resultsB": "top healthcare teams", "resultsSub": "Hear from hiring managers who've used our events to fill critical clinical and healthcare roles.", "tes": [{"lead": "I went in thinking it would be another job fair with no-shows.", "rest": "Every single candidate showed up, and they were genuinely qualified. We had three nurses start within two weeks.", "name": "Sarah M.", "title": "Talent Acquisition Manager, Regional Health System", "ini": "SM"}, {"lead": "We've been short-staffed on night shift CNAs for months.", "rest": "Posted the roles on a Monday, had interviews scheduled by Wednesday, and brought two people onboard before the end of the month. That never happens.", "name": "Marcus L.", "title": "Director of Nursing, Multi-Site Hospital Group", "ini": "ML"}, {"lead": "What surprised me was how prepared the candidates were.", "rest": "They'd already reviewed our job descriptions and came with real questions. It felt like a second-round interview, not a job fair.", "name": "Elena R.", "title": "HR Business Partner, Home Health Organization", "ini": "ER"}], "closeA": "Secure your spot for the", "closeB": "Boise Healthcare hiring event", "eventName": "Boise Healthcare Hiring Event", "dateShort": "Wednesday, October 28", "time": "11:00 AM – 3:00 PM MDT", "msgJob": "Registered Nurse · Boise, ID", "schedName": "Maya Rodriguez", "schedMsg": "Hi Maya, Thank you for your interest in our open Occupational Therapist role. Are you available to interview before the hiring event on either of the proposed times? Looking forward to connecting.", "rows": [{"name": "Jordan Reyes", "job": "Pharmacy Technician"}, {"name": "Kayla Nguyen", "job": "Dental Hygienist"}, {"name": "Andre Diaz", "job": "Medical Assistant"}], "title": "For Employers: Healthcare Boise, ID Job Fair", "desc": "Recruit healthcare professionals at JobFairX's Boise, ID job fair.", "live": "https://jobfairx.com/employer/job-fairs/idaho/boise/next-healthcare"}}</script>
 <script>
 (function(){
  var html=document.documentElement;html.classList.remove('no-js');html.classList.add('js');
@@ -856,6 +874,29 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  tabs.forEach(function(t){t.addEventListener('click',function(){showTab(+t.dataset.i);cycle()})});
  var frame=document.getElementById('heroFrame');frame.addEventListener('mouseenter',function(){clearTimeout(tTimer)});frame.addEventListener('mouseleave',cycle);
  cycle();
+
+ /* review aid: event-type switch (five live pages in one design) */
+ (function(){
+  var TYPES=JSON.parse(document.getElementById('types').textContent);
+  var sw=document.getElementById('typeswitch'); if(!sw) return;
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function apply(k){
+   var t=TYPES[k]; if(!t) return;
+   document.querySelectorAll('[data-f]').forEach(function(el){var f=el.dataset.f; if(!(f in t)) return; if(el.tagName==='TEXTAREA'){el.value=t[f]} else {el.textContent=t[f]} if(el.classList.contains('cnt')){el.dataset.n=String(t[f]).replace('%','')}});
+   document.querySelectorAll('.cnt[data-f="count"]').forEach(function(el){el.dataset.n=String(t.count).replace(/,/g,'')});
+   var pg=document.getElementById('pastgrid'); if(pg){pg.innerHTML=t.logos.map(function(src){var n=src.split('/').pop().replace(/^(technology|entry-level|diversity|veteran|healthcare)-/,'').replace('.png','').replace(/-/g,' ');return '<img src="'+src+'" alt="'+esc(n)+'">'}).join('')}
+   var st=document.getElementById('stories'); if(st){st.innerHTML=t.tes.map(function(x){return '<div class="story"><div class="story-top"><q><b>'+esc(x.lead)+'</b> '+esc(x.rest)+'</q></div><div class="story-foot"><span class="mono">'+esc(x.ini)+'</span><div><b>'+esc(x.name)+'</b><span>'+esc(x.title)+'</span></div></div></div>'}).join('')}
+   var tr=document.getElementById('trackrows'); if(tr){var times=['May 28 · 12 PM<small>+1 more</small>','May 30 · 2 PM','Jun 3 · 3 PM','Jun 5 · 10:30 AM<small>+2 more</small>'];tr.innerHTML=t.rows.map(function(r,i){return '<tr><td>'+esc(r.name)+'<small>View resume</small></td><td>'+esc(r.job)+'</td><td>'+times[i%4]+'</td><td><span class="st">Awaiting candidate</span></td></tr>'}).join('')}
+   document.title=t.title; var md=document.querySelector('meta[name=description]'); if(md) md.setAttribute('content',t.desc);
+   sw.querySelectorAll('button').forEach(function(b){var on=b.dataset.type===k;b.classList.toggle('is-on',on);b.setAttribute('aria-pressed',on?'true':'false')});
+   try{localStorage.setItem('jfx-event-type',k)}catch(e){}
+   try{history.replaceState(null,'','#'+k)}catch(e){}
+   window.dispatchEvent(new Event('resize'));
+  }
+  sw.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.type)})});
+  var h=(location.hash||'').replace('#',''); var saved=null; try{saved=localStorage.getItem('jfx-event-type')}catch(e){}
+  var k=TYPES[h]?h:(TYPES[saved]?saved:'technology'); if(k!=='technology') apply(k);
+ })();
 
  /* proof strip: the four figures count up once when the strip scrolls in */
  (function(){
