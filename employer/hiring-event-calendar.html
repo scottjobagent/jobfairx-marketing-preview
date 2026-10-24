@@ -577,12 +577,12 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .dd>button svg{width:12px;height:12px;transition:transform .25s var(--ease)}
 .dd.is-open>button svg{transform:rotate(180deg)}
 .nav-links .dd{position:static}
-/* one wide panel centred under the bar (Careerflow pattern, 23 Oct 2026) */
-.dd-panel{position:absolute;left:50%;top:calc(100% - 2px);width:min(1000px,calc(100vw - 40px));background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 34px 80px -28px rgba(0,36,91,.38),0 2px 10px rgba(0,0,0,.05);padding:28px 30px 24px;display:grid;gap:4px 40px;opacity:0;transform:translate(-50%,-6px);pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease);z-index:70}
-.dd.is-open .dd-panel{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.dd-panel.grid{grid-template-columns:1fr 1fr;width:min(840px,calc(100vw - 40px))}
-.dd-panel.two.withcard{grid-template-columns:1fr 1fr 240px;width:min(1130px,calc(100vw - 40px))}
-.dd-panel.res{grid-template-columns:1fr 1fr 250px;width:min(940px,calc(100vw - 40px))}
+/* one band across the full width under the bar, its content lined up with the page (Scott, 24 Oct 2026: Option A) */
+.dd-panel{position:fixed;left:0;right:0;top:var(--nav);background:#fff;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:0 30px 50px -30px rgba(0,36,91,.32);padding:30px calc(max(var(--margin), (100vw - 1344px) / 2) + var(--pad)) 36px;display:grid;gap:4px 40px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease);z-index:70}
+.dd.is-open .dd-panel{opacity:1;transform:none;pointer-events:auto}
+.dd-panel.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.dd-panel.two.withcard{grid-template-columns:1fr 1fr 320px;gap:4px 48px}
+.dd-panel.res{grid-template-columns:1fr 1fr 300px;gap:4px 48px}
 .cf-col h6{margin:2px 0 10px;padding:0 12px;font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#8A8F98}
 .cf-item{display:flex;gap:16px;align-items:flex-start;padding:14px 12px;border-radius:12px;text-decoration:none;color:inherit;transition:background .2s}
 .cf-item:hover{background:#F6F7F9}
@@ -603,7 +603,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .cf-post .cv b{font-family:var(--display);font-weight:500;font-size:22px;line-height:1.05;letter-spacing:-.02em;max-width:11ch}
 .cf-post .cat{font-size:12px;font-weight:550;color:var(--brand)}
 .cf-post .tt{font-size:13.5px;font-weight:600;line-height:1.35;color:var(--ink)}
-.nav-dim{position:fixed;left:0;right:0;top:var(--nav);bottom:0;z-index:59;background:rgba(17,24,39,.45);opacity:0;pointer-events:none;transition:opacity .25s}
+.nav-dim{position:fixed;left:0;right:0;top:var(--nav);bottom:0;z-index:59;background:rgba(17,24,39,.32);opacity:0;pointer-events:none;transition:opacity .25s}
 body:has(.nav-links .dd.is-open) .nav-dim{opacity:1}
 body:has(.nav-links .dd.is-open) .typeswitch{z-index:58}
 body.menu-open .typeswitch{display:none}
