@@ -120,12 +120,11 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .kicker{font-family:var(--font);font-size:var(--fs-sm);font-weight:450;color:var(--body);letter-spacing:-.015em;margin-bottom:var(--sp)}
 .hero-side{grid-column:8/13;display:flex;flex-direction:column;gap:var(--sp-l);padding-top:calc(var(--fs-sm) * 1.5 + var(--sp))}
 .hero-cta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.hero-bar{margin:var(--sp-xl) auto 0;max-width:1040px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 10px 10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hero-bar{margin:var(--sp-xl) auto 0;width:fit-content;max-width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 10px 10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .hero-bar .lab{font-size:var(--fs-sm);color:var(--body);white-space:nowrap}
-.chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
 .chips a{padding:6px 12px;border-radius:8px;background:var(--tint);color:var(--brand);font-size:var(--fs-sm);text-decoration:none;transition:background .2s}
 .chips a:hover{background:#D8E4F8}
-.hero-bar .btn{margin-left:auto}
 
 /* browser frame (light) */
 .frame{margin-top:var(--sp-xl);background:#D4D4D4;border-radius:20px;padding:6px}
@@ -437,7 +436,6 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .hero-cta{gap:14px}
  .hero-bar{padding:12px;gap:10px;flex-direction:column;align-items:stretch}
  .chips{justify-content:flex-start}
- .hero-bar .btn{margin-left:0;width:100%}
  .screen{aspect-ratio:4/3}
  .dframe .inner{aspect-ratio:4/3}
  .logo-grid{grid-template-columns:repeat(2,1fr);gap:28px 16px}
@@ -590,13 +588,12 @@ body.menu-open .typeswitch{display:none}
  <div class="hero-bar load" style="--i:4">
   <span class="lab">Browse by event type</span>
   <div class="chips">
-   <a href="hiring-event-calendar.html">Healthcare</a>
-   <a href="hiring-event-calendar.html">Diversity</a>
-   <a href="hiring-event-calendar.html">Veteran</a>
-   <a href="hiring-event-calendar.html">Technology</a>
-   <a href="hiring-event-calendar.html">Entry-Level</a>
+   <a href="hiring-event-calendar.html#healthcare">Healthcare</a>
+   <a href="hiring-event-calendar.html#diversity">Diversity</a>
+   <a href="hiring-event-calendar.html#veteran">Veteran</a>
+   <a href="hiring-event-calendar.html#technology">Technology</a>
+   <a href="hiring-event-calendar.html#entry-level">Entry-Level</a>
   </div>
-  <a class="btn ghost sm" href="hiring-event-calendar.html">See all upcoming hiring events</a>
  </div>
  <div class="frame load" style="--i:5" id="heroFrame">
   <div class="frame-bar">
