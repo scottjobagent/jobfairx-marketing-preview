@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet">
 <style>
-/* JobFairX employer home in the rezi.ai template (rezi measured 22 Oct 2026 at 1440 and 375). Our colours, Inter. */
+/* JobFairX employer home (layout measured 22 Oct 2026 at 1440 and 375). Our colours, Inter. */
 :root{
  color-scheme:light;
  --bg:#FAFAFA;--card:#FFFFFF;--line:#E9E9E9;--line2:#D9D9D9;--ink:#0A0A0A;--body:#545454;--muted:#A6A6A6;
@@ -50,7 +50,7 @@ button{font:inherit;letter-spacing:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 .theme-dark :focus-visible,.theme-blue :focus-visible{outline-color:#fff}
 
-/* layout: the container keeps rezi's two vertical hairlines */
+/* layout: the container keeps two vertical hairlines */
 .sec{background:var(--surface);color:var(--t2)}
 .wrap{margin:0 var(--margin);padding:var(--sec) var(--pad);border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
 @media (min-width:1440px){.wrap{margin:0 auto;max-width:1344px}}
@@ -471,7 +471,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .cta-visual img{height:220px}
 }
 
-/* ===== pricing page: rezi pricing-page shape ===== */
+/* ===== pricing page: pricing-page shape ===== */
 [hidden]{display:none!important}
 .prhead .wrap{padding-bottom:var(--sp-xl)}
 .prhead .eyebrow{margin-bottom:var(--sp-l)}
@@ -479,7 +479,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .prhead .lead{max-width:48ch}
 .display.one{max-width:24ch;margin-bottom:var(--sp-l)}
 .sublead{max-width:60ch;margin-bottom:var(--sp-h)}
-/* plan cards (home.css .plans/.plan) + the live Events stepper inside Growth, like rezi's inset box */
+/* plan cards (home.css .plans/.plan) + the live Events stepper inside Growth, as an inset box */
 .plansec .wrap{padding-top:0}
 .plan .btn.dark{background:var(--ink);color:#fff}
 .plan .btn.dark:hover{background:#333}
@@ -490,10 +490,10 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .qty .ctl b{min-width:1.5ch;text-align:center;font-weight:600}
 .qty .tot{font-weight:600}
 .qty .save{font-size:var(--fs-xs);color:rgba(255,255,255,.7);grid-column:1/-1}
-/* link row on rules (rezi's "Compare all features") */
+/* link row on rules (a "Compare all features" row) */
 .linkrow{margin:var(--sp-xl) calc(-1 * var(--pad)) 0;padding:16px var(--pad);border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:var(--fs-sm);color:var(--body)}
 .linkrow a{color:var(--brand);font-weight:550;text-decoration:none}
-/* one quote, centered (rezi) */
+/* one quote, centered */
 .bigq{max-width:46rem;margin:0 auto;text-align:center}
 .bigq q{quotes:"\201C" "\201D";display:block;font-family:var(--display);font-size:var(--fs-h5);line-height:1.35;letter-spacing:-.01em;color:var(--muted)}
 .bigq q b{font-weight:500;color:var(--ink)}
@@ -507,7 +507,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .statcards b{display:block;font-family:var(--display);font-weight:500;font-size:var(--fs-h3);letter-spacing:-.02em;color:var(--brand);line-height:1.05}
 .statcards span{display:block;color:var(--ink);font-weight:550;font-size:var(--fs-sm);margin-top:8px}
 .statcards small{display:block;color:var(--muted);font-size:var(--fs-xs);margin-top:4px}
-/* compare table (rezi) */
+/* compare table */
 .cmpwrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--card)}
 .cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm);min-width:640px}
 .cmp th,.cmp td{padding:14px 18px;text-align:left;vertical-align:middle;border-top:1px solid var(--line)}
@@ -522,7 +522,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .cmp td .ic svg{width:10px;height:10px}
 .cmp .last td{padding:18px}
 .cmp .last .btn.sm{min-height:36px}
-/* faq with tabs (rezi) */
+/* faq with tabs */
 .faqgrid{display:grid;grid-template-columns:minmax(180px,3fr) 9fr;gap:var(--sp-xl);align-items:start}
 .ftabs{display:flex;flex-direction:column;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px;position:sticky;top:calc(var(--nav) + 20px)}
 .ftab{border:0;background:transparent;color:var(--body);font:inherit;font-size:var(--fs-sm);text-align:left;padding:10px 12px;border-radius:9px;cursor:pointer}
@@ -543,7 +543,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 }
 
 
-/* ===== dropdown navigation (rezi style) ===== */
+/* ===== dropdown navigation ===== */
 .nav .wrap{gap:22px;position:relative}
 .nav-links{display:flex;align-items:center;gap:2px}
 .nav-links>a,.dd>button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:0;background:transparent;color:var(--body);font:inherit;font-size:var(--fs-sm);letter-spacing:inherit;text-decoration:none;border-radius:8px;cursor:pointer;transition:color .3s var(--ease)}
@@ -642,7 +642,7 @@ body.menu-open .typeswitch{display:none}
 <div class="menu mm" id="menu"><div class="mm-sec"><button type="button" class="mm-row" id="mm-b-solutions" aria-expanded="false" aria-controls="mm-solutions">Solutions<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><div class="mm-sub" id="mm-solutions" hidden><a class="mm-item" href="technology-hiring.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/><path d="m14 4-4 16"/></svg></span><span class="t"><b>Technology hiring events</b><span>Engineers, developers, and data talent in live interviews</span></span></a><a class="mm-item" href="healthcare-hiring.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span><span class="t"><b>Healthcare hiring events</b><span>Nurses, techs, and clinical staff ready to interview</span></span></a><a class="mm-item" href="entry-level-hiring.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5 12 5l10 4.5-10 4.5z"/><path d="M6 11.5V16c3.5 2.7 8.5 2.7 12 0v-4.5"/><path d="M22 9.5V14"/></svg></span><span class="t"><b>Entry-Level hiring events</b><span>Recent graduates to early-career professionals, matched to your roles</span></span></a><a class="mm-item" href="diversity-hiring.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.4 2.7-6 6-6s6 2.6 6 6"/><path d="M16 4.6a3.2 3.2 0 0 1 0 6.3"/><path d="M18 14.3c1.8.7 3 2.8 3 5.7"/></svg></span><span class="t"><b>Diversity hiring events</b><span>Qualified, diverse candidates in a structured event</span></span></a><a class="mm-item" href="veteran-hiring.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8z"/></svg></span><span class="t"><b>Veteran hiring events</b><span>Reliable, well-trained veterans matched to your open roles</span></span></a><a class="mm-item" href="https://jobfairx.com/employer/hiring-event-bundles"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg></span><span class="t"><b>Event bundles</b><span>Save up to 40% compared to individual pricing</span></span></a></div></div><div class="mm-sec"><button type="button" class="mm-row" id="mm-b-features" aria-expanded="false" aria-controls="mm-features">Features<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><div class="mm-sub" id="mm-features" hidden><a class="mm-walk" href="https://www.youtube.com/watch?v=jE3IjF5q4Pg" target="_blank" rel="noopener"><img src="img/walkthrough.jpg" alt=""><span><b>See how JobFairX works</b><i>Watch the walkthrough ›</i></span></a><h6>Before the event</h6><a class="mm-item" href="ai-candidate-matching.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 13.9 8.6 19 10.5l-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z"/><path d="M19 3v4M17 5h4"/></svg></span><span class="t"><b>AI candidate matching</b><span>Your roles matched to registered candidates within hours</span></span></a><a class="mm-item" href="interview-requests.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="m16 11 2 2 4-4"/></svg></span><span class="t"><b>Interview requests</b><span>Accept each request or turn on auto-accept</span></span></a><a class="mm-item" href="candidate-messaging-scheduling.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg></span><span class="t"><b>Candidate messaging and scheduling</b><span>Propose times, reschedule, and schedule follow-ups</span></span></a><a class="mm-item" href="local-candidate-database.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="t"><b>Local candidate database</b><span>3+ million job seekers, verified within about 20 miles of the event city</span></span></a><a class="mm-item" href="automations.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><span class="t"><b>Automations<span class="new">NEW</span></b><span>Messages that send as candidates move through your hiring process</span></span></a><h6>Event day and after</h6><a class="mm-item" href="interview-formats.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="m15.5 10.5 6-3.5v10l-6-3.5"/></svg></span><span class="t"><b>In-person, video, or phone interviews</b><span>You choose the format, with 15 or 30 minute slots</span></span></a><a class="mm-item" href="event-day-lobby.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span><span class="t"><b>Event-day lobby</b><span>Interview rooms, candidate check-in, and Start interview</span></span></a><a class="mm-item" href="panel-interviews.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7.5" r="3"/><path d="M6.5 20c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5"/><circle cx="4.5" cy="10" r="2"/><circle cx="19.5" cy="10" r="2"/><path d="M1.5 18.5c0-1.9 1.3-3.4 3-3.8M22.5 18.5c0-1.9-1.3-3.4-3-3.8"/></svg></span><span class="t"><b>Panel interviews<span class="new">NEW</span></b><span>More than one interviewer in the same interview</span></span></a><a class="mm-item" href="post-event-report.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span><span class="t"><b>Post-event report</b><span>Interview stats, candidate dispositions, and downloadable data</span></span></a><a class="mm-item" href="analytics.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M6 17v-6M11 17V6M16 17v-9M20 17v-3"/></svg></span><span class="t"><b>Analytics<span class="new">NEW</span></b><span>Interviews scheduled, attendance, missed, marked yes, over time</span></span></a></div></div><a class="mm-row" href="hiring-event-calendar.html">Upcoming Hiring Events</a><a class="mm-row" href="hiring-event-pricing.html">Pricing</a><div class="mm-sec"><button type="button" class="mm-row" id="mm-b-resources" aria-expanded="false" aria-controls="mm-resources">Resources<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><div class="mm-sub" id="mm-resources" hidden><a class="mm-item" href="blog.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h6a4 4 0 0 1 4 4v11a3 3 0 0 0-3-3H2z"/><path d="M22 5h-6a4 4 0 0 0-4 4v11a3 3 0 0 1 3-3h7z"/></svg></span><span class="t"><b>Blog</b><span>Hiring guides, comparisons and industry hiring guides</span></span></a><a class="mm-item" href="hiring-event-faq.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.5 2.5 0 1 1 3.6 2.3c-.7.4-1.2 1-1.2 1.8v.5M12 17h.01"/></svg></span><span class="t"><b>Hiring event FAQ</b><span>Answers to the questions employers ask first</span></span></a><a class="mm-item" href="help/index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/></svg></span><span class="t"><b>Help Center</b><span>Step-by-step guides for running your hiring events</span></span></a><a class="mm-item" href="https://jobfairx.com/employer/about-us"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg></span><span class="t"><b>About JobFairX</b><span>Who we are</span></span></a><a class="mm-item" href="https://jobfairx.com/employer/contact"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg></span><span class="t"><b>Contact us</b><span>We reply within one business day</span></span></a><a class="mm-item" href="https://jobfairx.com/job-fair-calendar"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/></svg></span><span class="t"><b>For job seekers</b><span>Browse upcoming job fairs</span></span></a></div></div><a class="mm-row" href="https://virtual.jobfairx.com/login/#/">Sign In</a></div>
 <!-- nav:end -->
 <main>
-<!-- 1. header: pill on a rule, short headline, two lines (rezi pricing) -->
+<!-- 1. header: pill on a rule, short headline, two lines -->
 <section class="sec prhead"><div class="wrap">
  <div class="eyebrow load" style="--i:0"><span>Pricing</span></div>
  <h1 class="load" style="--i:1">Flexible Hiring Event Packages</h1>
@@ -685,7 +685,7 @@ body.menu-open .typeswitch{display:none}
  </div>
 </div></section>
 
-<!-- 4. compare table (rezi) -->
+<!-- 4. compare table -->
 <section class="sec" id="compare"><div class="wrap">
  <div class="eyebrow"><span>Compare</span></div>
  <h2 class="display one" data-reveal>Compare packages</h2>
@@ -696,7 +696,7 @@ body.menu-open .typeswitch{display:none}
  </table></div>
 </div></section>
 
-<!-- 5. faq with tabs (rezi) -->
+<!-- 5. faq with tabs -->
 <section class="sec"><div class="wrap">
  <div class="eyebrow"><span>Frequently asked questions</span></div>
  <h2 class="display one" data-reveal>Frequently asked questions</h2>
@@ -706,7 +706,7 @@ body.menu-open .typeswitch{display:none}
  </div>
 </div></section>
 
-<!-- 6. closing band (rezi pricing: text left, product right) -->
+<!-- 6. closing band (text left, product right) -->
 <section class="sec theme-blue cta"><div class="wrap">
  <div class="cta-text" data-reveal>
   <h2 class="display">Ready to Start Hiring?</h2>

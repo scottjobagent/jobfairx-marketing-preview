@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet">
 <style>
-/* JobFairX employer home in the rezi.ai template (rezi measured 22 Oct 2026 at 1440 and 375). Our colours, Inter. */
+/* JobFairX employer home (layout measured 22 Oct 2026 at 1440 and 375). Our colours, Inter. */
 :root{
  color-scheme:light;
  --bg:#FAFAFA;--card:#FFFFFF;--line:#E9E9E9;--line2:#D9D9D9;--ink:#0A0A0A;--body:#545454;--muted:#A6A6A6;
@@ -50,7 +50,7 @@ button{font:inherit;letter-spacing:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 .theme-dark :focus-visible,.theme-blue :focus-visible{outline-color:#fff}
 
-/* layout: the container keeps rezi's two vertical hairlines */
+/* layout: the container keeps two vertical hairlines */
 .sec{background:var(--surface);color:var(--t2)}
 .wrap{margin:0 var(--margin);padding:var(--sec) var(--pad);border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
 @media (min-width:1440px){.wrap{margin:0 auto;max-width:1344px}}
@@ -471,9 +471,9 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .cta-visual img{height:220px}
 }
 
-/* ===== calendar page, version 2: rezi changelog + examples shape ===== */
+/* ===== calendar page, version 2: changelog + examples shape ===== */
 [hidden]{display:none!important}
-/* header: a plain title and one line, no pill (rezi changelog) */
+/* header: a plain title and one line, no pill (changelog pattern) */
 .calhead2 .wrap{padding-block:var(--sp-h) var(--sp-l);border-bottom:1px solid var(--line)}
 .calhead2 h1{font-family:var(--font);font-size:var(--fs-sm);font-weight:450;color:var(--muted);margin-bottom:10px}
 .calhead2 .title{font-family:var(--display);font-weight:500;font-size:var(--fs-h3);line-height:1.12;letter-spacing:-.012em;color:var(--ink);margin-bottom:12px;max-width:24ch}
@@ -568,7 +568,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 }
 
 
-/* ===== dropdown navigation (rezi style) ===== */
+/* ===== dropdown navigation ===== */
 .nav .wrap{gap:22px;position:relative}
 .nav-links{display:flex;align-items:center;gap:2px}
 .nav-links>a,.dd>button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:0;background:transparent;color:var(--body);font:inherit;font-size:var(--fs-sm);letter-spacing:inherit;text-decoration:none;border-radius:8px;cursor:pointer;transition:color .3s var(--ease)}
@@ -665,14 +665,14 @@ body.menu-open .typeswitch{display:none}
 <!-- nav:end -->
 <main>
 <div class="seekers">Looking for a job? <a href="https://jobfairx.com/job-fair-calendar">Browse upcoming job fairs →</a></div>
-<!-- 1. header: a plain title and one line (rezi changelog) -->
+<!-- 1. header: a plain title and one line (changelog pattern) -->
 <section class="sec calhead2"><div class="wrap">
  <h1 class="load" style="--i:0">2026 Hiring events</h1>
  <h2 class="title load" style="--i:1">Interview-Ready Candidates Matched to Your Jobs</h2>
  <p class="lead load" style="--i:2">Register for a hiring event, post your jobs, and select in-person or video interviews. AI Candidate Matching starts immediately.</p>
 </div></section>
 
-<!-- 2. sticky sidebar (rezi examples) + dated rows grouped by month (rezi changelog) -->
+<!-- 2. sticky sidebar (examples pattern) + dated rows grouped by month (changelog pattern) -->
 <section class="sec calbody"><div class="wrap">
  <div class="calgrid">
   <aside class="side load" style="--i:3">

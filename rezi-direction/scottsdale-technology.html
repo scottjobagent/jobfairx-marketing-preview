@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet">
 <style>
-/* JobFairX employer home in the rezi.ai template (rezi measured 22 Oct 2026 at 1440 and 375). Our colours, Inter. */
+/* JobFairX employer home (layout measured 22 Oct 2026 at 1440 and 375). Our colours, Inter. */
 :root{
  color-scheme:light;
  --bg:#FAFAFA;--card:#FFFFFF;--line:#E9E9E9;--line2:#D9D9D9;--ink:#0A0A0A;--body:#545454;--muted:#A6A6A6;
@@ -50,7 +50,7 @@ button{font:inherit;letter-spacing:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 .theme-dark :focus-visible,.theme-blue :focus-visible{outline-color:#fff}
 
-/* layout: the container keeps rezi's two vertical hairlines */
+/* layout: the container keeps two vertical hairlines */
 .sec{background:var(--surface);color:var(--t2)}
 .wrap{margin:0 var(--margin);padding:var(--sec) var(--pad);border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
 @media (min-width:1440px){.wrap{margin:0 auto;max-width:1344px}}
@@ -471,14 +471,14 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .cta-visual img{height:220px}
 }
 
-/* ===== event page, version 2: rezi tool-page shape ===== */
+/* ===== event page, version 2: tool-page shape ===== */
 [hidden]{display:none!important}
 .evrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
 .ev-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:var(--pill);background:var(--tint);color:var(--brand);font-size:var(--fs-sm);font-weight:550}
 .ev-pill i{width:8px;height:8px;border-radius:50%;background:var(--brand);display:inline-block}
 .ev-when{font-size:var(--fs-sm);color:var(--body)}
 .ev-closes{padding:5px 10px;border-radius:var(--pill);background:#FEF3C7;color:#92400E;font-size:var(--fs-xs);font-weight:550;white-space:nowrap}
-/* hero: text left, reservation card right, one vertical rule between (rezi's resume checker) */
+/* hero: text left, reservation card right, one vertical rule between */
 .hero2 .wrap{padding-block:0}
 .hgrid{display:grid;grid-template-columns:7fr 5fr;border-top:1px solid var(--line)}
 .hleft{padding:var(--sp-h) var(--pad) var(--sec-m) 0}
@@ -504,7 +504,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .btn.wide{width:100%}
 .rc-note{margin-top:12px;font-size:var(--fs-xs);color:var(--muted);line-height:1.45}
 .rc-note b{color:var(--body);font-weight:600}
-/* single-column section heads (rezi tool page): headline, then the line, no right column */
+/* single-column section heads (tool page): headline, then the line, no right column */
 .display.one{max-width:24ch;margin-bottom:var(--sp-l)}
 .sublead{max-width:60ch;margin-bottom:var(--sp-h)}
 /* three capability cards with pictures */
@@ -513,13 +513,13 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .capcard .pic{aspect-ratio:4/3;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#EEF1F6;margin-bottom:18px}
 .capcard .pic img{width:100%;height:100%;object-fit:cover;object-position:left top}
 .capcard .h5{font-size:var(--fs-lg);margin-bottom:6px}
-/* the slim bar on a rule (rezi's upload bar) */
+/* the slim bar on a rule */
 .slimrule{margin:var(--sec-m) calc(-1 * var(--pad)) 0;border-top:1px solid var(--line);display:flex;justify-content:center;padding:0 var(--pad)}
 .slim{transform:translateY(-50%);display:inline-flex;align-items:center;gap:14px;padding:7px 7px 7px 18px;background:var(--card);border:1px solid var(--line);border-radius:var(--pill);box-shadow:0 10px 30px rgba(0,36,91,.08);font-size:var(--fs-sm);color:var(--body);max-width:100%}
 .slim b{color:var(--ink);font-weight:600}
 .slim em{font-style:normal;color:var(--muted)}
 .slim .btn.sm{flex:none}
-/* dark feature band: the frame stays pinned on the left while the steps scroll past on the right (rezi's product page) */
+/* dark feature band: the frame stays pinned on the left while the steps scroll past on the right */
 .fband .wrap{padding-bottom:var(--sec-m)}
 .featgrid{display:grid;grid-template-columns:7fr 5fr;gap:clamp(24px, 4vw, 64px);align-items:start;margin-top:var(--sp-l)}
 .fsticky{position:sticky;top:calc(var(--nav) + 24px)}
@@ -597,7 +597,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 }
 
 
-/* ===== dropdown navigation (rezi style) ===== */
+/* ===== dropdown navigation ===== */
 .nav .wrap{gap:22px;position:relative}
 .nav-links{display:flex;align-items:center;gap:2px}
 .nav-links>a,.dd>button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:0;background:transparent;color:var(--body);font:inherit;font-size:var(--fs-sm);letter-spacing:inherit;text-decoration:none;border-radius:8px;cursor:pointer;transition:color .3s var(--ease)}
@@ -703,7 +703,7 @@ body.menu-open .typeswitch{display:none}
  <button type="button" data-type="healthcare" aria-pressed="false">H<span class="tip">Healthcare · Boise</span></button>
 </nav>
 <main>
-<!-- 1. hero: the page does its job in the first screen (rezi tool page) -->
+<!-- 1. hero: the page does its job in the first screen (tool page) -->
 <section class="sec hero2"><div class="wrap">
  <div class="hgrid">
   <div class="hleft">
@@ -750,7 +750,7 @@ body.menu-open .typeswitch{display:none}
  <div class="slimrule"><div class="slim" data-reveal><span><b data-dynamic="pre-registered-count" data-f="count">778</b> candidates pre-registered for this event · <em>updated daily</em></span><a class="btn sm" href="#pricing" data-live="reserve">Reserve My Spot</a></div></div>
 </div></section>
 
-<!-- 3. dark band: pinned product frame on the left, the five steps scroll on the right (rezi product page) -->
+<!-- 3. dark band: pinned product frame on the left, the five steps scroll on the right (product page) -->
 <section class="sec theme-dark fband" id="how-it-works"><div class="wrap">
  <div class="eyebrow"><span>How JobFairX works</span></div>
  <h2 class="display one" data-reveal>Hiring events built around interviews</h2>
