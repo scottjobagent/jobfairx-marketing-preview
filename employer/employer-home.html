@@ -173,25 +173,23 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 .fig{width:20px;height:20px;display:block;transform-origin:50% 100%;fill:#E6EEFA}
 .cap{font-size:11px;color:var(--muted)}
 
-/* the difference (dark) */
-.diff{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px;margin-bottom:var(--sp-h)}
+/* the difference (light: Scott, 25 Oct 2026, Option B) */
+.diff{background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px}
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .panel{border-radius:16px;padding:clamp(18px, 2.4vw, 32px)}
-.panel.old{background:rgba(0,0,0,.22)}
-.panel.new{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(169,198,255,.35)}
-.panel h4{font-family:var(--display);font-size:var(--fs-h5);color:#fff;letter-spacing:-.01em;margin-bottom:6px;display:flex;align-items:center;gap:10px}
-.panel .tag{font-family:var(--font);font-size:var(--fs-xs);padding:3px 9px;border-radius:var(--pill);background:rgba(255,255,255,.1);color:var(--t2);font-weight:450}
-.panel.new .tag{background:rgba(169,198,255,.18);color:#A9C6FF}
+.panel.old{background:#F6F7F9}
+.panel.new{background:#fff;box-shadow:inset 0 0 0 2px var(--brand)}
+.panel h4{font-family:var(--display);font-size:var(--fs-h5);color:var(--ink);letter-spacing:-.01em;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.panel .tag{font-family:var(--font);font-size:var(--fs-xs);padding:3px 9px;border-radius:var(--pill);background:#EEF0F3;color:var(--body);font-weight:450}
+.panel.new .tag{background:var(--brand);color:#fff}
 .rows{list-style:none;margin:14px 0 0;padding:0}
-.rows li{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid rgba(255,255,255,.08);color:#fff;font-size:var(--fs)}
-.panel.old .rows li{color:var(--t2)}
+.rows li{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line);color:var(--ink);font-size:var(--fs)}
+.panel.old .rows li{color:#5B6472}
 .ic{flex:none;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
 .ic svg{width:12px;height:12px}
-.ic.no{background:rgba(216,63,63,.22);color:#FF8A8A}
+.ic.no{background:#FDECEC;color:#C93A3A}
 .ic.yes{background:rgba(14,159,110,.25);color:#7EE2BE}
-.points{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gutter)}
-.point{border-top:1px solid var(--rule);padding-top:18px}
-.point .h5{margin-bottom:8px}
+.diff .ic.yes{background:#E6F6EF;color:#0E8A5F}
 
 /* event types */
 .types{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--gutter)}
@@ -354,7 +352,7 @@ body.menu-open .burger i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
  .head .desc{padding-top:0}
  .hero-grid{display:flex;flex-direction:column;gap:var(--sp-l)}
  .hero-side{padding-top:0}
- .plans,.trio,.stories,.points{grid-template-columns:1fr}
+ .plans,.trio,.stories{grid-template-columns:1fr}
  .includes{grid-template-columns:1fr}
  .visual{grid-template-columns:1fr}
  .cta .wrap{display:flex;flex-direction:column;align-items:stretch}
@@ -595,7 +593,7 @@ body.menu-open .typeswitch{display:none}
 </div></section>
 
 <!-- 4. the difference (dark) -->
-<section class="sec theme-dark"><div class="wrap">
+<section class="sec"><div class="wrap">
  <div class="eyebrow"><span>The difference</span></div>
  <div class="head" data-reveal>
   <div class="ttl"><h2 class="display">This isn't a job board. <span class="dim">It's a day of interviews.</span></h2></div>
@@ -626,11 +624,6 @@ body.menu-open .typeswitch{display:none}
     </ul>
    </div>
   </div>
- </div>
- <div class="points" data-reveal data-stagger>
-  <div class="point"><p class="h5">A hiring event built around interviews</p><p>Skip the endless resume review and meet qualified candidates in scheduled interviews.</p></div>
-  <div class="point"><p class="h5">Candidates request interviews with your team</p><p>Every interview on your schedule comes from a candidate who matched with your role and requested time with your team.</p></div>
-  <div class="point"><p class="h5">Faster hiring without the operational overhead</p><p>Scheduling, reminders, messaging, and follow-ups are handled before the event begins.</p></div>
  </div>
 </div></section>
 
