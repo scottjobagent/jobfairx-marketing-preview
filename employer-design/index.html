@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Employer Site Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Inter+Tight:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAFA;--card:#fff;--ink:#0A0A0A;--body:#545454;--muted:#8A8A8A;--line:#E3E3E3;--brand:#0044B3;--ok:#0E7A55;--ok-bg:#E4F4EC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1216;--card:#171B21;--ink:#E8EBF0;--body:#A3ABB8;--muted:#7D8696;--line:#2A303A;--brand:#60A5FA;--ok:#6EE7B7;--ok-bg:#12352A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1216;--card:#171B21;--ink:#E8EBF0;--body:#A3ABB8;--muted:#7D8696;--line:#2A303A;--brand:#60A5FA;--ok:#6EE7B7;--ok-bg:#12352A;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.55 "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;padding-block:48px 88px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin:0 0 10px}
+h1{font-family:"Inter Tight","Inter",Arial,sans-serif;font-weight:300;font-size:clamp(34px,4vw,52px);line-height:1.06;letter-spacing:-.02em;color:var(--ink);margin:0 0 14px}
+.lede{max-width:44em;margin:0 0 36px}
+.groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+h2{font-size:20px;font-weight:650;color:var(--ink);margin:0 0 2px}
+.ref{font-size:14px;color:var(--body);margin:0 0 14px}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+a{color:var(--brand);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+a:visited{color:var(--brand)}
+a:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+.st{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.st.done{background:var(--ok-bg);color:var(--ok)}
+.st.next{color:var(--body);border:1px solid var(--line)}
+.todo{color:var(--body)}
+.foot{margin-top:28px;font-size:14px;color:var(--body)}
+@media (max-width:760px){.groups{grid-template-columns:minmax(0,1fr)}}
+</style></head><body><main class="page">
+<p class="eyebrow">JobFairX employer site · 25 Oct 2026</p>
+<h1>Employer site design</h1>
+<p class="lede">Every page in the top navigation, redesigned with Indeed for Employers as the reference. These are new files at their own address; the current preview pages are unchanged. 24 of 24 pages are ready. Open one, then use the site's own menu to move between them.</p>
+<div class="groups"><section><h2>Solutions</h2><p class="ref">Reference: Indeed&#x27;s Enterprise solution page; its Sponsored Jobs page for the bundles</p><ul><li><a href="technology-hiring.html">Technology hiring events</a><span class="st done">Ready</span></li><li><a href="healthcare-hiring.html">Healthcare hiring events</a><span class="st done">Ready</span></li><li><a href="entry-level-hiring.html">Entry-Level hiring events</a><span class="st done">Ready</span></li><li><a href="diversity-hiring.html">Diversity hiring events</a><span class="st done">Ready</span></li><li><a href="veteran-hiring.html">Veteran hiring events</a><span class="st done">Ready</span></li><li><a href="hiring-event-bundles.html">Event bundles</a><span class="st done">Ready</span></li></ul></section><section><h2>Features</h2><p class="ref">Reference: Indeed&#x27;s product pages (Interview, Screening, Smart Sourcing)</p><ul><li><a href="ai-candidate-matching.html">AI candidate matching</a><span class="st done">Ready</span></li><li><a href="interview-requests.html">Interview requests</a><span class="st done">Ready</span></li><li><a href="candidate-messaging-scheduling.html">Candidate messaging and scheduling</a><span class="st done">Ready</span></li><li><a href="local-candidate-database.html">Local candidate database</a><span class="st done">Ready</span></li><li><a href="automations.html">Automations</a><span class="st done">Ready</span></li><li><a href="interview-formats.html">In-person, video, or phone interviews</a><span class="st done">Ready</span></li><li><a href="event-day-lobby.html">Event-day lobby</a><span class="st done">Ready</span></li><li><a href="panel-interviews.html">Panel interviews</a><span class="st done">Ready</span></li><li><a href="post-event-report.html">Post-event report</a><span class="st done">Ready</span></li><li><a href="analytics.html">Analytics</a><span class="st done">Ready</span></li></ul></section><section><h2>Top bar</h2><p class="ref">Reference: Indeed&#x27;s webinars listing; its Sponsored Jobs and FAQ pages for pricing (its pricing page shows a bot check)</p><ul><li><a href="hiring-event-calendar.html">Upcoming Hiring Events</a><span class="st done">Ready</span></li><li><a href="hiring-event-pricing.html">Pricing</a><span class="st done">Ready</span></li></ul></section><section><h2>Resources</h2><p class="ref">Reference: Indeed&#x27;s Hiring Events onboarding page, Employer Guide, FAQ, Help Center and contact page (its About page shows a bot check)</p><ul><li><a href="resources.html">Employer resources</a><span class="st done">Ready</span></li><li><a href="blog.html">Blog</a><span class="st done">Ready</span></li><li><a href="hiring-event-faq.html">Hiring event FAQ</a><span class="st done">Ready</span></li><li><a href="help/index.html">Help Center</a><span class="st done">Ready</span></li><li><a href="about-us.html">About JobFairX</a><span class="st done">Ready</span></li><li><a href="contact.html">Contact us</a><span class="st done">Ready</span></li></ul></section></div>
+<p class="foot">Words, numbers and pictures come from today's pages. The home page is not part of this design.</p>
+</main></body></html>
