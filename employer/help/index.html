@@ -842,7 +842,7 @@ html { scroll-padding-top: calc(var(--nav) + 24px); }
 <script>
 /* nav-js v2: dropdowns open on hover or click, Escape and focus-leave close; the phone accordion keeps one section open */
 (function(){
- var dds=[].slice.call(document.querySelectorAll('.dd')),timer=null;
+ var dds=[].slice.call(document.querySelectorAll('.nav-links .dd')),timer=null;
  function setOpen(dd,on){dds.forEach(function(d){var o=d===dd&&on;d.classList.toggle('is-open',o);d.querySelector('button').setAttribute('aria-expanded',o?'true':'false')})}
  dds.forEach(function(dd){
   var btn=dd.querySelector('button');
