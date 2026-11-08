@@ -55,6 +55,17 @@ button{font-family:inherit}
 .devlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
 
+/* files strip */
+.files{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;border:1px solid var(--line);border-radius:12px;
+  background:var(--wash);padding:12px 16px;margin-bottom:22px}
+.files-l{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.dl{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:#fff;background:var(--blue);
+  border-radius:9999px;padding:7px 15px;text-decoration:none;white-space:nowrap}
+.dl small{font-weight:500;opacity:.85;font-size:12px}
+.dl:hover{background:var(--blue-dk)}
+.dl:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.files-n{font-size:12.5px;color:var(--slate);flex:1 1 260px;min-width:0}
+
 /* stickers */
 .st{display:inline-flex;align-items:center;font-size:13px;font-weight:600;
   border-radius:9999px;padding:2px 10px;white-space:nowrap}
@@ -237,13 +248,19 @@ button{font-family:inherit}
   </span>
 </div></div>
 <div class="wrap">
+  <div class="files" id="files">
+    <span class="files-l">Event files</span>
+    <a class="dl" href="jobfairx-2027-calendar.csv" download>United States CSV <small>11,340 events</small></a>
+    <a class="dl" href="jobfairx-2027-calendar-canada.csv" download>Canada CSV <small>1,500 events</small></a>
+    <span class="files-n">One row per event, UTF-8, with a header row. Eventbrite: load every event except Diversity. Columns and rules are on the Developer doc tab.</span>
+  </div>
   <div id="view-calendar"></div>
   <div id="view-cities" hidden></div>
   <div id="view-breakdown" hidden></div>
   <div id="view-devdoc" hidden>
 <section>
   <div class="shead"><span class="num">01</span><h2>What to build</h2></div>
-  <p>Import the rows of the two event files below as scheduled hiring events, one per row, and show them on the
+  <p>Import the rows of the two event files (download links at the top of this page and in &sect;02) as scheduled hiring events, one per row, and show them on the
     hiring-event calendar page (<code>/employer/hiring-event-calendar</code>) with the existing event-type stickers.
     Each row is one event in one market on one date. Nothing here changes the event page, registration flow or
     pricing; it is schedule data only.</p>
@@ -265,9 +282,9 @@ button{font-family:inherit}
   <div class="tw"><table>
     <thead><tr><th>File</th><th class="r">Rows</th><th>Purpose</th></tr></thead>
     <tbody>
-      <tr><td><code>jobfairx-2027-calendar.csv</code></td><td class="r">11,340</td>
+      <tr><td><a href="jobfairx-2027-calendar.csv" download><code>jobfairx-2027-calendar.csv</code></a></td><td class="r">11,340</td>
         <td><b>United States, source of truth.</b> One row per event: 189 markets &times; 5 types &times; 12 months.</td></tr>
-      <tr><td><code>jobfairx-2027-calendar-canada.csv</code></td><td class="r">1,500</td>
+      <tr><td><a href="jobfairx-2027-calendar-canada.csv" download><code>jobfairx-2027-calendar-canada.csv</code></a></td><td class="r">1,500</td>
         <td><b>Canada, source of truth.</b> 25 markets &times; 5 &times; 12. Same columns, with <code>province</code> and
           <code>postal_code</code>. IDs start <code>JFX27CA-</code>, so both files load into one table.</td></tr>
       <tr><td><code>jobfairx-2027-holidays.csv</code></td><td class="r">47</td>
@@ -278,7 +295,7 @@ button{font-family:inherit}
         <td>The generator, an independent audit, and the city list. Python 3, standard library only. See &sect;09.</td></tr>
     </tbody></table></div>
   <p style="font-size:13.5px;color:var(--mute)">Every CSV is UTF-8 with a header row; the <code>market</code> column
-    contains a comma and is quoted. The owner keeps the current set in the folder <code>JFX Design Ideas/calendar-2027</code>.</p>
+    contains a comma and is quoted. The two event files are published next to this page; the rest stay in the owner's folder <code>JFX Design Ideas/calendar-2027</code>.</p>
 </section>
 
 <section>
