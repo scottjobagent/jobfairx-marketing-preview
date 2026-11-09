@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js dx">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -679,6 +679,105 @@ body.menu-open .typeswitch{display:none}
 }
 @media (prefers-reduced-motion:reduce){.fx-hb svg,.fx-links a,.fx-soc a{transition:none}}
 /* ===== /footer v2 ===== */
+</style>
+<style id="dx-layer">
+/* ===== Design D layer (Scott, 9 Nov 2026: "Let's go with D, build all of the pages for D and push") =====
+   Restyles every prototype page in Design D's language without touching its words, links, pictures or structure:
+   the system face for the page body, rounded inset bands (a light grey top band, navy feature and closing bands),
+   two-tone headings whose second part carries the blue gradient, D's pill buttons, window-framed product shots,
+   rounded cards and D's question rows. The menu, footer, Michael Notes tab and View mobile tab are untouched. */
+:root{--bg:#FFFFFF}
+html.dx{--dx-font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Helvetica Neue",Helvetica,Arial,sans-serif;
+ --dx-ink:#0B1220;--dx-body:#3D4452;--dx-mute:#6B7280;--dx-line:rgba(11,18,32,.09);--dx-panel:#F4F5F7;
+ --dx-brand:#0044B3;--dx-brand-h:#00388F;--dx-dark:#00245B;--dx-sky:#A9C6FF;--dx-on-dark:#F5F7FA;--dx-on-dark-2:rgba(232,239,251,.74);
+ --dx-swash:linear-gradient(90deg,#0044B3 0%,#2563EB 42%,#0284C7 100%);
+ --dx-swash-d:linear-gradient(90deg,#E8EFFB 0%,#A9C6FF 40%,#7CC4FA 100%)}
+.dx main{font-family:var(--dx-font);letter-spacing:-.011em;padding-bottom:12px;
+ --t1:var(--dx-ink);--t2:var(--dx-body);--t3:var(--dx-mute);--rule:var(--dx-line);--line:rgba(11,18,32,.08);--card:#fff;
+ --brand:var(--dx-brand);--tint:#E8EFFB;--btn-bg:var(--dx-brand);--btn-bg-h:var(--dx-brand-h)}
+.dx main .wrap{border-left:0;border-right:0}
+
+/* bands: the top band light grey, feature and closing bands navy, all rounded and set in from the window edges */
+/* (an article page carries the whole article in its first section, so long reading stays on white: .artpill is left out) */
+.dx main>section.sec:first-of-type:not(.theme-blue):not(.theme-dark):not(.artpill){background:var(--dx-panel);margin:8px 12px 0;border-radius:28px;overflow:hidden}
+.dx main .sec.theme-blue,.dx main .sec.theme-dark{--surface:var(--dx-dark);--t1:var(--dx-on-dark);--t2:var(--dx-on-dark-2);--t3:var(--dx-sky);--rule:rgba(255,255,255,.12);
+ --btn-bg:#fff;--btn-fg:var(--dx-dark);--btn-bg-h:#E8EFFB;margin:12px 12px 0;border-radius:28px;overflow:hidden}
+
+/* type */
+.dx main :is(h1,h2,h3,h4,.display,.h5){font-family:var(--dx-font)}
+.dx main :is(.display,h2.display){font-weight:600;letter-spacing:-.016em;line-height:1.08}
+.dx main :is(h1,h2,h3,p,div).display .dim,.dx main :is(h1,h2,h3,.h5) .dim{background:var(--dx-swash);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+.dx main :is(.theme-blue,.theme-dark) :is(h1,h2,h3,p,div,.h5) .dim{background-image:var(--dx-swash-d)}
+.dx main .lead{line-height:1.42;letter-spacing:.004em}
+.dx main .h5{font-weight:600;letter-spacing:-.01em}
+
+/* labels above headings: D's plain brand label, no rules or pill */
+.dx main .eyebrow{margin:0 0 18px;gap:0}
+.dx main .eyebrow::before,.dx main .eyebrow::after{content:none}
+.dx main .eyebrow span{background:none;padding:0;border-radius:0;color:var(--dx-brand);font-size:17px;font-weight:600;letter-spacing:-.022em;line-height:1.3}
+.dx main :is(.theme-blue,.theme-dark) .eyebrow span{color:var(--dx-sky)}
+
+/* buttons and links */
+.dx main .btn{min-height:44px;padding:11px 22px;font-family:var(--dx-font);font-size:17px;font-weight:400;letter-spacing:-.022em;border-radius:980px}
+.dx main .btn.sm{min-height:36px;padding:7px 16px;font-size:15px}
+.dx main .btn.ghost{background:transparent;color:var(--dx-brand);box-shadow:inset 0 0 0 1px var(--dx-brand)}
+.dx main .btn.ghost:hover{background:rgba(0,68,179,.06)}
+.dx main :is(.theme-blue,.theme-dark) .btn.ghost{color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);background:transparent}
+.dx main :is(.theme-blue,.theme-dark) .btn.ghost:hover{background:rgba(255,255,255,.08)}
+.dx main .more{font-weight:500}
+
+/* product shots in D's window frame: three dots in a white title bar, a soft blue shadow */
+.dx main .pframe{border:0;border-radius:16px;padding-top:44px;position:relative;background:#fff;
+ box-shadow:0 0 0 .5px rgba(0,0,0,.14),0 1px 2px rgba(0,0,0,.04),0 40px 80px -34px rgba(0,36,91,.42)}
+.dx main .pframe::before{content:"";position:absolute;z-index:1;left:0;right:0;top:0;height:44px;border-bottom:1px solid rgba(11,18,32,.07);
+ background:radial-gradient(circle at 21px 22px,#FF5F57 5.5px,transparent 6px),radial-gradient(circle at 40px 22px,#FEBC2E 5.5px,transparent 6px),radial-gradient(circle at 59px 22px,#28C840 5.5px,transparent 6px),#fff}
+
+/* cards */
+.dx main :is(.bcard,.story,.rcard,.ecard,.ncard,.plan){border-radius:22px;border-color:rgba(11,18,32,.07)}
+
+/* checks in D blue (light blue on navy) */
+.dx main .ic.yes{background:rgba(0,68,179,.1);color:var(--dx-brand)}
+.dx main :is(.theme-blue,.theme-dark,.plan.feat) .ic.yes{background:rgba(169,198,255,.16);color:var(--dx-sky)}
+
+/* packages: the popular one navy, every button D blue, prices in D's semibold */
+.dx main .plan.feat{background:var(--dx-dark);border-color:var(--dx-dark);box-shadow:0 30px 60px -30px rgba(0,36,91,.6)}
+.dx main .plan .pr{font-family:var(--dx-font);font-weight:600;letter-spacing:-.03em}
+.dx main .btn.dark{background:var(--dx-brand);color:#fff}
+.dx main .btn.dark:hover{background:var(--dx-brand-h)}
+.dx main .plan .pop{background:rgba(169,198,255,.16);color:var(--dx-sky)}
+.dx main .plan.feat .btn,.dx main .plan.feat .btn.ghost{background:#fff;color:var(--dx-dark);box-shadow:none}
+.dx main .plan.feat .btn:hover{background:#E8EFFB}
+
+/* steps */
+.dx main .srow div{border-top-color:var(--dx-line)}
+.dx main .srow .n{width:30px;height:30px;padding:0;display:inline-grid;place-items:center;border-radius:50%;background:var(--dx-dark);color:#fff;font-size:13px}
+
+/* questions: D's rows with a round plus button */
+.dx main .acc{background:none;border:0;border-bottom:1px solid var(--dx-line);border-radius:0;margin:0}
+.dx main .acc:first-of-type{border-top:1px solid var(--dx-line)}
+.dx main .acc summary{padding:22px 0;font-size:19px;font-weight:600;letter-spacing:-.012em;color:var(--dx-ink)}
+.dx main .acc summary i{width:26px;height:26px;border-radius:50%;box-shadow:0 0 0 1px rgba(11,18,32,.2);opacity:1}
+.dx main .acc summary i::before{width:10px;height:1.6px;background:var(--dx-ink)}
+.dx main .acc summary i::after{width:1.6px;height:10px;background:var(--dx-ink)}
+.dx main .acc[open] summary i::before{transform:translate(-50%,-50%)}
+.dx main .acc[open] summary i::after{transform:translate(-50%,-50%) rotate(90deg)}
+.dx main .acc .ans{padding:0 48px 24px 0;font-size:16px;line-height:1.6}
+
+/* logos in grey, as on the D home page */
+.dx main :is(.logo-grid,.pastgrid,.logos) img{filter:grayscale(1);opacity:.62}
+
+/* Help Center: the same pages, set in D's colours, type and rounder cards through the help center's own settings */
+html.dx #hc{--canvas:#FFFFFF;--sunken:#F4F5F7;--hairline:rgba(11,18,32,.1);--hairline-soft:rgba(11,18,32,.06);--ink:#0B1220;--ink-2:#3D4452;--ink-3:#6B7280;
+ --brand-tint:#E8EFFB;--r-lg:18px;--r-xl:22px;--font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Helvetica Neue",Helvetica,Arial,sans-serif}
+html.dx #hc :is(h1,h2,h3){font-weight:600;letter-spacing:-.016em}
+
+@media (max-width:640px){
+ .dx main>section.sec:first-of-type,.dx main .sec.theme-blue,.dx main .sec.theme-dark{margin-left:8px;margin-right:8px;border-radius:22px}
+ .dx main .sec.theme-blue,.dx main .sec.theme-dark{margin-top:8px}
+ .dx main .acc summary{font-size:17px;padding:18px 0}
+ .dx main .acc .ans{padding-right:0}
+}
+
 </style>
 </head>
 <body>
